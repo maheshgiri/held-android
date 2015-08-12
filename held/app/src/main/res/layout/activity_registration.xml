@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_background"
+    android:scrollbars="none">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/REG_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/icon_back" />
+
+        <com.held.customview.CustomTextView
+            android:id="@+id/REG_welcome_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/REG_back"
+            android:layout_centerHorizontal="true"
+            android:text="Welcome!"
+            android:textColor="#ffffff"
+            android:textSize="22sp"
+            custom:typeFace="@string/freight_sans_medium" />
+
+
+        <com.held.customview.CustomEditText
+            android:id="@+id/REG_user_name_edt"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/REG_welcome_txt"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="30dp"
+            android:background="#1affffff"
+            android:gravity="center"
+            android:hint="Pick a Username (minimum 6 chars)"
+            android:maxLength="25"
+            android:maxLines="1"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
+            android:textSize="14sp"
+            custom:typeFace="@string/freight_sans_book" />
+
+        <LinearLayout
+            android:id="@+id/REG_phone_no"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/REG_user_name_edt"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/REG_country_code_edt"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="2"
+                android:background="#26ffffff"
+                android:textAllCaps="false"
+                android:textColor="#ffffff"
+                android:textColorHint="#ffffff"
+                android:textSize="14sp" />
+
+            <com.held.customview.CustomEditText
+                android:id="@+id/REG_mobile_no_edt"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="#1affffff"
+                android:gravity="center|left"
+                android:hint="Phone Number"
+                android:inputType="number"
+                android:maxLength="11"
+                android:paddingLeft="20dp"
+                android:textColor="#ffffff"
+                android:textColorHint="#ffffff"
+                android:textSize="14sp"
+                custom:typeFace="@string/freight_sans_book" />
+
+        </LinearLayout>
+
+
+        <com.held.customview.CustomButton
+            android:id="@+id/REG_register_btn"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_below="@+id/REG_phone_no"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="40dp"
+            android:background="#ffc500"
+            android:gravity="center"
+            android:text="Register"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            custom:typeFace="@string/freight_sans_medium" />
+
+        <com.held.customview.CustomTextView
+            android:id="@+id/SPLASH_terms_condition_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/REG_register_btn"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="By using Held you agree to the Terms, Cookie\nPolicy and Privacy Policy"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            custom:typeFace="@string/freight_sans_book" />
+    </RelativeLayout>
+</ScrollView>

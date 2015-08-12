@@ -1,0 +1,95 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_background"
+    android:fitsSystemWindows="true"
+    tools:context=".SplashActivity">
+
+    <com.held.customview.CustomTextView
+        android:id="@+id/SPLASH_logo_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        android:shadowColor="#14000000"
+        android:shadowDx="2"
+        android:shadowDy="20"
+        android:shadowRadius="17"
+        android:text="Held"
+        android:textColor="#F2ffffff"
+        android:textSize="107sp"
+        custom:typeFace="@string/indie" />
+
+    <View
+        android:id="@+id/SPLASH_divider_view"
+        android:layout_width="60dp"
+        android:layout_height="1dp"
+        android:layout_below="@+id/SPLASH_logo_img"
+        android:layout_centerHorizontal="true"
+        android:background="#1affffff" />
+
+    <com.held.customview.CustomTextView
+        android:id="@+id/SPLASH_tag_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SPLASH_divider_view"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="@string/SPLASH_headline"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        custom:typeFace="@string/freight_sans_book" />
+
+    <com.held.customview.CustomButton
+        android:id="@+id/SPLASH_get_started_btn"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_below="@+id/SPLASH_tag_line"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="40dp"
+        android:background="#ffc500"
+        android:gravity="center"
+        android:text="Get Started"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        custom:typeFace="@string/freight_sans_medium" />
+
+    <com.held.customview.CustomTextView
+        android:id="@+id/SPLASH_terms_condition_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SPLASH_get_started_btn"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="By using Held you agree to the Terms, Cookie\nPolicy and Privacy Policy"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        custom:typeFace="@string/freight_sans_book" />
+
+    <View
+        android:id="@+id/SPLASH_divider_bottom_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:background="#1affffff" />
+
+    <com.held.customview.CustomTextView
+        android:id="@+id/SPLASH_sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="Have an account ? Sign in"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        custom:typeFace="@string/freight_sans_book" />
+
+</RelativeLayout>

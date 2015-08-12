@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_background"
+    android:orientation="vertical">
+
+    <com.held.customview.CustomTextView
+        android:id="@+id/VERIFICATION_username_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:text="HI, jay kapasi"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="22sp"
+        custom:typeFace="@string/freight_sans_medium" />
+
+    <com.held.customview.CustomTextView
+        android:id="@+id/VERIFICATION_code_sent_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/VERIFICATION_username_txt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="verification code sent to 9664227310"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="14sp"
+        custom:typeFace="@string/freight_sans_book" />
+
+    <LinearLayout
+        android:id="@+id/VERIFICATION_code_edt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/VERIFICATION_code_sent_txt"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <com.held.customview.CustomEditText
+            android:id="@+id/VERIFICATION_code_one"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="#1affffff"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textColor="#ffffff"
+            android:textCursorDrawable="@drawable/cursor_background"
+            custom:typeFace="@string/freight_sans_medium" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="50dp"
+            android:background="#26ffffff"></View>
+
+        <com.held.customview.CustomEditText
+            android:id="@+id/VERIFICATION_code_two"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="#1affffff"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textColor="#ffffff"
+            android:textCursorDrawable="@drawable/cursor_background"
+            custom:typeFace="@string/freight_sans_medium" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="50dp"
+            android:background="#26ffffff"></View>
+
+        <com.held.customview.CustomEditText
+            android:id="@+id/VERIFICATION_code_three"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="#1affffff"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textColor="#ffffff"
+            android:textCursorDrawable="@drawable/cursor_background"
+            custom:typeFace="@string/freight_sans_medium" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="50dp"
+            android:background="#26ffffff"></View>
+
+        <com.held.customview.CustomEditText
+            android:id="@+id/VERIFICATION_code_four"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="#1affffff"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textColor="#ffffff"
+            android:textCursorDrawable="@drawable/cursor_background"
+            custom:typeFace="@string/freight_sans_medium" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/VERIFICATION_resend"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/VERIFICATION_code_edt"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <com.held.customview.CustomTextView
+            android:id="@+id/VERIFICATION_sms_resend_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Resend SMS"
+            android:textColor="#80ffffff"
+            android:textSize="13sp"
+            custom:typeFace="@string/freight_sans_book" />
+
+        <com.held.customview.CustomTextView
+            android:id="@+id/VERIFICATION_voice_call_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Voice Call"
+            android:textColor="#80ffffff"
+            android:textSize="13sp"
+            custom:typeFace="@string/freight_sans_book" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/BOX_top_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp">
+
+    <RelativeLayout
+        android:id="@+id/CHATRIGHT_top_layout"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="#1a000000">
+
+        <ImageView
+            android:id="@+id/CHATRIGHT_profile_img"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:fitsSystemWindows="true" />
+
+        <com.held.customview.CustomTextView
+            android:id="@+id/CHATRIGHT_user_name_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_toLeftOf="@+id/CHATRIGHT_profile_img"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            custom:typeFace="@string/freight_sans_medium" />
+
+        <com.held.customview.CustomTextView
+            android:id="@+id/CHATRIGHT_des_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/CHATRIGHT_user_name_txt"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@+id/CHATRIGHT_profile_img"
+            android:lineSpacingExtra="5dp"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            custom:typeFace="@string/freight_sans_book" />
+    </RelativeLayout>
+
+    <com.held.customview.CustomTextView
+        android:id="@+id/CHATRIGHT_date_txt"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/CHATRIGHT_top_layout"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:gravity="left"
+        android:lineSpacingExtra="5dp"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        custom:typeFace="@string/freight_sans_book" />
+</RelativeLayout>

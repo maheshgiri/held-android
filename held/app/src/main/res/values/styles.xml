@@ -1,0 +1,16 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:splitMotionEvents">false</item>
+        <item name="colorPrimary">#7474bf</item>
+        <item name="colorPrimaryDark">#7474bf</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <declare-styleable name="CustomTypeFace">
+        <attr name="typeFace" format="string" />
+    </declare-styleable>
+</resources>

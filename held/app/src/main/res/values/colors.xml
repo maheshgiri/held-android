@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="bg_color_one" type="color">#348ac7</item>
+    <item name="bg_color_two" type="color">#7474bf</item>
+
+    <item name="btn_color" type="color">#85A9D6</item>
+    <item name="btn_color_country" type="color">#5CA1D2</item>
+    <item name="feed_header_color" type="color">#4C95CD</item>
+    <item name="feed_search_box_color" type="color">#498CC2</item>
+</resources>
