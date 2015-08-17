@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.held.activity.PostActivity;
 import com.held.activity.R;
+import com.held.fragment.DownloadRequestFragment;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.ApproveDownloadResponse;
 import com.held.retrofit.response.DeclineDownloadResponse;
@@ -37,11 +38,13 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
     private PostActivity mActivity;
     private List<DownloadRequestData> mDownloadRequestList;
     private boolean mIsLastPage;
+    private DownloadRequestFragment mDownloadRequestFragment;
 
-    public DownloadRequestAdapter(PostActivity activity, List<DownloadRequestData> DownloadRequestList, boolean isLastPage) {
+    public DownloadRequestAdapter(PostActivity activity, List<DownloadRequestData> DownloadRequestList, boolean isLastPage, DownloadRequestFragment downloadRequestFragment) {
         mActivity = activity;
         mDownloadRequestList = DownloadRequestList;
         mIsLastPage = isLastPage;
+        mDownloadRequestFragment = downloadRequestFragment;
     }
 
     @Override
@@ -116,6 +119,7 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
             @Override
             public void success(DeclineDownloadResponse declineDownloadResponse, Response response) {
                 DialogUtils.stopProgressDialog();
+
             }
 
             @Override
@@ -136,7 +140,8 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
             @Override
             public void success(ApproveDownloadResponse approveDownloadResponse, Response response) {
                 DialogUtils.stopProgressDialog();
-
+                mDownloadRequestList.clear();
+                mDownloadRequestFragment.callDownloadRequestListApi();
             }
 
             @Override

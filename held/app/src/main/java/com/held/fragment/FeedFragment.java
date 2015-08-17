@@ -125,9 +125,8 @@ public class FeedFragment extends ParentFragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
                 if (getCurrActivity().getNetworkStatus()) {
-                    isLastPage=false;
+                    isLastPage = false;
                     mFeedList.clear();
                     mStart = System.currentTimeMillis();
                     callFeedApi();
@@ -206,7 +205,7 @@ public class FeedFragment extends ParentFragment {
                                     !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
                                 String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
                                 UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
-                                if(json.substring(json.indexOf(":") + 2, json.length() - 2).equals("")){
+                                if (json.substring(json.indexOf(":") + 2, json.length() - 2).equals("")) {
 
                                 }
                             } else

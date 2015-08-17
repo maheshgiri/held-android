@@ -19,6 +19,7 @@ public class PostActivity extends ParentActivity {
 
     public static boolean isPostVisible;
     private Fragment mDisplayFragment;
+    public static boolean isBlured = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

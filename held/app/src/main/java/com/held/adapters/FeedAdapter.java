@@ -107,11 +107,16 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             mPosition = position;
                             break;
                         case MotionEvent.ACTION_MOVE:
+                            mActivity.isBlured = false;
+                            break;
+                        case MotionEvent.ACTION_CANCEL:
                         case MotionEvent.ACTION_UP:
+                            view.getParent().requestDisallowInterceptTouchEvent(false);
                             Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(position).getImage()).
                                     transform(mBlurTransformation).into(holder.mFeedImg);
                             holder.mTimeTxt.setVisibility(View.VISIBLE);
                             callReleaseApi(mFeedList.get(position).getRid(), holder.mTimeTxt);
+                            mActivity.isBlured = true;
                             break;
 
                     }
@@ -119,6 +124,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     mPostId = mFeedList.get(position).getRid();
                     return mGestureDetector.onTouchEvent(motionEvent);
                 }
+
             });
         } else {
             ProgressViewHolder holder = (ProgressViewHolder) viewHolder;
@@ -236,6 +242,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(mPosition).getImage()).into(feedViewHolder.mFeedImg);
                 callHoldApi(mFeedList.get(mPosition).getRid());
                 feedViewHolder.mTimeTxt.setVisibility(View.INVISIBLE);
+                feedViewHolder.mFeedImg.getParent().requestDisallowInterceptTouchEvent(true);
             } else {
                 UiUtils.showSnackbarToast(mActivity.findViewById(R.id.frag_container), "You are not connected to internet");
             }

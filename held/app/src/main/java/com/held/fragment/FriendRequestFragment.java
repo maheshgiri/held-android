@@ -53,7 +53,7 @@ public class FriendRequestFragment extends ParentFragment {
     protected void initialiseView(View view, Bundle savedInstanceState) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.FR_recycler_view);
         mLayoutManager = new LinearLayoutManager(getCurrActivity(),LinearLayoutManager.VERTICAL,false);
-        mFriendRequestAdapter = new FriendRequestAdapter((PostActivity) getCurrActivity(), mFriendRequestList, mIsLastPage);
+        mFriendRequestAdapter = new FriendRequestAdapter((PostActivity) getCurrActivity(), mFriendRequestList, mIsLastPage,this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mFriendRequestAdapter);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.FR_swipe_refresh_layout);
@@ -91,7 +91,7 @@ public class FriendRequestFragment extends ParentFragment {
         }
     }
 
-    private void callFriendRequestListApi() {
+    public void callFriendRequestListApi() {
         mIsLoading = true;
         HeldService.getService().getFriendRequests(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
                 mLimit, mStart, new Callback<FriendRequestResponse>() {

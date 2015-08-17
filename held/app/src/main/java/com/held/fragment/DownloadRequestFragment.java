@@ -57,7 +57,7 @@ public class DownloadRequestFragment extends ParentFragment {
     protected void initialiseView(View view, Bundle savedInstanceState) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.DR_recycler_view);
         mLayoutManager = new LinearLayoutManager(getCurrActivity(),LinearLayoutManager.VERTICAL,false);
-        mDownloadRequestAdapter = new DownloadRequestAdapter((PostActivity) getCurrActivity(), mDownloadRequestList, mIsLastPage);
+        mDownloadRequestAdapter = new DownloadRequestAdapter((PostActivity) getCurrActivity(), mDownloadRequestList, mIsLastPage,this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mDownloadRequestAdapter);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.DR_swipe_refresh_layout);
@@ -95,7 +95,7 @@ public class DownloadRequestFragment extends ParentFragment {
         }
     }
 
-    private void callDownloadRequestListApi() {
+    public void callDownloadRequestListApi() {
         mIsLoading = true;
         HeldService.getService().getDownLoadRequestList(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
                 mLimit, mStart, new Callback<DownloadRequestListResponse>() {

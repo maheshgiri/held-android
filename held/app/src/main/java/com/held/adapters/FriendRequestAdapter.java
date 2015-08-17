@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.held.activity.PostActivity;
 import com.held.activity.R;
+import com.held.fragment.FriendRequestFragment;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.ApproveFriendResponse;
 import com.held.retrofit.response.DeclineFriendResponse;
@@ -39,11 +40,13 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
     private PostActivity mActivity;
     private List<SearchUserResponse> mFriendRequestList;
     private boolean mIsLastPage;
+    private FriendRequestFragment mFriendRequestFragment;
 
-    public FriendRequestAdapter(PostActivity activity, List<SearchUserResponse> friendRequestList, boolean isLastPage) {
+    public FriendRequestAdapter(PostActivity activity, List<SearchUserResponse> friendRequestList, boolean isLastPage, FriendRequestFragment friendRequestFragment) {
         mActivity = activity;
         mFriendRequestList = friendRequestList;
         mIsLastPage = isLastPage;
+        mFriendRequestFragment = friendRequestFragment;
     }
 
     @Override
@@ -137,6 +140,8 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
                     @Override
                     public void success(ApproveFriendResponse approveFriendResponse, Response response) {
                         DialogUtils.stopProgressDialog();
+                        mFriendRequestList.clear();
+                        mFriendRequestFragment.callFriendRequestListApi();
                     }
 
                     @Override
