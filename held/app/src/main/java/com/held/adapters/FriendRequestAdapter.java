@@ -2,11 +2,13 @@ package com.held.adapters;
 
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.held.activity.PostActivity;
@@ -15,8 +17,11 @@ import com.held.retrofit.HeldService;
 import com.held.retrofit.response.ApproveFriendResponse;
 import com.held.retrofit.response.DeclineFriendResponse;
 import com.held.retrofit.response.SearchUserResponse;
+import com.held.retrofit.response.UnDeclineFriendResponse;
 import com.held.utils.AppConstants;
+import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
+import com.held.utils.UiUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -24,67 +29,150 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
 
-public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdapter.FriendRequestViewHolder> {
+public class FriendRequestAdapter extends RecyclerView.Adapter {
+
+    private static final int TYPE_ITEM = 0;
+    private static final int TYPE_FOOTER = 1;
 
     private PostActivity mActivity;
     private List<SearchUserResponse> mFriendRequestList;
+    private boolean mIsLastPage;
 
-    public FriendRequestAdapter(PostActivity activity, List<SearchUserResponse> friendRequestList) {
+    public FriendRequestAdapter(PostActivity activity, List<SearchUserResponse> friendRequestList, boolean isLastPage) {
         mActivity = activity;
         mFriendRequestList = friendRequestList;
+        mIsLastPage = isLastPage;
     }
 
     @Override
-    public FriendRequestViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mActivity).inflate(R.layout.row_friend_request, parent, false);
-        return new FriendRequestViewHolder(v);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == TYPE_ITEM) {
+            View v = LayoutInflater.from(mActivity).inflate(R.layout.row_friend_request, parent, false);
+            return new FriendRequestViewHolder(v);
+        } else {
+            View v = LayoutInflater.from(mActivity).inflate(R.layout.layout_progress_bar, parent, false);
+            return new ProgressViewHolder(v);
+        }
+    }
+
+    public static class ProgressViewHolder extends RecyclerView.ViewHolder {
+        private ProgressBar progressBar;
+        private TextView mIndicationTxt;
+
+        public ProgressViewHolder(View v) {
+            super(v);
+            progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+            mIndicationTxt = (TextView) v.findViewById(R.id.indication_txt);
+        }
     }
 
     @Override
-    public void onBindViewHolder(FriendRequestViewHolder holder, final int position) {
-        Picasso.with(mActivity).load(AppConstants.BASE_URL + mFriendRequestList.get(position).getPic()).into(holder.mProfileImg);
-        holder.mUserNameTxt.setText(mFriendRequestList.get(position).getDisplay_name());
-        holder.mAcceptBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                callAccepFriendRequestApi(mFriendRequestList.get(position).getDisplay_name());
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        if (holder instanceof FriendRequestViewHolder) {
+
+            FriendRequestViewHolder viewHolder = (FriendRequestViewHolder) holder;
+
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + mFriendRequestList.get(position).getPic()).into(viewHolder.mProfileImg);
+            viewHolder.mUserNameTxt.setText(mFriendRequestList.get(position).getDisplay_name());
+            viewHolder.mAcceptBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mActivity.getNetworkStatus()) {
+                        DialogUtils.showProgressBar();
+                        callUndeclinedApi(mFriendRequestList.get(position).getDisplay_name());
+                    } else
+                        UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You are not connected to internet.");
+                }
+            });
+            viewHolder.mDeleteBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mActivity.getNetworkStatus()) {
+                        DialogUtils.showProgressBar();
+                        callDeclinedFriendRequestApi(mFriendRequestList.get(position).getDisplay_name());
+                    } else {
+                        UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You are not connected to internet.");
+                    }
+                }
+            });
+        } else {
+            ProgressViewHolder viewHolder = (ProgressViewHolder) holder;
+            if (mIsLastPage) {
+                viewHolder.mIndicationTxt.setVisibility(View.VISIBLE);
+                viewHolder.progressBar.setVisibility(View.GONE);
+            } else {
+                viewHolder.progressBar.setVisibility(View.VISIBLE);
+                viewHolder.mIndicationTxt.setVisibility(View.GONE);
+                viewHolder.progressBar.setIndeterminate(true);
             }
-        });
-        holder.mDeleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                callDeleteFriendRequestApi(mFriendRequestList.get(position).getDisplay_name());
-            }
-        });
+
+        }
     }
 
-    private void callDeleteFriendRequestApi(String name) {//PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_session_token))
+    private void callDeclinedFriendRequestApi(String name) {//PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_session_token))
         HeldService.getService().declineFriend(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_session_token)),
                 name, new Callback<DeclineFriendResponse>() {
                     @Override
                     public void success(DeclineFriendResponse declineFriendResponse, Response response) {
-
+                        DialogUtils.stopProgressDialog();
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-
+                        DialogUtils.stopProgressDialog();
+                        if (!TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "Some Problem Occurred");
                     }
                 });
     }
 
-    private void callAccepFriendRequestApi(String name) {
+    private void callAcceptFriendRequestApi(String name) {
         HeldService.getService().approveFriend(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_session_token)),
                 name, new Callback<ApproveFriendResponse>() {
                     @Override
                     public void success(ApproveFriendResponse approveFriendResponse, Response response) {
-
+                        DialogUtils.stopProgressDialog();
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
+                        DialogUtils.stopProgressDialog();
+                        if (!TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "Some Problem Occurred");
+                    }
+                });
+    }
 
+    private void callUndeclinedApi(final String name) {
+        HeldService.getService().undeclineFriend(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_session_token)),
+                name, new Callback<UnDeclineFriendResponse>() {
+                    @Override
+                    public void success(UnDeclineFriendResponse unDeclineFriendResponse, Response response) {
+                        DialogUtils.stopProgressDialog();
+                        if (mActivity.getNetworkStatus()) {
+                            DialogUtils.showProgressBar();
+                            callAcceptFriendRequestApi(name);
+                        } else
+                            UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You are not connected to internet.");
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        DialogUtils.stopProgressDialog();
+                        callAcceptFriendRequestApi(name);
+                        if (!TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+//                            UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "Some Problem Occurred");
                     }
                 });
     }
@@ -92,11 +180,17 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
 
     @Override
     public int getItemCount() {
-        return mFriendRequestList.size();
+        return mFriendRequestList.size() + 1;
     }
 
-    public void setFriendRequestList(List<SearchUserResponse> friendRequestList) {
+    @Override
+    public int getItemViewType(int position) {
+        return mFriendRequestList.size() == position ? TYPE_FOOTER : TYPE_ITEM;
+    }
+
+    public void setFriendRequestList(List<SearchUserResponse> friendRequestList, boolean isLastPage) {
         mFriendRequestList = friendRequestList;
+        mIsLastPage = isLastPage;
         notifyDataSetChanged();
     }
 

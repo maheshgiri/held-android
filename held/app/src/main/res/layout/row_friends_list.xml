@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:background="#1affffff"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/FRIEND_profile_pic"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/FRIEND_profile_pic">
+
+        <com.held.customview.CustomTextView
+            android:id="@+id/FRIEND_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+
+        <com.held.customview.CustomTextView
+            android:id="@+id/FRIEND_time_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:text="8:12 AM"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
+
+        <com.held.customview.CustomTextView
+            android:id="@+id/FRIEND_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/FRIEND_name"
+            android:layout_marginTop="10dp"
+            android:textColor="#ffffff"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+
+    <com.held.customview.CustomButton
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/button_background"
+        android:text="21"
+        android:textColor="#000000"
+        android:visibility="gone" />
+
+</RelativeLayout>

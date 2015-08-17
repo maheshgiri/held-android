@@ -1,9 +1,12 @@
 package com.held.retrofit;
 
 import com.held.retrofit.response.AddFriendResponse;
+import com.held.retrofit.response.ApproveDownloadResponse;
 import com.held.retrofit.response.ApproveFriendResponse;
 import com.held.retrofit.response.CreateUserResponse;
+import com.held.retrofit.response.DeclineDownloadResponse;
 import com.held.retrofit.response.DeclineFriendResponse;
+import com.held.retrofit.response.DownloadRequestListResponse;
 import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.FriendDeclineResponse;
 import com.held.retrofit.response.FriendRequestResponse;
@@ -62,7 +65,11 @@ public interface HeldAPI {
     void uploadFile(@Query("text") String text, @Part("file") TypedFile photoFile, @Header("X-HELD-TOKEN") String token, Callback<PostResponse> postResponseCallback);
 
     @GET("/posts/")
+    void feedPostWithPage(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, Callback<FeedResponse> feedResponseCallback);
+
+    @GET("/posts/")
     void feedPost(@Header("X-HELD-TOKEN") String token, Callback<FeedResponse> feedResponseCallback);
+
 
     @GET("/posts/hold")
     void holdPost(@Query("post") String postId, @Header("X-HELD-TOKEN") String token, Callback<HoldResponse> holdResponseCallback);
@@ -74,7 +81,7 @@ public interface HeldAPI {
     void getFriends(@Header("X-HELD-TOKEN") String token, Callback<FriendsResponse> friendsResponseCallback);
 
     @GET("/friends/requests")
-    void getFriendRequests(@Header("X-HELD-TOKEN") String token, Callback<FriendRequestResponse> friendRequestResponseCallback);
+    void getFriendRequests(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, Callback<FriendRequestResponse> friendRequestResponseCallback);
 
     @GET("/friends/declined")
     void getDeclinedFriends(@Header("X-HELD-TOKEN") String token, Callback<FriendDeclineResponse> friendDeclineResponseCallback);
@@ -109,5 +116,23 @@ public interface HeldAPI {
     @GET("/users/profile")
     void updateProfilePic(@Header("X-HELD-TOKEN") String token, @Query("field") String fieldValue, @Query("value") String image,
                           Callback<ProfilPicUpdateResponse> profilPicUpdateResponseCallback);
+
+    @GET("/friends/message")
+    void friendChat(@Header("X-HELD-TOKEN") String token, @Query("friend") String friendId, @Query("message") String message, Callback<PostMessageResponse> postMessageResponseCallback);
+
+    @GET("/friends/messages")
+    void getFriendChat(@Header("X-HELD-TOKEN") String token, @Query("friend") String friendId, Callback<PostChatResponse> postChatResponseCallback);
+
+    @GET("/friends/")
+    void getFriendsList(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, Callback<FriendRequestResponse> friendRequestResponseCallback);
+
+    @GET("/posts/download_requests/")
+    void getDownLoadRequestList(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, Callback<DownloadRequestListResponse> downloadRequestListResponseCallback);
+
+    @GET("/posts/decline_download")
+    void declineDownloadRequest(@Header("X-HELD-TOKEN") String token, @Query("request") String rid, Callback<DeclineDownloadResponse> declineDownloadResponseCallback);
+
+    @GET("/posts/approve_download")
+    void approveDownloadRequest(@Header("X-HELD-TOKEN") String token, @Query("request") String rid, Callback<ApproveDownloadResponse> approveDownloadResponseCallback);
 
 }

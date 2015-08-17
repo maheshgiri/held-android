@@ -11,12 +11,18 @@ import android.widget.TextView;
 import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.retrofit.response.PostChatData;
+import com.held.utils.AppConstants;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int ITEM_LEFT = 0;
+    private static final int ITEM_RIGHT = 1;
+
 
     private PostActivity mActivity;
     private List<PostChatData> mPostChatData;
@@ -30,7 +36,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public int getItemViewType(int position) {
         // Just as an example, return 0 or 2 depending on position
         // Note that unlike in ListView adapters, types don't have to be contiguous
-        return position;
+        return (mPostChatData.get(position).getOwner_display_name()).
+                equals(PreferenceHelper.getInstance(mActivity).readPreference(Utils.getString(R.string.API_user_name))) ? ITEM_RIGHT : ITEM_LEFT;
     }
 
     @Override
@@ -43,8 +50,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         View v;
 //        switch (viewType) {
 //            case 0:
-        if (mPostChatData.get(viewType).getOwner_display_name().
-                equals(PreferenceHelper.getInstance(mActivity).readPreference(Utils.getString(R.string.API_user_name)))) {
+        if (viewType == ITEM_RIGHT) {
             v = LayoutInflater.from(mActivity).inflate(R.layout.layout_chat_right, parent, false);
             return new ViewHolder0(v);
         } else {
@@ -57,11 +63,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        if (mPostChatData.get(position).getOwner_display_name().equals(PreferenceHelper.getInstance(mActivity).readPreference(Utils.getString(R.string.API_user_name)))) {
+        if (holder instanceof ViewHolder0) {
             ViewHolder0 viewHolder0 = (ViewHolder0) holder;
             viewHolder0.mUserNameTxt.setText(mPostChatData.get(position).getOwner_display_name());
             viewHolder0.mDateTxt.setText(mPostChatData.get(position).getDate());
             viewHolder0.mDesTxt.setText(mPostChatData.get(position).getMessage());
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostChatData.get(position).getOwner_pic()).into(viewHolder0.mProfilePic);
         } else {
             ViewHolder2 viewHolder = (ViewHolder2) holder;
             viewHolder.mUserNameTxt.setText(mPostChatData.get(position).getOwner_display_name());

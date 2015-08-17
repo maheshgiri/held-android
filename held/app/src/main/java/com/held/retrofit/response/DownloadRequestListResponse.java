@@ -3,21 +3,21 @@ package com.held.retrofit.response;
 
 import java.util.List;
 
-public class FriendRequestResponse {
+public class DownloadRequestListResponse {
 
-    private List<SearchUserResponse> objects;
+    private List<DownloadRequestData> objects;
     private boolean lastPage;
     private long nextPageStart;
 
-    public long getNextPageStart() {
-        return nextPageStart;
-    }
-
-    public List<SearchUserResponse> getObjects() {
+    public List<DownloadRequestData> getObjects() {
         return objects;
     }
 
     public boolean isLastPage() {
         return lastPage;
+    }
+
+    public long getNextPageStart() {
+        return nextPageStart;
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,11 @@ import com.held.retrofit.HeldService;
 import com.held.retrofit.response.PostChatData;
 import com.held.retrofit.response.PostChatResponse;
 import com.held.retrofit.response.PostMessageResponse;
+import com.held.retrofit.response.SearchUserResponse;
+import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
+import com.held.utils.UiUtils;
+import com.held.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +32,7 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
 
 public class ChatFragment extends ParentFragment {
 
@@ -38,12 +44,15 @@ public class ChatFragment extends ParentFragment {
     private Button mSubmitBtn;
     private EditText mMessageEdt;
     private ImageView mBackImg;
+    private boolean mIsOneToOne;
+    private String mId, mFriendId;
 
-    public static ChatFragment newInstance(String postid) {
+    public static ChatFragment newInstance(String id, boolean isOneToOne) {
 
         ChatFragment chatFragment = new ChatFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("postid", postid);
+        bundle.putString("id", id);
+        bundle.putBoolean("isOneToOne", isOneToOne);
         chatFragment.setArguments(bundle);
         return chatFragment;
     }
@@ -68,12 +77,73 @@ public class ChatFragment extends ParentFragment {
         mSubmitBtn.setOnClickListener(this);
         mBackImg = (ImageView) (getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_chat_img));
         mBackImg.setImageDrawable(getResources().getDrawable(R.drawable.icon_back));
-        callPostChatApi();
+        mIsOneToOne = getArguments().getBoolean("isOneToOne");
+        mId = getArguments().getString("id");
+        if (mIsOneToOne) {
+            callUserSearchApi();
+        } else {
+            callPostChatApi();
+        }
+    }
+
+    private void callUserSearchApi() {
+        HeldService.getService().searchUser(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
+                getArguments().getString("id"), new Callback<SearchUserResponse>() {
+                    @Override
+                    public void success(SearchUserResponse searchUserResponse, Response response) {
+                        DialogUtils.stopProgressDialog();
+                        Utils.hideSoftKeyboard(getCurrActivity());
+                        mFriendId = searchUserResponse.getRid();
+                        if (!mMessageEdt.getText().toString().isEmpty())
+                            callFriendChatApi();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        DialogUtils.stopProgressDialog();
+                        if (!TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
+                    }
+                });
+    }
+
+    private void callFriendChatApi() {
+        HeldService.getService().friendChat(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
+                mFriendId, mMessageEdt.getText().toString().trim(), new Callback<PostMessageResponse>() {
+                    @Override
+                    public void success(PostMessageResponse postMessageResponse, Response response) {
+                        mMessageEdt.setText("");
+                        callFriendsChatsApi();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+    }
+
+    private void callFriendsChatsApi() {
+        HeldService.getService().getFriendChat(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
+                mFriendId, new Callback<PostChatResponse>() {
+                    @Override
+                    public void success(PostChatResponse postChatResponse, Response response) {
+                        mChatAdapter.setPostChats(postChatResponse.getObjects());
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
     }
 
     private void callPostChatApi() {
         HeldService.getService().getPostChat(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                getArguments().getString("postid"), new Callback<PostChatResponse>() {
+                getArguments().getString("id"), new Callback<PostChatResponse>() {
                     @Override
                     public void success(PostChatResponse postChatResponse, Response response) {
                         mChatAdapter.setPostChats(postChatResponse.getObjects());
@@ -95,7 +165,17 @@ public class ChatFragment extends ParentFragment {
     public void onClicked(View v) {
         switch (v.getId()) {
             case R.id.CHAT_submit_btn:
-                callChatPostApi();
+                if (mIsOneToOne) {
+                    if (!mMessageEdt.getText().toString().isEmpty())
+                        callFriendChatApi();
+                    else
+                        UiUtils.showSnackbarToast(getView(), "Message should not be empty");
+                } else {
+                    if (!mMessageEdt.getText().toString().isEmpty())
+                        callChatPostApi();
+                    else
+                        UiUtils.showSnackbarToast(getView(), "Message should not be empty");
+                }
                 break;
             case R.id.TOOLBAR_chat_img:
                 mBackImg.setImageDrawable(getResources().getDrawable(R.drawable.icon_chat));
@@ -105,17 +185,18 @@ public class ChatFragment extends ParentFragment {
     }
 
     private void callChatPostApi() {
-        HeldService.getService().postChat(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)), getArguments().getString("postid"), mMessageEdt.getText().toString().trim(), new Callback<PostMessageResponse>() {
-            @Override
-            public void success(PostMessageResponse postMessageResponse, Response response) {
-                mMessageEdt.setText("");
-                callPostChatApi();
-            }
+        HeldService.getService().postChat(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
+                getArguments().getString("id"), mMessageEdt.getText().toString().trim(), new Callback<PostMessageResponse>() {
+                    @Override
+                    public void success(PostMessageResponse postMessageResponse, Response response) {
+                        mMessageEdt.setText("");
+                        callPostChatApi();
+                    }
 
-            @Override
-            public void failure(RetrofitError error) {
+                    @Override
+                    public void failure(RetrofitError error) {
 
-            }
-        });
+                    }
+                });
     }
 }

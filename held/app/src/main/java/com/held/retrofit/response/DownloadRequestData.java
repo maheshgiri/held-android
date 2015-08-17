@@ -1,21 +1,26 @@
 package com.held.retrofit.response;
 
 
-public class PostChatData {
+public class DownloadRequestData {
 
     private String date;
+    private String post_image;
+    private boolean declined;
     private String owner_display_name;
     private String tag;
     private String rid;
-    private String message;
     private String owner_pic;
-
-    public String getOwner_pic() {
-        return owner_pic;
-    }
 
     public String getDate() {
         return date;
+    }
+
+    public String getPost_image() {
+        return post_image;
+    }
+
+    public boolean isDeclined() {
+        return declined;
     }
 
     public String getOwner_display_name() {
@@ -30,7 +35,7 @@ public class PostChatData {
         return rid;
     }
 
-    public String getMessage() {
-        return message;
+    public String getOwner_pic() {
+        return owner_pic;
     }
 }

@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.held.fragment.ActivityFeedFragment;
+import com.held.fragment.DownloadRequestFragment;
 import com.held.fragment.FriendRequestFragment;
 
 import java.util.ArrayList;
@@ -17,8 +19,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         super(fm);
         mFragments = new ArrayList<>();
         mFragments.add(new FriendRequestFragment());
-        mFragments.add(new FriendRequestFragment());
-        mFragments.add(new FriendRequestFragment());
+        mFragments.add(new DownloadRequestFragment());
+        mFragments.add(new ActivityFeedFragment());
 
     }
 

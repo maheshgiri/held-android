@@ -7,6 +7,15 @@ public class FeedResponse {
 
     private List<FeedData> objects;
     private boolean lastPage;
+    private long nextPageStart;
+
+    public long getNextPageStart() {
+        return nextPageStart;
+    }
+
+    public void setNextPageStart(long nextPageStart) {
+        this.nextPageStart = nextPageStart;
+    }
 
     public boolean isLastPage() {
         return lastPage;

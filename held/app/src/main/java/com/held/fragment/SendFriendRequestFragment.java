@@ -3,6 +3,7 @@ package com.held.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,15 @@ import android.widget.TextView;
 import com.held.activity.R;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.AddFriendResponse;
+import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
+import com.held.utils.UiUtils;
 import com.squareup.picasso.Picasso;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
 
 public class SendFriendRequestFragment extends ParentFragment {
 
@@ -62,7 +66,12 @@ public class SendFriendRequestFragment extends ParentFragment {
     public void onClicked(View v) {
         switch (v.getId()) {
             case R.id.FR_send_btn:
-                callSendRequestAPi();
+                if (getCurrActivity().getNetworkStatus()) {
+                    DialogUtils.showProgressBar();
+                    callSendRequestAPi();
+                } else {
+                    UiUtils.showSnackbarToast(getView(), "You are not connected to Internet");
+                }
                 break;
         }
     }
@@ -71,12 +80,19 @@ public class SendFriendRequestFragment extends ParentFragment {
         HeldService.getService().addFriend(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)), getArguments().getString("name"), new Callback<AddFriendResponse>() {
             @Override
             public void success(AddFriendResponse addFriendResponse, Response response) {
-
+                DialogUtils.stopProgressDialog();
+                UiUtils.showSnackbarToast(getView(), "Request Sent Succesfully");
+                getCurrActivity().onBackPressed();
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                DialogUtils.stopProgressDialog();
+                if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                    String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                    UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                } else
+                    UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
             }
         });
     }

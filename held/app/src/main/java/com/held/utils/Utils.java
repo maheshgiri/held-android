@@ -22,10 +22,9 @@ public class Utils {
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity
                 .getSystemService(Activity.INPUT_METHOD_SERVICE);
-        View focusView = activity.getCurrentFocus();
-        if (focusView != null)
-            inputMethodManager.hideSoftInputFromWindow(focusView.getWindowToken(), 0);
+//        View focusView = activity.getCurrentFocus();
+////        if (focusView != null)
+            inputMethodManager.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
     }
-
 
 }

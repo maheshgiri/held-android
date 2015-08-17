@@ -5,9 +5,11 @@ import android.support.v4.app.Fragment;
 
 import com.held.fragment.ChatFragment;
 import com.held.fragment.FeedFragment;
+import com.held.fragment.FriendsListFragment;
 import com.held.fragment.NotificationFragment;
 import com.held.fragment.PostFragment;
 import com.held.fragment.SendFriendRequestFragment;
+import com.held.utils.AppConstants;
 import com.held.utils.PreferenceHelper;
 
 /**
@@ -54,9 +56,10 @@ public class PostActivity extends ParentActivity {
         mDisplayFragment = PostFragment.newInstance();
     }
 
-    private void launchChatScreen(String postid) {
-        addFragment(ChatFragment.newInstance(postid), ChatFragment.TAG, true);
-        mDisplayFragment = PostFragment.newInstance();
+    private void launchChatScreen(String id, boolean isOneToOne) {
+        updateToolbar(true, false, true, false, true, true, false, "");
+        addFragment(ChatFragment.newInstance(id, isOneToOne), ChatFragment.TAG, true);
+        mDisplayFragment = ChatFragment.newInstance(id, isOneToOne);
     }
 
     @Override
@@ -92,7 +95,7 @@ public class PostActivity extends ParentActivity {
                 break;
             case 2:
                 if (bundle != null)
-                    launchChatScreen(bundle.getString("postid"));
+                    launchChatScreen(bundle.getString("postid"), false);
                 break;
             case 3:
                 launchCreatePostFragmentFromFeed();
@@ -104,13 +107,26 @@ public class PostActivity extends ParentActivity {
                 if (bundle != null)
                     launchRequestFriendScreen(bundle.getString("name"), bundle.getString("image"));
                 break;
+            case 6:
+                if (bundle != null)
+                    launchChatScreen(bundle.getString("owner_displayname"), true);
+                break;
+            case 7:
+                launchInboxPage();
+                break;
 
         }
     }
 
+    private void launchInboxPage() {
+        updateToolbar(true, false, true, false, true, true, false, "");
+        addFragment(FriendsListFragment.newInstance(), FriendsListFragment.TAG, true);
+        mDisplayFragment = FriendsListFragment.newInstance();
+    }
+
     private void launchRequestFriendScreen(String name, String image) {
         updateToolbar(false, false, false, false, false, false, false, "");
-        addFragment(SendFriendRequestFragment.newInstance(name, "http://139.162.1.137/api" + image), SendFriendRequestFragment.TAG, true);
-        mDisplayFragment = SendFriendRequestFragment.newInstance(name, "http://139.162.1.137/api" + image);
+        addFragment(SendFriendRequestFragment.newInstance(name, AppConstants.BASE_URL + image), SendFriendRequestFragment.TAG, true);
+        mDisplayFragment = SendFriendRequestFragment.newInstance(name, AppConstants.BASE_URL + image);
     }
 }

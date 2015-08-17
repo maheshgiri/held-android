@@ -2,16 +2,25 @@ package com.held.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.held.retrofit.HeldService;
+import com.held.retrofit.response.LoginUserResponse;
+import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
+import com.held.utils.UiUtils;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
 
 
-public class SplashActivity extends AppCompatActivity implements View.OnClickListener {
+public class SplashActivity extends ParentActivity implements View.OnClickListener {
 
     private Button mGetStartedBtn;
 
@@ -22,14 +31,41 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         mGetStartedBtn = (Button) findViewById(R.id.SPLASH_get_started_btn);
         mGetStartedBtn.setOnClickListener(this);
 
-        launchPostActivity();
+        if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
+                PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) != 0) {
+            if (getNetworkStatus()) {
+                DialogUtils.showProgressBar();
+                callLoginApi();
+            } else {
+                UiUtils.showSnackbarToast(findViewById(R.id.root_view), "You are not connected to internet");
+            }
+        } else if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
+                PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) == 0)
+            launchVerificationActivity();
+    }
 
-//        if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
-//                PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) != 0) {
-//            launchPostActivity();
-//        } else if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
-//                PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) == 0)
-//            launchVerificationActivity();
+    private void callLoginApi() {
+        HeldService.getService().loginUser(PreferenceHelper.getInstance(this).
+                readPreference(getString(R.string.API_phone_no)), PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) + "", new Callback<LoginUserResponse>() {
+            @Override
+            public void success(LoginUserResponse loginUserResponse, Response response) {
+                DialogUtils.stopProgressDialog();
+                if (loginUserResponse.isLogin()) {
+                    PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSession_token());
+                    launchPostActivity();
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                DialogUtils.stopProgressDialog();
+                if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                    String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                    UiUtils.showSnackbarToast(findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                } else
+                    UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Some Problem Occurred");
+            }
+        });
     }
 
     private void launchVerificationActivity() {

@@ -7,6 +7,7 @@ public class PostMessageResponse {
     private String tag;
     private String rid;
     private String message;
+    private String owner_pic;
 
     public String getDate() {
         return date;
@@ -26,5 +27,9 @@ public class PostMessageResponse {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getOwner_pic() {
+        return owner_pic;
     }
 }
