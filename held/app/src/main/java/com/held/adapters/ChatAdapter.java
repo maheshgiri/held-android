@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.held.activity.ChatActivity;
 import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.retrofit.response.PostChatData;
@@ -24,10 +25,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int ITEM_RIGHT = 1;
 
 
-    private PostActivity mActivity;
+    private ChatActivity mActivity;
     private List<PostChatData> mPostChatData;
 
-    public ChatAdapter(PostActivity activity, List<PostChatData> postChatData) {
+    public ChatAdapter(ChatActivity activity, List<PostChatData> postChatData) {
         mActivity = activity;
         mPostChatData = postChatData;
     }

@@ -46,8 +46,21 @@
             android:configChanges="fontScale"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-
-
+        <activity
+            android:name=".ChatActivity"
+            android:configChanges="fontScale"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".FeedActivity"
+            android:configChanges="fontScale"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".NotificationActivity"
+            android:configChanges="fontScale"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
         <receiver
             android:name="com.held.receiver.NetworkStateReceiver"
             android:label="NetworkChangeReceiver">

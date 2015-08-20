@@ -45,6 +45,24 @@
             android:textColor="#ffffff"
             android:textSize="15sp"
             custom:typeFace="@string/freight_sans_book" />
+
+        <com.held.customview.CustomEditText
+            android:id="@+id/BOX_des_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/BOX_user_name_txt"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/BOX_profile_img"
+            android:background="#1affffff"
+            android:lineSpacingExtra="5dp"
+            android:maxLength="40"
+            android:textColor="#ffffff"
+            android:textCursorDrawable="@drawable/cursor_background"
+            android:textSize="18sp"
+            android:visibility="gone"
+            custom:typeFace="@string/freight_sans_book" />
     </RelativeLayout>
 
     <ImageView
@@ -63,7 +81,6 @@
         android:textColor="#ffffff"
         android:textSize="16sp"
         custom:typeFace="@string/freight_sans_book" />
-
 
 </RelativeLayout>
 

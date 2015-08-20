@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.held.activity.ChatActivity;
 import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.retrofit.response.SearchUserResponse;
@@ -25,13 +26,13 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
 
-    private PostActivity mActivity;
+    private ChatActivity mActivity;
     private List<SearchUserResponse> mFriendList;
     private boolean mIsLastPage;
     private String mOwnerDisplayName;
     private GestureDetector mGestureDetector;
 
-    public FriendsAdapter(PostActivity activity, List<SearchUserResponse> friendList, boolean isLastPage) {
+    public FriendsAdapter(ChatActivity activity, List<SearchUserResponse> friendList, boolean isLastPage) {
         mActivity = activity;
         mFriendList = friendList;
         mIsLastPage = isLastPage;
@@ -129,7 +130,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         public boolean onDoubleTap(MotionEvent e) {
             Bundle bundle = new Bundle();
             bundle.putString("owner_displayname", mOwnerDisplayName);
-            mActivity.perform(6, bundle);
+            mActivity.perform(0, bundle);
             return true;
         }
     }

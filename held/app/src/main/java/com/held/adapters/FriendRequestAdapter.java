@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.held.activity.NotificationActivity;
 import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.fragment.FriendRequestFragment;
@@ -37,12 +38,12 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
 
-    private PostActivity mActivity;
+    private NotificationActivity mActivity;
     private List<SearchUserResponse> mFriendRequestList;
     private boolean mIsLastPage;
     private FriendRequestFragment mFriendRequestFragment;
 
-    public FriendRequestAdapter(PostActivity activity, List<SearchUserResponse> friendRequestList, boolean isLastPage, FriendRequestFragment friendRequestFragment) {
+    public FriendRequestAdapter(NotificationActivity activity, List<SearchUserResponse> friendRequestList, boolean isLastPage, FriendRequestFragment friendRequestFragment) {
         mActivity = activity;
         mFriendRequestList = friendRequestList;
         mIsLastPage = isLastPage;

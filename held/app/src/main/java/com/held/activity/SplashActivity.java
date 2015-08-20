@@ -52,7 +52,11 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
                 DialogUtils.stopProgressDialog();
                 if (loginUserResponse.isLogin()) {
                     PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSession_token());
-                    launchPostActivity();
+                    if (PreferenceHelper.getInstance(getApplicationContext()).readPreference(getString(R.string.API_is_first_post), false)) {
+                        launchFeedActivity();
+                    } else {
+                        launchPostActivity();
+                    }
                 }
             }
 
@@ -82,6 +86,11 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
         finish();
     }
 
+    private void launchFeedActivity() {
+        Intent intent = new Intent(SplashActivity.this, FeedActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

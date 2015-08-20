@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -71,7 +72,8 @@ public class PostFragment extends ParentFragment {
         mBoxLayout = (RelativeLayout) view.findViewById(R.id.BOX_layout);
         mPostLayout = (RelativeLayout) view.findViewById(R.id.POST_post_data);
         mImageToUpload = (ImageView) view.findViewById(R.id.POST_image);
-        mCaptionEdt = (EditText) view.findViewById(R.id.POST_image_caption_txt);
+        mCaptionEdt = (EditText) view.findViewById(R.id.BOX_des_edt);
+        mCaptionEdt.setVisibility(View.VISIBLE);
         mCancelTxt = (TextView) view.findViewById(R.id.POST_cancel);
         mOkTxt = (TextView) view.findViewById(R.id.POST_ok);
         getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_retake_btn).setOnClickListener(this);
@@ -79,7 +81,8 @@ public class PostFragment extends ParentFragment {
         mUserNameTxt.setText(PreferenceHelper.getInstance(getCurrActivity()).readPreference("USER_NAME"));
         mTimeTxt = (TextView) view.findViewById(R.id.BOX_time_txt);
         mTimeTxt.setText("Click here to upload Image");
-        mTimeTxt.setVisibility(View.VISIBLE);
+        mTimeTxt.setVisibility(View.GONE);
+        openImageIntent();
     }
 
     @Override
@@ -93,7 +96,7 @@ public class PostFragment extends ParentFragment {
     public void onClicked(View v) {
         switch (v.getId()) {
             case R.id.BOX_main_img:
-                openImageIntent();
+//                openImageIntent();
                 break;
             case R.id.TOOLBAR_retake_btn:
                 openImageIntent();
@@ -105,6 +108,7 @@ public class PostFragment extends ParentFragment {
                 } else {
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
                 }
+                mCaptionEdt.setVisibility(View.GONE);
                 break;
             case R.id.POST_cancel:
                 Utils.hideSoftKeyboard(getCurrActivity());
@@ -138,7 +142,6 @@ public class PostFragment extends ParentFragment {
                 options);
 
         mPostImg.setImageBitmap(mAttachment);
-        mPostTxt.setText(mCaption);
     }
 
     private void openImageIntent() {
@@ -204,11 +207,11 @@ public class PostFragment extends ParentFragment {
     private void doCrop(Uri mCurrentPhotoPath) {
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
         cropIntent.setDataAndType(mCurrentPhotoPath, "image/*");
-        cropIntent.putExtra("crop", "true");
-        cropIntent.putExtra("aspectX", 1);
-        cropIntent.putExtra("aspectY", 1);
-        cropIntent.putExtra("outputX", 320);
-        cropIntent.putExtra("outputY", 320);
+//        cropIntent.putExtra("crop", "true");
+//        cropIntent.putExtra("aspectX", 1);
+//        cropIntent.putExtra("aspectY", 1);
+//        cropIntent.putExtra("outputX", 320);
+//        cropIntent.putExtra("outputY", 320);
 
         File cameraFolder;
 
@@ -247,12 +250,14 @@ public class PostFragment extends ParentFragment {
                     File photo = new File(Environment.getExternalStorageDirectory(),
                             "/HELD" + sourceFileName);
                     Uri photoUri = Uri.fromFile(photo);
-                    doCrop(photoUri);
+                    mFile = new File(photoUri.getPath());
+                    updateBoxUI();
                     break;
 
                 case AppConstants.REQUEST_GALLERY:
                     Uri PhotoURI = data.getData();
-                    doCrop(PhotoURI);
+                    mFile = new File(getRealPathFromURI(PhotoURI));
+                    updateBoxUI();
                     break;
             }
         }
@@ -269,6 +274,20 @@ public class PostFragment extends ParentFragment {
             updateUI();
         }
 
+    }
+
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getCurrActivity().getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
     }
 
     private void updateUI() {
@@ -296,7 +315,7 @@ public class PostFragment extends ParentFragment {
 
     private void callPostDataApi() {
 
-        HeldService.getService().uploadFile(mCaption, new TypedFile("multipart/form-data", mFile), PreferenceHelper.getInstance(getCurrActivity()).readPreference("SESSION_TOKEN"), new Callback<PostResponse>() {
+        HeldService.getService().uploadFile(mCaptionEdt.getText().toString().trim(), new TypedFile("multipart/form-data", mFile), PreferenceHelper.getInstance(getCurrActivity()).readPreference("SESSION_TOKEN"), new Callback<PostResponse>() {
             @Override
             public void success(PostResponse postResponse, Response response) {
                 DialogUtils.stopProgressDialog();

@@ -12,9 +12,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.held.activity.FeedActivity;
 import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.customview.BlurTransformation;
+import com.held.fragment.FeedFragment;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.HoldResponse;
@@ -34,7 +36,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = FeedAdapter.class.getSimpleName();
 
-    private PostActivity mActivity;
+    private FeedActivity mActivity;
     private BlurTransformation mBlurTransformation;
     private GestureDetector mGestureDetector, mPersonalChatDetector;
     private String mPostId, mOwnerDisplayName;
@@ -42,18 +44,20 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private FeedViewHolder feedViewHolder;
     private List<FeedData> mFeedList;
     private boolean mIsLastPage;
+    private FeedFragment mFeedFragment;
 
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
-    public FeedAdapter(PostActivity activity, List<FeedData> feedDataList, BlurTransformation blurTransformation
-            , boolean isLastPage) {
+    public FeedAdapter(FeedActivity activity, List<FeedData> feedDataList, BlurTransformation blurTransformation
+            , boolean isLastPage, FeedFragment feedFragment) {
         mActivity = activity;
         mFeedList = feedDataList;
         mBlurTransformation = blurTransformation;
         mGestureDetector = new GestureDetector(mActivity, new GestureListener());
         mPersonalChatDetector = new GestureDetector(mActivity, new PersonalChatListener());
         mIsLastPage = isLastPage;
+        mFeedFragment = feedFragment;
     }
 
     @Override
@@ -111,6 +115,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             break;
                         case MotionEvent.ACTION_CANCEL:
                         case MotionEvent.ACTION_UP:
+                            mFeedFragment.showRCView();
                             view.getParent().requestDisallowInterceptTouchEvent(false);
                             Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(position).getImage()).
                                     transform(mBlurTransformation).into(holder.mFeedImg);
@@ -239,13 +244,16 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @Override
         public void onLongPress(MotionEvent e) {
             if (mActivity.getNetworkStatus()) {
-                Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(mPosition).getImage()).into(feedViewHolder.mFeedImg);
+//                Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(mPosition).getImage()).into(feedViewHolder.mFeedImg);
                 callHoldApi(mFeedList.get(mPosition).getRid());
                 feedViewHolder.mTimeTxt.setVisibility(View.INVISIBLE);
                 feedViewHolder.mFeedImg.getParent().requestDisallowInterceptTouchEvent(true);
+                mFeedFragment.showFullImg(AppConstants.BASE_URL + mFeedList.get(mPosition).getImage());
             } else {
                 UiUtils.showSnackbarToast(mActivity.findViewById(R.id.frag_container), "You are not connected to internet");
             }
+
+
             super.onLongPress(e);
         }
     }
@@ -261,10 +269,15 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         // event when double tap occurs
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            Bundle bundle = new Bundle();
-            bundle.putString("owner_displayname", mOwnerDisplayName);
-            mActivity.perform(6, bundle);
-            return true;
+            if (!mOwnerDisplayName.equals(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_user_name)))) {
+                Bundle bundle = new Bundle();
+                bundle.putString("owner_displayname", mOwnerDisplayName);
+                mActivity.perform(6, bundle);
+                return true;
+            } else {
+                UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You cannot chat with yourself");
+                return true;
+            }
         }
     }
 }

@@ -16,6 +16,7 @@
     <string name="API_phone_no">PHONE_NUMBER</string>
     <string name="API_user_name">USER_NAME</string>
     <string name="API_pin">PIN</string>
+    <string name="API_is_first_post">isFirstPostCreated</string>
 
     <!--COUNTRY-CODES-->
     <string-array name="country_codes">
@@ -241,4 +242,6 @@
         <item>+970 (Palestine)</item>
         <item>+212 (Western Sahara)</item>
     </string-array>
+
+    <string name="sender_id">207813929540</string>
 </resources>

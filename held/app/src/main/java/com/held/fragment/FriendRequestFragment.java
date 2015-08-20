@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.held.activity.NotificationActivity;
 import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.adapters.FriendRequestAdapter;
@@ -53,7 +54,7 @@ public class FriendRequestFragment extends ParentFragment {
     protected void initialiseView(View view, Bundle savedInstanceState) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.FR_recycler_view);
         mLayoutManager = new LinearLayoutManager(getCurrActivity(),LinearLayoutManager.VERTICAL,false);
-        mFriendRequestAdapter = new FriendRequestAdapter((PostActivity) getCurrActivity(), mFriendRequestList, mIsLastPage,this);
+        mFriendRequestAdapter = new FriendRequestAdapter((NotificationActivity) getCurrActivity(), mFriendRequestList, mIsLastPage,this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mFriendRequestAdapter);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.FR_swipe_refresh_layout);

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.held.activity.NotificationActivity;
 import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.adapters.DownloadRequestAdapter;
@@ -57,7 +58,7 @@ public class DownloadRequestFragment extends ParentFragment {
     protected void initialiseView(View view, Bundle savedInstanceState) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.DR_recycler_view);
         mLayoutManager = new LinearLayoutManager(getCurrActivity(),LinearLayoutManager.VERTICAL,false);
-        mDownloadRequestAdapter = new DownloadRequestAdapter((PostActivity) getCurrActivity(), mDownloadRequestList, mIsLastPage,this);
+        mDownloadRequestAdapter = new DownloadRequestAdapter((NotificationActivity) getCurrActivity(), mDownloadRequestList, mIsLastPage,this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mDownloadRequestAdapter);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.DR_swipe_refresh_layout);

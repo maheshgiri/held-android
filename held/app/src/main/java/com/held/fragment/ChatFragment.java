@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.held.activity.PostActivity;
+import com.held.activity.ChatActivity;
 import com.held.activity.R;
 import com.held.adapters.ChatAdapter;
 import com.held.retrofit.HeldService;
@@ -21,7 +21,6 @@ import com.held.retrofit.response.PostChatData;
 import com.held.retrofit.response.PostChatResponse;
 import com.held.retrofit.response.PostMessageResponse;
 import com.held.retrofit.response.SearchUserResponse;
-import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 import com.held.utils.Utils;
@@ -69,7 +68,7 @@ public class ChatFragment extends ParentFragment {
         mLayoutManager = new LinearLayoutManager(getCurrActivity());
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.setStackFromEnd(true);
-        mChatAdapter = new ChatAdapter((PostActivity) getCurrActivity(), mPostChatData);
+        mChatAdapter = new ChatAdapter((ChatActivity) getCurrActivity(), mPostChatData);
         mChatList.setLayoutManager(mLayoutManager);
         mChatList.setAdapter(mChatAdapter);
         mSubmitBtn = (Button) view.findViewById(R.id.CHAT_submit_btn);
@@ -91,17 +90,17 @@ public class ChatFragment extends ParentFragment {
                 getArguments().getString("id"), new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
-                        DialogUtils.stopProgressDialog();
+//                        DialogUtils.stopProgressDialog();
                         Utils.hideSoftKeyboard(getCurrActivity());
                         mFriendId = searchUserResponse.getRid();
-                        if (!mMessageEdt.getText().toString().isEmpty())
-                            callFriendChatApi();
+//                        if (!mMessageEdt.getText().toString().isEmpty())
+                        callFriendsChatsApi();
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        DialogUtils.stopProgressDialog();
-                        if (!TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+//                        DialogUtils.stopProgressDialog();
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
                             String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
                             UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
                         } else
@@ -176,10 +175,6 @@ public class ChatFragment extends ParentFragment {
                     else
                         UiUtils.showSnackbarToast(getView(), "Message should not be empty");
                 }
-                break;
-            case R.id.TOOLBAR_chat_img:
-                mBackImg.setImageDrawable(getResources().getDrawable(R.drawable.icon_chat));
-                getCurrActivity().onBackPressed();
                 break;
         }
     }

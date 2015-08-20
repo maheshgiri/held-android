@@ -15,8 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.held.activity.FeedActivity;
 import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.adapters.FeedAdapter;
@@ -29,6 +31,7 @@ import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 import com.held.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +57,7 @@ public class FeedFragment extends ParentFragment {
     private List<FeedData> mFeedList = new ArrayList<>();
     private int mLimit = 5;
     private long mStart = System.currentTimeMillis();
-
+    private ImageView mFullImg;
 
     public static FeedFragment newInstance() {
         return new FeedFragment();
@@ -70,15 +73,14 @@ public class FeedFragment extends ParentFragment {
     protected void initialiseView(View view, Bundle savedInstanceState) {
 
         Log.d(TAG, " PIN " + PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)));
-
+        mFullImg = (ImageView) view.findViewById(R.id.FEED_full_img);
         mFeedRecyclerView = (RecyclerView) view.findViewById(R.id.FEED_recycler_view);
         mLayoutManager = new LinearLayoutManager(getCurrActivity());
         mFeedRecyclerView.setLayoutManager(mLayoutManager);
         mFeedResponse = new FeedResponse();
         blurTransformation = new BlurTransformation(getCurrActivity(), 25f);
-        mFeedAdapter = new FeedAdapter((PostActivity) getCurrActivity(), mFeedList, blurTransformation, isLastPage);
+        mFeedAdapter = new FeedAdapter((FeedActivity) getCurrActivity(), mFeedList, blurTransformation, isLastPage, this);
         mFeedRecyclerView.setAdapter(mFeedAdapter);
-        getCurrActivity().findViewById(R.id.TOOLBAR_camera_img).setOnClickListener(this);
         if (getCurrActivity().getNetworkStatus()) {
             DialogUtils.showProgressBar();
             callFeedApi();
@@ -151,6 +153,18 @@ public class FeedFragment extends ParentFragment {
         });
     }
 
+    public void showFullImg(String url) {
+        mFullImg.setVisibility(View.VISIBLE);
+        mFeedRecyclerView.setVisibility(View.GONE);
+        Picasso.with(getActivity()).load(url).into(mFullImg);
+    }
+
+    public void showRCView() {
+        mFullImg.setVisibility(View.GONE);
+        mFeedRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+
     private void callUserSearchApi() {
         HeldService.getService().searchUser(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
                 mSearchEdt.getText().toString().trim(), new Callback<SearchUserResponse>() {
@@ -217,22 +231,9 @@ public class FeedFragment extends ParentFragment {
 
     @Override
     protected void bindListeners(View view) {
-        getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_chat_img).setOnClickListener(this);
-        getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_notification_img).setOnClickListener(this);
     }
 
     @Override
     public void onClicked(View v) {
-        switch (v.getId()) {
-            case R.id.TOOLBAR_camera_img:
-                getCurrActivity().perform(3, null);
-                break;
-            case R.id.TOOLBAR_chat_img:
-                getCurrActivity().perform(7, null);
-                break;
-            case R.id.TOOLBAR_notification_img:
-                getCurrActivity().perform(4, null);
-                break;
-        }
     }
 }

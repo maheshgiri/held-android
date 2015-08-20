@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.held.activity.ChatActivity;
 import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.adapters.FriendsAdapter;
@@ -54,7 +55,7 @@ public class FriendsListFragment extends ParentFragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.FRIENDLIST_recycler_view);
         mLayoutManager = new LinearLayoutManager(getCurrActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mFriendAdapter = new FriendsAdapter((PostActivity) getCurrActivity(), mFriendList, mIsLastPage);
+        mFriendAdapter = new FriendsAdapter((ChatActivity) getCurrActivity(), mFriendList, mIsLastPage);
         mRecyclerView.setAdapter(mFriendAdapter);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.FRIENDLIST_swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

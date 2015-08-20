@@ -44,7 +44,7 @@
             android:background="#1affffff"
             android:gravity="center"
             android:hint="Pick a Username (minimum 6 chars)"
-            android:maxLength="25"
+            android:maxLength="15"
             android:maxLines="1"
             android:textAllCaps="false"
             android:textColor="#ffffff"
