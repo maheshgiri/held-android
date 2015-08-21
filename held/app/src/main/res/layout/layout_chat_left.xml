@@ -28,7 +28,7 @@
             android:layout_marginTop="7dp"
             android:layout_toRightOf="@+id/CHATLEFT_profile_img"
             android:textColor="#ffffff"
-            android:textSize="15sp"
+            android:textSize="18sp"
             custom:typeFace="@string/freight_sans_medium" />
 
         <com.held.customview.CustomTextView
@@ -41,7 +41,7 @@
             android:layout_toRightOf="@+id/CHATLEFT_profile_img"
             android:lineSpacingExtra="5dp"
             android:textColor="#ffffff"
-            android:textSize="15sp"
+            android:textSize="18sp"
             custom:typeFace="@string/freight_sans_book" />
     </RelativeLayout>
 
@@ -55,6 +55,6 @@
         android:gravity="right"
         android:lineSpacingExtra="5dp"
         android:textColor="#ffffff"
-        android:textSize="12sp"
+        android:textSize="18sp"
         custom:typeFace="@string/freight_sans_book" />
 </RelativeLayout>

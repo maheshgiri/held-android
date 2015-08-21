@@ -31,8 +31,8 @@
             android:maxLength="150"
             android:textColor="#ffffff"
             android:textColorHint="#80ffffff"
-            android:textSize="16sp"
-            custom:typeFace="@string/freight_sans_book" />
+            custom:typeFace="@string/freight_sans_book"
+            android:textSize="18sp"/>
 
         <com.held.customview.CustomTextView
             android:id="@+id/POST_cancel"

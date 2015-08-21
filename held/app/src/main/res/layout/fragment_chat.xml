@@ -37,7 +37,8 @@
                 android:background="@drawable/edittext_color"
                 android:maxLength="100"
                 android:textColor="#ffffff"
-                custom:typeFace="@string/freight_sans_book" />
+                custom:typeFace="@string/freight_sans_book"
+                android:textSize="18sp"/>
 
             <com.held.customview.CustomButton
                 android:id="@+id/CHAT_submit_btn"
@@ -48,8 +49,8 @@
                 android:text="Submit"
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
-                android:textSize="18sp"
-                custom:typeFace="@string/freight_sans_book" />
+                custom:typeFace="@string/freight_sans_book"
+                android:textSize="18sp"/>
         </RelativeLayout>
     </RelativeLayout>
 

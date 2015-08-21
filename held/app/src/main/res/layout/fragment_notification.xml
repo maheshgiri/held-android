@@ -14,7 +14,8 @@
         android:background="#265092"
         app:tabIndicatorColor="#1affffff"
         app:tabSelectedTextColor="#ffffff"
-        app:tabTextColor="#4f94cc">
+        app:tabTextColor="#4f94cc"
+        android:textSize="18sp">
 
     </android.support.design.widget.TabLayout>
 
