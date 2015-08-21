@@ -8,8 +8,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.held.gcm.GCMControlManager;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.LoginUserResponse;
+import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
@@ -30,6 +32,8 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
         setContentView(R.layout.activity_splash);
         mGetStartedBtn = (Button) findViewById(R.id.SPLASH_get_started_btn);
         mGetStartedBtn.setOnClickListener(this);
+
+        setupGCM();
 
         if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
                 PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) != 0) {
@@ -52,11 +56,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
                 DialogUtils.stopProgressDialog();
                 if (loginUserResponse.isLogin()) {
                     PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSession_token());
-                    if (PreferenceHelper.getInstance(getApplicationContext()).readPreference(getString(R.string.API_is_first_post), false)) {
-                        launchFeedActivity();
-                    } else {
-                        launchPostActivity();
-                    }
+                    callUpdateRegIdApi();
                 }
             }
 
@@ -122,5 +122,34 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
                 startActivity(intent);
                 break;
         }
+    }
+
+    private void setupGCM() {
+        GCMControlManager gcmControlManager = new GCMControlManager(this);
+        gcmControlManager.setupGCM();
+    }
+
+    private void callUpdateRegIdApi() {
+        HeldService.getService().updateRegID(PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_session_token)),
+                "notification_token", PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_registration_key)), new Callback<SearchUserResponse>() {
+                    @Override
+                    public void success(SearchUserResponse searchUserResponse, Response response) {
+                        if (PreferenceHelper.getInstance(getApplicationContext()).readPreference(getString(R.string.API_is_first_post), false)) {
+                            launchFeedActivity();
+                        } else {
+                            launchPostActivity();
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        DialogUtils.stopProgressDialog();
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Some Problem Occurred");
+                    }
+                });
     }
 }

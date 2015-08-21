@@ -15,6 +15,7 @@ import com.held.receiver.NetworkStateReceiver;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.CreateUserResponse;
 import com.held.retrofit.response.LoginUserResponse;
+import com.held.retrofit.response.SearchUserResponse;
 import com.held.retrofit.response.VerificationResponse;
 import com.held.retrofit.response.VoiceCallResponse;
 import com.held.utils.DialogUtils;
@@ -183,6 +184,26 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         );
     }
 
+    private void callUpdateRegIdApi() {
+        HeldService.getService().updateRegID(PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_session_token)),
+                "notification_token", PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_registration_key)), new Callback<SearchUserResponse>() {
+                    @Override
+                    public void success(SearchUserResponse searchUserResponse, Response response) {
+                        launchComposeScreen();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        DialogUtils.stopProgressDialog();
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Some Problem Occurred");
+                    }
+                });
+    }
+
     private void callLoginUserApi() {
         HeldService.getService().loginUser(mPhoneNo, mPin, new Callback<LoginUserResponse>() {
             @Override
@@ -190,7 +211,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                 DialogUtils.stopProgressDialog();
                 if (loginUserResponse.isLogin()) {
                     PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSession_token());
-                    launchComposeScreen();
+                    callUpdateRegIdApi();
                 }
             }
 

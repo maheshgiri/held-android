@@ -14,6 +14,12 @@ public class SearchUserResponse {
     private String rid;
     private String display_name;
 
+    public String getNotification_token() {
+        return notification_token;
+    }
+
+    private String notification_token;
+
     public String getSession_token() {
         return session_token;
     }

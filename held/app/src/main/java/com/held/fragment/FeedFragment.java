@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.held.activity.FeedActivity;
-import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.adapters.FeedAdapter;
 import com.held.customview.BlurTransformation;
@@ -236,4 +235,5 @@ public class FeedFragment extends ParentFragment {
     @Override
     public void onClicked(View v) {
     }
+
 }

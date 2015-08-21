@@ -135,4 +135,8 @@ public interface HeldAPI {
     @GET("/posts/approve_download")
     void approveDownloadRequest(@Header("X-HELD-TOKEN") String token, @Query("request") String rid, Callback<ApproveDownloadResponse> approveDownloadResponseCallback);
 
+    @GET("/users/profile")
+    void updateRegID(@Header("X-HELD-TOKEN") String token, @Query("field") String fieldValue, @Query("value") String image,
+                          Callback<SearchUserResponse> searchUserResponseCallback);
+
 }

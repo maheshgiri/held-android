@@ -243,5 +243,8 @@
         <item>+212 (Western Sahara)</item>
     </string-array>
 
+    <!--<string name="sender_id">696193089870</string>-->
     <string name="sender_id">207813929540</string>
+    <string name="API_registration_key">REG_KEY</string>
+    <string name="API_app_version">APP_VERSION</string>
 </resources>

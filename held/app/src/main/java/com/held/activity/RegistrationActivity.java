@@ -142,5 +142,4 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
         mNetWorStatus = isEnabled;
     }
 
-
 }
