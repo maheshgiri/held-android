@@ -36,7 +36,7 @@
             android:layout_marginRight="10dp"
             android:text="8:12 AM"
             android:textColor="#ffffff"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <com.held.customview.CustomTextView
             android:id="@+id/FRIEND_description"
@@ -45,7 +45,7 @@
             android:layout_below="@+id/FRIEND_name"
             android:layout_marginTop="10dp"
             android:textColor="#ffffff"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
     </RelativeLayout>
 

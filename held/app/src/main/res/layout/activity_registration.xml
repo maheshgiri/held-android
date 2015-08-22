@@ -50,7 +50,7 @@
             android:textColor="#ffffff"
             android:textColorHint="#ffffff"
             android:textCursorDrawable="@drawable/cursor_background"
-            android:textSize="14sp"
+            android:textSize="18sp"
             custom:typeFace="@string/freight_sans_book" />
 
         <LinearLayout
@@ -72,7 +72,7 @@
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
                 android:textColorHint="#ffffff"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
 
             <com.held.customview.CustomEditText
                 android:id="@+id/REG_mobile_no_edt"
@@ -88,7 +88,7 @@
                 android:textColor="#ffffff"
                 android:textColorHint="#ffffff"
                 android:textCursorDrawable="@drawable/cursor_background"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 custom:typeFace="@string/freight_sans_book" />
 
         </LinearLayout>

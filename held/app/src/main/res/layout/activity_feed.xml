@@ -7,12 +7,13 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
+    <include layout="@layout/app_toolbar"></include>
+
     <FrameLayout
         android:id="@+id/frag_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"></FrameLayout>
+        android:layout_below="@+id/toolbar"></FrameLayout>
 
-    <include layout="@layout/app_toolbar"></include>
 
 </RelativeLayout>

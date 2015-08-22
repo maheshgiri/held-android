@@ -247,4 +247,5 @@
     <string name="sender_id">207813929540</string>
     <string name="API_registration_key">REG_KEY</string>
     <string name="API_app_version">APP_VERSION</string>
+    <string name="HELD_held">Held</string>
 </resources>

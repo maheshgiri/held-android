@@ -4,9 +4,6 @@ import android.app.Application;
 import android.content.Context;
 
 
-/**
- * Created by Ymedialabs on 02/02/15.
- */
 public class HeldApplication extends Application {
     private static final String TAG = HeldApplication.class.getSimpleName();
     public static boolean IS_APP_FOREGROUND;

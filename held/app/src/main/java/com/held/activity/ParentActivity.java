@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.held.fragment.ParentFragment;
 import com.held.receiver.NetworkStateReceiver;
 import com.held.utils.DialogUtils;
+import com.held.utils.HeldApplication;
 import com.held.utils.NetworkUtil;
 
 import java.util.List;
@@ -124,13 +125,14 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
     @Override
     protected void onResume() {
         super.onResume();
-
+        HeldApplication.IS_APP_FOREGROUND = true;
         //Get current Network status during Activity resume
         mNetworkStatus = NetworkUtil.isInternetConnected(getApplicationContext());
     }
 
     @Override
     protected void onPause() {
+        HeldApplication.IS_APP_FOREGROUND = false;
         super.onPause();
     }
 
@@ -237,7 +239,7 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
         setToolbar();
     }
 
-    public void perform(int id,Bundle bundle){
+    public void perform(int id, Bundle bundle) {
 
     }
 }

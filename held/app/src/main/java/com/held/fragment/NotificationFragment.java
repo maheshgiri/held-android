@@ -18,9 +18,18 @@ public class NotificationFragment extends ParentFragment {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
+    private int mId;
 
     public static NotificationFragment newInstance() {
         return new NotificationFragment();
+    }
+
+    public static NotificationFragment newInstance(int id) {
+        Bundle bundle = new Bundle();
+        NotificationFragment fragment = new NotificationFragment();
+        bundle.putInt("id", id);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Nullable
@@ -31,6 +40,7 @@ public class NotificationFragment extends ParentFragment {
 
     @Override
     protected void initialiseView(View view, Bundle savedInstanceState) {
+
         mTabLayout = (TabLayout) view.findViewById(R.id.NOTIFY_tab_layout);
         mTabLayout.addTab(mTabLayout.newTab().setText("Friend Requests"));
         mTabLayout.addTab(mTabLayout.newTab().setText("Download Requests"));
@@ -56,6 +66,13 @@ public class NotificationFragment extends ParentFragment {
 
             }
         });
+
+        if (getArguments() != null) {
+            mId = getArguments().getInt("id");
+            if (mId == 1) {
+                mViewPager.setCurrentItem(1);
+            }
+        }
     }
 
     @Override

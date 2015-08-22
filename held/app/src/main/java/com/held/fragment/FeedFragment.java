@@ -130,6 +130,7 @@ public class FeedFragment extends ParentFragment {
                     isLastPage = false;
                     mFeedList.clear();
                     mStart = System.currentTimeMillis();
+                    DialogUtils.showProgressBar();
                     callFeedApi();
                 } else {
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
@@ -155,12 +156,14 @@ public class FeedFragment extends ParentFragment {
     public void showFullImg(String url) {
         mFullImg.setVisibility(View.VISIBLE);
         mFeedRecyclerView.setVisibility(View.GONE);
+        getCurrActivity().getToolbar().setVisibility(View.GONE);
         Picasso.with(getActivity()).load(url).into(mFullImg);
     }
 
     public void showRCView() {
         mFullImg.setVisibility(View.GONE);
         mFeedRecyclerView.setVisibility(View.VISIBLE);
+        getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
     }
 
 

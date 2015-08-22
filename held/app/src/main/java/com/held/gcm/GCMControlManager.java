@@ -15,9 +15,6 @@ import com.held.utils.PreferenceHelper;
 
 import java.io.IOException;
 
-/**
- * Created by yml on 19/2/15.
- */
 
 public class GCMControlManager {
 

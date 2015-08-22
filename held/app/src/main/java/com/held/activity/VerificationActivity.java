@@ -173,7 +173,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                     @Override
                     public void failure(RetrofitError error) {
                         DialogUtils.stopProgressDialog();
-                        if (!TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
                             String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
                             UiUtils.showSnackbarToast(findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
                         } else

@@ -1,13 +1,7 @@
 package com.held.gcm;
 
-
-
-
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by YMediaLabs on 19/2/15.
- */
 public class GCMConstants {
     /**
      * Substitute you own sender ID here. This is the project number you got
@@ -41,6 +35,7 @@ public class GCMConstants {
 
     public static class NotificationID {
         private static final AtomicInteger c = new AtomicInteger(0);
+
         public static int getID() {
             return c.incrementAndGet();
         }
