@@ -81,7 +81,7 @@ public class FeedFragment extends ParentFragment {
         mFeedAdapter = new FeedAdapter((FeedActivity) getCurrActivity(), mFeedList, blurTransformation, isLastPage, this);
         mFeedRecyclerView.setAdapter(mFeedAdapter);
         if (getCurrActivity().getNetworkStatus()) {
-            DialogUtils.showProgressBar();
+//            DialogUtils.showProgressBar();
             callFeedApi();
         } else
             UiUtils.showSnackbarToast(getView(), "Sorry! You don't seem to connected to internet");
@@ -130,7 +130,7 @@ public class FeedFragment extends ParentFragment {
                     isLastPage = false;
                     mFeedList.clear();
                     mStart = System.currentTimeMillis();
-                    DialogUtils.showProgressBar();
+//                    DialogUtils.showProgressBar();
                     callFeedApi();
                 } else {
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
@@ -204,7 +204,7 @@ public class FeedFragment extends ParentFragment {
                     mLimit, mStart, new Callback<FeedResponse>() {
                         @Override
                         public void success(FeedResponse feedResponse, Response response) {
-                            DialogUtils.stopProgressDialog();
+//                            DialogUtils.stopProgressDialog();
                             mFeedResponse = feedResponse;
                             mFeedList.addAll(mFeedResponse.getObjects());
                             isLastPage = mFeedResponse.isLastPage();
@@ -215,7 +215,7 @@ public class FeedFragment extends ParentFragment {
 
                         @Override
                         public void failure(RetrofitError error) {
-                            DialogUtils.stopProgressDialog();
+//                            DialogUtils.stopProgressDialog();
                             isLoading = false;
                             if (error != null && error.getResponse() != null &&
                                     !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
