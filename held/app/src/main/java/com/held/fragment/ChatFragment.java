@@ -17,10 +17,12 @@ import com.held.activity.ChatActivity;
 import com.held.activity.R;
 import com.held.adapters.ChatAdapter;
 import com.held.retrofit.HeldService;
+import com.held.retrofit.response.DownloadRequestData;
 import com.held.retrofit.response.PostChatData;
 import com.held.retrofit.response.PostChatResponse;
 import com.held.retrofit.response.PostMessageResponse;
 import com.held.retrofit.response.SearchUserResponse;
+import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 import com.held.utils.Utils;
@@ -42,7 +44,7 @@ public class ChatFragment extends ParentFragment {
     private List<PostChatData> mPostChatData = new ArrayList<>();
     private Button mSubmitBtn;
     private EditText mMessageEdt;
-    private ImageView mBackImg;
+    private ImageView mBackImg, mDownLoad;
     private boolean mIsOneToOne;
     private String mId, mFriendId;
 
@@ -77,8 +79,11 @@ public class ChatFragment extends ParentFragment {
         mBackImg = (ImageView) (getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_chat_img));
         mBackImg.setImageDrawable(getResources().getDrawable(R.drawable.icon_back));
         mIsOneToOne = getArguments().getBoolean("isOneToOne");
+        mDownLoad = (ImageView) view.findViewById(R.id.CHAT_download);
+        mDownLoad.setOnClickListener(this);
         mId = getArguments().getString("id");
         if (mIsOneToOne) {
+            mDownLoad.setVisibility(View.GONE);
             callUserSearchApi();
         } else {
             callPostChatApi();
@@ -120,7 +125,12 @@ public class ChatFragment extends ParentFragment {
 
                     @Override
                     public void failure(RetrofitError error) {
-
+//                        DialogUtils.stopProgressDialog();
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
                     }
                 });
     }
@@ -135,7 +145,12 @@ public class ChatFragment extends ParentFragment {
 
                     @Override
                     public void failure(RetrofitError error) {
-
+//                        DialogUtils.stopProgressDialog();
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
                     }
                 });
     }
@@ -150,7 +165,12 @@ public class ChatFragment extends ParentFragment {
 
                     @Override
                     public void failure(RetrofitError error) {
-
+//                        DialogUtils.stopProgressDialog();
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
                     }
                 });
     }
@@ -176,7 +196,36 @@ public class ChatFragment extends ParentFragment {
                         UiUtils.showSnackbarToast(getView(), "Message should not be empty");
                 }
                 break;
+            case R.id.CHAT_download:
+                if (getCurrActivity().getNetworkStatus()) {
+                    DialogUtils.showProgressBar();
+                    callDownloadRequestApi();
+                } else
+                    UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
+
+                break;
         }
+    }
+
+    private void callDownloadRequestApi() {
+        HeldService.getService().requestDownLoadPost(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
+                getArguments().getString("id"), new Callback<DownloadRequestData>() {
+                    @Override
+                    public void success(DownloadRequestData downloadRequestData, Response response) {
+                        DialogUtils.stopProgressDialog();
+                        UiUtils.showSnackbarToast(getView(), "Download Request Sent Successfully");
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        DialogUtils.stopProgressDialog();
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
+                    }
+                });
     }
 
     private void callChatPostApi() {

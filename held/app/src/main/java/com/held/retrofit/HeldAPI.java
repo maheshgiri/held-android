@@ -6,6 +6,7 @@ import com.held.retrofit.response.ApproveFriendResponse;
 import com.held.retrofit.response.CreateUserResponse;
 import com.held.retrofit.response.DeclineDownloadResponse;
 import com.held.retrofit.response.DeclineFriendResponse;
+import com.held.retrofit.response.DownloadRequestData;
 import com.held.retrofit.response.DownloadRequestListResponse;
 import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.FriendDeclineResponse;
@@ -137,6 +138,8 @@ public interface HeldAPI {
 
     @GET("/users/profile")
     void updateRegID(@Header("X-HELD-TOKEN") String token, @Query("field") String fieldValue, @Query("value") String image,
-                          Callback<SearchUserResponse> searchUserResponseCallback);
+                     Callback<SearchUserResponse> searchUserResponseCallback);
 
+    @GET("/posts/request_download")
+    void requestDownLoadPost(@Header("X-HELD-TOKEN") String token, @Query("post") String fieldValue, Callback<DownloadRequestData> downloadRequestDataCallback);
 }

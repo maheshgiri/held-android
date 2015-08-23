@@ -14,6 +14,15 @@
         android:layout_above="@+id/CHAT_bottom_layout"
         android:layout_marginTop="15dp" />
 
+    <ImageView
+        android:id="@+id/CHAT_download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:src="@drawable/icon_notification" />
+
     <RelativeLayout
         android:id="@+id/CHAT_bottom_layout"
         android:layout_width="match_parent"
@@ -37,8 +46,8 @@
                 android:background="@drawable/edittext_color"
                 android:maxLength="100"
                 android:textColor="#ffffff"
-                custom:typeFace="@string/freight_sans_book"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                custom:typeFace="@string/freight_sans_book" />
 
             <com.held.customview.CustomButton
                 android:id="@+id/CHAT_submit_btn"
@@ -49,8 +58,8 @@
                 android:text="Submit"
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
-                custom:typeFace="@string/freight_sans_book"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                custom:typeFace="@string/freight_sans_book" />
         </RelativeLayout>
     </RelativeLayout>
 
