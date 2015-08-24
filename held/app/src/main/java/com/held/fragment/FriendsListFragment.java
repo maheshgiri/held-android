@@ -6,17 +6,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.held.activity.ChatActivity;
-import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.adapters.FriendsAdapter;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FriendRequestResponse;
 import com.held.retrofit.response.SearchUserResponse;
+import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 
@@ -26,6 +27,7 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
 
 public class FriendsListFragment extends ParentFragment {
 
@@ -107,6 +109,13 @@ public class FriendsListFragment extends ParentFragment {
             @Override
             public void failure(RetrofitError error) {
                 mIsLoading = false;
+                DialogUtils.stopProgressDialog();
+                mIsLoading = false;
+                if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                    String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                    UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                } else
+                    UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
             }
         });
     }

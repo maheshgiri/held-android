@@ -6,12 +6,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.held.activity.NotificationActivity;
-import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.adapters.FriendRequestAdapter;
 import com.held.retrofit.HeldService;
@@ -27,6 +27,7 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
 
 public class FriendRequestFragment extends ParentFragment {
 
@@ -53,8 +54,8 @@ public class FriendRequestFragment extends ParentFragment {
     @Override
     protected void initialiseView(View view, Bundle savedInstanceState) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.FR_recycler_view);
-        mLayoutManager = new LinearLayoutManager(getCurrActivity(),LinearLayoutManager.VERTICAL,false);
-        mFriendRequestAdapter = new FriendRequestAdapter((NotificationActivity) getCurrActivity(), mFriendRequestList, mIsLastPage,this);
+        mLayoutManager = new LinearLayoutManager(getCurrActivity(), LinearLayoutManager.VERTICAL, false);
+        mFriendRequestAdapter = new FriendRequestAdapter((NotificationActivity) getCurrActivity(), mFriendRequestList, mIsLastPage, this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mFriendRequestAdapter);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.FR_swipe_refresh_layout);
@@ -110,6 +111,11 @@ public class FriendRequestFragment extends ParentFragment {
                     public void failure(RetrofitError error) {
                         DialogUtils.stopProgressDialog();
                         mIsLoading = false;
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
                     }
                 });
     }

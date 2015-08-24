@@ -86,6 +86,7 @@ public class FeedFragment extends ParentFragment {
         } else
             UiUtils.showSnackbarToast(getView(), "Sorry! You don't seem to connected to internet");
         mSearchEdt = (EditText) getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_search_edt);
+
         mSearchEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -151,18 +152,19 @@ public class FeedFragment extends ParentFragment {
                 }
             }
         });
+        Utils.hideSoftKeyboard(getCurrActivity());
     }
 
     public void showFullImg(String url) {
         mFullImg.setVisibility(View.VISIBLE);
-        mFeedRecyclerView.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setVisibility(View.GONE);
         getCurrActivity().getToolbar().setVisibility(View.GONE);
         Picasso.with(getActivity()).load(url).into(mFullImg);
     }
 
     public void showRCView() {
         mFullImg.setVisibility(View.GONE);
-        mFeedRecyclerView.setVisibility(View.VISIBLE);
+        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
         getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
     }
 
@@ -183,7 +185,7 @@ public class FeedFragment extends ParentFragment {
                     @Override
                     public void failure(RetrofitError error) {
                         DialogUtils.stopProgressDialog();
-                        if (!TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
                             String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
                             UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
                         } else
@@ -220,7 +222,7 @@ public class FeedFragment extends ParentFragment {
                             if (error != null && error.getResponse() != null &&
                                     !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
                                 String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
-                                UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
+//                                UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
                                 if (json.substring(json.indexOf(":") + 2, json.length() - 2).equals("")) {
 
                                 }

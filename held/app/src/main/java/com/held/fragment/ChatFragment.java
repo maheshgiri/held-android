@@ -44,7 +44,7 @@ public class ChatFragment extends ParentFragment {
     private List<PostChatData> mPostChatData = new ArrayList<>();
     private Button mSubmitBtn;
     private EditText mMessageEdt;
-    private ImageView mBackImg, mDownLoad;
+    private ImageView mDownLoad;
     private boolean mIsOneToOne;
     private String mId, mFriendId;
 
@@ -76,8 +76,6 @@ public class ChatFragment extends ParentFragment {
         mSubmitBtn = (Button) view.findViewById(R.id.CHAT_submit_btn);
         mMessageEdt = (EditText) view.findViewById(R.id.CHAT_message);
         mSubmitBtn.setOnClickListener(this);
-        mBackImg = (ImageView) (getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_chat_img));
-        mBackImg.setImageDrawable(getResources().getDrawable(R.drawable.icon_back));
         mIsOneToOne = getArguments().getBoolean("isOneToOne");
         mDownLoad = (ImageView) view.findViewById(R.id.CHAT_download);
         mDownLoad.setOnClickListener(this);
@@ -177,7 +175,6 @@ public class ChatFragment extends ParentFragment {
 
     @Override
     protected void bindListeners(View view) {
-        mBackImg.setOnClickListener(this);
     }
 
     @Override
@@ -239,7 +236,12 @@ public class ChatFragment extends ParentFragment {
 
                     @Override
                     public void failure(RetrofitError error) {
-
+                        DialogUtils.stopProgressDialog();
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
                     }
                 });
     }

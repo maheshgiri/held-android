@@ -133,9 +133,9 @@ public class PostFragment extends ParentFragment {
         mCaption = mCaptionEdt.getText().toString().trim();
 
         BitmapFactory.Options options = new BitmapFactory.Options();
-//        UiUtils.calculateInSampleSize(options,
-//                UiUtils.dpToPx(getResources(), 350),
-//                UiUtils.dpToPx(getResources(), 350));
+        UiUtils.calculateInSampleSize(options,
+                UiUtils.dpToPx(getResources(), 350),
+                UiUtils.dpToPx(getResources(), 350));
         options.inSampleSize = 1;
         options.inJustDecodeBounds = false;
         Bitmap mAttachment = BitmapFactory.decodeFile(mFile.getAbsolutePath(),
@@ -320,7 +320,7 @@ public class PostFragment extends ParentFragment {
             public void success(PostResponse postResponse, Response response) {
                 DialogUtils.stopProgressDialog();
                 if (!PreferenceHelper.getInstance(getCurrActivity()).readPreference("isFirstPostCreated", false)) {
-                    DialogUtils.showProgressBar();
+                    DialogUtils.stopProgressDialog();
                     callPicUpdateApi(postResponse.getImage());
                 }
                 PreferenceHelper.getInstance(getCurrActivity()).writePreference("isFirstPostCreated", true);

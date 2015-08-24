@@ -11,7 +11,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.held.activity.NotificationActivity;
-import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.fragment.DownloadRequestFragment;
 import com.held.retrofit.HeldService;
@@ -142,7 +141,8 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
             public void success(ApproveDownloadResponse approveDownloadResponse, Response response) {
                 DialogUtils.stopProgressDialog();
                 mDownloadRequestList.clear();
-                mDownloadRequestFragment.callDownloadRequestListApi();
+                long start = System.currentTimeMillis();
+                mDownloadRequestFragment.callDownloadRequestListApi(start);
             }
 
             @Override

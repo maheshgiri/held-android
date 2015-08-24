@@ -12,14 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.held.activity.NotificationActivity;
-import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.adapters.DownloadRequestAdapter;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.DownloadRequestData;
 import com.held.retrofit.response.DownloadRequestListResponse;
-import com.held.retrofit.response.FriendRequestResponse;
-import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
@@ -57,8 +54,8 @@ public class DownloadRequestFragment extends ParentFragment {
     @Override
     protected void initialiseView(View view, Bundle savedInstanceState) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.DR_recycler_view);
-        mLayoutManager = new LinearLayoutManager(getCurrActivity(),LinearLayoutManager.VERTICAL,false);
-        mDownloadRequestAdapter = new DownloadRequestAdapter((NotificationActivity) getCurrActivity(), mDownloadRequestList, mIsLastPage,this);
+        mLayoutManager = new LinearLayoutManager(getCurrActivity(), LinearLayoutManager.VERTICAL, false);
+        mDownloadRequestAdapter = new DownloadRequestAdapter((NotificationActivity) getCurrActivity(), mDownloadRequestList, mIsLastPage, this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mDownloadRequestAdapter);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.DR_swipe_refresh_layout);
@@ -70,7 +67,7 @@ public class DownloadRequestFragment extends ParentFragment {
                 int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
 
                 if (!mIsLastPage && (lastVisibleItemPosition + 1) == totalItemCoount && !mIsLoading) {
-                    callDownloadRequestListApi();
+                    callDownloadRequestListApi(mStart);
                 }
             }
         });
@@ -82,22 +79,17 @@ public class DownloadRequestFragment extends ParentFragment {
                 mDownloadRequestList.clear();
                 mIsLastPage = false;
                 if (getCurrActivity().getNetworkStatus()) {
-                    callDownloadRequestListApi();
+                    callDownloadRequestListApi(mStart);
                 } else {
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
                 }
             }
         });
-        if (getCurrActivity().getNetworkStatus()) {
-            DialogUtils.showProgressBar();
-            callDownloadRequestListApi();
-        } else {
-            UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
-        }
     }
 
-    public void callDownloadRequestListApi() {
+    public void callDownloadRequestListApi(long start) {
         mIsLoading = true;
+        mStart = start;
         HeldService.getService().getDownLoadRequestList(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
                 mLimit, mStart, new Callback<DownloadRequestListResponse>() {
                     @Override
@@ -114,7 +106,6 @@ public class DownloadRequestFragment extends ParentFragment {
                     public void failure(RetrofitError error) {
                         DialogUtils.stopProgressDialog();
                         mIsLoading = false;
-                        DialogUtils.stopProgressDialog();
                         if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
                             String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
                             UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));

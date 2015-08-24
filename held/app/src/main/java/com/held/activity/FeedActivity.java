@@ -116,7 +116,13 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
     @Override
     public void onBackPressed() {
-        finish();
+        if (mDisplayFragment instanceof FeedFragment)
+            finish();
+        else {
+            super.onBackPressed();
+            updateToolbar(true, false, true, false, true, true, false, "");
+            mDisplayFragment = FeedFragment.newInstance();
+        }
     }
 
     @Override

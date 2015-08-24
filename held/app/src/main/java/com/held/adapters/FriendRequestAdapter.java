@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.held.activity.NotificationActivity;
-import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.fragment.FriendRequestFragment;
 import com.held.retrofit.HeldService;
@@ -126,7 +125,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
                     @Override
                     public void failure(RetrofitError error) {
                         DialogUtils.stopProgressDialog();
-                        if (!TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
                             String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
                             UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
                         } else
@@ -148,7 +147,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
                     @Override
                     public void failure(RetrofitError error) {
                         DialogUtils.stopProgressDialog();
-                        if (!TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
                             String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
                             UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
                         } else
@@ -174,7 +173,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
                     public void failure(RetrofitError error) {
                         DialogUtils.stopProgressDialog();
                         callAcceptFriendRequestApi(name);
-                        if (!TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
                             String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
 //                            UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
                         } else

@@ -61,6 +61,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
 
     private void launchChatScreenFromInbox(String id, boolean isOneToOne) {
         updateToolbar(true, false, true, false, true, true, false, "");
+        mChat.setImageResource(R.drawable.icon_back);
         addFragment(ChatFragment.newInstance(id, isOneToOne), ChatFragment.TAG, true);
         mDisplayFragment = ChatFragment.newInstance(id, isOneToOne);
     }
@@ -69,8 +70,6 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
-
     }
 
     @Override
@@ -92,6 +91,9 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
                 break;
             case R.id.TOOLBAR_camera_img:
                 launchCreatePostScreen();
+                break;
+            case R.id.TOOLBAR_chat_img:
+                onBackPressed();
                 break;
         }
     }
