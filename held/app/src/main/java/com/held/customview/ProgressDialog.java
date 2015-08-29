@@ -33,9 +33,10 @@ public class ProgressDialog extends Dialog {
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         setCancelable(false);
-        int dividerId = getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+        int dividerId = getContext().getResources().getIdentifier("titleDivider", "id", "android");
         View divider = findViewById(dividerId);
-        divider.setBackgroundColor(Color.TRANSPARENT);
+        if (divider != null)
+            divider.setBackgroundColor(Color.TRANSPARENT);
     }
 
     @Override

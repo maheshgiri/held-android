@@ -10,6 +10,11 @@ public class FeedData {
     private String rid;
     private String owner_display_name;
     private String owner_pic;
+    private String thumbnail;
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
 
     public String getDate() {
         return date;

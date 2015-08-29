@@ -10,12 +10,16 @@ public class PostResponse {
     int held;
     String text;
     String rid;
+    String owner_display_name;
+    String thumbnail;
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
 
     public String getOwner_display_name() {
         return owner_display_name;
     }
-
-    String owner_display_name;
 
     public String getDate() {
         return date;

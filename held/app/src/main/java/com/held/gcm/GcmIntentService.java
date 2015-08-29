@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
@@ -17,12 +16,6 @@ import com.held.activity.FeedActivity;
 import com.held.activity.NotificationActivity;
 import com.held.activity.R;
 import com.held.utils.HeldApplication;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
 
 public class GcmIntentService extends IntentService {
 
@@ -83,11 +76,18 @@ public class GcmIntentService extends IntentService {
                 sendNotification(intent, title, message);
                 return;
             case "friend:message":
+                String entity = bundleResponse.getString("entity");
+                String str[] = message.split(":");
                 if (HeldApplication.IS_APP_FOREGROUND) {
                     intent = new Intent(this, ChatActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("id", str[0]);
+                    intent.putExtra("isOneToOne", true);
                     startActivity(intent);
                 } else {
                     intent = new Intent(this, ChatActivity.class);
+                    intent.putExtra("id", str[0]);
+                    intent.putExtra("isOneToOne", true);
                     sendNotification(intent, title, message);
                 }
                 return;
@@ -99,6 +99,8 @@ public class GcmIntentService extends IntentService {
                 intent.putExtra("id", 1);
                 sendNotification(intent, title, message);
             case "post:download_approve":
+                intent = new Intent(this, NotificationActivity.class);
+                sendNotification(intent, title, message);
 //                try {
 //                    URL url = new URL("file://some/path/anImage.png");
 //                    InputStream input = url.openStream();

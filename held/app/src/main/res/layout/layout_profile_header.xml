@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.held.customview.CircularImageView
+        android:id="@+id/PROFILE_pic"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/icon_search" />
+
+    <com.held.customview.CustomTextView
+        android:id="@+id/PROFILE_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/PROFILE_pic"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="hat"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        custom:typeFace="@string/freight_sans_book" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/PROFILE_name"
+        android:layout_marginTop="20dp"
+        android:background="#1affffff"
+        android:orientation="horizontal">
+
+        <com.held.customview.CustomTextView
+            android:id="@+id/PROFILE_photos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="adas"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            custom:typeFace="@string/freight_sans_book" />
+
+        <com.held.customview.CustomTextView
+            android:id="@+id/PROFILE_friends"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="asdasd"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            custom:typeFace="@string/freight_sans_book" />
+
+        <ImageView
+            android:id="@+id/PROFILE_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/icon_chat" />
+
+        <ImageView
+            android:id="@+id/PROFILE_invite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@drawable/icon_chat" />
+
+    </LinearLayout>
+
+</RelativeLayout>
