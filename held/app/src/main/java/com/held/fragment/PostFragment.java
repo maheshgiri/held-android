@@ -341,7 +341,7 @@ public class PostFragment extends ParentFragment {
 
     private void callPicUpdateApi(String image) {
         HeldService.getService().updateProfilePic(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                "pic", image, new Callback<ProfilPicUpdateResponse>() {
+                "thumbnail", image, new Callback<ProfilPicUpdateResponse>() {
                     @Override
                     public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
                         DialogUtils.stopProgressDialog();

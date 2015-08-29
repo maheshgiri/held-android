@@ -90,9 +90,28 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             setTimeText(mFeedList.get(position).getHeld(), holder.mTimeTxt);
 
+//            holder.mUserImg.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    mActivity.perform(8, null);
+//                }
+//            });
+
             holder.mUserImg.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
+                    switch (motionEvent.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                      /*  if (mActivity.getNetworkStatus()) {
+                            Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedResponse.getObjects().get(position).getImage()).into(holder.mFeedImg);
+                            callHoldApi(mFeedResponse.getObjects().get(position).getRid());
+                            holder.mTimeTxt.setVisibility(View.INVISIBLE);
+                        } else {
+                            UiUtils.owSnackbarToast(mActivity.findViewById(R.id.frag_container), "You are not connected to internet");
+                        }*/
+                            mPosition = position;
+                            break;
+                    }
                     mOwnerDisplayName = mFeedList.get(position).getOwner_display_name();
                     return mPersonalChatDetector.onTouchEvent(motionEvent);
                 }
@@ -277,7 +296,6 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public boolean onDown(MotionEvent e) {
-
             return true;
         }
 
@@ -293,6 +311,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You cannot chat with yourself");
                 return true;
             }
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            Bundle bundle = new Bundle();
+            bundle.putString("uid", mFeedList.get(mPosition).getOwner_display_name());
+            mActivity.perform(8, bundle);
+            return true;
         }
     }
 }

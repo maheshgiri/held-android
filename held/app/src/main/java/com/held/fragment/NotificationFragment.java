@@ -69,8 +69,12 @@ public class NotificationFragment extends ParentFragment {
 
         if (getArguments() != null) {
             mId = getArguments().getInt("id");
-            if (mId == 1) {
+            if (mId == 0) {
+                mViewPager.setCurrentItem(0);
+            } else if (mId == 1) {
                 mViewPager.setCurrentItem(1);
+            } else if (mId == 2) {
+                mViewPager.setCurrentItem(2);
             }
         }
     }

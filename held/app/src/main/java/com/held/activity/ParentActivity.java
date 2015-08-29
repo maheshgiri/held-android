@@ -41,7 +41,7 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
         if (savedInstanceState != null) {
 
         }
-        DialogUtils.resetDialog(this);
+        DialogUtils.resetDialog(ParentActivity.this);
         //Get current Network status during Activity creation for first time
         mNetworkStatus = NetworkUtil.isInternetConnected(getApplicationContext());
 

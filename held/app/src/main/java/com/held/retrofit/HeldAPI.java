@@ -1,5 +1,6 @@
 package com.held.retrofit;
 
+import com.held.retrofit.response.ActivityFeedDataResponse;
 import com.held.retrofit.response.AddFriendResponse;
 import com.held.retrofit.response.ApproveDownloadResponse;
 import com.held.retrofit.response.ApproveFriendResponse;
@@ -142,4 +143,10 @@ public interface HeldAPI {
 
     @GET("/posts/request_download")
     void requestDownLoadPost(@Header("X-HELD-TOKEN") String token, @Query("post") String fieldValue, Callback<DownloadRequestData> downloadRequestDataCallback);
+
+    @GET("/user_posts/")
+    void getUserPosts(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, @Query("user") String uid, Callback<FeedResponse> feedResponseCallback);
+
+    @GET("/activities/")
+    void getActivitiesFeed(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, @Query("user") String uid, Callback<ActivityFeedDataResponse> activityFeedDataResponseCallback);
 }

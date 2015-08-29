@@ -11,6 +11,7 @@
         android:layout_height="60dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/icon_search" />
 
     <com.held.customview.CustomTextView
@@ -20,7 +21,6 @@
         android:layout_below="@+id/PROFILE_pic"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="hat"
         android:textColor="#ffffff"
         android:textSize="18sp"
         custom:typeFace="@string/freight_sans_book" />

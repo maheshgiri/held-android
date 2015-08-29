@@ -71,10 +71,15 @@ public class GcmIntentService extends IntentService {
         int gameId, oppToken;
 
         switch (type) {
-            case "friend:approve":
-                Intent intent = new Intent(this, ChatActivity.class);
+            case "friend:request":
+                Intent intent = new Intent(this, NotificationActivity.class);
+                intent.putExtra("id", 0);
                 sendNotification(intent, title, message);
-                return;
+                break;
+            case "friend:approve":
+                intent = new Intent(this, ChatActivity.class);
+                sendNotification(intent, title, message);
+                break;
             case "friend:message":
                 String entity = bundleResponse.getString("entity");
                 String str[] = message.split(":");
@@ -90,14 +95,31 @@ public class GcmIntentService extends IntentService {
                     intent.putExtra("isOneToOne", true);
                     sendNotification(intent, title, message);
                 }
-                return;
+                break;
             case "post:held":
                 intent = new Intent(this, FeedActivity.class);
                 sendNotification(intent, title, message);
+                break;
             case "post:download_request":
                 intent = new Intent(this, NotificationActivity.class);
                 intent.putExtra("id", 1);
                 sendNotification(intent, title, message);
+                break;
+            case "post:message":
+                entity = bundleResponse.getString("entity");
+                if (HeldApplication.IS_APP_FOREGROUND) {
+                    intent = new Intent(this, ChatActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("id", entity);
+                    intent.putExtra("isOneToOne", false);
+                    startActivity(intent);
+                } else {
+                    intent = new Intent(this, ChatActivity.class);
+                    intent.putExtra("id", entity);
+                    intent.putExtra("isOneToOne", false);
+                    sendNotification(intent, title, message);
+                }
+                break;
             case "post:download_approve":
                 intent = new Intent(this, NotificationActivity.class);
                 sendNotification(intent, title, message);

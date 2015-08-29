@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.held.fragment.FeedFragment;
+import com.held.fragment.ProfileFragment;
 import com.held.fragment.SendFriendRequestFragment;
 import com.held.utils.AppConstants;
 
@@ -110,8 +111,18 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
             case 7:
 //                launchInboxPage();
                 break;
+            case 8:
+                if (bundle != null)
+                    launchProfileScreen(bundle.getString("uid"));
+                break;
 
         }
+    }
+
+    private void launchProfileScreen(String uid) {
+        updateToolbar(false, false, false, false, false, false, false, "");
+        addFragment(ProfileFragment.newInstance(uid), ProfileFragment.TAG, true);
+        mDisplayFragment = ProfileFragment.newInstance(uid);
     }
 
     @Override
