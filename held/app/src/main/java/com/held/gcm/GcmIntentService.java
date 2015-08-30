@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
@@ -22,9 +23,11 @@ public class GcmIntentService extends IntentService {
 
     private final String TAG = GcmIntentService.class.getSimpleName();
     private AudioManager am;
+    private LocalBroadcastManager localBroadcastManager;
 
     public GcmIntentService() {
         super("GcmIntentService");
+        localBroadcastManager = LocalBroadcastManager.getInstance(this);
     }
 
     @Override
@@ -83,12 +86,12 @@ public class GcmIntentService extends IntentService {
             case "friend:message":
                 String entity = bundleResponse.getString("entity");
                 String str[] = message.split(":");
-                if (HeldApplication.IS_APP_FOREGROUND) {
-                    intent = new Intent(this, ChatActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (HeldApplication.IS_CHAT_FOREGROUND) {
+                    intent = new Intent("CHAT");
                     intent.putExtra("id", str[0]);
                     intent.putExtra("isOneToOne", true);
-                    startActivity(intent);
+                    localBroadcastManager.sendBroadcast(intent);
+
                 } else {
                     intent = new Intent(this, ChatActivity.class);
                     intent.putExtra("id", str[0]);
@@ -107,13 +110,20 @@ public class GcmIntentService extends IntentService {
                 break;
             case "post:message":
                 entity = bundleResponse.getString("entity");
-                if (HeldApplication.IS_APP_FOREGROUND) {
-                    intent = new Intent(this, ChatActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (HeldApplication.IS_CHAT_FOREGROUND) {
+                    intent = new Intent("CHAT");
                     intent.putExtra("id", entity);
                     intent.putExtra("isOneToOne", false);
-                    startActivity(intent);
-                } else {
+                    localBroadcastManager.sendBroadcast(intent);
+                }
+//                else if (HeldApplication.IS_APP_FOREGROUND) {
+//                    intent = new Intent(this, ChatActivity.class);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    intent.putExtra("id", entity);
+//                    intent.putExtra("isOneToOne", false);
+//                    startActivity(intent);
+//                }
+                else {
                     intent = new Intent(this, ChatActivity.class);
                     intent.putExtra("id", entity);
                     intent.putExtra("isOneToOne", false);

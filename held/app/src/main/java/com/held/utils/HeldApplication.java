@@ -7,6 +7,7 @@ import android.content.Context;
 public class HeldApplication extends Application {
     private static final String TAG = HeldApplication.class.getSimpleName();
     public static boolean IS_APP_FOREGROUND;
+    public static boolean IS_CHAT_FOREGROUND;
     private static HeldApplication mInstance;
     private static Context mAppContext;
 

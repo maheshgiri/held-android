@@ -358,7 +358,5 @@ public class PostFragment extends ParentFragment {
                     }
                 }
         );
-
     }
-
 }

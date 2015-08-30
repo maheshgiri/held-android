@@ -24,7 +24,8 @@
         android:id="@+id/FEED_full_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:adjustViewBounds="false"
-        android:visibility="gone" />
+        android:adjustViewBounds="true"
+        android:visibility="gone"
+        android:scaleType="centerCrop"/>
 
 </RelativeLayout>

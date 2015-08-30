@@ -5,11 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.held.activity.ChatActivity;
-import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.retrofit.response.PostChatData;
 import com.held.utils.AppConstants;
@@ -27,6 +28,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ChatActivity mActivity;
     private List<PostChatData> mPostChatData;
+    private int lastPosition = -1;
 
     public ChatAdapter(ChatActivity activity, List<PostChatData> postChatData) {
         mActivity = activity;
@@ -76,12 +78,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             viewHolder.mDateTxt.setText(mPostChatData.get(position).getDate());
             viewHolder.mDesTxt.setText(mPostChatData.get(position).getMessage());
         }
-
     }
 
     public void setPostChats(List<PostChatData> postChatData) {
         mPostChatData = postChatData;
         notifyDataSetChanged();
+//        notifyItemInserted(mPostChatData.size());
     }
 
     class ViewHolder0 extends RecyclerView.ViewHolder {
@@ -109,6 +111,15 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mDesTxt = (TextView) itemView.findViewById(R.id.CHATLEFT_des_txt);
             mDateTxt = (TextView) itemView.findViewById(R.id.CHATLEFT_date_txt);
             mProfilePic = (ImageView) itemView.findViewById(R.id.CHATLEFT_profile_img);
+        }
+    }
+
+    private void setAnimation(View viewToAnimate, int position) {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(mActivity, android.R.anim.slide_in_left);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
         }
     }
 

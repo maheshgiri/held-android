@@ -1,14 +1,21 @@
 package com.held.fragment;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,6 +23,7 @@ import android.widget.ImageView;
 import com.held.activity.ChatActivity;
 import com.held.activity.R;
 import com.held.adapters.ChatAdapter;
+import com.held.customview.SlideInUpAnimator;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.DownloadRequestData;
 import com.held.retrofit.response.PostChatData;
@@ -23,6 +31,7 @@ import com.held.retrofit.response.PostChatResponse;
 import com.held.retrofit.response.PostMessageResponse;
 import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.DialogUtils;
+import com.held.utils.HeldApplication;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 import com.held.utils.Utils;
@@ -47,6 +56,7 @@ public class ChatFragment extends ParentFragment {
     private ImageView mDownLoad;
     private boolean mIsOneToOne;
     private String mId, mFriendId;
+    private BroadcastReceiver broadcastReceiver;
 
     public static ChatFragment newInstance(String id, boolean isOneToOne) {
 
@@ -65,14 +75,47 @@ public class ChatFragment extends ParentFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        HeldApplication.IS_CHAT_FOREGROUND = true;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        HeldApplication.IS_CHAT_FOREGROUND = false;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        HeldApplication.IS_CHAT_FOREGROUND = true;
+        LocalBroadcastManager.getInstance(getCurrActivity()).registerReceiver((broadcastReceiver),
+                new IntentFilter("CHAT"));
+    }
+
+    @Override
+    public void onStop() {
+        LocalBroadcastManager.getInstance(getCurrActivity()).unregisterReceiver(broadcastReceiver);
+        super.onStop();
+    }
+
+    @Override
     protected void initialiseView(View view, Bundle savedInstanceState) {
+        Animation animation = AnimationUtils.loadAnimation(getCurrActivity(), android.R.anim.slide_in_left);
+
         mChatList = (RecyclerView) view.findViewById(R.id.CHAT_recycler_view);
         mLayoutManager = new LinearLayoutManager(getCurrActivity());
         mLayoutManager.setReverseLayout(true);
-        mLayoutManager.setStackFromEnd(true);
+        mLayoutManager.scrollToPositionWithOffset(mPostChatData.size(), 0);
         mChatAdapter = new ChatAdapter((ChatActivity) getCurrActivity(), mPostChatData);
+        SlideInUpAnimator slideInUpAnimator = new SlideInUpAnimator();
+        slideInUpAnimator.setAddDuration(1000);
+        mChatList.setItemAnimator(slideInUpAnimator);
+
         mChatList.setLayoutManager(mLayoutManager);
         mChatList.setAdapter(mChatAdapter);
+
         mSubmitBtn = (Button) view.findViewById(R.id.CHAT_submit_btn);
         mMessageEdt = (EditText) view.findViewById(R.id.CHAT_message);
         mSubmitBtn.setOnClickListener(this);
@@ -80,11 +123,40 @@ public class ChatFragment extends ParentFragment {
         mDownLoad = (ImageView) view.findViewById(R.id.CHAT_download);
         mDownLoad.setOnClickListener(this);
         mId = getArguments().getString("id");
+
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mId = intent.getStringExtra("id");
+                mIsOneToOne = intent.getBooleanExtra("isOneToOne", false);
+                if (mIsOneToOne) {
+                    mDownLoad.setVisibility(View.GONE);
+                    callUserSearchApi();
+                } else {
+                    if (isAdded())
+                        callPostChatApi();
+                }
+            }
+        };
+
         if (mIsOneToOne) {
             mDownLoad.setVisibility(View.GONE);
             callUserSearchApi();
         } else {
-            callPostChatApi();
+            if (isAdded())
+                callPostChatApi();
+        }
+    }
+
+    public void onDataReceived(String id, boolean isOneToOne) {
+        mId = id;
+        mIsOneToOne = isOneToOne;
+        if (mIsOneToOne) {
+            mDownLoad.setVisibility(View.GONE);
+            callUserSearchApi();
+        } else {
+            if (isAdded())
+                callPostChatApi();
         }
     }
 

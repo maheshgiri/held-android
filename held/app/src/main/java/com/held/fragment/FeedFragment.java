@@ -126,6 +126,7 @@ public class FeedFragment extends ParentFragment {
             }
         });*/
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.FEED_swipe_refresh_layout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_to_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -138,7 +139,6 @@ public class FeedFragment extends ParentFragment {
                 } else {
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
                 }
-                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
 
@@ -164,9 +164,7 @@ public class FeedFragment extends ParentFragment {
         if (getView() != null) {
             getView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                             | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                             | View.SYSTEM_UI_FLAG_IMMERSIVE
             );
@@ -177,7 +175,6 @@ public class FeedFragment extends ParentFragment {
         if (getView() != null) {
             getView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
     }
@@ -237,6 +234,7 @@ public class FeedFragment extends ParentFragment {
                         @Override
                         public void success(FeedResponse feedResponse, Response response) {
 //                            DialogUtils.stopProgressDialog();
+                            mSwipeRefreshLayout.setRefreshing(false);
                             mFeedResponse = feedResponse;
                             mFeedList.addAll(mFeedResponse.getObjects());
                             isLastPage = mFeedResponse.isLastPage();
@@ -248,6 +246,7 @@ public class FeedFragment extends ParentFragment {
                         @Override
                         public void failure(RetrofitError error) {
 //                            DialogUtils.stopProgressDialog();
+                            mSwipeRefreshLayout.setRefreshing(false);
                             isLoading = false;
                             if (error != null && error.getResponse() != null &&
                                     !TextUtils.isEmpty(error.getResponse().getBody().toString())) {

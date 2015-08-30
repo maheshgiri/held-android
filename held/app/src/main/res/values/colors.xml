@@ -7,4 +7,5 @@
     <item name="btn_color_country" type="color">#5CA1D2</item>
     <item name="feed_header_color" type="color">#4C95CD</item>
     <item name="feed_search_box_color" type="color">#498CC2</item>
+    <color name="swipe_to_refresh">#4285f4</color>
 </resources>

@@ -33,27 +33,22 @@
             android:name=".RegistrationActivity"
             android:configChanges="fontScale"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".VerificationActivity"
             android:configChanges="fontScale"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".ComposeActivity"
-            android:configChanges="fontScale"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".PostActivity"
             android:configChanges="fontScale"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ChatActivity"
             android:configChanges="fontScale"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".FeedActivity"
             android:configChanges="fontScale"
@@ -63,7 +58,7 @@
             android:name=".NotificationActivity"
             android:configChanges="fontScale"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateHidden" />
 
         <receiver
             android:name="com.held.receiver.NetworkStateReceiver"

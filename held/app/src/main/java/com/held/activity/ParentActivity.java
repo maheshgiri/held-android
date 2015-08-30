@@ -1,5 +1,6 @@
 package com.held.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -48,10 +49,10 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
         //Register here to get Network status
         NetworkStateReceiver.registerOnNetworkChangeListener(this);
 
-//        mFragEnterAnim = R.anim.slide_in_right;
-//        mFragExitAnim = R.anim.slide_out_left;
-//        mFragPopEnterAnim = R.anim.slide_in_left;
-//        mFragPopExitAnim = R.anim.slide_out_right;
+        mFragEnterAnim = R.anim.slide_in_right;
+        mFragExitAnim = R.anim.slide_out_left;
+        mFragPopEnterAnim = R.anim.slide_in_left;
+        mFragPopExitAnim = R.anim.slide_out_right;
 
     }
 
@@ -157,29 +158,29 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
     }
 
 
-//    @Override
-//    public void startActivity(Intent intent) {
-//        super.startActivity(intent);
-//        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-//    }
-//
-//    @Override
-//    public void startActivityForResult(Intent intent, int requestCode) {
-//        super.startActivityForResult(intent, requestCode);
-//        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-//    }
-//
-//    @Override
-//    public void finish() {
-//        super.finish();
-//        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-//    }
-//
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-//    }
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
 
     public Toolbar getToolbar() {
         return mToolbar;

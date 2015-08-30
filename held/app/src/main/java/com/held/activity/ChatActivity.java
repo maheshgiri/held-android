@@ -20,12 +20,17 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
     private EditText mSearchEdt;
     private Button mRetakeBtn, mPostBtn;
     private TextView mUsername;
+    private static ChatActivity activity;
+
+    public static ChatActivity getInstance() {
+        return activity;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
+        activity = this;
         mChat = (ImageView) findViewById(R.id.TOOLBAR_chat_img);
         mCamera = (ImageView) findViewById(R.id.TOOLBAR_camera_img);
         mNotification = (ImageView) findViewById(R.id.TOOLBAR_notification_img);
@@ -50,6 +55,8 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
     private void launchInboxPage() {
         updateToolbar(true, false, true, false, true, true, false, "");
         addFragment(FriendsListFragment.newInstance(), FriendsListFragment.TAG);
+//        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.card_flip_right_in, R.anim.card_flip_right_out,
+//                R.anim.card_flip_left_in, R.anim.card_flip_left_out);
         mDisplayFragment = FriendsListFragment.newInstance();
     }
 
@@ -64,6 +71,10 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         mChat.setImageResource(R.drawable.icon_back);
         addFragment(ChatFragment.newInstance(id, isOneToOne), ChatFragment.TAG, true);
         mDisplayFragment = ChatFragment.newInstance(id, isOneToOne);
+    }
+
+    public Fragment getCurrentFragment() {
+        return mDisplayFragment;
     }
 
 
