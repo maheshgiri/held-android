@@ -48,6 +48,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_DATA = 1;
     private static final int TYPE_FOOTER = 2;
+    private BlurTransformation mBlurTransformation;
 
 
     public ProfileAdapter(ParentActivity activity, List<FeedData> postList, boolean isLastPage, ProfileFragment profileFragment) {
@@ -55,6 +56,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mPostList = postList;
         mIsLastPage = isLastPage;
         mProfileFragment = profileFragment;
+        mBlurTransformation = new BlurTransformation(mActivity, 18);
         mGestureDetector = new GestureDetector(mActivity, new GestureListener());
     }
 
@@ -104,7 +106,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             final ItemViewHolder viewHolder = (ItemViewHolder) holder;
             mItemViewHolder = viewHolder;
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getOwner_pic()).into(viewHolder.mUserImg);
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getImage()).into(viewHolder.mFeedImg);
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getImage()).transform(mBlurTransformation).into(viewHolder.mFeedImg);
             setTimeText(mPostList.get(position - 1).getHeld(), viewHolder.mTimeTxt);
             viewHolder.mFeedTxt.setText(mPostList.get(position - 1).getText());
             viewHolder.mFeedImg.setOnTouchListener(new View.OnTouchListener() {

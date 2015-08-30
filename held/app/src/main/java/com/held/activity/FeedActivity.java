@@ -120,7 +120,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     }
 
     private void launchProfileScreen(String uid) {
-        updateToolbar(false, false, false, false, false, false, false, "");
+        updateToolbar(true, false, true, false, true, true, false, "");
         addFragment(ProfileFragment.newInstance(uid), ProfileFragment.TAG, true);
         mDisplayFragment = ProfileFragment.newInstance(uid);
     }
