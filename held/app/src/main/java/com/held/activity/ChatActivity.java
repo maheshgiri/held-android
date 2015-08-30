@@ -118,4 +118,14 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         Intent intent = new Intent(ChatActivity.this, NotificationActivity.class);
         startActivity(intent);
     }
+
+    public void onLeftSwipe() {
+        // Do something
+        finish();
+    }
+
+    public void onRightSwipe() {
+        // Do something
+        launchNotificationScreen();
+    }
 }

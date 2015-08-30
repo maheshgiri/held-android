@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.held.activity.FeedActivity;
+import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.adapters.FeedAdapter;
 import com.held.customview.BlurTransformation;
@@ -57,6 +59,7 @@ public class FeedFragment extends ParentFragment {
     private int mLimit = 5;
     private long mStart = System.currentTimeMillis();
     private ImageView mFullImg;
+    private GestureDetector mGestureDetector;
 
     public static FeedFragment newInstance() {
         return new FeedFragment();
@@ -82,6 +85,15 @@ public class FeedFragment extends ParentFragment {
         blurTransformation = new BlurTransformation(getCurrActivity(), 25f);
         mFeedAdapter = new FeedAdapter((FeedActivity) getCurrActivity(), mFeedList, blurTransformation, isLastPage, this);
         mFeedRecyclerView.setAdapter(mFeedAdapter);
+        mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());
+
+        mFeedRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return mGestureDetector.onTouchEvent(motionEvent);
+            }
+        });
+
         if (getCurrActivity().getNetworkStatus()) {
 //            DialogUtils.showProgressBar();
             callFeedApi();
@@ -267,6 +279,39 @@ public class FeedFragment extends ParentFragment {
 
     @Override
     public void onClicked(View v) {
+    }
+
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        private static final int SWIPE_MIN_DISTANCE = 120;
+        private static final int SWIPE_MAX_OFF_PATH = 200;
+        private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2,
+                               float velocityX, float velocityY) {
+            try {
+                float diffAbs = Math.abs(e1.getY() - e2.getY());
+                float diff = e1.getX() - e2.getX();
+
+                if (diffAbs > SWIPE_MAX_OFF_PATH)
+                    return false;
+
+                // Left swipe
+                if (diff > SWIPE_MIN_DISTANCE
+                        && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                    ((FeedActivity) getCurrActivity()).onLeftSwipe();
+
+                    // Right swipe
+                } else if (-diff > SWIPE_MIN_DISTANCE
+                        && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                    ((FeedActivity) getCurrActivity()).onRightSwipe();
+                }
+            } catch (Exception e) {
+                Log.e("YourActivity", "Error on gestures");
+            }
+            return false;
+        }
     }
 
 }

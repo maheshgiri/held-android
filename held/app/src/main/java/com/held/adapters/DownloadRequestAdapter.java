@@ -37,7 +37,7 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
 
     private NotificationActivity mActivity;
     private List<DownloadRequestData> mDownloadRequestList;
-    private boolean mIsLastPage;
+    private boolean mIsLastPage = true;
     private DownloadRequestFragment mDownloadRequestFragment;
 
     public DownloadRequestAdapter(NotificationActivity activity, List<DownloadRequestData> DownloadRequestList, boolean isLastPage, DownloadRequestFragment downloadRequestFragment) {

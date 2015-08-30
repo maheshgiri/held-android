@@ -5,8 +5,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -16,7 +19,21 @@ import com.held.activity.ChatActivity;
 import com.held.activity.FeedActivity;
 import com.held.activity.NotificationActivity;
 import com.held.activity.R;
+import com.held.retrofit.HeldService;
+import com.held.retrofit.response.PostResponse;
+import com.held.utils.AppConstants;
 import com.held.utils.HeldApplication;
+import com.held.utils.PreferenceHelper;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class GcmIntentService extends IntentService {
 
@@ -24,10 +41,11 @@ public class GcmIntentService extends IntentService {
     private final String TAG = GcmIntentService.class.getSimpleName();
     private AudioManager am;
     private LocalBroadcastManager localBroadcastManager;
+    private String sourceFileName;
 
     public GcmIntentService() {
         super("GcmIntentService");
-        localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        localBroadcastManager = LocalBroadcastManager.getInstance(HeldApplication.getAppContext());
     }
 
     @Override
@@ -131,34 +149,71 @@ public class GcmIntentService extends IntentService {
                 }
                 break;
             case "post:download_approve":
+                entity = bundleResponse.getString("entity");
+                callPostSearchApi(entity);
                 intent = new Intent(this, NotificationActivity.class);
                 sendNotification(intent, title, message);
-//                try {
-//                    URL url = new URL("file://some/path/anImage.png");
-//                    InputStream input = url.openStream();
-//                } catch (Exception e) {
-//
-//                }
-//                try {
-//                    //The sdcard directory e.g. '/sdcard' can be used directly, or
-//                    //more safely abstracted with getExternalStorageDirectory()
-//                    File storagePath = Environment.getExternalStorageDirectory();
-//                    OutputStream output = new FileOutputStream(new File(storagePath, "myImage.png"));
-//                    try {
-//                        byte[] buffer = new byte[aReasonableSize];
-//                        int bytesRead = 0;
-//                        while ((bytesRead = input.read(buffer, 0, buffer.length)) >= 0) {
-//                            output.write(buffer, 0, bytesRead);
-//                        }
-//                    } finally {
-//                        output.close();
-//                    }
-//                } finally {
-//                    input.close();
-//                }
                 break;
         }
 
+    }
+
+    private void callPostSearchApi(String postId) {
+        HeldService.getService().postSearch(PreferenceHelper.getInstance(HeldApplication.getAppContext())
+                .readPreference(getString(R.string.API_session_token)), postId, new Callback<PostResponse>() {
+            @Override
+            public void success(PostResponse postResponse, Response response) {
+                Target target = new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        File cameraFolder;
+
+                        cameraFolder = new File(Environment
+                                .getExternalStorageDirectory(), "/HELD");
+                        if (!cameraFolder.exists())
+                            cameraFolder.mkdirs();
+
+                        sourceFileName = "/IMG_"
+                                + System.currentTimeMillis() + ".jpg";
+
+                        File photo = new File(cameraFolder, sourceFileName);
+
+                        FileOutputStream out = null;
+                        try {
+                            out = new FileOutputStream(photo);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out); // bmp is your Bitmap instance
+                            // PNG is a lossless format, the compression factor (100) is ignored
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            try {
+                                if (out != null) {
+                                    out.close();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                };
+                Picasso.with(HeldApplication.getAppContext()).load(AppConstants.BASE_URL + postResponse.getImage()).into(target);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 
     protected void sendNotification(Intent intent, String title, String message) {

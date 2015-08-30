@@ -9,6 +9,7 @@ import com.held.retrofit.response.DeclineDownloadResponse;
 import com.held.retrofit.response.DeclineFriendResponse;
 import com.held.retrofit.response.DownloadRequestData;
 import com.held.retrofit.response.DownloadRequestListResponse;
+import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.FriendDeclineResponse;
 import com.held.retrofit.response.FriendRequestResponse;
@@ -149,4 +150,7 @@ public interface HeldAPI {
 
     @GET("/activities/")
     void getActivitiesFeed(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, @Query("user") String uid, Callback<ActivityFeedDataResponse> activityFeedDataResponseCallback);
+
+    @GET("/posts/search")
+    void postSearch(@Header("X-HELD-TOKEN") String token, @Query("post") String postId, Callback<PostResponse> postResponseCallback);
 }

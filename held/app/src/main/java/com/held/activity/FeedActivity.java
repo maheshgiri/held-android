@@ -4,6 +4,7 @@ package com.held.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.GestureDetector;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import com.held.fragment.FeedFragment;
 import com.held.fragment.ProfileFragment;
 import com.held.fragment.SendFriendRequestFragment;
 import com.held.utils.AppConstants;
+import com.held.utils.PreferenceHelper;
 
 public class FeedActivity extends ParentActivity implements View.OnClickListener {
 
@@ -23,11 +25,20 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     private EditText mSearchEdt;
     private Button mRetakeBtn, mPostBtn;
     private TextView mUsername;
+    private GestureDetector gestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
+
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            if (getIntent().getExtras().getBoolean("isProfile")) {
+                launchProfileScreen(PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_user_name)));
+            }
+        } else {
+            launchFeedScreen();
+        }
 
         mChat = (ImageView) findViewById(R.id.TOOLBAR_chat_img);
         mCamera = (ImageView) findViewById(R.id.TOOLBAR_camera_img);
@@ -43,7 +54,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mRetakeBtn.setOnClickListener(this);
         mPostBtn.setOnClickListener(this);
 
-        launchFeedScreen();
+
     }
 
     private void launchFeedScreen() {
@@ -129,6 +140,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     public void onBackPressed() {
         if (mDisplayFragment instanceof FeedFragment)
             finish();
+        else if (mDisplayFragment instanceof ProfileFragment)
+            launchFeedScreen();
         else {
             super.onBackPressed();
             updateToolbar(true, false, true, false, true, true, false, "");
@@ -150,4 +163,16 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 break;
         }
     }
+
+    public void onLeftSwipe() {
+        // Do something
+        launchCreatePostScreen();
+
+    }
+
+    public void onRightSwipe() {
+        // Do something
+        launchChatListScreen();
+    }
+
 }

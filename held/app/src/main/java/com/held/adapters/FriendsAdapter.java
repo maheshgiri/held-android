@@ -13,7 +13,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.held.activity.ChatActivity;
-import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.AppConstants;
@@ -30,13 +29,13 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     private List<SearchUserResponse> mFriendList;
     private boolean mIsLastPage;
     private String mOwnerDisplayName;
-    private GestureDetector mGestureDetector;
+    private GestureDetector mPersonalGestureDetector;
 
     public FriendsAdapter(ChatActivity activity, List<SearchUserResponse> friendList, boolean isLastPage) {
         mActivity = activity;
         mFriendList = friendList;
         mIsLastPage = isLastPage;
-        mGestureDetector = new GestureDetector(mActivity, new PersonalChatListener());
+        mPersonalGestureDetector = new GestureDetector(mActivity, new PersonalChatListener());
     }
 
     @Override
@@ -61,7 +60,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                     mOwnerDisplayName = mFriendList.get(position).getDisplay_name();
-                    return mGestureDetector.onTouchEvent(motionEvent);
+                    return mPersonalGestureDetector.onTouchEvent(motionEvent);
                 }
             });
         } else {

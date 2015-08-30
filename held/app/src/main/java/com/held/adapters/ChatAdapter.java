@@ -2,6 +2,7 @@ package com.held.adapters;
 
 
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ChatActivity mActivity;
     private List<PostChatData> mPostChatData;
     private int lastPosition = -1;
+    private GestureDetector mGestureDetector;
 
     public ChatAdapter(ChatActivity activity, List<PostChatData> postChatData) {
         mActivity = activity;
@@ -80,6 +82,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+
     public void setPostChats(List<PostChatData> postChatData) {
         mPostChatData = postChatData;
         notifyDataSetChanged();
@@ -122,5 +125,4 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             lastPosition = position;
         }
     }
-
 }
