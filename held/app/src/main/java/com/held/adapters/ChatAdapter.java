@@ -1,6 +1,8 @@
 package com.held.adapters;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +34,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<PostChatData> mPostChatData;
     private int lastPosition = -1;
     private GestureDetector mGestureDetector;
+    private boolean delayEnterAnimation = true, animationsLocked;
 
     public ChatAdapter(ChatActivity activity, List<PostChatData> postChatData) {
         mActivity = activity;
@@ -123,6 +127,28 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Animation animation = AnimationUtils.loadAnimation(mActivity, android.R.anim.slide_in_left);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
+        }
+    }
+
+    private void runEnterAnimation(View view, int position) {
+        if (animationsLocked) return;
+
+        if (position > lastPosition) {
+            lastPosition = position;
+            view.setTranslationY(100);
+            view.setAlpha(0.f);
+            view.animate()
+                    .translationY(0).alpha(1.f)
+                    .setStartDelay(delayEnterAnimation ? 20 * (position) : 0)
+                    .setInterpolator(new DecelerateInterpolator(2.f))
+                    .setDuration(300)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            animationsLocked = true;
+                        }
+                    })
+                    .start();
         }
     }
 }

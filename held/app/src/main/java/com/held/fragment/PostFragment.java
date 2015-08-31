@@ -226,11 +226,13 @@ public class PostFragment extends ParentFragment {
     private void doCrop(Uri mCurrentPhotoPath) {
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
         cropIntent.setDataAndType(mCurrentPhotoPath, "image/*");
-//        cropIntent.putExtra("crop", "true");
-//        cropIntent.putExtra("aspectX", 1);
-//        cropIntent.putExtra("aspectY", 1);
-//        cropIntent.putExtra("outputX", 320);
-//        cropIntent.putExtra("outputY", 320);
+        if (!PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_is_first_post), false)) {
+            cropIntent.putExtra("crop", "true");
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            cropIntent.putExtra("outputX", 320);
+            cropIntent.putExtra("outputY", 320);
+        }
 
         File cameraFolder;
 
@@ -269,14 +271,16 @@ public class PostFragment extends ParentFragment {
                     File photo = new File(Environment.getExternalStorageDirectory(),
                             "/HELD" + sourceFileName);
                     Uri photoUri = Uri.fromFile(photo);
-                    mFile = new File(photoUri.getPath());
-                    updateBoxUI();
+                    doCrop(photoUri);
+//                    mFile = new File(photoUri.getPath());
+//                    updateBoxUI();
                     break;
 
                 case AppConstants.REQUEST_GALLERY:
                     Uri PhotoURI = data.getData();
-                    mFile = new File(getRealPathFromURI(PhotoURI));
-                    updateBoxUI();
+                    doCrop(PhotoURI);
+//                    mFile = new File(PhotoURI.getPath());
+//                    updateBoxUI();
                     break;
             }
         }
@@ -290,19 +294,21 @@ public class PostFragment extends ParentFragment {
                 return;
             }
 
-            updateUI();
+            updateBoxUI();
+//            updateUI();
         }
 
     }
 
     private String getRealPathFromURI(Uri contentURI) {
-        String result;
-        Cursor cursor = getCurrActivity().getContentResolver().query(contentURI, null, null, null, null);
+        String result = "";
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getCurrActivity().getContentResolver().query(contentURI, filePathColumn, null, null, null);
         if (cursor == null) { // Source is Dropbox or other similar local file path
             result = contentURI.getPath();
         } else {
             cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            int idx = cursor.getColumnIndex(filePathColumn[0]);//MediaStore.Images.ImageColumns.DATA
             result = cursor.getString(idx);
             cursor.close();
         }
