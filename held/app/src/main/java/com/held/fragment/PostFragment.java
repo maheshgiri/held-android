@@ -347,6 +347,7 @@ public class PostFragment extends ParentFragment {
                 if (!PreferenceHelper.getInstance(getCurrActivity()).readPreference("isFirstPostCreated", false)) {
                     DialogUtils.stopProgressDialog();
                     callPicUpdateApi(postResponse.getImage());
+                    callThumbnailUpdateApi(postResponse.getImage());
                 }
                 PreferenceHelper.getInstance(getCurrActivity()).writePreference("isFirstPostCreated", true);
                 getCurrActivity().perform(1, null);
@@ -364,9 +365,30 @@ public class PostFragment extends ParentFragment {
         });
     }
 
-    private void callPicUpdateApi(String image) {
+    private void callThumbnailUpdateApi(String image) {
         HeldService.getService().updateProfilePic(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
                 "thumbnail", image, new Callback<ProfilPicUpdateResponse>() {
+                    @Override
+                    public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
+                        DialogUtils.stopProgressDialog();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        DialogUtils.stopProgressDialog();
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
+                    }
+                }
+        );
+    }
+
+    private void callPicUpdateApi(String image) {
+        HeldService.getService().updateProfilePic(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
+                "pic", image, new Callback<ProfilPicUpdateResponse>() {
                     @Override
                     public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
                         DialogUtils.stopProgressDialog();

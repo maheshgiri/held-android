@@ -84,6 +84,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             viewHolder.mDateTxt.setText(mPostChatData.get(position).getDate());
             viewHolder.mDesTxt.setText(mPostChatData.get(position).getMessage());
         }
+        runEnterAnimation(holder.itemView, position);
     }
 
 
@@ -135,17 +136,17 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         if (position > lastPosition) {
             lastPosition = position;
-            view.setTranslationY(100);
+            view.setTranslationY(1000);
             view.setAlpha(0.f);
             view.animate()
                     .translationY(0).alpha(1.f)
-                    .setStartDelay(delayEnterAnimation ? 20 * (position) : 0)
+                    .setStartDelay(delayEnterAnimation ? 50 * (position) : 0)
                     .setInterpolator(new DecelerateInterpolator(2.f))
                     .setDuration(300)
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            animationsLocked = true;
+                            animationsLocked = false;
                         }
                     })
                     .start();
