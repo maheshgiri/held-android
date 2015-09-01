@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@drawable/icon_chat" />
+            android:src="@drawable/icon_single_chat" />
 
         <ImageView
             android:id="@+id/PROFILE_invite"
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:src="@drawable/icon_chat" />
+            android:src="@drawable/icon_add_friend" />
 
     </LinearLayout>
 
