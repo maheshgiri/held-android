@@ -1,25 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/app_background"
     android:clickable="true"
     android:orientation="vertical">
 
-    <android.support.design.widget.TabLayout
+    <!-- <android.support.design.widget.TabLayout
+         android:id="@+id/NOTIFY_tab_layout"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:background="#265092"
+         android:textSize="18sp"
+         app:tabIndicatorColor="#1affffff"
+         app:tabSelectedTextColor="#ffffff"
+         app:tabTextColor="#4f94cc">
+
+     </android.support.design.widget.TabLayout>
+ -->
+    <LinearLayout
         android:id="@+id/NOTIFY_tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:background="#265092"
-        app:tabIndicatorColor="#1affffff"
-        app:tabSelectedTextColor="#ffffff"
-        app:tabTextColor="#4f94cc"
-        android:textSize="18sp">
+        android:orientation="horizontal">
 
-    </android.support.design.widget.TabLayout>
+        <RelativeLayout
+            android:id="@+id/NOTIFY_fr_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@color/selected_tab_color">
 
-    <android.support.v4.view.ViewPager
+            <com.held.customview.CustomTextView
+                android:id="@+id/NOTIFY_friend_request"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="left"
+                android:text="Friend\nRequests"
+                android:textColor="#ffffff"
+                android:textSize="18sp"
+                custom:typeFace="@string/freight_sans_medium" />
+
+            <com.held.customview.CustomTextView
+                android:id="@+id/NOTIFY_friend_request_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
+                android:background="#ffcc33"
+                android:text="21"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/NOTIFY_dr_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+
+            <com.held.customview.CustomTextView
+                android:id="@+id/NOTIFY_download_request"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="left"
+                android:text="Download\nRequests"
+                android:textColor="#4f94cc"
+                android:textSize="18sp"
+                custom:typeFace="@string/freight_sans_medium" />
+
+            <com.held.customview.CustomTextView
+                android:id="@+id/NOTIFY_download_request_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:background="#ffcc33"
+                android:text="21"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/NOTIFY_af_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1">
+
+            <com.held.customview.CustomTextView
+                android:id="@+id/NOTIFY_feed_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="left"
+                android:text="Activity\nFeed"
+                android:textColor="#4f94cc"
+                android:textSize="18sp"
+                custom:typeFace="@string/freight_sans_medium" />
+
+            <com.held.customview.CustomTextView
+                android:id="@+id/NOTIFY_feed_activity_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="10dp"
+                android:background="#ffcc33"
+                android:text="21"
+                android:textSize="16sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <com.held.customview.CustomViewPager
         android:id="@+id/NOTIFY_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

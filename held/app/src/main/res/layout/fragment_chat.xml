@@ -21,7 +21,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="10dp"
         android:padding="10dp"
-        android:src="@drawable/icon_notification" />
+        android:src="@drawable/icon_download" />
 
     <RelativeLayout
         android:id="@+id/CHAT_bottom_layout"

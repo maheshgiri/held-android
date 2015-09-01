@@ -90,7 +90,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof HeaderViewHolder) {
             HeaderViewHolder viewHolder = (HeaderViewHolder) holder;
-            Picasso.with(mActivity).load("http://139.162.1.137/api/user_images/tejasshah_1440819300949.jpg").into(viewHolder.mProfilePic);
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + "/user_images/tejasshah_1441082308661.jpg").into(viewHolder.mProfilePic);
         } else if (holder instanceof ProgressViewHolder) {
             ProgressViewHolder viewHolder = (ProgressViewHolder) holder;
 

@@ -1,13 +1,15 @@
 package com.held.fragment;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.held.activity.R;
 import com.held.adapters.ViewPagerAdapter;
@@ -15,10 +17,11 @@ import com.held.adapters.ViewPagerAdapter;
 public class NotificationFragment extends ParentFragment {
 
     public static final String TAG = NotificationFragment.class.getSimpleName();
-    private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
     private int mId;
+    private TextView mFriendRequest, mDownloadRequest, mActivityFeed;
+    private RelativeLayout mFRLayout, mDRLayout, mAFLayout;
 
     public static NotificationFragment newInstance() {
         return new NotificationFragment();
@@ -41,31 +44,44 @@ public class NotificationFragment extends ParentFragment {
     @Override
     protected void initialiseView(View view, Bundle savedInstanceState) {
 
-        mTabLayout = (TabLayout) view.findViewById(R.id.NOTIFY_tab_layout);
-        mTabLayout.addTab(mTabLayout.newTab().setText("Friend Requests"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("Download Requests"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("Activity Feed"));
+//        mTabLayout = (TabLayout) view.findViewById(R.id.NOTIFY_tab_layout);
+//        mTabLayout.addTab(mTabLayout.newTab().setText("Friend Requests"));
+//        mTabLayout.addTab(mTabLayout.newTab().setText("Download Requests"));
+//        mTabLayout.addTab(mTabLayout.newTab().setText("Activity Feed"));
+
+        mFriendRequest = (TextView) view.findViewById(R.id.NOTIFY_friend_request);
+        mDownloadRequest = (TextView) view.findViewById(R.id.NOTIFY_download_request);
+        mActivityFeed = (TextView) view.findViewById(R.id.NOTIFY_feed_activity);
+
+        mFRLayout = (RelativeLayout) view.findViewById(R.id.NOTIFY_fr_layout);
+        mDRLayout = (RelativeLayout) view.findViewById(R.id.NOTIFY_dr_layout);
+        mAFLayout = (RelativeLayout) view.findViewById(R.id.NOTIFY_af_layout);
+
+        mFRLayout.setOnClickListener(this);
+        mDRLayout.setOnClickListener(this);
+        mAFLayout.setOnClickListener(this);
+
         mViewPager = (ViewPager) view.findViewById(R.id.NOTIFY_view_pager);
         mViewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+//        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
-        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition());
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+//        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+//            @Override
+//            public void onTabSelected(TabLayout.Tab tab) {
+//                mViewPager.setCurrentItem(tab.getPosition());
+//            }
+//
+//            @Override
+//            public void onTabUnselected(TabLayout.Tab tab) {
+//
+//            }
+//
+//            @Override
+//            public void onTabReselected(TabLayout.Tab tab) {
+//
+//            }
+//        });
 
         if (getArguments() != null) {
             mId = getArguments().getInt("id");
@@ -86,6 +102,34 @@ public class NotificationFragment extends ParentFragment {
 
     @Override
     public void onClicked(View v) {
-
+        switch (v.getId()) {
+            case R.id.NOTIFY_fr_layout:
+                mViewPager.setCurrentItem(0);
+                mFRLayout.setBackgroundColor(getResources().getColor(R.color.selected_tab_color));
+                mDRLayout.setBackgroundColor(Color.TRANSPARENT);
+                mAFLayout.setBackgroundColor(Color.TRANSPARENT);
+                mFriendRequest.setTextColor(Color.WHITE);
+                mDownloadRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
+                mActivityFeed.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
+                break;
+            case R.id.NOTIFY_dr_layout:
+                mViewPager.setCurrentItem(1);
+                mFRLayout.setBackgroundColor(Color.TRANSPARENT);
+                mDRLayout.setBackgroundColor(getResources().getColor(R.color.selected_tab_color));
+                mAFLayout.setBackgroundColor(Color.TRANSPARENT);
+                mFriendRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
+                mDownloadRequest.setTextColor(Color.WHITE);
+                mActivityFeed.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
+                break;
+            case R.id.NOTIFY_af_layout:
+                mViewPager.setCurrentItem(2);
+                mFRLayout.setBackgroundColor(Color.TRANSPARENT);
+                mDRLayout.setBackgroundColor(Color.TRANSPARENT);
+                mAFLayout.setBackgroundColor(getResources().getColor(R.color.selected_tab_color));
+                mFriendRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
+                mDownloadRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
+                mActivityFeed.setTextColor(Color.WHITE);
+                break;
+        }
     }
 }

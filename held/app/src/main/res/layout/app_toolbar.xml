@@ -51,7 +51,7 @@
             android:layout_toLeftOf="@+id/TOOLBAR_notification_img"
             android:layout_toRightOf="@+id/TOOLBAR_chat_img"
             android:background="@drawable/search_background"
-            android:maxLength="25"
+            android:maxLength="20"
             android:singleLine="true"
             android:textCursorDrawable="@drawable/cursor_background"
             android:textSize="18sp"

@@ -8,4 +8,6 @@
     <item name="feed_header_color" type="color">#4C95CD</item>
     <item name="feed_search_box_color" type="color">#498CC2</item>
     <color name="swipe_to_refresh">#4285f4</color>
+    <color name="selected_tab_color">#80000000</color>
+    <color name="unselected_tab_txt_color">#4f94cc</color>
 </resources>

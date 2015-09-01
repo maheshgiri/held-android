@@ -20,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.held.activity.FeedActivity;
-import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.adapters.FeedAdapter;
 import com.held.customview.BlurTransformation;
@@ -85,14 +84,14 @@ public class FeedFragment extends ParentFragment {
         blurTransformation = new BlurTransformation(getCurrActivity(), 25f);
         mFeedAdapter = new FeedAdapter((FeedActivity) getCurrActivity(), mFeedList, blurTransformation, isLastPage, this);
         mFeedRecyclerView.setAdapter(mFeedAdapter);
-        mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());
-
-        mFeedRecyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return mGestureDetector.onTouchEvent(motionEvent);
-            }
-        });
+//        mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());
+//
+//        mFeedRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                return mGestureDetector.onTouchEvent(motionEvent);
+//            }
+//        });
 
         if (getCurrActivity().getNetworkStatus()) {
 //            DialogUtils.showProgressBar();
@@ -196,6 +195,7 @@ public class FeedFragment extends ParentFragment {
         mSwipeRefreshLayout.setVisibility(View.GONE);
         getCurrActivity().getToolbar().setVisibility(View.GONE);
         Picasso.with(getActivity()).load(url).into(mFullImg);
+        mFeedRecyclerView.setEnabled(false);
         mSwipeRefreshLayout.setEnabled(false);
         hideSystemUI();
     }
@@ -204,6 +204,7 @@ public class FeedFragment extends ParentFragment {
         mFullImg.setVisibility(View.GONE);
         mSwipeRefreshLayout.setVisibility(View.VISIBLE);
         getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
+        mFeedRecyclerView.setEnabled(true);
         mSwipeRefreshLayout.setEnabled(true);
         showSystemUI();
     }
@@ -301,7 +302,6 @@ public class FeedFragment extends ParentFragment {
                 if (diff > SWIPE_MIN_DISTANCE
                         && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                     ((FeedActivity) getCurrActivity()).onLeftSwipe();
-
                     // Right swipe
                 } else if (-diff > SWIPE_MIN_DISTANCE
                         && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
