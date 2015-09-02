@@ -93,9 +93,13 @@ public class GcmIntentService extends IntentService {
 
         switch (type) {
             case "friend:request":
+                int count = PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_FRIEND_REQUEST_COUNT), 0);
+                count++;
+                PreferenceHelper.getInstance(this).writePreference(getString(R.string.API_FRIEND_REQUEST_COUNT), count);
                 Intent intent = new Intent(this, NotificationActivity.class);
                 intent.putExtra("id", 0);
                 sendNotification(intent, title, message);
+
                 break;
             case "friend:approve":
                 intent = new Intent(this, ChatActivity.class);
@@ -118,10 +122,16 @@ public class GcmIntentService extends IntentService {
                 }
                 break;
             case "post:held":
+                count = PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_HELD_COUNT), 0);
+                count++;
+                PreferenceHelper.getInstance(this).writePreference(getString(R.string.API_HELD_COUNT), count);
                 intent = new Intent(this, FeedActivity.class);
                 sendNotification(intent, title, message);
                 break;
             case "post:download_request":
+                count = PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), 0);
+                count++;
+                PreferenceHelper.getInstance(this).writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), count);
                 intent = new Intent(this, NotificationActivity.class);
                 intent.putExtra("id", 1);
                 sendNotification(intent, title, message);

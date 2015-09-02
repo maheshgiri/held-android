@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.held.activity.R;
 import com.held.adapters.ViewPagerAdapter;
+import com.held.utils.PreferenceHelper;
 
 public class NotificationFragment extends ParentFragment {
 
@@ -20,7 +21,7 @@ public class NotificationFragment extends ParentFragment {
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
     private int mId;
-    private TextView mFriendRequest, mDownloadRequest, mActivityFeed;
+    private TextView mFriendRequest, mDownloadRequest, mActivityFeed, mFriendCount, mDownloadCount, mHeldCount;
     private RelativeLayout mFRLayout, mDRLayout, mAFLayout;
 
     public static NotificationFragment newInstance() {
@@ -53,6 +54,10 @@ public class NotificationFragment extends ParentFragment {
         mDownloadRequest = (TextView) view.findViewById(R.id.NOTIFY_download_request);
         mActivityFeed = (TextView) view.findViewById(R.id.NOTIFY_feed_activity);
 
+        mFriendCount = (TextView) view.findViewById(R.id.NOTIFY_friend_request_count);
+        mDownloadCount = (TextView) view.findViewById(R.id.NOTIFY_download_request_count);
+        mHeldCount = (TextView) view.findViewById(R.id.NOTIFY_feed_activity_count);
+
         mFRLayout = (RelativeLayout) view.findViewById(R.id.NOTIFY_fr_layout);
         mDRLayout = (RelativeLayout) view.findViewById(R.id.NOTIFY_dr_layout);
         mAFLayout = (RelativeLayout) view.findViewById(R.id.NOTIFY_af_layout);
@@ -64,6 +69,23 @@ public class NotificationFragment extends ParentFragment {
         mViewPager = (ViewPager) view.findViewById(R.id.NOTIFY_view_pager);
         mViewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
         mViewPager.setAdapter(mViewPagerAdapter);
+
+        int count = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_HELD_COUNT), 0);
+        if (count != 0) {
+            mHeldCount.setVisibility(View.VISIBLE);
+            mHeldCount.setText(count + "");
+        }
+
+        count = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_FRIEND_REQUEST_COUNT), 0);
+        if (count != 0) {
+            mFriendCount.setVisibility(View.VISIBLE);
+            mFriendCount.setText(count + "");
+        }
+        count = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), 0);
+        if (count != 0) {
+            mDownloadCount.setVisibility(View.VISIBLE);
+            mDownloadCount.setText(count + "");
+        }
 //        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
 //        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -87,10 +109,47 @@ public class NotificationFragment extends ParentFragment {
             mId = getArguments().getInt("id");
             if (mId == 0) {
                 mViewPager.setCurrentItem(0);
+                mFRLayout.setBackgroundColor(getResources().getColor(R.color.selected_tab_color));
+                mDRLayout.setBackgroundColor(Color.TRANSPARENT);
+                mAFLayout.setBackgroundColor(Color.TRANSPARENT);
+                mFriendRequest.setTextColor(Color.WHITE);
+                mDownloadRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
+                mActivityFeed.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
+
+                count = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_FRIEND_REQUEST_COUNT), 0);
+                if (count != 0) {
+                    mFriendCount.setVisibility(View.VISIBLE);
+                    mFriendCount.setText(count + "");
+                }
+
+
             } else if (mId == 1) {
                 mViewPager.setCurrentItem(1);
+                mFRLayout.setBackgroundColor(Color.TRANSPARENT);
+                mDRLayout.setBackgroundColor(getResources().getColor(R.color.selected_tab_color));
+                mAFLayout.setBackgroundColor(Color.TRANSPARENT);
+                mFriendRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
+                mDownloadRequest.setTextColor(Color.WHITE);
+                mActivityFeed.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
+                count = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), 0);
+                if (count != 0) {
+                    mDownloadCount.setVisibility(View.VISIBLE);
+                    mDownloadCount.setText(count + "");
+                }
             } else if (mId == 2) {
                 mViewPager.setCurrentItem(2);
+                mViewPager.setCurrentItem(2);
+                mFRLayout.setBackgroundColor(Color.TRANSPARENT);
+                mDRLayout.setBackgroundColor(Color.TRANSPARENT);
+                mAFLayout.setBackgroundColor(getResources().getColor(R.color.selected_tab_color));
+                mFriendRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
+                mDownloadRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
+                mActivityFeed.setTextColor(Color.WHITE);
+                count = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_HELD_COUNT), 0);
+                if (count != 0) {
+                    mHeldCount.setVisibility(View.VISIBLE);
+                    mHeldCount.setText(count + "");
+                }
             }
         }
     }
@@ -111,6 +170,8 @@ public class NotificationFragment extends ParentFragment {
                 mFriendRequest.setTextColor(Color.WHITE);
                 mDownloadRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
                 mActivityFeed.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
+                PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_FRIEND_REQUEST_COUNT), 0);
+                mFriendCount.setVisibility(View.GONE);
                 break;
             case R.id.NOTIFY_dr_layout:
                 mViewPager.setCurrentItem(1);
@@ -120,6 +181,8 @@ public class NotificationFragment extends ParentFragment {
                 mFriendRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
                 mDownloadRequest.setTextColor(Color.WHITE);
                 mActivityFeed.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
+                PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), 0);
+                mDownloadCount.setVisibility(View.GONE);
                 break;
             case R.id.NOTIFY_af_layout:
                 mViewPager.setCurrentItem(2);
@@ -129,6 +192,8 @@ public class NotificationFragment extends ParentFragment {
                 mFriendRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
                 mDownloadRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
                 mActivityFeed.setTextColor(Color.WHITE);
+                PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_HELD_COUNT), 0);
+                mHeldCount.setVisibility(View.GONE);
                 break;
         }
     }

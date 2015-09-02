@@ -85,6 +85,17 @@ public class DownloadRequestFragment extends ParentFragment {
                 }
             }
         });
+        if(getCurrActivity().getNetworkStatus()){
+            callDownloadRequestListApi(mStart);
+        }else{
+            UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
     }
 
     public void callDownloadRequestListApi(long start) {

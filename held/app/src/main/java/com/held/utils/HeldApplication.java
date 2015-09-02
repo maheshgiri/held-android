@@ -25,6 +25,7 @@ public class HeldApplication extends Application {
 
         mInstance = this;
         mAppContext = getApplicationContext();
+
     }
 
 }

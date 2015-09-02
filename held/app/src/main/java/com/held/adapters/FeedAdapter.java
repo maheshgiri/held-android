@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.held.activity.FeedActivity;
 import com.held.activity.R;
 import com.held.customview.BlurTransformation;
+import com.held.customview.PicassoCache;
 import com.held.fragment.FeedFragment;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
@@ -25,6 +26,7 @@ import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
+import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -85,7 +87,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.mUserNameTxt.setText(mFeedList.get(position).getOwner_display_name());
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mFeedList.get(position).getOwner_pic()).into(holder.mUserImg);
             holder.mFeedTxt.setText(mFeedList.get(position).getText());
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mFeedList.get(position).getImage()).
+            PicassoCache.getPicassoInstance(mActivity).load(AppConstants.BASE_URL + mFeedList.get(position).getImage()).
                     transform(mBlurTransformation).into(holder.mFeedImg);
 
             setTimeText(mFeedList.get(position).getHeld(), holder.mTimeTxt);
@@ -131,10 +133,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             UiUtils.owSnackbarToast(mActivity.findViewById(R.id.frag_container), "You are not connected to internet");
                         }*/
                             mPosition = position;
-                            view.getParent().requestDisallowInterceptTouchEvent(true);
+//                            view.getParent().requestDisallowInterceptTouchEvent(true);
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            view.getParent().requestDisallowInterceptTouchEvent(true);
+//                            view.getParent().requestDisallowInterceptTouchEvent(true);
                             break;
                         case MotionEvent.ACTION_CANCEL:
                         case MotionEvent.ACTION_UP:

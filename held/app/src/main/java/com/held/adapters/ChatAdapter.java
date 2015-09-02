@@ -136,7 +136,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         if (position > lastPosition) {
             lastPosition = position;
-            view.setTranslationY(1000);
+            view.setTranslationY(100);
             view.setAlpha(0.f);
             view.animate()
                     .translationY(0).alpha(1.f)
