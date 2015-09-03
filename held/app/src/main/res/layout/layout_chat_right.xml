@@ -4,6 +4,7 @@
     android:id="@+id/BOX_top_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginRight="10dp"
     android:layout_marginTop="5dp">
 
     <RelativeLayout
@@ -60,6 +61,6 @@
         android:gravity="left"
         android:lineSpacingExtra="5dp"
         android:textColor="#ffffff"
-        android:textSize="18sp"
+        android:textSize="17sp"
         custom:typeFace="@string/freight_sans_book" />
 </RelativeLayout>

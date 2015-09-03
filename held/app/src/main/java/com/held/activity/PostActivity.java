@@ -92,33 +92,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
 
     @Override
     public void onBackPressed() {
-
         launchFeedScreen();
-
-//        if (mDisplayFragment instanceof FeedFragment) {
-//            finish();
-//        } else if (mDisplayFragment instanceof PostFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        } else if (mDisplayFragment instanceof ChatFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        } else if (mDisplayFragment instanceof NotificationFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        } else if (mDisplayFragment instanceof SendFriendRequestFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        } else if (mDisplayFragment instanceof FriendsListFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        }
-
     }
 
     @Override

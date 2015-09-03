@@ -9,7 +9,7 @@
         <item name="colorPrimaryDark">#348ac7</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:fitsSystemWindows">true</item>
-        <item name="android:windowFullscreen">true</item>
+        <!--<item name="android:windowFullscreen">true</item>-->
     </style>
 
 </resources>

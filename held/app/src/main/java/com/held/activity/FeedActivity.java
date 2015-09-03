@@ -16,6 +16,7 @@ import com.held.fragment.ProfileFragment;
 import com.held.fragment.SendFriendRequestFragment;
 import com.held.utils.AppConstants;
 import com.held.utils.PreferenceHelper;
+import com.held.utils.Utils;
 
 public class FeedActivity extends ParentActivity implements View.OnClickListener {
 
@@ -145,7 +146,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         else {
             super.onBackPressed();
             updateToolbar(true, false, true, false, true, true, false, "");
-            mDisplayFragment = FeedFragment.newInstance();
+            mDisplayFragment = Utils.getCurrVisibleFragment(this);
         }
     }
 
