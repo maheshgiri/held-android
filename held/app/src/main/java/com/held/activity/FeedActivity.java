@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.held.fragment.FeedFragment;
+import com.held.fragment.HomeFragment;
 import com.held.fragment.ProfileFragment;
 import com.held.fragment.SendFriendRequestFragment;
 import com.held.utils.AppConstants;
@@ -35,10 +36,12 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
         if (getIntent() != null && getIntent().getExtras() != null) {
             if (getIntent().getExtras().getBoolean("isProfile")) {
-                launchProfileScreen(PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_user_name)));
+                launchProfileScreen(PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_user_name)),
+                        PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_user_img)));
             }
         } else {
-            launchFeedScreen();
+//            launchFeedScreen();
+            launchHomeScreen();
         }
 
         mChat = (ImageView) findViewById(R.id.TOOLBAR_chat_img);
@@ -61,6 +64,12 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     private void launchFeedScreen() {
         updateToolbar(true, false, true, false, true, true, false, "");
         addFragment(FeedFragment.newInstance(), FeedFragment.TAG, true);
+        mDisplayFragment = FeedFragment.newInstance();
+    }
+
+    private void launchHomeScreen() {
+        updateToolbar(true, false, true, false, true, true, false, "");
+        addFragment(HomeFragment.newInstance(), HomeFragment.TAG, true);
         mDisplayFragment = FeedFragment.newInstance();
     }
 
@@ -92,57 +101,50 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mDisplayFragment = SendFriendRequestFragment.newInstance(name, AppConstants.BASE_URL + image);
     }
 
+
     @Override
     public void perform(int id, Bundle bundle) {
         super.perform(id, bundle);
         switch (id) {
-            case 0:
+            case AppConstants.LAUNCH_POST_SCREEN:
                 launchCreatePostScreen();
                 break;
-            case 1:
-                launchFeedScreen();
+            case AppConstants.LAUNCH_FEED_SCREEN:
+                launchHomeScreen();
                 break;
-            case 2:
+            case AppConstants.LAUNCH_CHAT_SCREEN:
                 if (bundle != null)
                     launchChatScreen(bundle.getString("postid"), false);
                 break;
-            case 3:
-//                launchCreatePostFragmentFromFeed();
-                break;
-            case 4:
+            case AppConstants.LAUNCH_NOTIFICATION_SCREEN:
                 launchNotificationScreen();
                 break;
-            case 5:
+            case AppConstants.LAUNCH_FRIEND_REQUEST_SCREEN:
                 if (bundle != null)
                     launchRequestFriendScreen(bundle.getString("name"), bundle.getString("image"));
                 break;
-            case 6:
+            case AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN:
                 if (bundle != null)
                     launchChatScreen(bundle.getString("owner_displayname"), true);
                 break;
-            case 7:
-//                launchInboxPage();
-                break;
-            case 8:
+            case AppConstants.LAUNCH_PROFILE_SCREEN:
                 if (bundle != null)
-                    launchProfileScreen(bundle.getString("uid"));
+                    launchProfileScreen(bundle.getString("uid"), bundle.getString("userImg"));
                 break;
 
         }
     }
 
-    private void launchProfileScreen(String uid) {
+    private void launchProfileScreen(String uid, String userImg) {
         updateToolbar(true, false, true, false, true, true, false, "");
-        addFragment(ProfileFragment.newInstance(uid), ProfileFragment.TAG, true);
-        mDisplayFragment = ProfileFragment.newInstance(uid);
+        addFragment(ProfileFragment.newInstance(uid, userImg), ProfileFragment.TAG, true);
+        mDisplayFragment = ProfileFragment.newInstance(uid, userImg);
     }
 
     @Override
     public void onBackPressed() {
-        if (mDisplayFragment instanceof FeedFragment)
+        if (mDisplayFragment instanceof HomeFragment)
             finish();
-        else if (mDisplayFragment instanceof ProfileFragment)
-            launchFeedScreen();
         else {
             super.onBackPressed();
             updateToolbar(true, false, true, false, true, true, false, "");
@@ -157,11 +159,12 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 launchChatListScreen();
                 break;
             case R.id.TOOLBAR_notification_img:
-                perform(4, null);
+                perform(AppConstants.LAUNCH_NOTIFICATION_SCREEN, null);
                 break;
             case R.id.TOOLBAR_camera_img:
-                perform(0, null);
+                perform(AppConstants.LAUNCH_POST_SCREEN, null);
                 break;
+
         }
     }
 
@@ -174,6 +177,26 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     public void onRightSwipe() {
         // Do something
         launchChatListScreen();
+    }
+
+    public void updateToolbarForPost() {
+        mRetakeBtn.setVisibility(View.VISIBLE);
+        mPostBtn.setVisibility(View.VISIBLE);
+        mCamera.setVisibility(View.GONE);
+        mNotification.setVisibility(View.GONE);
+        mChat.setVisibility(View.GONE);
+        mSearchEdt.setVisibility(View.INVISIBLE);
+        mUsername.setVisibility(View.INVISIBLE);
+    }
+
+    public void updateToolbar(){
+        mRetakeBtn.setVisibility(View.GONE);
+        mPostBtn.setVisibility(View.GONE);
+        mCamera.setVisibility(View.VISIBLE);
+        mNotification.setVisibility(View.VISIBLE);
+        mChat.setVisibility(View.VISIBLE);
+        mSearchEdt.setVisibility(View.VISIBLE);
+        mUsername.setVisibility(View.INVISIBLE);
     }
 
 }

@@ -61,17 +61,17 @@ public class FriendsListFragment extends ParentFragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.FRIENDLIST_recycler_view);
         mLayoutManager = new LinearLayoutManager(getCurrActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mFriendAdapter = new FriendsAdapter((ChatActivity) getCurrActivity(), mFriendList, mIsLastPage);
+        mFriendAdapter = new FriendsAdapter(getCurrActivity(), mFriendList, mIsLastPage);
         mRecyclerView.setAdapter(mFriendAdapter);
 
         mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());
 
-        mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return mGestureDetector.onTouchEvent(motionEvent);
-            }
-        });
+//        mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                return mGestureDetector.onTouchEvent(motionEvent);
+//            }
+//        });
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.FRIENDLIST_swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

@@ -86,7 +86,8 @@ public class PostFragment extends ParentFragment {
         mTimeTxt = (TextView) view.findViewById(R.id.BOX_time_txt);
         mTimeTxt.setText("Click here to upload Image");
         mTimeTxt.setVisibility(View.GONE);
-        openImageIntent();
+        if (getCurrActivity() instanceof PostActivity)
+            openImageIntent();
         mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());
 
         mPostImg.setOnTouchListener(new View.OnTouchListener() {
@@ -112,6 +113,13 @@ public class PostFragment extends ParentFragment {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser)
+            openImageIntent();
+    }
+
+    @Override
     public void onClicked(View v) {
         switch (v.getId()) {
             case R.id.BOX_main_img:
@@ -131,7 +139,6 @@ public class PostFragment extends ParentFragment {
                 break;
             case R.id.POST_cancel:
                 Utils.hideSoftKeyboard(getCurrActivity());
-                ((PostActivity) getCurrActivity()).isPostVisible = false;
                 getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
                 mBoxLayout.setVisibility(View.VISIBLE);
                 mPostLayout.setVisibility(View.GONE);
@@ -145,7 +152,6 @@ public class PostFragment extends ParentFragment {
     }
 
     private void updateBoxUI() {
-        ((PostActivity) getCurrActivity()).isPostVisible = false;
         getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
         mBoxLayout.setVisibility(View.VISIBLE);
         mPostLayout.setVisibility(View.GONE);
@@ -194,9 +200,13 @@ public class PostFragment extends ParentFragment {
                                 File photo = new File(cameraFolder, sourceFileName);
                                 getCameraImage.putExtra(MediaStore.EXTRA_OUTPUT,
                                         Uri.fromFile(photo));
-
-                                startActivityForResult(getCameraImage,
-                                        AppConstants.REQUEST_CAMEAR);
+                                if (getCurrActivity() instanceof PostActivity) {
+                                    startActivityForResult(getCameraImage,
+                                            AppConstants.REQUEST_CAMEAR);
+                                } else {
+                                    getParentFragment().startActivityForResult(getCameraImage,
+                                            AppConstants.REQUEST_CAMEAR);
+                                }
 
                                 break;
 
@@ -208,8 +218,13 @@ public class PostFragment extends ParentFragment {
                                 intent.setType("image/*");
                                 Intent chooser = Intent.createChooser(intent,
                                         "Choose a Picture");
-                                startActivityForResult(chooser,
-                                        AppConstants.REQUEST_GALLERY);
+                                if (getCurrActivity() instanceof PostActivity) {
+                                    startActivityForResult(chooser,
+                                            AppConstants.REQUEST_GALLERY);
+                                } else {
+                                    getParentFragment().startActivityForResult(chooser,
+                                            AppConstants.REQUEST_GALLERY);
+                                }
 
                                 break;
 
@@ -258,7 +273,11 @@ public class PostFragment extends ParentFragment {
 
         cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCropImageUri);
 
-        startActivityForResult(cropIntent, AppConstants.REQUEST_CROP);
+        if (getCurrActivity() instanceof PostActivity)
+            startActivityForResult(cropIntent, AppConstants.REQUEST_CROP);
+        else
+            getParentFragment().startActivityForResult(cropIntent, AppConstants.REQUEST_CROP);
+
     }
 
     @Override
@@ -316,7 +335,6 @@ public class PostFragment extends ParentFragment {
     }
 
     private void updateUI() {
-        ((PostActivity) getCurrActivity()).isPostVisible = true;
         mBoxLayout.setVisibility(View.GONE);
         mPostLayout.setVisibility(View.VISIBLE);
         getCurrActivity().getToolbar().setVisibility(View.GONE);
@@ -350,7 +368,11 @@ public class PostFragment extends ParentFragment {
                     callThumbnailUpdateApi(postResponse.getImage());
                 }
                 PreferenceHelper.getInstance(getCurrActivity()).writePreference("isFirstPostCreated", true);
-                getCurrActivity().perform(1, null);
+                if (getCurrActivity() instanceof PostActivity)
+                    getCurrActivity().perform(1, null);
+                else
+                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);
+
             }
 
             @Override
@@ -392,6 +414,7 @@ public class PostFragment extends ParentFragment {
                     @Override
                     public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
                         DialogUtils.stopProgressDialog();
+                        PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_user_img), AppConstants.BASE_URL + profilPicUpdateResponse.getPic());
                     }
 
                     @Override

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.held.fragment.ChatFragment;
 import com.held.fragment.FriendsListFragment;
+import com.held.utils.AppConstants;
 import com.held.utils.Utils;
 
 public class ChatActivity extends ParentActivity implements View.OnClickListener {
@@ -117,7 +118,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
     public void perform(int id, Bundle bundle) {
         super.perform(id, bundle);
         switch (id) {
-            case 0:
+            case AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN:
                 if (bundle != null)
                     launchChatScreenFromInbox(bundle.getString("owner_displayname"), true);
                 break;

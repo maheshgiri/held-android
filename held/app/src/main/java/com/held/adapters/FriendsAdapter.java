@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.held.activity.ChatActivity;
+import com.held.activity.ParentActivity;
 import com.held.activity.R;
 import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.AppConstants;
@@ -25,13 +26,13 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
 
-    private ChatActivity mActivity;
+    private ParentActivity mActivity;
     private List<SearchUserResponse> mFriendList;
     private boolean mIsLastPage;
     private String mOwnerDisplayName;
     private GestureDetector mPersonalGestureDetector;
 
-    public FriendsAdapter(ChatActivity activity, List<SearchUserResponse> friendList, boolean isLastPage) {
+    public FriendsAdapter(ParentActivity activity, List<SearchUserResponse> friendList, boolean isLastPage) {
         mActivity = activity;
         mFriendList = friendList;
         mIsLastPage = isLastPage;
@@ -132,7 +133,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         public boolean onDoubleTap(MotionEvent e) {
             Bundle bundle = new Bundle();
             bundle.putString("owner_displayname", mOwnerDisplayName);
-            mActivity.perform(0, bundle);
+            mActivity.perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, bundle);
             return true;
         }
     }

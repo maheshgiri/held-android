@@ -26,7 +26,6 @@ import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
-import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -272,7 +271,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public boolean onDoubleTap(MotionEvent e) {
             Bundle bundle = new Bundle();
             bundle.putString("postid", mPostId);
-            mActivity.perform(2, bundle);
+            mActivity.perform(AppConstants.LAUNCH_CHAT_SCREEN, bundle);
             return true;
         }
 
@@ -309,7 +308,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (!mOwnerDisplayName.equals(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_user_name)))) {
                 Bundle bundle = new Bundle();
                 bundle.putString("owner_displayname", mOwnerDisplayName);
-                mActivity.perform(6, bundle);
+                mActivity.perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, bundle);
                 return true;
             } else {
                 UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You cannot chat with yourself");
@@ -321,7 +320,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public boolean onSingleTapConfirmed(MotionEvent e) {
             Bundle bundle = new Bundle();
             bundle.putString("uid", mFeedList.get(mPosition).getOwner_display_name());
-            mActivity.perform(8, bundle);
+            bundle.putString("userImg", AppConstants.BASE_URL + mFeedList.get(mPosition).getOwner_pic());
+            mActivity.perform(AppConstants.LAUNCH_PROFILE_SCREEN, bundle);
             return true;
         }
     }

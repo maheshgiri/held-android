@@ -28,6 +28,7 @@ import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.SearchUserResponse;
+import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
@@ -224,7 +225,7 @@ public class FeedFragment extends ParentFragment {
                         Bundle bundle = new Bundle();
                         bundle.putString("name", searchUserResponse.getDisplay_name());
                         bundle.putString("image", searchUserResponse.getPic());
-                        getCurrActivity().perform(5, bundle);
+                        getCurrActivity().perform(AppConstants.LAUNCH_FRIEND_REQUEST_SCREEN, bundle);
                     }
 
                     @Override
