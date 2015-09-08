@@ -38,7 +38,7 @@ public class HomeFragment extends ParentFragment implements ViewPager.OnPageChan
         mViewPager = (ViewPager) view.findViewById(R.id.HOME_view_pager);
         mHomeAdapter = new HomeAdapter(getChildFragmentManager());
         mViewPager.setAdapter(mHomeAdapter);
-        mViewPager.setCurrentItem(2);
+        mViewPager.setCurrentItem(1);
         mViewPager.addOnPageChangeListener(this);
     }
 
@@ -59,11 +59,14 @@ public class HomeFragment extends ParentFragment implements ViewPager.OnPageChan
 
     @Override
     public void onPageSelected(int position) {
-        if (position == 3) {
-            ((FeedActivity) getCurrActivity()).updateToolbarForPost();
-        } else {
-            ((FeedActivity) getCurrActivity()).updateToolbar();
-        }
+        ((FeedActivity) getCurrActivity()).updateViewPager(position);
+//        if (position == 2) {
+//            ((FeedActivity) getCurrActivity()).updateToolbarForPost();
+//        } else if (position == 0) {
+//            ((FeedActivity) getCurrActivity()).updateToolbarForInbox();
+//        } else {
+//            ((FeedActivity) getCurrActivity()).updateToolbar();
+//        }
     }
 
     @Override
@@ -84,5 +87,10 @@ public class HomeFragment extends ParentFragment implements ViewPager.OnPageChan
                     UiUtils.showSnackbarToast(getView(), "Oops, Something went wrong.");
             }
         }
+    }
+
+    public void updateViewPager(int position) {
+        if (mViewPager != null)
+            mViewPager.setCurrentItem(position);
     }
 }

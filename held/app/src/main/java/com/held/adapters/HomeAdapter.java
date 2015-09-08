@@ -22,7 +22,6 @@ public class HomeAdapter extends FragmentStatePagerAdapter {
         super(fm);
 
         mFragments = new ArrayList<>();
-        mFragments.add(new NotificationFragment());
         mFragments.add(new FriendsListFragment());
         mFragments.add(new FeedFragment());
         mFragments.add(new PostFragment());
