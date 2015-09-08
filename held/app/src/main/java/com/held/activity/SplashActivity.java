@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.held.gcm.GCMControlManager;
 import com.held.retrofit.HeldService;
@@ -25,14 +26,16 @@ import retrofit.mime.TypedByteArray;
 public class SplashActivity extends ParentActivity implements View.OnClickListener {
 
     private Button mGetStartedBtn;
+    private TextView mSigninTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         mGetStartedBtn = (Button) findViewById(R.id.SPLASH_get_started_btn);
+        mSigninTxt=(TextView)findViewById(R.id.SPLASH_sign_in);
         mGetStartedBtn.setOnClickListener(this);
-
+        mSigninTxt.setOnClickListener(this);
         setupGCM();
 
         if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
@@ -44,13 +47,13 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
                 UiUtils.showSnackbarToast(findViewById(R.id.root_view), "You are not connected to internet");
             }
         } else if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
-                PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) == 0)
-            launchVerificationActivity();
+                 PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) == 0)
+        { launchVerificationActivity();}
     }
 
     private void callLoginApi() {
         HeldService.getService().loginUser(PreferenceHelper.getInstance(this).
-                readPreference(getString(R.string.API_phone_no)), PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) + "", new Callback<LoginUserResponse>() {
+                readPreference(getString(R.string.API_phone_no)), PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) + "","", new Callback<LoginUserResponse>() {
             @Override
             public void success(LoginUserResponse loginUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
@@ -120,6 +123,9 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
             case R.id.SPLASH_get_started_btn:
                 Intent intent = new Intent(SplashActivity.this, RegistrationActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.SPLASH_sign_in :
+                callLoginApi();
                 break;
         }
     }

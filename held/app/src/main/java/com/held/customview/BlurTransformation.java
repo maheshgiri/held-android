@@ -7,6 +7,7 @@ import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
 import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.ScriptIntrinsicBlur;
+import android.util.Log;
 
 import com.squareup.picasso.Transformation;
 
@@ -18,6 +19,7 @@ public class BlurTransformation implements Transformation {
     public BlurTransformation(Context context, float radius) {
         this.context = context;
         this.radius = radius;
+        Log.i("CustomView", "BlurTransform");
     }
 
     @Override

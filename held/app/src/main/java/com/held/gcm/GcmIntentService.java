@@ -90,60 +90,60 @@ public class GcmIntentService extends IntentService {
         Log.i(TAG, " title: " + title);
 
         int gameId, oppToken;
+if(type!=null) {
+    switch (type) {
+        case "friend:request":
+            int count = PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_FRIEND_REQUEST_COUNT), 0);
+            count++;
+            PreferenceHelper.getInstance(this).writePreference(getString(R.string.API_FRIEND_REQUEST_COUNT), count);
+            Intent intent = new Intent(this, NotificationActivity.class);
+            intent.putExtra("id", 0);
+            sendNotification(intent, title, message);
 
-        switch (type) {
-            case "friend:request":
-                int count = PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_FRIEND_REQUEST_COUNT), 0);
-                count++;
-                PreferenceHelper.getInstance(this).writePreference(getString(R.string.API_FRIEND_REQUEST_COUNT), count);
-                Intent intent = new Intent(this, NotificationActivity.class);
-                intent.putExtra("id", 0);
-                sendNotification(intent, title, message);
+            break;
+        case "friend:approve":
+            intent = new Intent(this, ChatActivity.class);
+            sendNotification(intent, title, message);
+            break;
+        case "friend:message":
+            String entity = bundleResponse.getString("entity");
+            String str[] = message.split(":");
+            if (HeldApplication.IS_CHAT_FOREGROUND) {
+                intent = new Intent("CHAT");
+                intent.putExtra("id", str[0]);
+                intent.putExtra("isOneToOne", true);
+                localBroadcastManager.sendBroadcast(intent);
 
-                break;
-            case "friend:approve":
+            } else {
                 intent = new Intent(this, ChatActivity.class);
+                intent.putExtra("id", str[0]);
+                intent.putExtra("isOneToOne", true);
                 sendNotification(intent, title, message);
-                break;
-            case "friend:message":
-                String entity = bundleResponse.getString("entity");
-                String str[] = message.split(":");
-                if (HeldApplication.IS_CHAT_FOREGROUND) {
-                    intent = new Intent("CHAT");
-                    intent.putExtra("id", str[0]);
-                    intent.putExtra("isOneToOne", true);
-                    localBroadcastManager.sendBroadcast(intent);
-
-                } else {
-                    intent = new Intent(this, ChatActivity.class);
-                    intent.putExtra("id", str[0]);
-                    intent.putExtra("isOneToOne", true);
-                    sendNotification(intent, title, message);
-                }
-                break;
-            case "post:held":
-                count = PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_HELD_COUNT), 0);
-                count++;
-                PreferenceHelper.getInstance(this).writePreference(getString(R.string.API_HELD_COUNT), count);
-                intent = new Intent(this, FeedActivity.class);
-                sendNotification(intent, title, message);
-                break;
-            case "post:download_request":
-                count = PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), 0);
-                count++;
-                PreferenceHelper.getInstance(this).writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), count);
-                intent = new Intent(this, NotificationActivity.class);
-                intent.putExtra("id", 1);
-                sendNotification(intent, title, message);
-                break;
-            case "post:message":
-                entity = bundleResponse.getString("entity");
-                if (HeldApplication.IS_CHAT_FOREGROUND) {
-                    intent = new Intent("CHAT");
-                    intent.putExtra("id", entity);
-                    intent.putExtra("isOneToOne", false);
-                    localBroadcastManager.sendBroadcast(intent);
-                }
+            }
+            break;
+        case "post:held":
+            count = PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_HELD_COUNT), 0);
+            count++;
+            PreferenceHelper.getInstance(this).writePreference(getString(R.string.API_HELD_COUNT), count);
+            intent = new Intent(this, FeedActivity.class);
+            sendNotification(intent, title, message);
+            break;
+        case "post:download_request":
+            count = PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), 0);
+            count++;
+            PreferenceHelper.getInstance(this).writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), count);
+            intent = new Intent(this, NotificationActivity.class);
+            intent.putExtra("id", 1);
+            sendNotification(intent, title, message);
+            break;
+        case "post:message":
+            entity = bundleResponse.getString("entity");
+            if (HeldApplication.IS_CHAT_FOREGROUND) {
+                intent = new Intent("CHAT");
+                intent.putExtra("id", entity);
+                intent.putExtra("isOneToOne", false);
+                localBroadcastManager.sendBroadcast(intent);
+            }
 //                else if (HeldApplication.IS_APP_FOREGROUND) {
 //                    intent = new Intent(this, ChatActivity.class);
 //                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -151,20 +151,23 @@ public class GcmIntentService extends IntentService {
 //                    intent.putExtra("isOneToOne", false);
 //                    startActivity(intent);
 //                }
-                else {
-                    intent = new Intent(this, ChatActivity.class);
-                    intent.putExtra("id", entity);
-                    intent.putExtra("isOneToOne", false);
-                    sendNotification(intent, title, message);
-                }
-                break;
-            case "post:download_approve":
-                entity = bundleResponse.getString("entity");
-                callPostSearchApi(entity);
-                intent = new Intent(this, NotificationActivity.class);
+            else {
+                intent = new Intent(this, ChatActivity.class);
+                intent.putExtra("id", entity);
+                intent.putExtra("isOneToOne", false);
                 sendNotification(intent, title, message);
-                break;
-        }
+            }
+            break;
+        case "post:download_approve":
+            entity = bundleResponse.getString("entity");
+            callPostSearchApi(entity);
+            intent = new Intent(this, NotificationActivity.class);
+            sendNotification(intent, title, message);
+            break;
+
+
+    }
+}
 
     }
 

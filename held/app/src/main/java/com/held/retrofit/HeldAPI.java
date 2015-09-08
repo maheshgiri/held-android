@@ -29,11 +29,14 @@ import com.held.retrofit.response.VerificationResponse;
 import com.held.retrofit.response.VoiceCallResponse;
 
 import retrofit.Callback;
+import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
+import retrofit.http.PUT;
 import retrofit.http.Part;
+import retrofit.http.Path;
 import retrofit.http.Query;
 import retrofit.mime.TypedFile;
 
@@ -42,14 +45,14 @@ import retrofit.mime.TypedFile;
  */
 public interface HeldAPI {
 
-    String CREATE_USER = "/users/create";
-    String RESEND_SMS = "/users/resetpin";
-    String VOICE_CALL = "/users/pincall";
-    String LOGIN_USER = "/users/login";
-    String VERIFY = "/users/verify";
+    String CREATE_USER = "/registrations/";
+    String RESEND_SMS = "/registrations/{registration_id}/sms";
+    String VOICE_CALL = "/registrations/{registration_id}/call";
+    String LOGIN_USER = "/sessions/";
+    String VERIFY = "/registrations/{registration_id}";
 
-    @GET(CREATE_USER)
-    void createUser(@Query("phone") String phoneNo, @Query("name") String name, Callback<CreateUserResponse> createUserResponseCallback);
+    @POST(CREATE_USER)
+    void createUser(@Query("phone") String phoneNo, @Query("name") String name,@Body()String empty, Callback<CreateUserResponse> createUserResponseCallback);
 
     @GET(RESEND_SMS)
     void resendSms(@Query("phone") String phoneNo, Callback<CreateUserResponse> createUserResponseCallback);
@@ -57,12 +60,15 @@ public interface HeldAPI {
     @GET(VOICE_CALL)
     void voiceCall(@Query("phone") String phoneNo, Callback<VoiceCallResponse> voiceCallResponseCallback);
 
-    @GET(LOGIN_USER)
-    void loginUser(@Query("phone") String phoneNo, @Query("pin") String pin, Callback<LoginUserResponse> loginUserResponseCallback);
+    @POST(LOGIN_USER)
+    void loginUser(@Query("phone") String phoneNo, @Query("pin") String pin,@Body()String empty, Callback<LoginUserResponse> loginUserResponseCallback);
 
-    @GET(VERIFY)
-    void verifyUser(@Query("phone") String phoneNo, @Query("pin") String pin, Callback<VerificationResponse> verificationResponseCallback);
+    @PUT(VERIFY)
+    void verifyUser(@Header("Authorization")String auth,@Path("registration_id") String RegId , @Query("pin") String pin,@Body()String empty ,Callback<VerificationResponse> verificationResponseCallback);
 
+
+
+    ///////////////////************OLD APIs**************///////////////////////////////
     @Multipart
     @POST("/posts/create")
     void uploadFile(@Query("text") String text, @Part("file") TypedFile photoFile, @Header("X-HELD-TOKEN") String token, Callback<PostResponse> postResponseCallback);

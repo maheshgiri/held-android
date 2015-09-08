@@ -54,6 +54,7 @@ public class ActivityFeedFragment extends ParentFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_activity_feed, container, false);
+
     }
 
     @Override

@@ -44,7 +44,6 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         mNotification.setOnClickListener(this);
         mRetakeBtn.setOnClickListener(this);
         mPostBtn.setOnClickListener(this);
-
         if (getIntent().getExtras() != null) {
             launchChatScreen(getIntent().getExtras().getString("id"), getIntent().getExtras().getBoolean("isOneToOne"));
         } else {

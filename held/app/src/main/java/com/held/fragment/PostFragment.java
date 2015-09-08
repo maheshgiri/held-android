@@ -38,7 +38,6 @@ import com.held.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
-
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
