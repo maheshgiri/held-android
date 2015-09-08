@@ -6,11 +6,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.held.activity.R;
 import com.held.adapters.ProfileAdapter;
@@ -18,8 +22,10 @@ import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.SearchUserResponse;
+import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
+import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -41,6 +47,8 @@ public class ProfileFragment extends ParentFragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private String mUid, mUserName, mUserImg = "";
     private ImageView mFullImg;
+    private EditText mSearchEdt;
+
 
     public static final String TAG = ProfileFragment.class.getSimpleName();
 
@@ -68,6 +76,18 @@ public class ProfileFragment extends ParentFragment {
         mRecyclerView.setAdapter(mProfileAdapter);
         mFullImg = (ImageView) view.findViewById(R.id.PROFILE_full_img);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.PROFILE_swipe_refresh_layout);
+        mSearchEdt = (EditText) getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_search_edt);
+
+        mSearchEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    Utils.hideSoftKeyboard(getCurrActivity());
+                    return true;
+                }
+                return false;
+            }
+        });
 
         if (getArguments() != null) {
             mUserName = getArguments().getString("uid");

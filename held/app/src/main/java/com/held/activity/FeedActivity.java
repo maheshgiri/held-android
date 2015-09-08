@@ -154,7 +154,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     @Override
     public void onClick(View view) {
         mDisplayedFragment = Utils.getCurrVisibleFragment(this);
-        if(mDisplayedFragment==null)
+//        if(mDisplayedFragment==null)
         switch (view.getId()) {
             case R.id.TOOLBAR_chat_img:
                 if (mPosition == 0) {
