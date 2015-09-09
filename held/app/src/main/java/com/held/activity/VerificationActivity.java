@@ -166,7 +166,14 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         HeldService.getService().verifyUser(mAuth,mRegId, mPin,"", new Callback<VerificationResponse>() {
                     @Override
                     public void success(VerificationResponse verificationResponse, Response response) {
-                      launchComposeScreen();
+                        PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_pin), Integer.parseInt(mPin));
+                        //PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_registration_key), Integer.parseInt(m));
+                        Log.i("VerificationActivity","Writting pin and phone no ");
+                        PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_phone_no), Integer.parseInt(mPhoneNo));
+                        PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), verificationResponse.getSession_token());
+                        DialogUtils.showProgressBar();
+                        launchComposeScreen();
+
                        /* if (verificationResponse.isVerified()) {
                             PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_pin), Integer.parseInt(mPin));
                             Log.i("VerificationActivity", "Responce :" + verificationResponse.toString());

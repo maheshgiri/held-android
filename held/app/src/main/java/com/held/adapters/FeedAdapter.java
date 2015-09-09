@@ -87,8 +87,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.mUserNameTxt.setText(mFeedList.get(position).getOwner_display_name());
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mFeedList.get(position).getOwner_pic()).into(holder.mUserImg);
             holder.mFeedTxt.setText(mFeedList.get(position).getText());
-            PicassoCache.getPicassoInstance(mActivity).load(AppConstants.BASE_URL + mFeedList.get(position).getImage()).
-                    transform(mBlurTransformation).into(holder.mFeedImg);
+            PicassoCache.getPicassoInstance(mActivity).load(AppConstants.BASE_URL+ mFeedList.get(position).getImageUri()).
+            transform(mBlurTransformation).into(holder.mFeedImg);
 
             setTimeText(mFeedList.get(position).getHeld(), holder.mTimeTxt);
 
@@ -142,10 +142,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         case MotionEvent.ACTION_UP:
                             mFeedFragment.showRCView();
                             view.getParent().requestDisallowInterceptTouchEvent(false);
-                            Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(position).getImage()).
+                            Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(position).getImageUri()).
                                     transform(mBlurTransformation).into(holder.mFeedImg);
                             holder.mTimeTxt.setVisibility(View.VISIBLE);
-                            callReleaseApi(mFeedList.get(position).getRid(), holder.mTimeTxt);
+                            callReleaseApi(mFeedList.get(position).getRid(), holder.mTimeTxt,String.valueOf(System.currentTimeMillis()));
                             mActivity.isBlured = true;
                             break;
 
@@ -170,9 +170,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    private void callReleaseApi(String postId, final TextView textView) {
-        HeldService.getService().releasePost(postId, System.currentTimeMillis(), PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"),
-                new Callback<ReleaseResponse>() {
+    private void callReleaseApi(String postId, final TextView textView,String start_tm) {
+        HeldService.getService().releasePost(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"),postId,start_tm ,String.valueOf(System.currentTimeMillis()),
+                "",new Callback<ReleaseResponse>() {
                     @Override
                     public void success(ReleaseResponse releaseResponse, Response response) {
                         setTimeText(releaseResponse.getHeld(), textView);
@@ -198,8 +198,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         textView.setVisibility(View.VISIBLE);
     }
 
-    private void callHoldApi(String postId) {
-        HeldService.getService().holdPost(postId, PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"), new Callback<HoldResponse>() {
+    private void callHoldApi(String postId,String start_tm) {
+        HeldService.getService().holdPost(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"),postId,start_tm, "",new Callback<HoldResponse>() {
             @Override
             public void success(HoldResponse holdResponse, Response response) {
 
@@ -280,12 +280,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void onLongPress(MotionEvent e) {
             if (mActivity.getNetworkStatus()) {
 //                Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(mPosition).getImage()).into(feedViewHolder.mFeedImg);
-                if (!mFeedList.get(mPosition).getOwner_display_name().equals(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_user_name)))) {
-                    callHoldApi(mFeedList.get(mPosition).getRid());
-                }
+              //  if (!mFeedList.get(mPosition).getOwner_display_name().equals(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_user_name)))) {
+                    callHoldApi(mFeedList.get(mPosition).getRid(),String.valueOf(System.currentTimeMillis()));
+              //  }
                 feedViewHolder.mTimeTxt.setVisibility(View.INVISIBLE);
                 feedViewHolder.mFeedImg.getParent().requestDisallowInterceptTouchEvent(true);
-                mFeedFragment.showFullImg(AppConstants.BASE_URL + mFeedList.get(mPosition).getImage());
+                mFeedFragment.showFullImg(AppConstants.BASE_URL + mFeedList.get(mPosition).getImageUri());
 
             } else {
                 UiUtils.showSnackbarToast(mActivity.findViewById(R.id.frag_container), "You are not connected to internet");

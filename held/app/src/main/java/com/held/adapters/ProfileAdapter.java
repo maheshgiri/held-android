@@ -90,7 +90,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof HeaderViewHolder) {
             HeaderViewHolder viewHolder = (HeaderViewHolder) holder;
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + "/user_images/tejasshah_1441082308661.jpg").into(viewHolder.mProfilePic);
+           Picasso.with(mActivity).load(AppConstants.BASE_URL + "/user_images/tejasshah_1441082308661.jpg").into(viewHolder.mProfilePic);
         } else if (holder instanceof ProgressViewHolder) {
             ProgressViewHolder viewHolder = (ProgressViewHolder) holder;
 
@@ -106,7 +106,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             final ItemViewHolder viewHolder = (ItemViewHolder) holder;
             mItemViewHolder = viewHolder;
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getOwner_pic()).into(viewHolder.mUserImg);
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getImage()).transform(mBlurTransformation).into(viewHolder.mFeedImg);
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getImageUri()).transform(mBlurTransformation).into(viewHolder.mFeedImg);
             setTimeText(mPostList.get(position - 1).getHeld(), viewHolder.mTimeTxt);
             viewHolder.mFeedTxt.setText(mPostList.get(position - 1).getText());
             viewHolder.mFeedImg.setOnTouchListener(new View.OnTouchListener() {
@@ -130,10 +130,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         case MotionEvent.ACTION_UP:
                             mProfileFragment.showRCView();
                             view.getParent().requestDisallowInterceptTouchEvent(false);
-                            Picasso.with(mActivity).load("http://139.162.1.137/api" + mPostList.get(position - 1).getImage()).
+                            Picasso.with(mActivity).load("http://139.162.1.137/api" + mPostList.get(position - 1).getImageUri()).
                                     transform(new BlurTransformation(mActivity, 18)).into(viewHolder.mFeedImg);
                             viewHolder.mTimeTxt.setVisibility(View.VISIBLE);
-                            callReleaseApi(mPostList.get(position - 1).getRid(), viewHolder.mTimeTxt);
+                            callReleaseApi(mPostList.get(position - 1).getRid(), viewHolder.mTimeTxt,String.valueOf(System.currentTimeMillis()));
 //                            mActivity.isBlured = true;
                             break;
 
@@ -146,9 +146,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    private void callReleaseApi(String postId, final TextView textView) {
-        HeldService.getService().releasePost(postId, System.currentTimeMillis(), PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"),
-                new Callback<ReleaseResponse>() {
+    private void callReleaseApi(String postId, final TextView textView,String start_tm) {
+        HeldService.getService().releasePost(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"),postId,start_tm ,String.valueOf(System.currentTimeMillis()),"",
+                new Callback<ReleaseResponse>()  {
                     @Override
                     public void success(ReleaseResponse releaseResponse, Response response) {
                         setTimeText(releaseResponse.getHeld(), textView);
@@ -247,11 +247,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (mActivity.getNetworkStatus()) {
 //                Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(mPosition).getImage()).into(feedViewHolder.mFeedImg);
                 if (!mPostList.get(mPosition).getOwner_display_name().equals(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_user_name)))) {
-                    callHoldApi(mPostList.get(mPosition).getRid());
+                    callHoldApi(mPostList.get(mPosition).getRid(),String.valueOf(System.currentTimeMillis()));
                 }
                 mItemViewHolder.mTimeTxt.setVisibility(View.INVISIBLE);
                 mItemViewHolder.mFeedImg.getParent().requestDisallowInterceptTouchEvent(true);
-                mProfileFragment.showFullImg(AppConstants.BASE_URL + mPostList.get(mPosition).getImage());
+                mProfileFragment.showFullImg(AppConstants.BASE_URL + mPostList.get(mPosition).getImageUri());
 
             } else {
                 UiUtils.showSnackbarToast(mActivity.findViewById(R.id.frag_container), "You are not connected to internet");
@@ -262,9 +262,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    private void callHoldApi(String postId) {
-        HeldService.getService().holdPost(postId, PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"), new Callback<HoldResponse>() {
-            @Override
+    private void callHoldApi(String postId,String start_tm) {
+        HeldService.getService().holdPost(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"),postId,start_tm,"" ,new Callback<HoldResponse>(){
+        @Override
             public void success(HoldResponse holdResponse, Response response) {
 
             }

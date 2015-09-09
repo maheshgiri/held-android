@@ -1,5 +1,7 @@
 package com.held.retrofit;
 
+import android.media.Image;
+
 import com.held.retrofit.response.ActivityFeedDataResponse;
 import com.held.retrofit.response.AddFriendResponse;
 import com.held.retrofit.response.ApproveDownloadResponse;
@@ -67,24 +69,38 @@ public interface HeldAPI {
     void verifyUser(@Header("Authorization")String auth,@Path("registration_id") String RegId , @Query("pin") String pin,@Body()String empty ,Callback<VerificationResponse> verificationResponseCallback);
 
 
-
-    ///////////////////************OLD APIs**************///////////////////////////////
     @Multipart
-    @POST("/posts/create")
-    void uploadFile(@Query("text") String text, @Part("file") TypedFile photoFile, @Header("X-HELD-TOKEN") String token, Callback<PostResponse> postResponseCallback);
+    @POST("/posts/")
+    void uploadFile(@Header("Authorization") String header,@Query("text") String text, @Part("file") TypedFile photoFile,@Query("url") String url , Callback<PostResponse> postResponseCallback);
+
+
+    @Multipart
+    @PUT("/users/{user_id}")
+    void updateProfilePic(@Header("Authorization") String token,@Path("user_id")String uid, @Query("field") String fieldValue, @Part("value") Image image,
+                          Callback<ProfilPicUpdateResponse> profilPicUpdateResponseCallback);
+
+    @GET("/users/")
+    void searchUser(@Header("Authorization") String token, @Query("name") String name, Callback<SearchUserResponse> searchUserResponseCallback);
+
+
+    @PUT("/posts/{post_id}/holds/{hold_id}")
+    void releasePost(@Header("Authorization") String token,@Path("hold_id") String postId,@Query("start_time") String start_tm,@Query("end_time") String end_tm,@Body()String empty, Callback<ReleaseResponse> releaseResponseCallback);
+
+    @POST("/posts/{post_id}/holds/")
+    void holdPost(@Header("Authorization") String token,@Path("post_id") String postId,@Query("start_time") String start_tm, @Body()String empty,Callback<HoldResponse> holdResponseCallback);
+
 
     @GET("/posts/")
-    void feedPostWithPage(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, Callback<FeedResponse> feedResponseCallback);
+    void feedPostWithPage(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<FeedResponse> feedResponseCallback);
+    ///////////////////************OLD APIs**************///////////////////////////////
+
+
+
+
+
 
     @GET("/posts/")
     void feedPost(@Header("X-HELD-TOKEN") String token, Callback<FeedResponse> feedResponseCallback);
-
-
-    @GET("/posts/hold")
-    void holdPost(@Query("post") String postId, @Header("X-HELD-TOKEN") String token, Callback<HoldResponse> holdResponseCallback);
-
-    @GET("/posts/release")
-    void releasePost(@Query("post") String postId, @Query("time") long timeStamp, @Header("X-HELD-TOKEN") String token, Callback<ReleaseResponse> releaseResponseCallback);
 
     @GET("/friends")
     void getFriends(@Header("X-HELD-TOKEN") String token, Callback<FriendsResponse> friendsResponseCallback);
@@ -110,8 +126,7 @@ public interface HeldAPI {
     @GET("/friends/unfriend")
     void unFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<UnFriendResponse> unFriendResponseCallback);
 
-    @GET("/users/search")
-    void searchUser(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<SearchUserResponse> searchUserResponseCallback);
+
 
     @GET("/users/logout")
     void logoutUser(@Header("X-HELD-TOKEN") String token, @Query("phone") String phone, @Query("pin") int pin, Callback<LogoutUserResponse> logoutUserResponseCallback);
@@ -122,9 +137,7 @@ public interface HeldAPI {
     @GET("/posts/message")
     void postChat(@Header("X-HELD-TOKEN") String token, @Query("post") String postId, @Query("message") String message, Callback<PostMessageResponse> postMessageResponseCallback);
 
-    @GET("/users/profile")
-    void updateProfilePic(@Header("X-HELD-TOKEN") String token, @Query("field") String fieldValue, @Query("value") String image,
-                          Callback<ProfilPicUpdateResponse> profilPicUpdateResponseCallback);
+
 
     @GET("/friends/message")
     void friendChat(@Header("X-HELD-TOKEN") String token, @Query("friend") String friendId, @Query("message") String message, Callback<PostMessageResponse> postMessageResponseCallback);

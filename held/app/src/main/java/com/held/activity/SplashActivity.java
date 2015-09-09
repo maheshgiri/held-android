@@ -57,10 +57,12 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
             @Override
             public void success(LoginUserResponse loginUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
-                if (loginUserResponse.isLogin()) {
+                PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSessionToken());
+                launchPostActivity();
+                /*if (loginUserResponse.isLogin()) {
                     PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSession_token());
                     callUpdateRegIdApi();
-                }
+                }*/
             }
 
             @Override

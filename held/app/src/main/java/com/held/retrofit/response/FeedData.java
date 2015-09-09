@@ -4,16 +4,16 @@ package com.held.retrofit.response;
 public class FeedData {
 
     private String date;
-    private String image;
+    private String imageUri;
     private long held;
     private String text;
     private String rid;
     private String owner_display_name;
     private String owner_pic;
-    private String thumbnail;
+    private String thumbnailUri;
 
-    public String getThumbnail() {
-        return thumbnail;
+    public String getThumbnailUri() {
+        return thumbnailUri;
     }
 
     public String getDate() {
@@ -24,12 +24,12 @@ public class FeedData {
         this.date = date;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageUri() {
+        return imageUri;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 
     public long getHeld() {

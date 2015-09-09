@@ -24,6 +24,7 @@ import com.held.retrofit.response.PostResponse;
 import com.held.utils.AppConstants;
 import com.held.utils.HeldApplication;
 import com.held.utils.PreferenceHelper;
+import com.held.utils.UiUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -90,7 +91,10 @@ public class GcmIntentService extends IntentService {
         Log.i(TAG, " title: " + title);
 
         int gameId, oppToken;
-if(type!=null) {
+        if(type!=null) {
+            UiUtils.showToast("type of GCM message is Empty");
+            return;
+        }
     switch (type) {
         case "friend:request":
             int count = PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_FRIEND_REQUEST_COUNT), 0);
@@ -167,7 +171,7 @@ if(type!=null) {
 
 
     }
-}
+
 
     }
 

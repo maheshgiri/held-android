@@ -110,7 +110,10 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
             @Override
             public void success(CreateUserResponse createUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
-                if (createUserResponse == null) return;
+                if (createUserResponse == null)
+                {
+                    return;
+                }
                 PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_phone_no), mCountryCode + mPhoneNoEdt.getText().toString().trim());
                 PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_user_name), mUserNameEdt.getText().toString().trim());
 

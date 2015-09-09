@@ -1,12 +1,14 @@
 package com.held.retrofit.response;
 
+import android.media.Image;
+
 /**
  * Created by jay on 3/8/15.
  */
 public class PostResponse {
 
     String date;
-    String image;
+    Image image;
     int held;
     String text;
     String rid;
@@ -25,7 +27,7 @@ public class PostResponse {
         return date;
     }
 
-    public String getImage() {
+    public Image getImage() {
         return image;
     }
 
