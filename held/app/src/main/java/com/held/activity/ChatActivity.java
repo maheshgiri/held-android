@@ -67,7 +67,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
 
     private void launchChatScreenFromInbox(String id, boolean isOneToOne) {
         updateToolbar(true, false, true, false, true, true, false, "");
-        mChat.setImageResource(R.drawable.icon_back);
+       // mChat.setImageResource(R.drawable.icon_back);
         addFragment(ChatFragment.newInstance(id, isOneToOne), ChatFragment.TAG, true);
         mDisplayFragment = ChatFragment.newInstance(id, isOneToOne);
     }

@@ -32,12 +32,12 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        mGetStartedBtn = (Button) findViewById(R.id.SPLASH_get_started_btn);
-        mSigninTxt=(TextView)findViewById(R.id.SPLASH_sign_in);
+        mGetStartedBtn = (Button) findViewById(R.id.startBtn);
+        mSigninTxt=(TextView)findViewById(R.id.signinTxt);
         mGetStartedBtn.setOnClickListener(this);
         mSigninTxt.setOnClickListener(this);
         setupGCM();
-
+/*
         if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
                 PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) != 0) {
             if (getNetworkStatus()) {
@@ -49,6 +49,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
         } else if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
                  PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) == 0)
         { launchVerificationActivity();}
+        */
     }
 
     private void callLoginApi() {
@@ -122,11 +123,11 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.SPLASH_get_started_btn:
+            case R.id.startBtn:
                 Intent intent = new Intent(SplashActivity.this, RegistrationActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.SPLASH_sign_in :
+            case R.id.signinTxt :
                 callLoginApi();
                 break;
         }

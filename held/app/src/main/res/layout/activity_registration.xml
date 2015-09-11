@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/icon_back" />
+             />
 
         <com.held.customview.CustomTextView
             android:id="@+id/REG_welcome_txt"
