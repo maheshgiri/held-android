@@ -1,5 +1,6 @@
 package com.held.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -8,7 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
+import android.graphics.Typeface;
 import com.held.gcm.GCMControlManager;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.LoginUserResponse;
@@ -26,7 +27,8 @@ import retrofit.mime.TypedByteArray;
 public class SplashActivity extends ParentActivity implements View.OnClickListener {
 
     private Button mGetStartedBtn;
-    private TextView mSigninTxt;
+    private TextView mSigninTxt,mHeadLinetxt,mPolicy,mHave;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +36,24 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
         setContentView(R.layout.activity_splash);
         mGetStartedBtn = (Button) findViewById(R.id.startBtn);
         mSigninTxt=(TextView)findViewById(R.id.signinTxt);
+        mHeadLinetxt=(TextView)findViewById(R.id.text1);
+        mPolicy=(TextView)findViewById(R.id.text3);
+        mHave=(TextView)findViewById(R.id.text2);
         mGetStartedBtn.setOnClickListener(this);
         mSigninTxt.setOnClickListener(this);
+        Context ctx = getApplicationContext();
+        if (ctx != null) {
+            Typeface type = Typeface.createFromAsset(ctx.getAssets(),
+                    "BentonSansBook.otf");
+            mGetStartedBtn.setTypeface(type);
+            mSigninTxt.setTypeface(type);
+            mHeadLinetxt.setTypeface(type);
+            mPolicy.setTypeface(type);
+            mHave.setTypeface(type);
+
+        }
         setupGCM();
-/*
+
         if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
                 PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) != 0) {
             if (getNetworkStatus()) {
@@ -49,7 +65,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
         } else if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
                  PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) == 0)
         { launchVerificationActivity();}
-        */
+
     }
 
     private void callLoginApi() {

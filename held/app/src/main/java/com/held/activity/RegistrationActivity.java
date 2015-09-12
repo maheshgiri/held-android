@@ -1,6 +1,8 @@
 package com.held.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.held.receiver.NetworkStateReceiver;
 import com.held.retrofit.HeldService;
@@ -36,7 +39,7 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
     private String mCountryCode;
     private int mPin;
     private String mRegKey,mAccessToken;
-
+private TextView mPolicy;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +58,18 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
         ArrayAdapter myAdap = (ArrayAdapter) mCountryCodes.getAdapter();
         int spinnerPosition = myAdap.getPosition("+91 (India)");
         mCountryCodes.setSelection(spinnerPosition);
+        mPolicy=(TextView)findViewById(R.id.SPLASH_terms_condition_txt);
+        Context ctx = getApplicationContext();
+        if (ctx != null) {
+            Typeface type = Typeface.createFromAsset(ctx.getAssets(),
+                    "BentonSansBook.otf");
+            mUserNameEdt.setTypeface(type);
+
+            mPhoneNoEdt.setTypeface(type);
+            mRegisterBtn.setTypeface(type);
+            mPolicy.setTypeface(type);
+
+        }
     }
 
     @Override
