@@ -44,7 +44,6 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         mNotification.setOnClickListener(this);
         mRetakeBtn.setOnClickListener(this);
         mPostBtn.setOnClickListener(this);
-
         if (getIntent().getExtras() != null) {
             launchChatScreen(getIntent().getExtras().getString("id"), getIntent().getExtras().getBoolean("isOneToOne"));
         } else {
@@ -68,7 +67,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
 
     private void launchChatScreenFromInbox(String id, boolean isOneToOne) {
         updateToolbar(true, false, true, false, true, true, false, "");
-        mChat.setImageResource(R.drawable.icon_back);
+       // mChat.setImageResource(R.drawable.icon_back);
         addFragment(ChatFragment.newInstance(id, isOneToOne), ChatFragment.TAG, true);
         mDisplayFragment = ChatFragment.newInstance(id, isOneToOne);
     }

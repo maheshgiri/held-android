@@ -10,4 +10,9 @@
     <color name="swipe_to_refresh">#4285f4</color>
     <color name="selected_tab_color">#80000000</color>
     <color name="unselected_tab_txt_color">#4f94cc</color>
+
+    <color name="bg_color" type="color">#ffffff</color>
+<color name="new_btn_color">#00c6ae</color>
+    <color name="white">#ffffff</color>
+
 </resources>

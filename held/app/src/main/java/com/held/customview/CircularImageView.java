@@ -11,20 +11,24 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 public class CircularImageView extends ImageView {
 
     public CircularImageView(Context context) {
         super(context);
+        Log.i("CustomView", "Circular image");
     }
 
     public CircularImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        Log.i("CustomView", "Circular image");
     }
 
     public CircularImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        Log.i("CustomView", "Circular image");
     }
 
     @Override

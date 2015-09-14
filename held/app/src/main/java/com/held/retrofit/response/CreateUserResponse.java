@@ -14,11 +14,14 @@ public class CreateUserResponse {
     private String rid;
     private String display_name;
     private String error;
+    private String accessToken;
 
+    public String getAccessToken() {
+        return accessToken;
+    }
     public String getError() {
         return error;
     }
-
     public int getPin() {
         return pin;
     }

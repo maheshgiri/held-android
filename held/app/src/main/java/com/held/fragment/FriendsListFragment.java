@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.held.activity.ChatActivity;
 import com.held.activity.R;
 import com.held.adapters.FriendsAdapter;
@@ -23,14 +22,14 @@ import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+
+
 
 public class FriendsListFragment extends ParentFragment {
 

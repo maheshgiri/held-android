@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -38,7 +39,6 @@ import com.held.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
-
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -339,16 +339,18 @@ public class PostFragment extends ParentFragment {
     }
 
     private void callPostDataApi() {
+        Log.i("PostFrgament","Sesson"+PreferenceHelper.getInstance(getCurrActivity()).readPreference("SESSION_TOKEN"));
 
-        HeldService.getService().uploadFile(mCaptionEdt.getText().toString().trim(), new TypedFile("multipart/form-data", mFile), PreferenceHelper.getInstance(getCurrActivity()).readPreference("SESSION_TOKEN"), new Callback<PostResponse>() {
+        HeldService.getService().uploadFile(PreferenceHelper.getInstance(getCurrActivity()).readPreference("SESSION_TOKEN"),mCaptionEdt.getText().toString().trim(), new TypedFile("multipart/form-data", mFile),"", new Callback<PostResponse>() {
             @Override
             public void success(PostResponse postResponse, Response response) {
                 DialogUtils.stopProgressDialog();
-                if (!PreferenceHelper.getInstance(getCurrActivity()).readPreference("isFirstPostCreated", false)) {
-                    DialogUtils.stopProgressDialog();
-                    callPicUpdateApi(postResponse.getImage());
-                    callThumbnailUpdateApi(postResponse.getImage());
-                }
+
+                callPicUpdateApi(postResponse.getImage());
+                callThumbnailUpdateApi(postResponse.getImage());
+               /* if (!PreferenceHelper.getInstance(getCurrActivity()).readPreference("isFirstPostCreated", false)) {
+
+                }*/
                 PreferenceHelper.getInstance(getCurrActivity()).writePreference("isFirstPostCreated", true);
                 getCurrActivity().perform(1, null);
             }
@@ -365,12 +367,13 @@ public class PostFragment extends ParentFragment {
         });
     }
 
-    private void callThumbnailUpdateApi(String image) {
+    private void callThumbnailUpdateApi(Image image) {
         HeldService.getService().updateProfilePic(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                "thumbnail", image, new Callback<ProfilPicUpdateResponse>() {
+                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)),"thumbnail", image, new Callback<ProfilPicUpdateResponse>() {
                     @Override
                     public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
                         DialogUtils.stopProgressDialog();
+                        UiUtils.showSnackbarToast(getView(), "Profile Pic Updated Successfully..");
                     }
 
                     @Override
@@ -386,9 +389,9 @@ public class PostFragment extends ParentFragment {
         );
     }
 
-    private void callPicUpdateApi(String image) {
+    private void callPicUpdateApi(Image image) {
         HeldService.getService().updateProfilePic(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                "pic", image, new Callback<ProfilPicUpdateResponse>() {
+                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)),"pic", image, new Callback<ProfilPicUpdateResponse>() {
                     @Override
                     public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
                         DialogUtils.stopProgressDialog();

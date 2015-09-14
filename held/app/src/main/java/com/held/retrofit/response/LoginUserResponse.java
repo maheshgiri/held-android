@@ -5,13 +5,14 @@ package com.held.retrofit.response;
  */
 public class LoginUserResponse {
 
-    private String session_token;
+    private String sessionToken;
     private boolean login;
 
-    public String getSession_token() {
-        return session_token;
-    }
 
+
+    public String getSessionToken() {
+        return sessionToken;
+    }
     public boolean isLogin() {
         return login;
     }

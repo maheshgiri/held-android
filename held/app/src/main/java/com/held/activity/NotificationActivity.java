@@ -24,7 +24,6 @@ public class NotificationActivity extends ParentActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-
         mChat = (ImageView) findViewById(R.id.TOOLBAR_chat_img);
         mCamera = (ImageView) findViewById(R.id.TOOLBAR_camera_img);
         mNotification = (ImageView) findViewById(R.id.TOOLBAR_notification_img);

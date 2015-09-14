@@ -3,6 +3,7 @@ package com.held.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,6 +48,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
         mNotification.setOnClickListener(this);
         mRetakeBtn.setOnClickListener(this);
         mPostBtn.setOnClickListener(this);
+        Log.i("PostActivity","@@Inside post Activity");
 
 //        if (PreferenceHelper.getInstance(getApplicationContext()).readPreference("isFirstPostCreated", false)) {
 //            launchFeedScreen();

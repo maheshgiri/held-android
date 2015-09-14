@@ -1,5 +1,6 @@
 package com.held.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -7,7 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
+import android.widget.TextView;
+import android.graphics.Typeface;
 import com.held.gcm.GCMControlManager;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.LoginUserResponse;
@@ -25,14 +27,31 @@ import retrofit.mime.TypedByteArray;
 public class SplashActivity extends ParentActivity implements View.OnClickListener {
 
     private Button mGetStartedBtn;
+    private TextView mSigninTxt,mHeadLinetxt,mPolicy,mHave;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        mGetStartedBtn = (Button) findViewById(R.id.SPLASH_get_started_btn);
+        mGetStartedBtn = (Button) findViewById(R.id.startBtn);
+        mSigninTxt=(TextView)findViewById(R.id.signinTxt);
+        mHeadLinetxt=(TextView)findViewById(R.id.text1);
+        mPolicy=(TextView)findViewById(R.id.text3);
+        mHave=(TextView)findViewById(R.id.text2);
         mGetStartedBtn.setOnClickListener(this);
+        mSigninTxt.setOnClickListener(this);
+        Context ctx = getApplicationContext();
+        if (ctx != null) {
+            Typeface type = Typeface.createFromAsset(ctx.getAssets(),
+                    "BentonSansBook.otf");
+            mGetStartedBtn.setTypeface(type);
+            mSigninTxt.setTypeface(type);
+            mHeadLinetxt.setTypeface(type);
+            mPolicy.setTypeface(type);
+            mHave.setTypeface(type);
 
+        }
         setupGCM();
 
         if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
@@ -44,20 +63,23 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
                 UiUtils.showSnackbarToast(findViewById(R.id.root_view), "You are not connected to internet");
             }
         } else if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
-                PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) == 0)
-            launchVerificationActivity();
+                 PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) == 0)
+        { launchVerificationActivity();}
+
     }
 
     private void callLoginApi() {
         HeldService.getService().loginUser(PreferenceHelper.getInstance(this).
-                readPreference(getString(R.string.API_phone_no)), PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) + "", new Callback<LoginUserResponse>() {
+                readPreference(getString(R.string.API_phone_no)), PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) + "","", new Callback<LoginUserResponse>() {
             @Override
             public void success(LoginUserResponse loginUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
-                if (loginUserResponse.isLogin()) {
+                PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSessionToken());
+                launchPostActivity();
+                /*if (loginUserResponse.isLogin()) {
                     PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSession_token());
                     callUpdateRegIdApi();
-                }
+                }*/
             }
 
             @Override
@@ -117,9 +139,12 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.SPLASH_get_started_btn:
+            case R.id.startBtn:
                 Intent intent = new Intent(SplashActivity.this, RegistrationActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.signinTxt :
+                callLoginApi();
                 break;
         }
     }

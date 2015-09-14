@@ -1,15 +1,19 @@
 package com.held.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.held.receiver.NetworkStateReceiver;
 import com.held.retrofit.HeldService;
@@ -34,7 +38,8 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
     private Spinner mCountryCodes;
     private String mCountryCode;
     private int mPin;
-
+    private String mRegKey,mAccessToken;
+private TextView mPolicy;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,18 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
         ArrayAdapter myAdap = (ArrayAdapter) mCountryCodes.getAdapter();
         int spinnerPosition = myAdap.getPosition("+91 (India)");
         mCountryCodes.setSelection(spinnerPosition);
+        mPolicy=(TextView)findViewById(R.id.SPLASH_terms_condition_txt);
+        Context ctx = getApplicationContext();
+        if (ctx != null) {
+            Typeface type = Typeface.createFromAsset(ctx.getAssets(),
+                    "BentonSansBook.otf");
+            mUserNameEdt.setTypeface(type);
+
+            mPhoneNoEdt.setTypeface(type);
+            mRegisterBtn.setTypeface(type);
+            mPolicy.setTypeface(type);
+
+        }
     }
 
     @Override
@@ -104,14 +121,21 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
     }
 
     private void callCreateUserApi() {
-        HeldService.getService().createUser(mCountryCode + mPhoneNoEdt.getText().toString().trim(), mUserNameEdt.getText().toString().trim().toLowerCase(), new Callback<CreateUserResponse>() {
+        HeldService.getService().createUser(mCountryCode + mPhoneNoEdt.getText().toString().trim(), mUserNameEdt.getText().toString().trim().toLowerCase(),"" ,new Callback<CreateUserResponse>() {
             @Override
             public void success(CreateUserResponse createUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
-                if (createUserResponse == null) return;
+                if (createUserResponse == null)
+                {
+                    return;
+                }
                 PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_phone_no), mCountryCode + mPhoneNoEdt.getText().toString().trim());
                 PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_user_name), mUserNameEdt.getText().toString().trim());
+
                 mPin = createUserResponse.getPin();
+                mRegKey=createUserResponse.getRid();
+                mAccessToken=createUserResponse.getAccessToken();
+                Log.i("RegistrationActivity", "Profile PIN" + createUserResponse.toString());
                 launchVerificationActivity();
             }
 
@@ -133,6 +157,8 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
         intent.putExtra("username", mUserNameEdt.getText().toString().trim());
         intent.putExtra("phoneno", mCountryCode + mPhoneNoEdt.getText().toString().trim());
         intent.putExtra("pin", mPin);
+        intent.putExtra("regId",mRegKey);
+        intent.putExtra("accessToken",mAccessToken);
         startActivity(intent);
         finish();
     }

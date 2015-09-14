@@ -5,11 +5,16 @@
     <string name="indie">Indie.otf</string>
     <string name="freight_sans_medium">FreightSansMedium.TTF</string>
     <string name="freight_sans_book">FreightSansBook.TTF</string>
-
+<string name="phone_hint">Phone Number</string>
+    <string name="user_name_hint">Pick a Username (minimum 6 chars)</string>
+    <string name="benton_sans_book">BentonSansBook.otf</string>
     <string name="action_settings">Settings</string>
 
-    <string name="SPLASH_headline">Share Photos &amp; Chat with your\nFriends</string>
+    <string name="Headline">Share Photos &amp; Chat with your \nFriends</string>
+    <string name="Have_Acctount">"Have an account?"</string>
+    <string name="SignIn">Sign In</string>
     <string name="error_offline_msg">Sorry! You don\'t seem to be connected to internet.</string>
+    <string name="Policy">By using Held you agree to the Terms, Cookie \nPolicy and Privacy Policy"</string>
 
     <!--API DATA-->
     <string name="API_session_token">SESSION_TOKEN</string>
@@ -252,4 +257,5 @@
     <string name="API_DOWNLOAD_REQUEST_COUNT">DOWNLOAD_REQUEST_COUNT</string>
     <string name="API_HELD_COUNT">HELD_COUNT</string>
     <string name="API_FRIEND_REQUEST_COUNT">FRIEND_REQUEST_COUNT</string>
+
 </resources>
