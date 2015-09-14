@@ -69,14 +69,13 @@ public class PostFragment extends ParentFragment {
 
     @Override
     protected void initialiseView(View view, Bundle savedInstanceState) {
-        mUserImg = (ImageView) view.findViewById(R.id.BOX_profile_img);
-        mUserNameTxt = (TextView) view.findViewById(R.id.BOX_user_name_txt);
-        mPostTxt = (TextView) view.findViewById(R.id.BOX_des_txt);
-        mPostImg = (ImageView) view.findViewById(R.id.BOX_main_img);
+        mUserImg = (ImageView) view.findViewById(R.id.profile_img);
+        mUserNameTxt = (TextView) view.findViewById(R.id.user_name);
+        mPostTxt = (TextView) view.findViewById(R.id.user_post_txt);
+        mPostImg = (ImageView) view.findViewById(R.id.user_post_image);
         mBoxLayout = (RelativeLayout) view.findViewById(R.id.BOX_layout);
-        mPostLayout = (RelativeLayout) view.findViewById(R.id.POST_post_data);
-        mImageToUpload = (ImageView) view.findViewById(R.id.POST_image);
-        mCaptionEdt = (EditText) view.findViewById(R.id.BOX_des_edt);
+
+        mCaptionEdt = (EditText) view.findViewById(R.id.post_edit_text);
         mCaptionEdt.setVisibility(View.VISIBLE);
         mCancelTxt = (TextView) view.findViewById(R.id.POST_cancel);
         mOkTxt = (TextView) view.findViewById(R.id.POST_ok);

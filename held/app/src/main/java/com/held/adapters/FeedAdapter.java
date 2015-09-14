@@ -240,10 +240,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private FeedViewHolder(View v) {
             super(v);
-            mUserNameTxt = (TextView) v.findViewById(R.id.BOX_user_name_txt);
-            mFeedImg = (ImageView) v.findViewById(R.id.BOX_main_img);
-            mUserImg = (ImageView) v.findViewById(R.id.BOX_profile_img);
-            mFeedTxt = (TextView) v.findViewById(R.id.BOX_des_txt);
+            mUserNameTxt = (TextView) v.findViewById(R.id.user_name);
+            mFeedImg = (ImageView) v.findViewById(R.id.user_post_image);
+            mUserImg = (ImageView) v.findViewById(R.id.profile_img);
+            mFeedTxt = (TextView) v.findViewById(R.id.user_post_txt);
             mTimeTxt = (TextView) v.findViewById(R.id.BOX_time_txt);
         }
     }
