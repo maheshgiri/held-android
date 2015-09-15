@@ -23,7 +23,6 @@ import com.held.utils.AppConstants;
  */
 public class PostActivity extends ParentActivity implements View.OnClickListener {
 
-    public static boolean isPostVisible;
     private Fragment mDisplayFragment;
     private ImageView mChat, mCamera, mNotification;
     private EditText mSearchEdt;
@@ -58,10 +57,10 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
     }
 
     private void launchFeedScreen() {
-        Intent intent = new Intent(PostActivity.this, FeedActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("isProfile", true);
-        startActivity(intent);
+//        Intent intent = new Intent(PostActivity.this, FeedActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        intent.putExtra("isProfile", true);
+//        startActivity(intent);
         finish();
 //        updateToolbar(true, false, true, false, true, true, false, "");
 //        addFragment(FeedFragment.newInstance(), FeedFragment.TAG, true);
@@ -94,33 +93,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
 
     @Override
     public void onBackPressed() {
-
         launchFeedScreen();
-
-//        if (mDisplayFragment instanceof FeedFragment) {
-//            finish();
-//        } else if (mDisplayFragment instanceof PostFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        } else if (mDisplayFragment instanceof ChatFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        } else if (mDisplayFragment instanceof NotificationFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        } else if (mDisplayFragment instanceof SendFriendRequestFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        } else if (mDisplayFragment instanceof FriendsListFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        }
-
     }
 
     @Override

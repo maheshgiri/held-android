@@ -55,7 +55,7 @@ public class FriendRequestFragment extends ParentFragment {
     protected void initialiseView(View view, Bundle savedInstanceState) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.FR_recycler_view);
         mLayoutManager = new LinearLayoutManager(getCurrActivity(), LinearLayoutManager.VERTICAL, false);
-        mFriendRequestAdapter = new FriendRequestAdapter((NotificationActivity) getCurrActivity(), mFriendRequestList, mIsLastPage, this);
+        mFriendRequestAdapter = new FriendRequestAdapter(getCurrActivity(), mFriendRequestList, mIsLastPage, this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mFriendRequestAdapter);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.FR_swipe_refresh_layout);
