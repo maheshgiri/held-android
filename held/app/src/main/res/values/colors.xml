@@ -13,6 +13,8 @@
 
     <color name="bg_color" type="color">#ffffff</color>
 <color name="new_btn_color">#00c6ae</color>
+
     <color name="white">#ffffff</color>
+    <color name="shadow_color">#000000</color>
 
 </resources>

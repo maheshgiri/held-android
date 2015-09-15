@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -21,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -28,14 +30,17 @@ import android.widget.TextView;
 
 import com.held.activity.PostActivity;
 import com.held.activity.R;
+import com.held.customview.PicassoCache;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.PostResponse;
 import com.held.retrofit.response.ProfilPicUpdateResponse;
+import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 import com.held.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,14 +53,16 @@ import retrofit.mime.TypedFile;
 public class PostFragment extends ParentFragment {
 
     public static final String TAG = PostFragment.class.getSimpleName();
-    private ImageView mPostImg, mUserImg, mImageToUpload;
+    private ImageView mPostImg, mUserImg, mImageToUpload,mBackImg;
     private TextView mPostTxt, mUserNameTxt, mCancelTxt, mOkTxt, mTimeTxt;
     private RelativeLayout mPostLayout;
     private RelativeLayout mBoxLayout;
     private String sourceFileName, mCaption;
     private File mFile;
     private EditText mCaptionEdt;
+    private Fragment mfragment;
     private GestureDetector mGestureDetector;
+    private Button mPostBtn;
 
     public static PostFragment newInstance() {
         return new PostFragment();
@@ -70,19 +77,23 @@ public class PostFragment extends ParentFragment {
     @Override
     protected void initialiseView(View view, Bundle savedInstanceState) {
         mUserImg = (ImageView) view.findViewById(R.id.profile_img);
-        mUserNameTxt = (TextView) view.findViewById(R.id.user_name);
-        mPostTxt = (TextView) view.findViewById(R.id.user_post_txt);
-        mPostImg = (ImageView) view.findViewById(R.id.user_post_image);
+        mUserNameTxt = (TextView) view.findViewById(R.id.user_name_txt);
+        mPostTxt = (TextView) view.findViewById(R.id.post_txt);
+        mPostImg = (ImageView) view.findViewById(R.id.post_image);
         mBoxLayout = (RelativeLayout) view.findViewById(R.id.BOX_layout);
-
-        mCaptionEdt = (EditText) view.findViewById(R.id.post_edit_text);
+        mPostLayout = (RelativeLayout) view.findViewById(R.id.POST_post_data);
+        mImageToUpload = (ImageView) view.findViewById(R.id.POST_image);
+        mBackImg=(ImageView)view.findViewById(R.id.back_home);
+        mCaptionEdt = (EditText) view.findViewById(R.id.post_edit_txt);
         mCaptionEdt.setVisibility(View.VISIBLE);
         mCancelTxt = (TextView) view.findViewById(R.id.POST_cancel);
         mOkTxt = (TextView) view.findViewById(R.id.POST_ok);
-        getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_retake_btn).setOnClickListener(this);
-        getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_post_btn).setOnClickListener(this);
+        mPostBtn=(Button)view.findViewById(R.id.post_button);
+
+        mBackImg.setOnClickListener(this);
+        mPostBtn.setOnClickListener(this);
         mUserNameTxt.setText(PreferenceHelper.getInstance(getCurrActivity()).readPreference("USER_NAME"));
-        mTimeTxt = (TextView) view.findViewById(R.id.BOX_time_txt);
+        mTimeTxt = (TextView) view.findViewById(R.id.box_time_txt);
         mTimeTxt.setText("Click here to upload Image");
         mTimeTxt.setVisibility(View.GONE);
         openImageIntent();
@@ -101,6 +112,7 @@ public class PostFragment extends ParentFragment {
                 return mGestureDetector.onTouchEvent(motionEvent);
             }
         });
+loadProfile();
     }
 
     @Override
@@ -113,13 +125,13 @@ public class PostFragment extends ParentFragment {
     @Override
     public void onClicked(View v) {
         switch (v.getId()) {
-            case R.id.BOX_main_img:
+            case R.id.post_image:
 //                openImageIntent();
                 break;
             case R.id.TOOLBAR_retake_btn:
                 openImageIntent();
                 break;
-            case R.id.TOOLBAR_post_btn:
+            case R.id.post_button:
                 if (mFile != null & getCurrActivity().getNetworkStatus()) {
                     DialogUtils.showProgressBar();
                     callPostDataApi();
@@ -140,6 +152,8 @@ public class PostFragment extends ParentFragment {
                 mTimeTxt.setVisibility(View.INVISIBLE);
                 updateBoxUI();
                 break;
+            case R.id.back_home:
+
         }
     }
 
@@ -340,39 +354,42 @@ public class PostFragment extends ParentFragment {
     private void callPostDataApi() {
         Log.i("PostFrgament","Sesson"+PreferenceHelper.getInstance(getCurrActivity()).readPreference("SESSION_TOKEN"));
 
-        HeldService.getService().uploadFile(PreferenceHelper.getInstance(getCurrActivity()).readPreference("SESSION_TOKEN"),mCaptionEdt.getText().toString().trim(), new TypedFile("multipart/form-data", mFile),"", new Callback<PostResponse>() {
-            @Override
-            public void success(PostResponse postResponse, Response response) {
-                DialogUtils.stopProgressDialog();
+        HeldService.getService().uploadFile(PreferenceHelper.getInstance(getCurrActivity()).readPreference("SESSION_TOKEN"),
+                mCaptionEdt.getText().toString().trim(), new TypedFile("multipart/form-data", mFile), "", new Callback<PostResponse>() {
+                    @Override
+                    public void success(PostResponse postResponse, Response response) {
+                        DialogUtils.stopProgressDialog();
 
-                callPicUpdateApi(postResponse.getImage());
-                callThumbnailUpdateApi(postResponse.getImage());
+                        PicassoCache.getPicassoInstance(getCurrActivity()).load(postResponse.getImageUri()).into(mUserImg);
+                        callPicUpdateApi(postResponse.getImageUri());
+                        callThumbnailUpdateApi(postResponse.getThumbnailUri());
+
                /* if (!PreferenceHelper.getInstance(getCurrActivity()).readPreference("isFirstPostCreated", false)) {
 
                 }*/
-                PreferenceHelper.getInstance(getCurrActivity()).writePreference("isFirstPostCreated", true);
-                getCurrActivity().perform(1, null);
-            }
+                        PreferenceHelper.getInstance(getCurrActivity()).writePreference("isFirstPostCreated", true);
+                        getCurrActivity().perform(1, null);
+                    }
 
-            @Override
-            public void failure(RetrofitError error) {
-                DialogUtils.stopProgressDialog();
-                if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
-                    String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
-                    UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
-                } else
-                    UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
-            }
-        });
+                    @Override
+                    public void failure(RetrofitError error) {
+                        DialogUtils.stopProgressDialog();
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
+                    }
+                });
     }
 
-    private void callThumbnailUpdateApi(Image image) {
+    private void callThumbnailUpdateApi(String image) {
         HeldService.getService().updateProfilePic(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)),"thumbnail", image, new Callback<ProfilPicUpdateResponse>() {
+                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)),"NotificationToken", image, new Callback<ProfilPicUpdateResponse>() {
                     @Override
                     public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
                         DialogUtils.stopProgressDialog();
-                        UiUtils.showSnackbarToast(getView(), "Profile Pic Updated Successfully..");
+                        UiUtils.showSnackbarToast(getView(), "Post Posted Successfully..");
                     }
 
                     @Override
@@ -388,12 +405,13 @@ public class PostFragment extends ParentFragment {
         );
     }
 
-    private void callPicUpdateApi(Image image) {
+    private void callPicUpdateApi(String image) {
         HeldService.getService().updateProfilePic(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)),"pic", image, new Callback<ProfilPicUpdateResponse>() {
+                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)), "pic", image, new Callback<ProfilPicUpdateResponse>() {
                     @Override
                     public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
                         DialogUtils.stopProgressDialog();
+                        UiUtils.showSnackbarToast(getView(), "User Profile  Pic Updated..");
                     }
 
                     @Override
@@ -441,4 +459,24 @@ public class PostFragment extends ParentFragment {
             return false;
         }
     }
+    public void loadProfile()
+    {
+        HeldService.getService().searchUser(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
+                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)), new Callback<SearchUserResponse>() {
+                    @Override
+                    public void success(SearchUserResponse searchUserResponse, Response response) {
+                        PicassoCache.getPicassoInstance(getCurrActivity())
+                                .load(searchUserResponse.getProfilePic())
+                                .placeholder(R.drawable.user_icon)
+                                .into(mUserImg);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+
+    }
+
 }

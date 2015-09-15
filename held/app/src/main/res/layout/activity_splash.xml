@@ -53,22 +53,51 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             />
-        <Button
-            android:id="@+id/startBtn"
-            android:layout_width="285dp"
-            android:layout_height="50dp"
-            android:text="Get Started"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:fontFamily="@string/benton_sans_book"
-            android:background="#00c6ae"
-            android:textColor="#ffffff"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:layout_marginTop="45dp"
-            android:layout_gravity="center"
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_with_shadow"
 
-            />
+            android:layout_gravity="center">
+            <Button
+                android:id="@+id/startBtn"
+                android:layout_width="285dp"
+                android:layout_height="50dp"
+                android:text="Get Started"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:fontFamily="@string/benton_sans_book"
+                android:background="@color/new_btn_color"
+                android:textColor="#ffffff"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+
+                android:layout_marginTop="45dp"
+                android:layout_gravity="center"
+                android:layout_centerHorizontal="true"
+                />
+            <View
+                android:layout_width="286dp"
+                android:layout_height="3dp"
+                android:background="@color/shadow_color"
+                android:alpha=".10"
+                android:layout_gravity="center"
+                android:layout_marginTop="1dp"
+                android:layout_below="@+id/startBtn"
+                android:layout_centerHorizontal="true"
+                />
+            <View
+                android:layout_width="3dp"
+                android:layout_height="50dp"
+                android:background="@color/shadow_color"
+                android:alpha=".10"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="4dp"
+                android:layout_toRightOf="@+id/startBtn"
+
+                />
+
+        </RelativeLayout>
 
             <TextView
                 android:id="@+id/text3"
@@ -146,7 +175,7 @@
         android:fontFamily="@string/benton_sans_book"
         android:textSize="16sp"
         android:singleLine="false"
-        android:textColor="#00c6ae"
+        android:textColor="@color/new_btn_color"
 
          />
     </LinearLayout>

@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
+import com.held.adapters.FeedAdapter;
+
 
 public class PreferenceHelper {
 
@@ -59,5 +61,7 @@ public class PreferenceHelper {
     public boolean readPreference(String key, boolean defaultValue) {
         return mSharedPrefs.getBoolean(key, defaultValue);
     }
+
+
 }
 

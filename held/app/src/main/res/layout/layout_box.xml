@@ -4,68 +4,95 @@
     android:id="@+id/BOX_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     android:background="#ffffff">
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:id="@+id/linearLayout">
-    <ImageView
-        android:layout_width="43dp"
-        android:layout_height="43dp"
-        android:id="@+id/profile_img"
-        android:layout_marginLeft="10dp"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/scarlets" />
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="7dp"
-    android:layout_marginTop="3dp"
-    android:orientation="vertical">
-    <TextView
+>
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Scarlettjohansson"
-        android:id="@+id/user_name"
-        android:fontFamily="@string/benton_sans_medium"
-        android:textSize="13sp"
-        android:textColor="#363636"
+        android:id="@+id/BOX_top_layout">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout"
+            >
 
- />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/user_post_txt"
-        android:layout_marginTop="3dp"
-        android:textSize="13sp"
-        android:fontFamily="@string/benton_sans_book"
-        android:textColor="#898989"
-        android:text="There is a theory which states that if ever anyone discovers exactly what the Universe."
-        />
+            <ImageView
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:id="@+id/profile_img"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentTop="true"
+            android:scaleType="centerCrop"
+                android:src="@drawable/user_icon" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/post_edit_text" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:orientation="vertical">
 
-</LinearLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Scarlettjohansson"
+                        android:id="@+id/user_name_txt"
+                        android:fontFamily="@string/benton_sans_medium"
+                        android:textSize="13sp"
+                        android:layout_marginTop="3dp"
+                        android:textColor="#363636" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/post_txt"
+                        android:layout_marginTop="3dp"
+                        android:textSize="13sp"
+                        android:layout_below="@+id/user_name_txt"
+                        android:fontFamily="@string/benton_sans_book"
+                        android:textColor="#898989"
 
-</LinearLayout>
+                        />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/post_edit_txt"
+                        android:layout_marginTop="3dp"
+                        android:textSize="13sp"
+                        android:layout_below="@+id/user_name_txt"
+                        android:fontFamily="@string/benton_sans_book"
+
+                        android:visibility="gone"
+                        android:maxLength="40"
+                        android:textColor="#898989"></EditText>
+
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
 
     <ImageView
         android:layout_width="640dp"
         android:layout_height="343dp"
-        android:id="@+id/user_post_image"
-        android:layout_below="@+id/linearLayout"
+        android:id="@+id/post_image"
+        android:layout_below="@+id/BOX_top_layout"
         android:layout_marginTop="20dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:src="@drawable/milana_vayntrub" />
-
+        android:scaleType="centerCrop"
+        android:fitsSystemWindows="true"/>
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Hello"
+    android:textColor="#898989"
+    android:textSize="18sp"
+   android:layout_centerInParent="true"
+    android:id="@+id/box_time_txt"/>
 
 </RelativeLayout>
 

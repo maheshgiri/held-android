@@ -22,6 +22,7 @@ import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.HoldResponse;
 import com.held.retrofit.response.ReleaseResponse;
+import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
@@ -240,11 +241,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private FeedViewHolder(View v) {
             super(v);
-            mUserNameTxt = (TextView) v.findViewById(R.id.user_name);
-            mFeedImg = (ImageView) v.findViewById(R.id.user_post_image);
+            mUserNameTxt = (TextView) v.findViewById(R.id.user_name_txt);
+            mFeedImg = (ImageView) v.findViewById(R.id.post_image);
             mUserImg = (ImageView) v.findViewById(R.id.profile_img);
-            mFeedTxt = (TextView) v.findViewById(R.id.user_post_txt);
-            mTimeTxt = (TextView) v.findViewById(R.id.BOX_time_txt);
+            mFeedTxt = (TextView) v.findViewById(R.id.post_txt);
+            mTimeTxt = (TextView) v.findViewById(R.id.box_time_txt);
         }
     }
 
@@ -325,4 +326,5 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return true;
         }
     }
+
 }

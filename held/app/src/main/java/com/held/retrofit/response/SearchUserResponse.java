@@ -1,6 +1,9 @@
 package com.held.retrofit.response;
 
 
+import android.media.Image;
+import android.widget.ImageView;
+
 public class SearchUserResponse {
 
     private String session_token;
@@ -13,11 +16,13 @@ public class SearchUserResponse {
     private String pic;
     private String rid;
     private String display_name;
+    private String profilePic;
+
 
     public String getNotification_token() {
         return notification_token;
     }
-
+public String getProfilePic(){return profilePic;}
     private String notification_token;
 
     public String getSession_token() {

@@ -23,6 +23,7 @@ import com.held.activity.FeedActivity;
 import com.held.activity.R;
 import com.held.adapters.FeedAdapter;
 import com.held.customview.BlurTransformation;
+import com.held.customview.PicassoCache;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
@@ -57,7 +58,7 @@ public class FeedFragment extends ParentFragment {
     private List<FeedData> mFeedList = new ArrayList<>();
     private int mLimit = 5;
     private long mStart = System.currentTimeMillis();
-    private ImageView mFullImg;
+    private ImageView mFullImg,mUserImg;
     private GestureDetector mGestureDetector;
 
     public static FeedFragment newInstance() {
@@ -84,6 +85,7 @@ public class FeedFragment extends ParentFragment {
         blurTransformation = new BlurTransformation(getCurrActivity(), 25f);
         mFeedAdapter = new FeedAdapter((FeedActivity) getCurrActivity(), mFeedList, blurTransformation, isLastPage, this);
         mFeedRecyclerView.setAdapter(mFeedAdapter);
+
 //        mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());
 //
 //        mFeedRecyclerView.setOnTouchListener(new View.OnTouchListener() {
@@ -115,6 +117,7 @@ public class FeedFragment extends ParentFragment {
                 return false;
             }
         });
+
        /* mSearchEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -254,6 +257,7 @@ public class FeedFragment extends ParentFragment {
                             mFeedAdapter.setFeedResponse(mFeedList, isLastPage);
                             mStart = mFeedResponse.getNextPageStart();
                             isLoading = false;
+
                         }
 
                         @Override

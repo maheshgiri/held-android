@@ -8,15 +8,15 @@ import android.media.Image;
 public class PostResponse {
 
     String date;
-    Image image;
+    String imageUri;
     int held;
     String text;
     String rid;
     String owner_display_name;
-    String thumbnail;
+    String thumbnailUri;
 
-    public String getThumbnail() {
-        return thumbnail;
+    public String getThumbnailUri() {
+        return thumbnailUri;
     }
 
     public String getOwner_display_name() {
@@ -27,8 +27,8 @@ public class PostResponse {
         return date;
     }
 
-    public Image getImage() {
-        return image;
+    public String getImageUri() {
+        return imageUri;
     }
 
     public int getHeld() {

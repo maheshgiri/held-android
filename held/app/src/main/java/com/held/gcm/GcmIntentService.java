@@ -223,7 +223,7 @@ public class GcmIntentService extends IntentService {
 
                     }
                 };
-                Picasso.with(HeldApplication.getAppContext()).load(AppConstants.BASE_URL + postResponse.getImage()).into(target);
+                Picasso.with(HeldApplication.getAppContext()).load(AppConstants.BASE_URL + postResponse.getImageUri()).into(target);
             }
 
             @Override

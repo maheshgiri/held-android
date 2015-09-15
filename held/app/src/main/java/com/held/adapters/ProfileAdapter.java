@@ -206,11 +206,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            mUserNameTxt = (TextView) itemView.findViewById(R.id.BOX_user_name_txt);
-            mFeedImg = (ImageView) itemView.findViewById(R.id.BOX_main_img);
-            mUserImg = (ImageView) itemView.findViewById(R.id.BOX_profile_img);
-            mFeedTxt = (TextView) itemView.findViewById(R.id.BOX_des_txt);
-            mTimeTxt = (TextView) itemView.findViewById(R.id.BOX_time_txt);
+            mUserNameTxt = (TextView) itemView.findViewById(R.id.user_name_txt);
+            mFeedImg = (ImageView) itemView.findViewById(R.id.post_image);
+            mUserImg = (ImageView) itemView.findViewById(R.id.profile_img);
+            mFeedTxt = (TextView) itemView.findViewById(R.id.post_txt);
+            mTimeTxt = (TextView) itemView.findViewById(R.id.box_time_txt);
         }
     }
 

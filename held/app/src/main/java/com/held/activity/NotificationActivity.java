@@ -30,7 +30,7 @@ public class NotificationActivity extends ParentActivity implements View.OnClick
         mSearchEdt = (EditText) findViewById(R.id.TOOLBAR_search_edt);
         mRetakeBtn = (Button) findViewById(R.id.TOOLBAR_retake_btn);
         mPostBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
-        mUsername = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
+       // mUsername = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
 
         mChat.setOnClickListener(this);
         mCamera.setOnClickListener(this);
