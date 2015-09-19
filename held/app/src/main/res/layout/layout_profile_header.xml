@@ -3,9 +3,10 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/bg_color">
 
-    <com.held.customview.CircularImageView
+    <ImageView
         android:id="@+id/PROFILE_pic"
         android:layout_width="70dp"
         android:layout_height="70dp"
@@ -13,16 +14,16 @@
         android:layout_marginTop="30dp"
         android:scaleType="centerCrop" />
 
-    <com.held.customview.CustomTextView
+    <TextView
         android:id="@+id/PROFILE_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/PROFILE_pic"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:textColor="#ffffff"
+        android:textColor="#363636"
         android:textSize="18sp"
-        custom:typeFace="@string/freight_sans_book" />
+       />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,7 +33,7 @@
         android:background="#1affffff"
         android:orientation="horizontal">
 
-        <com.held.customview.CustomTextView
+        <TextView
             android:id="@+id/PROFILE_photos"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -42,9 +43,9 @@
             android:text="Photos"
             android:textColor="#ffffff"
             android:textSize="18sp"
-            custom:typeFace="@string/freight_sans_book" />
+             />
 
-        <com.held.customview.CustomTextView
+        <TextView
             android:id="@+id/PROFILE_friends"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -54,7 +55,7 @@
             android:text="Friends"
             android:textColor="#ffffff"
             android:textSize="18sp"
-            custom:typeFace="@string/freight_sans_book" />
+        />
 
         <ImageView
             android:id="@+id/PROFILE_chat"

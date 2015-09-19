@@ -31,19 +31,19 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         activity = this;
-        mChat = (ImageView) findViewById(R.id.TOOLBAR_chat_img);
-        mCamera = (ImageView) findViewById(R.id.TOOLBAR_camera_img);
-        mNotification = (ImageView) findViewById(R.id.TOOLBAR_notification_img);
-        mSearchEdt = (EditText) findViewById(R.id.TOOLBAR_search_edt);
-        mRetakeBtn = (Button) findViewById(R.id.TOOLBAR_retake_btn);
-        mPostBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
+        mChat = (ImageView) findViewById(R.id.toolbar_chat_img);
+        mCamera = (ImageView) findViewById(R.id.toolbar_post_img);
+        mNotification = (ImageView) findViewById(R.id.toolbar_notification_img);
+      //  mSearchEdt = (EditText) findViewById(R.id.TOOLBAR_search_edt);
+     //   mRetakeBtn = (Button) findViewById(R.id.TOOLBAR_retake_btn);
+     //   mPostBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
        // mUsername = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
 
         mChat.setOnClickListener(this);
         mCamera.setOnClickListener(this);
         mNotification.setOnClickListener(this);
-        mRetakeBtn.setOnClickListener(this);
-        mPostBtn.setOnClickListener(this);
+//        mRetakeBtn.setOnClickListener(this);
+  //      mPostBtn.setOnClickListener(this);
         if (getIntent().getExtras() != null) {
             launchChatScreen(getIntent().getExtras().getString("id"), getIntent().getExtras().getBoolean("isOneToOne"));
         } else {
@@ -96,13 +96,13 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.TOOLBAR_notification_img:
+            case R.id.toolbar_notification_img:
                 launchNotificationScreen();
                 break;
-            case R.id.TOOLBAR_camera_img:
+            case R.id.toolbar_post_img:
                 launchCreatePostScreen();
                 break;
-            case R.id.TOOLBAR_chat_img:
+            case R.id.toolbar_chat_img:
                 onBackPressed();
                 break;
         }

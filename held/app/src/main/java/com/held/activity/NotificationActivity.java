@@ -24,19 +24,19 @@ public class NotificationActivity extends ParentActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-        mChat = (ImageView) findViewById(R.id.TOOLBAR_chat_img);
-        mCamera = (ImageView) findViewById(R.id.TOOLBAR_camera_img);
-        mNotification = (ImageView) findViewById(R.id.TOOLBAR_notification_img);
-        mSearchEdt = (EditText) findViewById(R.id.TOOLBAR_search_edt);
-        mRetakeBtn = (Button) findViewById(R.id.TOOLBAR_retake_btn);
-        mPostBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
+        mChat = (ImageView) findViewById(R.id.toolbar_chat_img);
+        mCamera = (ImageView) findViewById(R.id.toolbar_post_img);
+        mNotification = (ImageView) findViewById(R.id.toolbar_notification_img);
+     //   mSearchEdt = (EditText) findViewById(R.id.TOOLBAR_search_edt);
+       // mRetakeBtn = (Button) findViewById(R.id.TOOLBAR_retake_btn);
+     //   mPostBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
        // mUsername = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
 
         mChat.setOnClickListener(this);
         mCamera.setOnClickListener(this);
         mNotification.setOnClickListener(this);
-        mRetakeBtn.setOnClickListener(this);
-        mPostBtn.setOnClickListener(this);
+//        mRetakeBtn.setOnClickListener(this);
+//        mPostBtn.setOnClickListener(this);
 
         if (getIntent().getExtras() != null) {
             launchNotificationScreen(getIntent().getExtras().getInt("id"));
@@ -65,10 +65,10 @@ public class NotificationActivity extends ParentActivity implements View.OnClick
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.TOOLBAR_chat_img:
+            case R.id.toolbar_chat_img:
                 launchChatListScreen();
                 break;
-            case R.id.TOOLBAR_camera_img:
+            case R.id.toolbar_post_img:
                 launchCreatePostScreen();
                 break;
         }

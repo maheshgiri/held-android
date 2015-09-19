@@ -24,6 +24,8 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:fitsSystemWindows="true"
+    />
 
 </LinearLayout>

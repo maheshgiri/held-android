@@ -18,6 +18,8 @@ import com.held.utils.DialogUtils;
 import com.held.utils.HeldApplication;
 import com.held.utils.NetworkUtil;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public abstract class ParentActivity extends AppCompatActivity implements NetworkStateReceiver.OnNetworkChangeListener {
@@ -188,40 +190,17 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
 
     public void setToolbar() {
         if (mToolbar == null) {
-            mToolbar = (Toolbar) findViewById(R.id.toolbar);
+            mToolbar = (Toolbar) findViewById(R.id.toolbar_main);
         }
         if (mToolbar == null) return;
 
-        ImageView chatImg = (ImageView) findViewById(R.id.TOOLBAR_chat_img);
-        ImageView cameraImg = (ImageView) findViewById(R.id.TOOLBAR_camera_img);
-        ImageView notificationImg = (ImageView) findViewById(R.id.TOOLBAR_notification_img);
-        EditText searchEdt = (EditText) findViewById(R.id.TOOLBAR_search_edt);
-        Button retakeBtn = (Button) findViewById(R.id.TOOLBAR_retake_btn);
-        Button postBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
-      //  TextView userNameTxt = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
+        ImageView chat_img=(ImageView)findViewById(R.id.toolbar_chat_img);
+        ImageView search_img=(ImageView)findViewById(R.id.toolbar_search_img);
+        ImageView notification_img=(ImageView)findViewById(R.id.toolbar_notification_img);
+        ImageView camera_img=(ImageView)findViewById(R.id.toolbar_post_img);
+        TextView toolbar_title_txt=(TextView)findViewById(R.id.toolbar_title_txt);
+        EditText toolbar_search_edt_txt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
 
-        if (mShowChat) chatImg.setVisibility(View.VISIBLE);
-        else chatImg.setVisibility(View.INVISIBLE);
-
-        if (mShowCamera) cameraImg.setVisibility(View.VISIBLE);
-        else cameraImg.setVisibility(View.INVISIBLE);
-
-        if (mShowNotification) notificationImg.setVisibility(View.VISIBLE);
-        else notificationImg.setVisibility(View.INVISIBLE);
-
-        if (mShowSearch) searchEdt.setVisibility(View.VISIBLE);
-        else searchEdt.setVisibility(View.INVISIBLE);
-
-       /* if (mShowUserName) {
-            userNameTxt.setVisibility(View.VISIBLE);
-            userNameTxt.setText(mUserName);
-        } else userNameTxt.setVisibility(View.INVISIBLE);*/
-
-        if (mShowRetakeBtn) retakeBtn.setVisibility(View.VISIBLE);
-        else retakeBtn.setVisibility(View.INVISIBLE);
-
-        if (mShowPostBtn) postBtn.setVisibility(View.VISIBLE);
-        else postBtn.setVisibility(View.INVISIBLE);
 
     }
 

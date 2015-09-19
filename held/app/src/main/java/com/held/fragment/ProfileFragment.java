@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +14,12 @@ import android.widget.ImageView;
 
 import com.held.activity.R;
 import com.held.adapters.ProfileAdapter;
+import com.held.customview.PicassoCache;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.SearchUserResponse;
+import com.held.utils.AppConstants;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 import com.squareup.picasso.Picasso;
@@ -38,10 +41,12 @@ public class ProfileFragment extends ParentFragment {
     private long mStart = System.currentTimeMillis();
     private int mLimit = 5;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private String mUid, mUserName;
-    private ImageView mFullImg;
+    private String mUid, mUserName,user_id;
+
+    private ImageView mFullImg,mUserImg;
 
     public static final String TAG = ProfileFragment.class.getSimpleName();
+    private ImageView mProfilePic;
 
     public static ProfileFragment newInstance(String uid) {
         ProfileFragment profileFragment = new ProfileFragment();
@@ -66,14 +71,17 @@ public class ProfileFragment extends ParentFragment {
         mRecyclerView.setAdapter(mProfileAdapter);
         mFullImg = (ImageView) view.findViewById(R.id.PROFILE_full_img);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.PROFILE_swipe_refresh_layout);
-        mUserName = getArguments().getString("uid");
+        mUserName = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_name));
+        mUserImg=(ImageView)view.findViewById(R.id.profile_img);
+        mProfilePic=(ImageView)view.findViewById(R.id.PROFILE_pic);
+
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int totalItemCount = mLayoutManager.getItemCount();
                 int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
-
+                loadProfile();
                 if (!mIsLastPage && (lastVisibleItemPosition + 1) == totalItemCount && !mIsLoading) {
                     callProfilePostAPi();
                 }
@@ -103,19 +111,19 @@ public class ProfileFragment extends ParentFragment {
     }
 
     private void callUserSearchApi() {
-        HeldService.getService().searchUser(PreferenceHelper.getInstance(getCurrActivity())
-                .readPreference(getString(R.string.API_session_token)), mUserName, new Callback<SearchUserResponse>() {
-            @Override
-            public void success(SearchUserResponse searchUserResponse, Response response) {
-                mUid = searchUserResponse.getRid();
-                callProfilePostAPi();
-            }
+        HeldService.getService().searchUser(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
+                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)), new Callback<SearchUserResponse>() {
+                    @Override
+                    public void success(SearchUserResponse searchUserResponse, Response response) {
+                        user_id = searchUserResponse.getRid();
+                        callProfilePostAPi();
+                    }
 
-            @Override
-            public void failure(RetrofitError error) {
+                    @Override
+                    public void failure(RetrofitError error) {
 
-            }
-        });
+                    }
+                });
     }
 
     private void hideSystemUI() {
@@ -159,8 +167,9 @@ public class ProfileFragment extends ParentFragment {
 
     private void callProfilePostAPi() {
         mIsLoading = true;
-        HeldService.getService().getUserPosts(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)), mLimit, mStart,
-                mUid, new Callback<FeedResponse>() {
+        HeldService.getService().getUserPosts(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
+                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)), mStart, mLimit,
+                new Callback<FeedResponse>() {
                     @Override
                     public void success(FeedResponse feedResponse, Response response) {
                         mPostList.addAll(feedResponse.getObjects());
@@ -168,6 +177,7 @@ public class ProfileFragment extends ParentFragment {
                         mStart = feedResponse.getNextPageStart();
                         mProfileAdapter.setPostList(mPostList, mIsLastPage);
                         mIsLoading = false;
+
                     }
 
                     @Override
@@ -185,6 +195,28 @@ public class ProfileFragment extends ParentFragment {
 
     @Override
     public void onClicked(View v) {
+
+    }
+    public void loadProfile()
+    {
+        HeldService.getService().searchUser(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
+                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)), new Callback<SearchUserResponse>() {
+                    @Override
+                    public void success(SearchUserResponse searchUserResponse, Response response) {
+                        Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
+
+                        PicassoCache.getPicassoInstance(getCurrActivity())
+                                .load(AppConstants.BASE_URL+searchUserResponse.getProfilePic())
+                                .placeholder(R.drawable.user_icon)
+                                .into(mProfilePic);
+                        mUserName=searchUserResponse.getDisplayName();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
 
     }
 }

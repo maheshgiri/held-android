@@ -15,14 +15,20 @@ public class SearchUserResponse {
     private boolean banned;
     private String pic;
     private String rid;
-    private String display_name;
+    private String displayName;
     private String profilePic;
 
+
+    public String getDisplayName() {
+        return displayName;
+    }
 
     public String getNotification_token() {
         return notification_token;
     }
-public String getProfilePic(){return profilePic;}
+
+    public String getProfilePic(){return profilePic;}
+
     private String notification_token;
 
     public String getSession_token() {
@@ -61,7 +67,5 @@ public String getProfilePic(){return profilePic;}
         return rid;
     }
 
-    public String getDisplay_name() {
-        return display_name;
-    }
+
 }

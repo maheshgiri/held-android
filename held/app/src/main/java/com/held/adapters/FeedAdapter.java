@@ -4,6 +4,7 @@ package com.held.adapters;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -72,6 +73,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             View v = LayoutInflater.from(mActivity).inflate(R.layout.layout_box,
                     parent, false);
             viewHolder = new FeedViewHolder(v);
+
         } else {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.layout_progress_bar, parent, false);
@@ -85,12 +87,23 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         if (viewHolder instanceof FeedViewHolder) {
             final FeedViewHolder holder = (FeedViewHolder) viewHolder;
-            holder.mUserNameTxt.setText(mFeedList.get(position).getOwner_display_name());
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mFeedList.get(position).getOwner_pic()).into(holder.mUserImg);
-            holder.mFeedTxt.setText(mFeedList.get(position).getText());
-            PicassoCache.getPicassoInstance(mActivity).load(AppConstants.BASE_URL+ mFeedList.get(position).getImageUri()).
-            transform(mBlurTransformation).into(holder.mFeedImg);
 
+           /* Picasso.with(mActivity)
+                    .load(AppConstants.BASE_URL + mFeedList.get(position).getProfilePic())
+                    .placeholder(R.drawable.user_icon)
+                    .into(holder.mUserImg);*/
+
+            PicassoCache.getPicassoInstance(mActivity)
+                            .load(AppConstants.BASE_URL + mFeedList.get(position).getCreator().getProfilePic())
+                            .placeholder(R.drawable.user_icon)
+                            .into(holder.mUserImg);
+
+            holder.mFeedTxt.setText(mFeedList.get(position).getText());
+
+            PicassoCache.getPicassoInstance(mActivity)
+                    .load(AppConstants.BASE_URL + mFeedList.get(position).getThumbnailUri()).transform(mBlurTransformation)
+                    .into(holder.mFeedImg);
+            holder.mUserNameTxt.setText(mFeedList.get(position).getCreator().getDisplayName());
             setTimeText(mFeedList.get(position).getHeld(), holder.mTimeTxt);
 
 //            holder.mUserImg.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +128,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             mPosition = position;
                             break;
                     }
-                    mOwnerDisplayName = mFeedList.get(position).getOwner_display_name();
+                    mOwnerDisplayName = mFeedList.get(position).getCreator().getDisplayName();
                     return mPersonalChatDetector.onTouchEvent(motionEvent);
                 }
             });
@@ -143,16 +156,16 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         case MotionEvent.ACTION_UP:
                             mFeedFragment.showRCView();
                             view.getParent().requestDisallowInterceptTouchEvent(false);
-                            Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(position).getImageUri()).
+                            Picasso.with(mActivity).load(AppConstants.BASE_URL + mFeedList.get(position).getImageUri()).
                                     transform(mBlurTransformation).into(holder.mFeedImg);
                             holder.mTimeTxt.setVisibility(View.VISIBLE);
-                            callReleaseApi(mFeedList.get(position).getRid(), holder.mTimeTxt,String.valueOf(System.currentTimeMillis()));
+                            callReleaseApi(mFeedList.get(position).getCreator().getRid(), holder.mTimeTxt,String.valueOf(System.currentTimeMillis()));
                             mActivity.isBlured = true;
                             break;
 
                     }
                     feedViewHolder = holder;
-                    mPostId = mFeedList.get(position).getRid();
+                    mPostId = mFeedList.get(position).getCreator().getRid();
                     return mGestureDetector.onTouchEvent(motionEvent);
                 }
 
@@ -236,11 +249,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static class FeedViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        private final TextView mUserNameTxt, mFeedTxt, mTimeTxt;
-        private final ImageView mFeedImg, mUserImg;
+        public final TextView mUserNameTxt, mFeedTxt, mTimeTxt;
+        public final ImageView mFeedImg, mUserImg;
 
         private FeedViewHolder(View v) {
             super(v);
+
             mUserNameTxt = (TextView) v.findViewById(R.id.user_name_txt);
             mFeedImg = (ImageView) v.findViewById(R.id.post_image);
             mUserImg = (ImageView) v.findViewById(R.id.profile_img);
@@ -282,7 +296,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (mActivity.getNetworkStatus()) {
 //                Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(mPosition).getImage()).into(feedViewHolder.mFeedImg);
               //  if (!mFeedList.get(mPosition).getOwner_display_name().equals(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_user_name)))) {
-                    callHoldApi(mFeedList.get(mPosition).getRid(),String.valueOf(System.currentTimeMillis()));
+                    callHoldApi(mFeedList.get(mPosition).getCreator().getRid(),String.valueOf(System.currentTimeMillis()));
               //  }
                 feedViewHolder.mTimeTxt.setVisibility(View.INVISIBLE);
                 feedViewHolder.mFeedImg.getParent().requestDisallowInterceptTouchEvent(true);
@@ -321,7 +335,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             Bundle bundle = new Bundle();
-            bundle.putString("uid", mFeedList.get(mPosition).getOwner_display_name());
+            bundle.putString("uid", mFeedList.get(mPosition).getCreator().getDisplayName());
             mActivity.perform(8, bundle);
             return true;
         }

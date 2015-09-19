@@ -55,11 +55,11 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         if (holder instanceof FriendViewHolder) {
             FriendViewHolder viewHolder = (FriendViewHolder) holder;
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mFriendList.get(position).getPic()).into(viewHolder.mProfilePic);
-            viewHolder.mUserName.setText(mFriendList.get(position).getDisplay_name());
+            viewHolder.mUserName.setText(mFriendList.get(position).getDisplayName());
             viewHolder.mProfilePic.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    mOwnerDisplayName = mFriendList.get(position).getDisplay_name();
+                    mOwnerDisplayName = mFriendList.get(position).getDisplayName();
                     return mPersonalGestureDetector.onTouchEvent(motionEvent);
                 }
             });
