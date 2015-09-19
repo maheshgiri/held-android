@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.held.fragment.FeedFragment;
@@ -29,6 +30,9 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     private GestureDetector gestureDetector;
     private int mPosition = 1;
 
+    private RelativeLayout mPosttoolbar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,14 +53,16 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mNotification = (ImageView) findViewById(R.id.TOOLBAR_notification_img);
         mSearchEdt = (EditText) findViewById(R.id.TOOLBAR_search_edt);
         mRetakeBtn = (Button) findViewById(R.id.TOOLBAR_retake_btn);
-        mPostBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
-        mUsername = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
-
+        //mPostBtn = (Button) findViewById(R.id.post_button);
+      //  mUsername = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
+        mPosttoolbar=(RelativeLayout)findViewById(R.id.post_toolbar);
+//        mPosttoolbar.setVisibility(View.GONE);
         mChat.setOnClickListener(this);
         mCamera.setOnClickListener(this);
         mNotification.setOnClickListener(this);
         mRetakeBtn.setOnClickListener(this);
-        mPostBtn.setOnClickListener(this);
+      //  mPostBtn.setOnClickListener(this);
+
 
 
     }

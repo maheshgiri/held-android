@@ -204,7 +204,7 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
         EditText searchEdt = (EditText) findViewById(R.id.TOOLBAR_search_edt);
         Button retakeBtn = (Button) findViewById(R.id.TOOLBAR_retake_btn);
         Button postBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
-        TextView userNameTxt = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
+      //  TextView userNameTxt = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
 
         if (mShowChat) chatImg.setVisibility(View.VISIBLE);
         else chatImg.setVisibility(View.INVISIBLE);
@@ -218,10 +218,10 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
         if (mShowSearch) searchEdt.setVisibility(View.VISIBLE);
         else searchEdt.setVisibility(View.INVISIBLE);
 
-        if (mShowUserName) {
+       /* if (mShowUserName) {
             userNameTxt.setVisibility(View.VISIBLE);
             userNameTxt.setText(mUserName);
-        } else userNameTxt.setVisibility(View.INVISIBLE);
+        } else userNameTxt.setVisibility(View.INVISIBLE);*/
 
         if (mShowRetakeBtn) retakeBtn.setVisibility(View.VISIBLE);
         else retakeBtn.setVisibility(View.INVISIBLE);

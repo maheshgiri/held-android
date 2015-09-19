@@ -1,6 +1,7 @@
 package com.held.retrofit;
 
 import android.media.Image;
+import android.widget.ImageView;
 
 import com.held.retrofit.response.ActivityFeedDataResponse;
 import com.held.retrofit.response.AddFriendResponse;
@@ -76,11 +77,11 @@ public interface HeldAPI {
 
     @Multipart
     @PUT("/users/{user_id}")
-    void updateProfilePic(@Header("Authorization") String token,@Path("user_id")String uid, @Query("field") String fieldValue, @Part("value") Image image,
+    void updateProfilePic(@Header("Authorization") String token,@Path("user_id")String uid, @Query("field") String fieldValue, @Part("value") String image,
                           Callback<ProfilPicUpdateResponse> profilPicUpdateResponseCallback);
 
-    @GET("/users/")
-    void searchUser(@Header("Authorization") String token, @Query("name") String name, Callback<SearchUserResponse> searchUserResponseCallback);
+    @GET("/users/{user_id}")
+    void searchUser(@Header("Authorization") String token, @Path("user_id") String uid, Callback<SearchUserResponse> searchUserResponseCallback);
 
 
     @PUT("/posts/{post_id}/holds/{hold_id}")

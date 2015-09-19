@@ -1,6 +1,10 @@
 package com.held.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
+
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -9,6 +13,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.held.receiver.NetworkStateReceiver;
@@ -37,10 +42,11 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
     public static String TAG = VerificationActivity.class.getSimpleName();
 
     private EditText mFirstEdt, mSecondEdt, mThirdEdt, mForthEdt;
-    private TextView mResendSmsTxt, mVoiceCallTxt, mUserNameTxt, mIndicationTxt;
+    private TextView mResendSmsTxt, mVoiceCallTxt, mUserNameTxt, mIndicationTxt,mPhoneTxt;
     private boolean mNetWorkStatus, isBackPressed;
     private String mPhoneNo, mUserName, mPin;
     private String mRegId,mAuth,mSessonToken,mNewRegId;
+    private ImageView mback;
 
 
     @Override
@@ -63,14 +69,38 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         mVoiceCallTxt = (TextView) findViewById(R.id.VERIFICATION_voice_call_txt);
         mUserNameTxt = (TextView) findViewById(R.id.VERIFICATION_username_txt);
         mIndicationTxt = (TextView) findViewById(R.id.VERIFICATION_code_sent_txt);
+        mPhoneTxt=(TextView)findViewById(R.id.VERIFICATION_phone_txt);
         mUserNameTxt.setText("Hi, " + mUserName + "!");
-        mIndicationTxt.setText("verification code sent to " + mPhoneNo);
+        mIndicationTxt.setText("verification code sent to " );
+        mback=(ImageView) findViewById(R.id.VER_back);
+        mPhoneTxt.setText(""+ mPhoneNo);
+        Context ctx = getApplicationContext();
+        if (ctx != null) {
+            Typeface type = Typeface.createFromAsset(ctx.getAssets(),
+                    "BentonSansBook.otf");
+            mUserNameTxt.setTypeface(type);
+            mIndicationTxt.setTypeface(type);
+            mFirstEdt.setTypeface(type);
+            mSecondEdt.setTypeface(type);
+            mThirdEdt.setTypeface(type);
+            mFirstEdt.setTypeface(type);
+            mVoiceCallTxt.setTypeface(type);
+            mResendSmsTxt.setTypeface(type);
+            Typeface type2 = Typeface.createFromAsset(ctx.getAssets(),
+                    "BentonSansMedium.otf");
+            mPhoneTxt.setTypeface(type2);
+
+        }
 
         mResendSmsTxt.setOnClickListener(this);
         mVoiceCallTxt.setOnClickListener(this);
-
+mback.setOnClickListener(this);
         mNetWorkStatus = NetworkUtil.isInternetConnected(getApplicationContext());
         NetworkStateReceiver.registerOnNetworkChangeListener(this);
+
+
+
+
 
         mFirstEdt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -282,6 +312,9 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                     UiUtils.showSnackbarToast(findViewById(R.id.root_view), Utils.getString(R.string.error_offline_msg));
                 }
                 break;
+            case R.id.VER_back:
+                Intent intent = new Intent(VerificationActivity.this, RegistrationActivity.class);
+                startActivity(intent);
         }
     }
 

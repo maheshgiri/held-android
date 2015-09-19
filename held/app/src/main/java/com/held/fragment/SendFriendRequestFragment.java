@@ -48,8 +48,8 @@ public class SendFriendRequestFragment extends ParentFragment {
 
     @Override
     protected void initialiseView(View view, Bundle savedInstanceState) {
-        mUserName = (TextView) view.findViewById(R.id.BOX_user_name_txt);
-        mProfilePic = (ImageView) view.findViewById(R.id.BOX_main_img);
+        mUserName = (TextView) view.findViewById(R.id.user_name_txt);
+        mProfilePic = (ImageView) view.findViewById(R.id.post_image);
         mSendBtn = (Button) view.findViewById(R.id.FR_send_btn);
         mSendBtn.setOnClickListener(this);
 

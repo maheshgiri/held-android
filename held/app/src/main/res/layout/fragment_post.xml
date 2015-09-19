@@ -3,11 +3,51 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/app_background"
+    android:background="@color/bg_color"
     android:clickable="true"
     android:orientation="vertical">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/post_toolbar">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/back_home"
+        android:src="@drawable/back_icon_v2"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="35dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-    <include layout="@layout/layout_box"></include>
+    <Button
+        android:layout_width="75dp"
+        android:layout_height="36dp"
+        android:text="POST"
+        android:id="@+id/post_button"
+        android:layout_marginLeft="190dp"
+        android:layout_marginTop="23dp"
+        android:textColor="#ffffff"
+        android:textSize="13sp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/new_btn_color"
+        android:fontFamily="@string/benton_sans_book"
+        android:textAlignment="center"
+        />
+</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/post_toolbar"
+        android:layout_marginTop="20dp"
+        >
+        <include layout="@layout/layout_box"></include>
+    </LinearLayout>
+
 
     <RelativeLayout
         android:id="@+id/POST_post_data"
@@ -20,48 +60,45 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
+        <EditText
+        android:id="@+id/POST_image_caption_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="70dp"
+        android:hint="Add Caption"
+        android:maxLength="150"
+        android:textColor="#acacac"
+        android:textColorHint="#20acacac"
 
-        <com.held.customview.CustomEditText
-            android:id="@+id/POST_image_caption_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="70dp"
-            android:hint="Add Caption"
-            android:maxLength="150"
-            android:textColor="#ffffff"
-            android:textColorHint="#80ffffff"
-            custom:typeFace="@string/freight_sans_book"
-            android:textSize="18sp"/>
+        android:textSize="18sp"/>
 
-        <com.held.customview.CustomTextView
-            android:id="@+id/POST_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="center"
-            android:padding="15dp"
-            android:text="Cancel"
-            android:textColor="#ffffff"
-            android:textSize="18sp" />
+    <TextView
+        android:id="@+id/POST_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="Cancel"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
 
-        <com.held.customview.CustomTextView
-            android:id="@+id/POST_ok"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
-            android:gravity="center"
-            android:padding="15dp"
-            android:text="OK"
-            android:textColor="#ffffff"
-            android:textSize="18sp" />
-
-    </RelativeLayout>
-
+    <TextView
+        android:id="@+id/POST_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="OK"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+        </RelativeLayout>
 </RelativeLayout>

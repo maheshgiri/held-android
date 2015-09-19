@@ -3,7 +3,7 @@
     android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/app_background"
+    android:background="@color/bg_color"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -11,8 +11,15 @@
         android:id="@+id/frag_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"></FrameLayout>
 
-    <include layout="@layout/app_toolbar"></include>
+        android:background="@color/bg_color"></FrameLayout>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/custom_toolbar">
+    <include layout="@layout/app_toolbar"
+        ></include>
+</RelativeLayout>
+
 
 </RelativeLayout>
