@@ -35,17 +35,18 @@
         android:layout_toStartOf="@+id/toolbar_search_img"
         android:layout_marginRight="71dp"
         android:layout_marginEnd="71dp" />
-    <EditText
+    <AutoCompleteTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar_search_edt_txt"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
+        android:editable="true"
         android:maxLength="30"
         android:hint="Search...."
-        />
-
+        android:layout_toLeftOf="@+id/toolbar_search_img"
+        android:layout_alignLeft="@+id/toolbar_title_txt"
+        android:layout_alignStart="@+id/toolbar_title_txt" />
 
     <ImageView
         android:layout_width="25dp"

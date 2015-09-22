@@ -89,7 +89,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
                         UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You are not connected to internet.");
                 }
             });
-            viewHolder.mDeleteBtn.setOnClickListener(new View.OnClickListener() {
+            viewHolder.mRejectBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mActivity.getNetworkStatus()) {
@@ -203,14 +203,14 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
 
         ImageView mProfileImg;
         TextView mUserNameTxt;
-        Button mAcceptBtn, mDeleteBtn;
+        Button mAcceptBtn, mRejectBtn;
 
         public FriendRequestViewHolder(View itemView) {
             super(itemView);
-            mProfileImg = (ImageView) itemView.findViewById(R.id.RFR_user_img);
-            mUserNameTxt = (TextView) itemView.findViewById(R.id.RFR_user_name_txt);
-            mAcceptBtn = (Button) itemView.findViewById(R.id.RFR_accept_btn);
-            mDeleteBtn = (Button) itemView.findViewById(R.id.RFR_delete_btn);
+            mProfileImg = (ImageView) itemView.findViewById(R.id.user_profile_pic);
+            mUserNameTxt = (TextView) itemView.findViewById(R.id.user_name_txt);
+            mAcceptBtn = (Button) itemView.findViewById(R.id.acceptBtn);
+            mRejectBtn = (Button) itemView.findViewById(R.id.rejectBtn);
         }
     }
 }

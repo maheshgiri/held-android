@@ -16,5 +16,7 @@
 
     <color name="white">#ffffff</color>
     <color name="shadow_color">#000000</color>
+<color name="positve_btn">#00CD00</color>
+    <color name="negative_btn">#FF3333</color>
 
 </resources>
