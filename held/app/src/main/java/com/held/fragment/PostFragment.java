@@ -98,9 +98,15 @@ public class PostFragment extends ParentFragment {
         mUserNameTxt.setText(PreferenceHelper.getInstance(getCurrActivity()).readPreference("USER_NAME"));
         mTimeTxt = (TextView) view.findViewById(R.id.box_time_txt);
         mTimeTxt.setText("Click here to upload Image");
-        mTimeTxt.setVisibility(View.GONE);
+
+//        mTimeTxt.setVisibility(View.GONE);
         if (getCurrActivity() instanceof PostActivity)
             openImageIntent();
+
+        mTimeTxt.setVisibility(View.VISIBLE);
+        mTimeTxt.setText("");
+        mTimeTxt.setVisibility(View.GONE);
+
         mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());
 
         mPostImg.setOnTouchListener(new View.OnTouchListener() {
@@ -116,7 +122,9 @@ public class PostFragment extends ParentFragment {
                 return mGestureDetector.onTouchEvent(motionEvent);
             }
         });
+
     //loadProfile();
+
     }
 
     @Override
@@ -139,9 +147,9 @@ public class PostFragment extends ParentFragment {
             case R.id.post_image:
 //                openImageIntent();
                 break;
-            case R.id.TOOLBAR_retake_btn:
+          /*  case R.id.TOOLBAR_retake_btn:
                 openImageIntent();
-                break;
+                break;*/
             case R.id.post_button:
                 if (mFile != null & getCurrActivity().getNetworkStatus()) {
                     DialogUtils.showProgressBar();
@@ -496,8 +504,9 @@ public class PostFragment extends ParentFragment {
                 PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)), new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
+                       Log.i("PostFragment","@@Image Url"+searchUserResponse.getProfilePic());
                         PicassoCache.getPicassoInstance(getCurrActivity())
-                                .load(searchUserResponse.getProfilePic())
+                                .load(AppConstants.BASE_URL + searchUserResponse.getProfilePic())
                                 .placeholder(R.drawable.user_icon)
                                 .into(mUserImg);
                     }

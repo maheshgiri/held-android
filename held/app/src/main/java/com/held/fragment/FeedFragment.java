@@ -102,9 +102,9 @@ public class FeedFragment extends ParentFragment {
             callFeedApi();
         } else
             UiUtils.showSnackbarToast(getView(), "Sorry! You don't seem to connected to internet");
-        mSearchEdt = (EditText) getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_search_edt);
+       // mSearchEdt = (EditText) getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_search_edt);
 
-        mSearchEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+/*        mSearchEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_DONE) {
@@ -200,7 +200,7 @@ public class FeedFragment extends ParentFragment {
         getCurrActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
         mFullImg.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setVisibility(View.GONE);
-        getCurrActivity().getToolbar().setVisibility(View.GONE);
+//        getCurrActivity().getToolbar().setVisibility(View.GONE);
         Picasso.with(getActivity()).load(url).into(mFullImg);
         mFeedRecyclerView.setEnabled(false);
         mSwipeRefreshLayout.setEnabled(false);
@@ -212,7 +212,7 @@ public class FeedFragment extends ParentFragment {
         getCurrActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mFullImg.setVisibility(View.GONE);
         mSwipeRefreshLayout.setVisibility(View.VISIBLE);
-        getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
+//        getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
         mFeedRecyclerView.setEnabled(true);
         mSwipeRefreshLayout.setEnabled(true);
         showSystemUI();
@@ -226,9 +226,11 @@ public class FeedFragment extends ParentFragment {
                         DialogUtils.stopProgressDialog();
                         Utils.hideSoftKeyboard(getCurrActivity());
                         Bundle bundle = new Bundle();
-                        bundle.putString("name", searchUserResponse.getDisplay_name());
-                        bundle.putString("image", searchUserResponse.getPic());
-                        getCurrActivity().perform(AppConstants.LAUNCH_FRIEND_REQUEST_SCREEN, bundle);
+                        //getCurrActivity().perform(AppConstants.LAUNCH_FRIEND_REQUEST_SCREEN, bundle);
+                        bundle.putString("name", searchUserResponse.getDisplayName());
+                        bundle.putString("image", searchUserResponse.getProfilePic());
+                        getCurrActivity().perform(5, bundle);
+
                     }
 
                     @Override
@@ -256,10 +258,12 @@ public class FeedFragment extends ParentFragment {
                         @Override
                         public void success(FeedResponse feedResponse, Response response) {
 //                            DialogUtils.stopProgressDialog();
+
                             mSwipeRefreshLayout.setRefreshing(false);
                             mFeedResponse = feedResponse;
                             mFeedList.addAll(mFeedResponse.getObjects());
                             isLastPage = mFeedResponse.isLastPage();
+                            Log.i("Errrooooeeerrr is","@@@ list :::"+mFeedList);
                             mFeedAdapter.setFeedResponse(mFeedList, isLastPage);
                             mStart = mFeedResponse.getNextPageStart();
                             isLoading = false;

@@ -38,19 +38,19 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
-        mChat = (ImageView) findViewById(R.id.TOOLBAR_chat_img);
-        mCamera = (ImageView) findViewById(R.id.TOOLBAR_camera_img);
-        mNotification = (ImageView) findViewById(R.id.TOOLBAR_notification_img);
-        mSearchEdt = (EditText) findViewById(R.id.TOOLBAR_search_edt);
-        mRetakeBtn = (Button) findViewById(R.id.TOOLBAR_retake_btn);
-        mPostBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
+        mChat = (ImageView) findViewById(R.id.toolbar_chat_img);
+        mCamera = (ImageView) findViewById(R.id.toolbar_post_img);
+        mNotification = (ImageView) findViewById(R.id.toolbar_notification_img);
+      //  mSearchEdt = (EditText) findViewById(R.id.TOOLBAR_search_edt);
+     //   mRetakeBtn = (Button) findViewById(R.id.TOOLBAR_retake_btn);
+      //  mPostBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
       //  mUsername = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
        toolbar=(RelativeLayout)findViewById(R.id.custom_toolbar);
         mChat.setOnClickListener(this);
         mCamera.setOnClickListener(this);
         mNotification.setOnClickListener(this);
-        mRetakeBtn.setOnClickListener(this);
-        mPostBtn.setOnClickListener(this);
+      //  mRetakeBtn.setOnClickListener(this);
+      //  mPostBtn.setOnClickListener(this);
         toolbar.setVisibility(View.GONE);
         Log.i(TAG,"@@Inside post Activity");
 
@@ -159,7 +159,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
 
     private void invalidateToolbar(int id) {
         switch (id) {
-            case R.id.TOOLBAR_chat_img:
+            case R.id.toolbar_chat_img:
                 if (mDisplayFragment instanceof FeedFragment) {
                     perform(7, null);
                 } else if (mDisplayFragment instanceof FriendsListFragment) {
@@ -173,7 +173,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
                     mChat.setImageResource(R.drawable.icon_chat);
                 }
                 break;
-            case R.id.TOOLBAR_notification_img:
+            case R.id.toolbar_notification_img:
                 if (mDisplayFragment instanceof FeedFragment) {
                     perform(4, null);
                 } else if (mDisplayFragment instanceof FriendsListFragment) {
@@ -185,7 +185,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
                     mChat.setImageResource(R.drawable.icon_chat);
                 }
                 break;
-            case R.id.TOOLBAR_camera_img:
+            case R.id.toolbar_post_img:
                 if (mDisplayFragment instanceof FeedFragment) {
                     perform(3, null);
                 } else if (mDisplayFragment instanceof FriendsListFragment) {
@@ -196,10 +196,10 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
                     perform(3, null);
                 }
                 break;
-            case R.id.TOOLBAR_retake_btn:
+            /*case R.id.TOOLBAR_retake_btn:
                 break;
-            case R.id.TOOLBAR_post_btn:
-                break;
+            case R.id.toolbar_post_btn:
+                break;*/
         }
     }
 
