@@ -394,7 +394,7 @@ public class PostFragment extends ParentFragment {
                 if (getCurrActivity() instanceof PostActivity)
                     getCurrActivity().perform(1, null);
                 else
-                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);      
+                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);
 
             }
 

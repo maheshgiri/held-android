@@ -54,6 +54,8 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
         toolbar.setVisibility(View.GONE);
         Log.i(TAG,"@@Inside post Activity");
 
+        // todo: this check is not very good. Should check with server whether user has an account
+        // and skip to feed
         if (PreferenceHelper.getInstance(getApplicationContext()).readPreference("isFirstPostCreated", false)) {
             launchFeedScreen();
         } else {
