@@ -31,6 +31,7 @@ import retrofit.mime.TypedByteArray;
 
 public class RegistrationActivity extends ParentActivity implements View.OnClickListener, NetworkStateReceiver.OnNetworkChangeListener {
 
+    private static final String TAG = "RegistrationActivity";
     private ImageView mBackImg;
     private EditText mUserNameEdt, mPhoneNoEdt;
     private boolean mNetWorStatus;
@@ -135,7 +136,9 @@ private TextView mPolicy;
                 mPin = createUserResponse.getPin();
                 mRegKey=createUserResponse.getRid();
                 mAccessToken=createUserResponse.getAccessToken();
+                PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), mAccessToken);
                 Log.i("RegistrationActivity", "Profile PIN" + createUserResponse.toString());
+                UiUtils.showToast("PIN: " + mPin);
                 launchVerificationActivity();
             }
 
@@ -158,6 +161,7 @@ private TextView mPolicy;
         intent.putExtra("phoneno", mCountryCode + mPhoneNoEdt.getText().toString().trim());
         intent.putExtra("pin", mPin);
         intent.putExtra("regId",mRegKey);
+        Log.d(TAG, "sending access tokes to verify activity: " + mAccessToken);
         intent.putExtra("accessToken",mAccessToken);
         startActivity(intent);
         finish();

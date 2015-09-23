@@ -18,12 +18,14 @@ import com.held.fragment.NotificationFragment;
 import com.held.fragment.PostFragment;
 import com.held.fragment.SendFriendRequestFragment;
 import com.held.utils.AppConstants;
+import com.held.utils.PreferenceHelper;
 
 /**
  * Created by jay on 5/8/15.
  */
 public class PostActivity extends ParentActivity implements View.OnClickListener {
 
+    private static final String TAG = "PostActivity";
     private Fragment mDisplayFragment;
     private ImageView mChat, mCamera, mNotification;
     private EditText mSearchEdt;
@@ -50,13 +52,14 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
         mRetakeBtn.setOnClickListener(this);
         mPostBtn.setOnClickListener(this);
         toolbar.setVisibility(View.GONE);
-        Log.i("PostActivity","@@Inside post Activity");
+        Log.i(TAG,"@@Inside post Activity");
 
-//        if (PreferenceHelper.getInstance(getApplicationContext()).readPreference("isFirstPostCreated", false)) {
-//            launchFeedScreen();
-//        } else {
-        launchCreatePostScreen();
-//        }
+        if (PreferenceHelper.getInstance(getApplicationContext()).readPreference("isFirstPostCreated", false)) {
+            launchFeedScreen();
+        } else {
+            Log.v(TAG, "Launching post screen");
+            launchCreatePostScreen();
+        }
     }
 
     private void launchFeedScreen() {
@@ -101,6 +104,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
 
     @Override
     public void perform(int id, Bundle bundle) {
+        Log.d(TAG, "In function perform");
         super.perform(id, bundle);
         switch (id) {
             case 0:

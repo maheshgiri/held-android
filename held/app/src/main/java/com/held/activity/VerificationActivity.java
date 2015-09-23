@@ -181,7 +181,7 @@ mback.setOnClickListener(this);
                         mSecondEdt.setText("");
                         mThirdEdt.setText("");
                         mForthEdt.setText("");
-                        DialogUtils.showProgressBar();
+                        DialogUtils.showProgressBar();  // todo: this leaks window
                         callVerificationApi();
                     } else
                         UiUtils.showSnackbarToast(findViewById(R.id.root_view), Utils.getString(R.string.error_offline_msg));
@@ -189,6 +189,12 @@ mback.setOnClickListener(this);
 
             }
         });
+
+
+        if (validatePhoneNo()) {
+            DialogUtils.showProgressBar();
+            callResendSmsApi();
+        }
 
     }
 
@@ -199,8 +205,7 @@ mback.setOnClickListener(this);
                         PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_pin), Integer.parseInt(mPin));
                         //PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_registration_key), Integer.parseInt(m));
                         Log.i("VerificationActivity","Writting pin and phone no ");
-                        PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_phone_no), Integer.parseInt(mPhoneNo));
-                        PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), verificationResponse.getSession_token());
+                        PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_phone_no), mPhoneNo);
                         DialogUtils.showProgressBar();
                         launchComposeScreen();
 

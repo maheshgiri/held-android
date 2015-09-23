@@ -65,12 +65,15 @@ public class PostFragment extends ParentFragment {
     private Button mPostBtn;
 
     public static PostFragment newInstance() {
+
+        Log.d(TAG, "Returning new instance of PostFragment");
         return new PostFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "Inflating compose fragment in onCreateView");
         return inflater.inflate(R.layout.fragment_post, container, false);
     }
 
@@ -113,7 +116,7 @@ public class PostFragment extends ParentFragment {
                 return mGestureDetector.onTouchEvent(motionEvent);
             }
         });
-loadProfile();
+    //loadProfile();
     }
 
     @Override
@@ -362,17 +365,16 @@ loadProfile();
                 options);
         mImageToUpload.setImageBitmap(mAttachment);
 //        PreferenceHelper.getInstance(getCurrActivity()).readPreference("isFirstPostCreated", false)
-        if (true) {
+
             mCaptionEdt.setVisibility(View.VISIBLE);
-        } else {
-            mCaptionEdt.setVisibility(View.GONE);
-        }
     }
 
     private void callPostDataApi() {
-        Log.i("PostFrgament","Sesson"+PreferenceHelper.getInstance(getCurrActivity()).readPreference("SESSION_TOKEN"));
+        PreferenceHelper helper = PreferenceHelper.getInstance(getCurrActivity());
+        String sessionToken = helper.readPreference(getString(R.string.API_session_token));
+        Log.i("PostFrgament", "Session token: " + sessionToken);
 
-        HeldService.getService().uploadFile(PreferenceHelper.getInstance(getCurrActivity()).readPreference("SESSION_TOKEN"),
+        HeldService.getService().uploadFile( sessionToken,
                 mCaptionEdt.getText().toString().trim(), new TypedFile("multipart/form-data", mFile), "", new Callback<PostResponse>() {
                     @Override
                     public void success(PostResponse postResponse, Response response) {
@@ -382,16 +384,17 @@ loadProfile();
                         callPicUpdateApi(postResponse.getImageUri());
                         callThumbnailUpdateApi(postResponse.getThumbnailUri());
 
-               /* if (!PreferenceHelper.getInstance(getCurrActivity()).readPreference("isFirstPostCreated", false)) {
+                        PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
+                if (!myhelper.readPreference("isFirstPostCreated", false)) {
+                    myhelper.writePreference("isFirstPostCreated", true);
+                }
 
-                }*/
 
-                PreferenceHelper.getInstance(getCurrActivity()).writePreference("isFirstPostCreated", true);
                 getCurrActivity().perform(1, null);
-                /*if (getCurrActivity() instanceof PostActivity)
+                if (getCurrActivity() instanceof PostActivity)
                     getCurrActivity().perform(1, null);
                 else
-                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);*/
+                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);      
 
             }
 
@@ -486,6 +489,7 @@ loadProfile();
             return false;
         }
     }
+
     public void loadProfile()
     {
         HeldService.getService().searchUser(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),

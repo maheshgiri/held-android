@@ -252,6 +252,7 @@
     <!--<string name="sender_id">696193089870</string>-->
     <string name="sender_id">207813929540</string>
     <string name="API_registration_key">REG_KEY</string>
+    <string name="API_gcm_registration_key">GCM_KEY</string>
     <string name="API_app_version">APP_VERSION</string>
     <string name="HELD_held">Held</string>
     <string name="error_progress_dialog_null_call_reset">ProgressDialog is null. Make sure you have called resetDialog() before calling this</string>
