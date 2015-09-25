@@ -94,7 +94,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
 
         mResendSmsTxt.setOnClickListener(this);
         mVoiceCallTxt.setOnClickListener(this);
-mback.setOnClickListener(this);
+        mback.setOnClickListener(this);
         mNetWorkStatus = NetworkUtil.isInternetConnected(getApplicationContext());
         NetworkStateReceiver.registerOnNetworkChangeListener(this);
 
@@ -207,15 +207,14 @@ mback.setOnClickListener(this);
                         Log.i("VerificationActivity","Writting pin and phone no ");
                         PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_phone_no), mPhoneNo);
                         DialogUtils.showProgressBar();
-                        launchComposeScreen();
 
-                       /* if (verificationResponse.isVerified()) {
+                        if (verificationResponse.isVerified()) {
                             PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_pin), Integer.parseInt(mPin));
                             Log.i("VerificationActivity", "Responce :" + verificationResponse.toString());
                             DialogUtils.showProgressBar();
-                            launchComposeScreen();
+                            callLoginUserApi();
                         }
-                        DialogUtils.stopProgressDialog();*/
+                        DialogUtils.stopProgressDialog();
                     }
 
                     @Override
@@ -233,8 +232,8 @@ mback.setOnClickListener(this);
                 });
     }
 
-    /*private void callUpdateRegIdApi() {
-        launchComposeScreen();
+    private void callUpdateRegIdApi() {
+
         HeldService.getService().updateRegID(PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_session_token)),
                 "notification_token", PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_registration_key)), new Callback<SearchUserResponse>() {
 
@@ -254,22 +253,17 @@ mback.setOnClickListener(this);
                     }
                 });
 
-    }*/
+    }
 
-   /* private void callLoginUserApi() {
+    private void callLoginUserApi() {
         Log.i("VerificationActivity","In callLoginUserApi()");
         HeldService.getService().loginUser(mPhoneNo, mPin,"", new Callback<LoginUserResponse>() {
             @Override
             public void success(LoginUserResponse loginUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
-                launchComposeScreen();
-                /*if (loginUserResponse.isLogin()) {
-                    PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSession_token());
-                  // PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_registration_key), loginUserResponse.getRid());
-                 //   mSessonToken=loginUserResponse.getSession_token();
-                //    mNewRegId=loginUserResponse.getRid();
-                    Log.i("VerificatonActivity ","Session Tokn"+loginUserResponse.getSession_token());
-                  //  Log.i("VerificatonActivity ","New Id"+loginUserResponse.getRid());
+                if (loginUserResponse.isLogin()) {
+                    PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token),
+                            loginUserResponse.getSessionToken());
                     callUpdateRegIdApi();
                 }
             }
@@ -284,7 +278,7 @@ mback.setOnClickListener(this);
                     UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Some Problem Occurred");
             }
         });
-    }*/
+    }
 
     private void launchComposeScreen() {
         Intent intent = new Intent(VerificationActivity.this, PostActivity.class);

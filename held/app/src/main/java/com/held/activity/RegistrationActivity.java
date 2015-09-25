@@ -161,6 +161,7 @@ private TextView mPolicy;
         intent.putExtra("phoneno", mCountryCode + mPhoneNoEdt.getText().toString().trim());
         intent.putExtra("pin", mPin);
         intent.putExtra("regId",mRegKey);
+        Log.d(TAG, "sending registration id : " + mRegKey);
         Log.d(TAG, "sending access tokes to verify activity: " + mAccessToken);
         intent.putExtra("accessToken",mAccessToken);
         startActivity(intent);
