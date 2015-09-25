@@ -22,6 +22,7 @@
     <string name="API_phone_no">PHONE_NUMBER</string>
     <string name="API_user_name">USER_NAME</string>
     <string name="API_pin">PIN</string>
+    <string name="API_user_regId">USER_REGID</string>
     <string name="API_is_first_post">isFirstPostCreated</string>
 
     <!--COUNTRY-CODES-->

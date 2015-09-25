@@ -35,7 +35,7 @@
         android:layout_toStartOf="@+id/toolbar_search_img"
         android:layout_marginRight="71dp"
         android:layout_marginEnd="71dp" />
-    <AutoCompleteTextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar_search_edt_txt"
@@ -85,10 +85,6 @@
         android:layout_marginRight="20dp"
         android:layout_marginEnd="20dp" />
 
-
-
-    </RelativeLayout>
-
-
+</RelativeLayout>
 </android.support.v7.widget.Toolbar>
 
