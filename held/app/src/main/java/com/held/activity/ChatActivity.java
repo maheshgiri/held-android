@@ -130,22 +130,15 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
             case R.id.toolbar_notification_img:
                 launchNotificationScreen();
                 break;
-<<<<<<< HEAD
+
             case R.id.toolbar_post_img:
                 launchCreatePostScreen();
                 break;
+
             case R.id.toolbar_chat_img:
-                onBackPressed();
-=======
-            case R.id.TOOLBAR_camera_img:
-                onBackPressed();
-//                launchCreatePostScreen();
-                break;
-            case R.id.TOOLBAR_chat_img:
                 if (mDisplayFragment instanceof ChatFragment) {
                     onBackPressed();
                 }
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
                 break;
         }
     }

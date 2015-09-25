@@ -56,26 +56,17 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
       //  mRetakeBtn.setOnClickListener(this);
       //  mPostBtn.setOnClickListener(this);
         toolbar.setVisibility(View.GONE);
-<<<<<<< HEAD
-        Log.i("PostActivity","@@Inside post Activity");
-
-        if (mPreference.readPreference("isFirstPostCreated", false)) {
-            launchFeedScreen();
-      } else {
-        launchCreatePostScreen();
-      }
-=======
         Log.i(TAG,"@@Inside post Activity");
 
         // todo: this check is not very good. Should check with server whether user has an account
         // and skip to feed
-        if (PreferenceHelper.getInstance(getApplicationContext()).readPreference("isFirstPostCreated", false)) {
+        if (mPreference.readPreference("isFirstPostCreated", false)) {
             launchFeedScreen();
         } else {
             Log.v(TAG, "Launching post screen");
             launchCreatePostScreen();
         }
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
+//>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
     }
 
     private void launchFeedScreen() {

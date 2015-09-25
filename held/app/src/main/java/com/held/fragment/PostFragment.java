@@ -100,17 +100,11 @@ public class PostFragment extends ParentFragment {
         mUserNameTxt.setText(PreferenceHelper.getInstance(getCurrActivity()).readPreference("USER_NAME"));
         mTimeTxt = (TextView) view.findViewById(R.id.box_time_txt);
         mTimeTxt.setText("Click here to upload Image");
-<<<<<<< HEAD
-        mTimeTxt.setVisibility(View.VISIBLE);
-        openImageIntent();
-        mTimeTxt.setText("");
-        mTimeTxt.setVisibility(View.GONE);
 
-=======
         mTimeTxt.setVisibility(View.GONE);
         if (getCurrActivity() instanceof PostActivity)
             openImageIntent();
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
+
         mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());
 
         mPostImg.setOnTouchListener(new View.OnTouchListener() {
@@ -126,12 +120,10 @@ public class PostFragment extends ParentFragment {
                 return mGestureDetector.onTouchEvent(motionEvent);
             }
         });
-<<<<<<< HEAD
+
         loadProfile();
 
-=======
-    //loadProfile();
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
+
     }
 
     @Override
@@ -385,17 +377,11 @@ public class PostFragment extends ParentFragment {
     }
 
     private void callPostDataApi() {
-<<<<<<< HEAD
-        Log.i("PostFrgament","Sesson"+mPrefernce.readPreference("SESSION_TOKEN"));
-
-        HeldService.getService().uploadFile(mPrefernce.readPreference("SESSION_TOKEN"),
-=======
         PreferenceHelper helper = PreferenceHelper.getInstance(getCurrActivity());
         String sessionToken = helper.readPreference(getString(R.string.API_session_token));
         Log.i("PostFrgament", "Session token: " + sessionToken);
 
         HeldService.getService().uploadFile( sessionToken,
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
                 mCaptionEdt.getText().toString().trim(), new TypedFile("multipart/form-data", mFile), "", new Callback<PostResponse>() {
                     @Override
                     public void success(PostResponse postResponse, Response response) {
@@ -405,29 +391,22 @@ public class PostFragment extends ParentFragment {
                         callPicUpdateApi(postResponse.getImageUri());
                         callThumbnailUpdateApi(postResponse.getThumbnailUri());
 
-<<<<<<< HEAD
-                if (!mPrefernce.readPreference("isFirstPostCreated", false)) {
 
-                }
-                        mPrefernce.writePreference("isFirstPostCreated", true);
-                        getCurrActivity().perform(1, null);
-                    }
-=======
-                        PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
+                PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
                 if (!myhelper.readPreference("isFirstPostCreated", false)) {
                     myhelper.writePreference("isFirstPostCreated", true);
                 }
 
 
-                getCurrActivity().perform(1, null);
+               /* getCurrActivity().perform(1, null);
                 if (getCurrActivity() instanceof PostActivity)
                     getCurrActivity().perform(1, null);
                 else
-                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);
+                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);*/
 
             }
 
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
+
 
                     @Override
                     public void failure(RetrofitError error) {

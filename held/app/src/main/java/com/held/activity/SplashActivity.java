@@ -56,17 +56,19 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
         mPrefernce=PreferenceHelper.getInstance(getApplicationContext());
         setupGCM();
 
-        if (!mPrefernce.readPreference(getString(R.string.API_phone_no)).isEmpty() &&
-                mPrefernce.readPreference(getString(R.string.API_pin), 0) != 0) {
+        if (!mPrefernce.readPreference(getString(R.string.API_phone_no)).isEmpty() && mPrefernce.readPreference(getString(R.string.API_pin), 0) != 0) {
             if (getNetworkStatus()) {
                 DialogUtils.showProgressBar();
                 callLoginApi();
             } else {
                 UiUtils.showSnackbarToast(findViewById(R.id.root_view), "You are not connected to internet");
             }
-        } else if (!mPrefernce.readPreference(getString(R.string.API_phone_no)).isEmpty() &&
-                 mPrefernce.readPreference(getString(R.string.API_pin), 0) == 0)
+        } else if (!mPrefernce.readPreference(getString(R.string.API_phone_no)).isEmpty() &&  mPrefernce.readPreference(getString(R.string.API_pin), 0) == 0)
         { launchVerificationActivity();}
+        else if(mPrefernce.readPreference(getString(R.string.API_phone_no)).isEmpty() && mPrefernce.readPreference(getString(R.string.API_pin), 0) == 0)
+        {
+            UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Click on Get Started button for Registration");
+        }
 
     }
 

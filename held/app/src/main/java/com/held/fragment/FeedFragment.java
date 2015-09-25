@@ -234,16 +234,11 @@ public class FeedFragment extends ParentFragment {
                         DialogUtils.stopProgressDialog();
                         Utils.hideSoftKeyboard(getCurrActivity());
                         Bundle bundle = new Bundle();
-<<<<<<< HEAD
-                        bundle.putString("name", searchUserResponse.getDisplayName());
-                        bundle.putString("image", searchUserResponse.getProfilePic());
 
-                        getCurrActivity().perform(5, bundle);
-=======
-                        bundle.putString("name", searchUserResponse.getDisplay_name());
+                        bundle.putString("name", searchUserResponse.getDisplayName());
                         bundle.putString("image", searchUserResponse.getPic());
                         getCurrActivity().perform(AppConstants.LAUNCH_FRIEND_REQUEST_SCREEN, bundle);
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
+
                     }
 
                     @Override

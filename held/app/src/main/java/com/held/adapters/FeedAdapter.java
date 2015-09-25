@@ -335,14 +335,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             Bundle bundle = new Bundle();
-<<<<<<< HEAD
             bundle.putString("uid", mFeedList.get(mPosition).getCreator().getDisplayName());
-            mActivity.perform(8, bundle);
-=======
-            bundle.putString("uid", mFeedList.get(mPosition).getOwner_display_name());
-            bundle.putString("userImg", AppConstants.BASE_URL + mFeedList.get(mPosition).getOwner_pic());
+            bundle.putString("userImg", AppConstants.BASE_URL + mFeedList.get(mPosition).getThumbnailUri());
             mActivity.perform(AppConstants.LAUNCH_PROFILE_SCREEN, bundle);
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
+
             return true;
         }
     }

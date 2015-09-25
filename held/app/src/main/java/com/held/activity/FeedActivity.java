@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 import com.held.fragment.FeedFragment;
@@ -22,18 +24,18 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
     //    private Fragment mDisplayFragment;
     public static boolean isBlured = true;
-    private ImageView mChat_img, mPost_img, mNotification_img,mSearch_img;
+    private ImageView mChat, mCamera, mNotification,mSearch;
     private EditText mSearch_edt;
-    private TextView mTitle_txt;
+    private TextView mTitle;
     private GestureDetector gestureDetector;
-<<<<<<< HEAD
+//<<<<<<< HEAD
     private Toolbar mHeld_toolbar;
 
-=======
+//=======
     private int mPosition = 1;
 
     private RelativeLayout mPosttoolbar;
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
+
 
 
     @Override
@@ -53,17 +55,17 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
         setToolbar();
         launchFeedScreen();
-        mChat_img=(ImageView)findViewById(R.id.toolbar_chat_img);
-        mSearch_img=(ImageView)findViewById(R.id.toolbar_search_img);
-        mNotification_img=(ImageView)findViewById(R.id.toolbar_notification_img);
-        mPost_img=(ImageView)findViewById(R.id.toolbar_post_img);
-        mTitle_txt=(TextView)findViewById(R.id.toolbar_title_txt);
+        mChat=(ImageView)findViewById(R.id.toolbar_chat_img);
+        mSearch=(ImageView)findViewById(R.id.toolbar_search_img);
+        mNotification=(ImageView)findViewById(R.id.toolbar_notification_img);
+        mCamera=(ImageView)findViewById(R.id.toolbar_post_img);
+        mTitle=(TextView)findViewById(R.id.toolbar_title_txt);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
 
-        mChat_img.setOnClickListener(this);
-        mSearch_img.setOnClickListener(this);
-        mNotification_img.setOnClickListener(this);
-        mPost_img.setOnClickListener(this);
+        mChat.setOnClickListener(this);
+        mSearch.setOnClickListener(this);
+        mNotification.setOnClickListener(this);
+        mCamera.setOnClickListener(this);
         mSearch_edt.setVisibility(View.GONE);
 
 
@@ -124,16 +126,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 if (bundle != null)
                     launchChatScreen(bundle.getString("postid"), false);
                 break;
-<<<<<<< HEAD
-            case 3:
-//                launchCreatePostFragmentFromFeed();
-                break;
-            case 4:
-                launchChatListScreen();
-=======
             case AppConstants.LAUNCH_NOTIFICATION_SCREEN:
                 launchNotificationScreen();
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
                 break;
             case AppConstants.LAUNCH_FRIEND_REQUEST_SCREEN:
                 if (bundle != null)
@@ -143,14 +137,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 if (bundle != null)
                     launchChatScreen(bundle.getString("owner_displayname"), true);
                 break;
-<<<<<<< HEAD
-            case 7:
-                launchNotificationScreen();
-                break;
-            case 8:
-=======
             case AppConstants.LAUNCH_PROFILE_SCREEN:
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
                 if (bundle != null)
                     launchProfileScreen(bundle.getString("uid"), bundle.getString("userImg"));
                 break;
@@ -180,17 +167,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mDisplayedFragment = Utils.getCurrVisibleFragment(this);
 //        if(mDisplayedFragment==null)
         switch (view.getId()) {
-<<<<<<< HEAD
+
             case R.id.toolbar_chat_img:
-                perform(4,null);
-                break;
-            case R.id.toolbar_notification_img:
-                perform(7,null);
-                break;
-            case R.id.toolbar_post_img:
-                perform(0, null);
-=======
-            case R.id.TOOLBAR_chat_img:
                 if (mPosition == 0) {
 
                 } else if (mPosition == 1) {
@@ -201,7 +179,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                     ((HomeFragment) mDisplayedFragment).updateViewPager(2);
                 }
                 break;
-            case R.id.TOOLBAR_notification_img:
+            case R.id.toolbar_notification_img:
                 if (mPosition == 0) {
                     perform(AppConstants.LAUNCH_NOTIFICATION_SCREEN, null);
                 } else if (mPosition == 1) {
@@ -212,7 +190,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                     perform(AppConstants.LAUNCH_NOTIFICATION_SCREEN, null);
                 }
                 break;
-            case R.id.TOOLBAR_camera_img:
+            case R.id.toolbar_post_img:
                 if (mPosition == 0) {
                     ((HomeFragment) mDisplayedFragment).updateViewPager(1);
                 } else if (mPosition == 1) {
@@ -222,23 +200,18 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 } else if (mPosition == 3) {
 //                    ((HomeFragment) mDisplayedFragment).updateViewPager(2);
                 }
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
+
                 break;
             case R.id.toolbar_search_img:
                 visibleTextView();
                 break;
         }
     }
-
-<<<<<<< HEAD
-
-
-=======
     public void updateViewPager(int position) {
         mPosition = position;
         updateToolbar();
     }
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
+
 
     public void onLeftSwipe() {
         // Do something
@@ -250,7 +223,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         launchChatListScreen();
     }
 
-<<<<<<< HEAD
+
     public void callSerachFriendApi()
     {
 
@@ -258,46 +231,46 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     public void visibleTextView(){
 
         mSearch_edt.setVisibility(View.VISIBLE);
-        mTitle_txt.setVisibility(View.GONE);
+        mTitle.setVisibility(View.GONE);
 
 
     }
-=======
+
     public void updateToolbar() {
         if (mPosition == 0) {
             mChat.setImageResource(R.drawable.icon_back);
             mCamera.setImageResource(R.drawable.icon_feed);
         } else if (mPosition == 1) {
-            mRetakeBtn.setVisibility(View.GONE);
-            mPostBtn.setVisibility(View.GONE);
+          //  mRetakeBtn.setVisibility(View.GONE);
+         //   mPostBtn.setVisibility(View.GONE);
             mCamera.setVisibility(View.VISIBLE);
             mNotification.setVisibility(View.VISIBLE);
             mChat.setVisibility(View.VISIBLE);
-            mSearchEdt.setVisibility(View.VISIBLE);
-            mUsername.setVisibility(View.INVISIBLE);
+            mSearch_edt.setVisibility(View.VISIBLE);
+         //   mUsername.setVisibility(View.INVISIBLE);
             mChat.setImageResource(R.drawable.icon_chat);
             mCamera.setImageResource(R.drawable.icon_camera);
         } else if (mPosition == 2) {
-            mRetakeBtn.setVisibility(View.VISIBLE);
-            mPostBtn.setVisibility(View.VISIBLE);
+          //  mRetakeBtn.setVisibility(View.VISIBLE);
+          //  mPostBtn.setVisibility(View.VISIBLE);
             mCamera.setVisibility(View.GONE);
             mNotification.setVisibility(View.GONE);
             mChat.setVisibility(View.GONE);
-            mSearchEdt.setVisibility(View.INVISIBLE);
-            mUsername.setVisibility(View.INVISIBLE);
+            mSearch_edt.setVisibility(View.INVISIBLE);
+           // mUsername.setVisibility(View.INVISIBLE);
         } else if (mPosition == 3) {
-            mRetakeBtn.setVisibility(View.GONE);
-            mPostBtn.setVisibility(View.GONE);
+           // mRetakeBtn.setVisibility(View.GONE);
+           // mPostBtn.setVisibility(View.GONE);
             mCamera.setVisibility(View.VISIBLE);
             mNotification.setVisibility(View.VISIBLE);
             mChat.setVisibility(View.VISIBLE);
-            mSearchEdt.setVisibility(View.VISIBLE);
-            mUsername.setVisibility(View.INVISIBLE);
+            mSearch_edt.setVisibility(View.VISIBLE);
+           // mUsername.setVisibility(View.INVISIBLE);
             mChat.setImageResource(R.drawable.icon_camera);
             mCamera.setImageResource(R.drawable.icon_feed);
 
         }
     }
 
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
+
 }

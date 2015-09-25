@@ -124,7 +124,7 @@ private TextView mPolicy;
     }
 
     private void callCreateUserApi() {
-        HeldService.getService().createUser(mCountryCode + mPhoneNoEdt.getText().toString().trim(), mUserNameEdt.getText().toString().trim().toLowerCase(),"" ,new Callback<CreateUserResponse>() {
+        HeldService.getService().createUser( mUserNameEdt.getText().toString().trim().toLowerCase(),mCountryCode + mPhoneNoEdt.getText().toString().trim(),"" ,new Callback<CreateUserResponse>() {
             @Override
             public void success(CreateUserResponse createUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();

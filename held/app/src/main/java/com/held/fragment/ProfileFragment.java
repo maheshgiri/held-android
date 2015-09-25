@@ -7,11 +7,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-<<<<<<< HEAD
+
 import android.util.Log;
-=======
+
 import android.view.KeyEvent;
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +29,11 @@ import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.SearchUserResponse;
-<<<<<<< HEAD
+
 import com.held.utils.AppConstants;
-=======
+
 import com.held.utils.DialogUtils;
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
+
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 import com.held.utils.Utils;
@@ -56,18 +56,13 @@ public class ProfileFragment extends ParentFragment {
     private long mStart = System.currentTimeMillis();
     private int mLimit = 5;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-<<<<<<< HEAD
-    private String mUid, mUserName,user_id;
+
+    private String mUid, mUserName,user_id,mUserImg = "";
     private PreferenceHelper mPreference;
-    private ImageView mFullImg,mUserImg;
-    private FeedActivity mActivity;
-=======
-    private String mUid, mUserName, mUserImg = "";
     private ImageView mFullImg;
+    private FeedActivity mActivity;
     private EditText mSearchEdt;
 
-
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
     public static final String TAG = ProfileFragment.class.getSimpleName();
     private ImageView mProfilePic;
     private TextView mUserNameText;
@@ -96,15 +91,15 @@ public class ProfileFragment extends ParentFragment {
         mRecyclerView.setAdapter(mProfileAdapter);
         mFullImg = (ImageView) view.findViewById(R.id.PROFILE_full_img);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.PROFILE_swipe_refresh_layout);
-<<<<<<< HEAD
+
         //mUserName = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_name));
-        mUserImg=(ImageView)view.findViewById(R.id.profile_img);
+
         mProfilePic=(ImageView)view.findViewById(R.id.PROFILE_pic);
         mPreference=PreferenceHelper.getInstance(getCurrActivity());
        // mUserNameText=(TextView)view.findViewById(R.id.PROFILE_name);
        // mUserNameText.setText(mUserName);
         //loadProfile();
-=======
+/*=======
         mSearchEdt = (EditText) getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_search_edt);
 
         mSearchEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -116,7 +111,7 @@ public class ProfileFragment extends ParentFragment {
                 }
                 return false;
             }
-        });
+        });*/
 
         if (getArguments() != null) {
             mUserName = getArguments().getString("uid");
@@ -126,7 +121,7 @@ public class ProfileFragment extends ParentFragment {
             mUserImg = "http://139.162.1.137/api/user_images/tejasshah_1440819300949.jpg";//PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_img));
         }
 
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
+
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -253,16 +248,15 @@ public class ProfileFragment extends ParentFragment {
     public void onClicked(View v) {
 
     }
-<<<<<<< HEAD
-    public void loadProfile()
-    {
+
+    public void loadProfile() {
         HeldService.getService().searchUser(mPreference.readPreference(getString(R.string.API_session_token)),
                 mPreference.readPreference(getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
                         Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
                         PicassoCache.getPicassoInstance(mActivity)
-                                .load(AppConstants.BASE_URL+searchUserResponse.getProfilePic())
+                                .load(AppConstants.BASE_URL + searchUserResponse.getProfilePic())
                                 .placeholder(R.drawable.user_icon)
                                 .into(mProfilePic);
                         mUserNameText.setText(searchUserResponse.getDisplayName());
@@ -273,8 +267,8 @@ public class ProfileFragment extends ParentFragment {
 
                     }
                 });
+    }
 
-=======
 
     public String getUserName() {
         return mUserName;
@@ -282,6 +276,6 @@ public class ProfileFragment extends ParentFragment {
 
     public String getUserImg() {
         return mUserImg;
->>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
+
     }
 }
