@@ -66,12 +66,15 @@ public class PostFragment extends ParentFragment {
     private PreferenceHelper mPrefernce;
 
     public static PostFragment newInstance() {
+
+        Log.d(TAG, "Returning new instance of PostFragment");
         return new PostFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "Inflating compose fragment in onCreateView");
         return inflater.inflate(R.layout.fragment_post, container, false);
     }
 
@@ -97,11 +100,17 @@ public class PostFragment extends ParentFragment {
         mUserNameTxt.setText(PreferenceHelper.getInstance(getCurrActivity()).readPreference("USER_NAME"));
         mTimeTxt = (TextView) view.findViewById(R.id.box_time_txt);
         mTimeTxt.setText("Click here to upload Image");
+<<<<<<< HEAD
         mTimeTxt.setVisibility(View.VISIBLE);
         openImageIntent();
         mTimeTxt.setText("");
         mTimeTxt.setVisibility(View.GONE);
 
+=======
+        mTimeTxt.setVisibility(View.GONE);
+        if (getCurrActivity() instanceof PostActivity)
+            openImageIntent();
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
         mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());
 
         mPostImg.setOnTouchListener(new View.OnTouchListener() {
@@ -117,8 +126,12 @@ public class PostFragment extends ParentFragment {
                 return mGestureDetector.onTouchEvent(motionEvent);
             }
         });
+<<<<<<< HEAD
         loadProfile();
 
+=======
+    //loadProfile();
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
     }
 
     @Override
@@ -126,6 +139,13 @@ public class PostFragment extends ParentFragment {
         mPostImg.setOnClickListener(this);
         mCancelTxt.setOnClickListener(this);
         mOkTxt.setOnClickListener(this);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser)
+            openImageIntent();
     }
 
     @Override
@@ -148,7 +168,6 @@ public class PostFragment extends ParentFragment {
                 break;
             case R.id.POST_cancel:
                 Utils.hideSoftKeyboard(getCurrActivity());
-                ((PostActivity) getCurrActivity()).isPostVisible = false;
                 getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
                 mBoxLayout.setVisibility(View.VISIBLE);
                 mPostLayout.setVisibility(View.GONE);
@@ -164,7 +183,6 @@ public class PostFragment extends ParentFragment {
     }
 
     private void updateBoxUI() {
-        ((PostActivity) getCurrActivity()).isPostVisible = false;
         getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
         mBoxLayout.setVisibility(View.VISIBLE);
         mPostLayout.setVisibility(View.GONE);
@@ -213,9 +231,13 @@ public class PostFragment extends ParentFragment {
                                 File photo = new File(cameraFolder, sourceFileName);
                                 getCameraImage.putExtra(MediaStore.EXTRA_OUTPUT,
                                         Uri.fromFile(photo));
-
-                                startActivityForResult(getCameraImage,
-                                        AppConstants.REQUEST_CAMEAR);
+                                if (getCurrActivity() instanceof PostActivity) {
+                                    startActivityForResult(getCameraImage,
+                                            AppConstants.REQUEST_CAMEAR);
+                                } else {
+                                    getParentFragment().startActivityForResult(getCameraImage,
+                                            AppConstants.REQUEST_CAMEAR);
+                                }
 
                                 break;
 
@@ -227,8 +249,13 @@ public class PostFragment extends ParentFragment {
                                 intent.setType("image/*");
                                 Intent chooser = Intent.createChooser(intent,
                                         "Choose a Picture");
-                                startActivityForResult(chooser,
-                                        AppConstants.REQUEST_GALLERY);
+                                if (getCurrActivity() instanceof PostActivity) {
+                                    startActivityForResult(chooser,
+                                            AppConstants.REQUEST_GALLERY);
+                                } else {
+                                    getParentFragment().startActivityForResult(chooser,
+                                            AppConstants.REQUEST_GALLERY);
+                                }
 
                                 break;
 
@@ -277,7 +304,11 @@ public class PostFragment extends ParentFragment {
 
         cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCropImageUri);
 
-        startActivityForResult(cropIntent, AppConstants.REQUEST_CROP);
+        if (getCurrActivity() instanceof PostActivity)
+            startActivityForResult(cropIntent, AppConstants.REQUEST_CROP);
+        else
+            getParentFragment().startActivityForResult(cropIntent, AppConstants.REQUEST_CROP);
+
     }
 
     @Override
@@ -335,7 +366,6 @@ public class PostFragment extends ParentFragment {
     }
 
     private void updateUI() {
-        ((PostActivity) getCurrActivity()).isPostVisible = true;
         mBoxLayout.setVisibility(View.GONE);
         mPostLayout.setVisibility(View.VISIBLE);
         getCurrActivity().getToolbar().setVisibility(View.GONE);
@@ -350,17 +380,22 @@ public class PostFragment extends ParentFragment {
                 options);
         mImageToUpload.setImageBitmap(mAttachment);
 //        PreferenceHelper.getInstance(getCurrActivity()).readPreference("isFirstPostCreated", false)
-        if (true) {
+
             mCaptionEdt.setVisibility(View.VISIBLE);
-        } else {
-            mCaptionEdt.setVisibility(View.GONE);
-        }
     }
 
     private void callPostDataApi() {
+<<<<<<< HEAD
         Log.i("PostFrgament","Sesson"+mPrefernce.readPreference("SESSION_TOKEN"));
 
         HeldService.getService().uploadFile(mPrefernce.readPreference("SESSION_TOKEN"),
+=======
+        PreferenceHelper helper = PreferenceHelper.getInstance(getCurrActivity());
+        String sessionToken = helper.readPreference(getString(R.string.API_session_token));
+        Log.i("PostFrgament", "Session token: " + sessionToken);
+
+        HeldService.getService().uploadFile( sessionToken,
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
                 mCaptionEdt.getText().toString().trim(), new TypedFile("multipart/form-data", mFile), "", new Callback<PostResponse>() {
                     @Override
                     public void success(PostResponse postResponse, Response response) {
@@ -370,12 +405,29 @@ public class PostFragment extends ParentFragment {
                         callPicUpdateApi(postResponse.getImageUri());
                         callThumbnailUpdateApi(postResponse.getThumbnailUri());
 
+<<<<<<< HEAD
                 if (!mPrefernce.readPreference("isFirstPostCreated", false)) {
 
                 }
                         mPrefernce.writePreference("isFirstPostCreated", true);
                         getCurrActivity().perform(1, null);
                     }
+=======
+                        PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
+                if (!myhelper.readPreference("isFirstPostCreated", false)) {
+                    myhelper.writePreference("isFirstPostCreated", true);
+                }
+
+
+                getCurrActivity().perform(1, null);
+                if (getCurrActivity() instanceof PostActivity)
+                    getCurrActivity().perform(1, null);
+                else
+                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);
+
+            }
+
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
 
                     @Override
                     public void failure(RetrofitError error) {
@@ -417,7 +469,9 @@ public class PostFragment extends ParentFragment {
                     @Override
                     public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
                         DialogUtils.stopProgressDialog();
+                  //      PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_user_img), AppConstants.BASE_URL + profilPicUpdateResponse.getPic());
                         UiUtils.showSnackbarToast(getView(), "User Profile  Pic Updated..");
+
                     }
 
                     @Override
@@ -465,6 +519,7 @@ public class PostFragment extends ParentFragment {
             return false;
         }
     }
+
     public void loadProfile()
     {
         HeldService.getService().searchUser(mPrefernce.readPreference(getString(R.string.API_session_token)),

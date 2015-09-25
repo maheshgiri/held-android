@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -31,6 +32,7 @@ import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.SearchUserResponse;
+import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
@@ -202,6 +204,8 @@ public class FeedFragment extends ParentFragment {
     }
 
     public void showFullImg(String url) {
+        getCurrActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getCurrActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
         mFullImg.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setVisibility(View.GONE);
 //        getCurrActivity().getToolbar().setVisibility(View.GONE);
@@ -212,6 +216,8 @@ public class FeedFragment extends ParentFragment {
     }
 
     public void showRCView() {
+        getCurrActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+        getCurrActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mFullImg.setVisibility(View.GONE);
         mSwipeRefreshLayout.setVisibility(View.VISIBLE);
 //        getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
@@ -228,10 +234,16 @@ public class FeedFragment extends ParentFragment {
                         DialogUtils.stopProgressDialog();
                         Utils.hideSoftKeyboard(getCurrActivity());
                         Bundle bundle = new Bundle();
+<<<<<<< HEAD
                         bundle.putString("name", searchUserResponse.getDisplayName());
                         bundle.putString("image", searchUserResponse.getProfilePic());
 
                         getCurrActivity().perform(5, bundle);
+=======
+                        bundle.putString("name", searchUserResponse.getDisplay_name());
+                        bundle.putString("image", searchUserResponse.getPic());
+                        getCurrActivity().perform(AppConstants.LAUNCH_FRIEND_REQUEST_SCREEN, bundle);
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
                     }
 
                     @Override

@@ -9,8 +9,7 @@
         <item name="colorPrimaryDark">#ffffff</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:fitsSystemWindows">true</item>
-        <item name="android:windowFullscreen">true</item>
-
+        <!--<item name="android:windowFullscreen">true</item>-->
     </style>
 
     <declare-styleable name="CustomTypeFace">

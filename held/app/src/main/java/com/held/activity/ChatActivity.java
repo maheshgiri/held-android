@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.held.fragment.ChatFragment;
 import com.held.fragment.FriendsListFragment;
+import com.held.utils.AppConstants;
+import com.held.utils.Utils;
 
 public class ChatActivity extends ParentActivity implements View.OnClickListener {
 
@@ -56,18 +58,39 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         addFragment(FriendsListFragment.newInstance(), FriendsListFragment.TAG);
 //        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.card_flip_right_in, R.anim.card_flip_right_out,
 //                R.anim.card_flip_left_in, R.anim.card_flip_left_out);
+        mCamera.setImageResource(R.drawable.icon_feed);
         mDisplayFragment = FriendsListFragment.newInstance();
     }
 
     private void launchChatScreen(String id, boolean isOneToOne) {
         updateToolbar(true, false, true, false, true, true, false, "");
+
+        mSearchEdt.setVisibility(View.INVISIBLE);
+        mUsername.setVisibility(View.VISIBLE);
+        mChat.setImageResource(R.drawable.icon_back);
+        mCamera.setImageResource(R.drawable.icon_menu);
+        if (!isOneToOne) {
+            mUsername.setText("Held");
+        } else {
+            mUsername.setText("@" + id);
+        }
+
         addFragment(ChatFragment.newInstance(id, isOneToOne), ChatFragment.TAG);
         mDisplayFragment = ChatFragment.newInstance(id, isOneToOne);
     }
 
     private void launchChatScreenFromInbox(String id, boolean isOneToOne) {
         updateToolbar(true, false, true, false, true, true, false, "");
-       // mChat.setImageResource(R.drawable.icon_back);
+
+        mSearchEdt.setVisibility(View.INVISIBLE);
+        mUsername.setVisibility(View.VISIBLE);
+        mCamera.setImageResource(R.drawable.icon_menu);
+        mChat.setImageResource(R.drawable.icon_back);
+        if (!isOneToOne) {
+            mUsername.setText("Held");
+        } else {
+            mUsername.setText("@" + id);
+        }
         addFragment(ChatFragment.newInstance(id, isOneToOne), ChatFragment.TAG, true);
         mDisplayFragment = ChatFragment.newInstance(id, isOneToOne);
     }
@@ -76,17 +99,25 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         return mDisplayFragment;
     }
 
-
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (mDisplayFragment instanceof ChatFragment) {
+            super.onBackPressed();
+            mSearchEdt.setVisibility(View.VISIBLE);
+            mUsername.setVisibility(View.INVISIBLE);
+            mCamera.setImageResource(R.drawable.icon_feed);
+            mChat.setImageResource(R.drawable.icon_chat);
+            mDisplayFragment = Utils.getCurrVisibleFragment(this);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
     public void perform(int id, Bundle bundle) {
         super.perform(id, bundle);
         switch (id) {
-            case 0:
+            case AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN:
                 if (bundle != null)
                     launchChatScreenFromInbox(bundle.getString("owner_displayname"), true);
                 break;
@@ -99,11 +130,22 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
             case R.id.toolbar_notification_img:
                 launchNotificationScreen();
                 break;
+<<<<<<< HEAD
             case R.id.toolbar_post_img:
                 launchCreatePostScreen();
                 break;
             case R.id.toolbar_chat_img:
                 onBackPressed();
+=======
+            case R.id.TOOLBAR_camera_img:
+                onBackPressed();
+//                launchCreatePostScreen();
+                break;
+            case R.id.TOOLBAR_chat_img:
+                if (mDisplayFragment instanceof ChatFragment) {
+                    onBackPressed();
+                }
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
                 break;
         }
     }

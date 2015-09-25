@@ -136,7 +136,7 @@ public class GCMControlManager {
     private void storeRegistrationIdIntoPrefs(Context context, String regId) {
         int appVersion = getAppVersion(context);
         Log.i(TAG, "Saving regId on app version " + appVersion);
-        PreferenceHelper.getInstance(mActivity).writePreference(mActivity.getString(R.string.API_registration_key), regId);
+        PreferenceHelper.getInstance(mActivity).writePreference(mActivity.getString(R.string.API_gcm_registration_key), regId);
         PreferenceHelper.getInstance(mActivity).writePreference(mActivity.getString(R.string.API_app_version), appVersion);
     }
 

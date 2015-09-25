@@ -25,7 +25,7 @@ import com.held.utils.PreferenceHelper;
  */
 public class PostActivity extends ParentActivity implements View.OnClickListener {
 
-    public static boolean isPostVisible;
+    private static final String TAG = "PostActivity";
     private Fragment mDisplayFragment;
     private ImageView mChat, mCamera, mNotification;
     private EditText mSearchEdt;
@@ -56,6 +56,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
       //  mRetakeBtn.setOnClickListener(this);
       //  mPostBtn.setOnClickListener(this);
         toolbar.setVisibility(View.GONE);
+<<<<<<< HEAD
         Log.i("PostActivity","@@Inside post Activity");
 
         if (mPreference.readPreference("isFirstPostCreated", false)) {
@@ -63,13 +64,25 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
       } else {
         launchCreatePostScreen();
       }
+=======
+        Log.i(TAG,"@@Inside post Activity");
+
+        // todo: this check is not very good. Should check with server whether user has an account
+        // and skip to feed
+        if (PreferenceHelper.getInstance(getApplicationContext()).readPreference("isFirstPostCreated", false)) {
+            launchFeedScreen();
+        } else {
+            Log.v(TAG, "Launching post screen");
+            launchCreatePostScreen();
+        }
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
     }
 
     private void launchFeedScreen() {
-        Intent intent = new Intent(PostActivity.this, FeedActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("isProfile", true);
-        startActivity(intent);
+//        Intent intent = new Intent(PostActivity.this, FeedActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        intent.putExtra("isProfile", true);
+//        startActivity(intent);
         finish();
 //        updateToolbar(true, false, true, false, true, true, false, "");
 //        addFragment(FeedFragment.newInstance(), FeedFragment.TAG, true);
@@ -102,37 +115,12 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
 
     @Override
     public void onBackPressed() {
-
         launchFeedScreen();
-
-//        if (mDisplayFragment instanceof FeedFragment) {
-//            finish();
-//        } else if (mDisplayFragment instanceof PostFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        } else if (mDisplayFragment instanceof ChatFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        } else if (mDisplayFragment instanceof NotificationFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        } else if (mDisplayFragment instanceof SendFriendRequestFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        } else if (mDisplayFragment instanceof FriendsListFragment) {
-//            super.onBackPressed();
-//            updateToolbar(true, false, true, false, true, true, false, "");
-//            mDisplayFragment = FeedFragment.newInstance();
-//        }
-
     }
 
     @Override
     public void perform(int id, Bundle bundle) {
+        Log.d(TAG, "In function perform");
         super.perform(id, bundle);
         switch (id) {
             case 0:

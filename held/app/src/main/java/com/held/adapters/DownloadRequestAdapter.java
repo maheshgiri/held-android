@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.held.activity.NotificationActivity;
+import com.held.activity.ParentActivity;
 import com.held.activity.R;
 import com.held.fragment.DownloadRequestFragment;
 import com.held.retrofit.HeldService;
@@ -35,12 +36,12 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
 
-    private NotificationActivity mActivity;
+    private ParentActivity mActivity;
     private List<DownloadRequestData> mDownloadRequestList;
     private boolean mIsLastPage = true;
     private DownloadRequestFragment mDownloadRequestFragment;
 
-    public DownloadRequestAdapter(NotificationActivity activity, List<DownloadRequestData> DownloadRequestList, boolean isLastPage, DownloadRequestFragment downloadRequestFragment) {
+    public DownloadRequestAdapter(ParentActivity activity, List<DownloadRequestData> DownloadRequestList, boolean isLastPage, DownloadRequestFragment downloadRequestFragment) {
         mActivity = activity;
         mDownloadRequestList = DownloadRequestList;
         mIsLastPage = isLastPage;

@@ -182,7 +182,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                         mSecondEdt.setText("");
                         mThirdEdt.setText("");
                         mForthEdt.setText("");
-                        DialogUtils.showProgressBar();
+                        DialogUtils.showProgressBar();  // todo: this leaks window
                         callVerificationApi();
                     } else
                         UiUtils.showSnackbarToast(findViewById(R.id.root_view), Utils.getString(R.string.error_offline_msg));
@@ -190,6 +190,12 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
 
             }
         });
+
+
+        if (validatePhoneNo()) {
+            DialogUtils.showProgressBar();
+            callResendSmsApi();
+        }
 
     }
 
@@ -200,20 +206,25 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                         mPrefernce.writePreference(getString(R.string.API_pin), Integer.parseInt(mPin));
                         //PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_registration_key), Integer.parseInt(m));
                         Log.i("VerificationActivity","Writting pin and phone no ");
+<<<<<<< HEAD
                         mPrefernce.writePreference(getString(R.string.API_phone_no), Integer.parseInt(mPhoneNo));
                         mPrefernce.writePreference(getString(R.string.API_session_token), verificationResponse.getSession_token());
                         DialogUtils.showProgressBar();
                         UiUtils.showSnackbarToast(findViewById(R.id.root_view), "User Verified Successfully..");
 
                         callLoginUserApi();
+=======
+                        PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_phone_no), mPhoneNo);
+                        DialogUtils.showProgressBar();
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
 
-                       /* if (verificationResponse.isVerified()) {
+                        if (verificationResponse.isVerified()) {
                             PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_pin), Integer.parseInt(mPin));
                             Log.i("VerificationActivity", "Responce :" + verificationResponse.toString());
                             DialogUtils.showProgressBar();
-                            launchComposeScreen();
+                            callLoginUserApi();
                         }
-                        DialogUtils.stopProgressDialog();*/
+                        DialogUtils.stopProgressDialog();
                     }
 
                     @Override
@@ -231,8 +242,8 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                 });
     }
 
-    /*private void callUpdateRegIdApi() {
-        launchComposeScreen();
+    private void callUpdateRegIdApi() {
+
         HeldService.getService().updateRegID(PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_session_token)),
                 "notification_token", PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_registration_key)), new Callback<SearchUserResponse>() {
 
@@ -252,14 +263,19 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                     }
                 });
 
-    }*/
+    }
 
+<<<<<<< HEAD
    private void callLoginUserApi() {
+=======
+    private void callLoginUserApi() {
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
         Log.i("VerificationActivity","In callLoginUserApi()");
         HeldService.getService().loginUser(mPhoneNo, mPin,"", new Callback<LoginUserResponse>() {
             @Override
             public void success(LoginUserResponse loginUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
+<<<<<<< HEAD
 
                 mPrefernce.writePreference(getString(R.string.API_session_token), loginUserResponse.getSessionToken());
                 mPrefernce.writePreference(getString(R.string.API_user_regId), loginUserResponse.getUser().getRid());
@@ -274,6 +290,13 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                   //  Log.i("VerificatonActivity ","New Id"+loginUserResponse.getRid());
                    // callUpdateRegIdApi();
                 }*/
+=======
+                if (loginUserResponse.isLogin()) {
+                    PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token),
+                            loginUserResponse.getSessionToken());
+                    callUpdateRegIdApi();
+                }
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
             }
 
             @Override

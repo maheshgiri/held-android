@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">held</string>
+    <string name="app_name">Held</string>
 
     <!--FONTS-->
     <string name="indie">Indie.otf</string>
@@ -253,14 +253,19 @@
     <!--<string name="sender_id">696193089870</string>-->
     <string name="sender_id">207813929540</string>
     <string name="API_registration_key">REG_KEY</string>
+    <string name="API_gcm_registration_key">GCM_KEY</string>
     <string name="API_app_version">APP_VERSION</string>
     <string name="HELD_held">Held</string>
     <string name="error_progress_dialog_null_call_reset">ProgressDialog is null. Make sure you have called resetDialog() before calling this</string>
     <string name="API_DOWNLOAD_REQUEST_COUNT">DOWNLOAD_REQUEST_COUNT</string>
     <string name="API_HELD_COUNT">HELD_COUNT</string>
     <string name="API_FRIEND_REQUEST_COUNT">FRIEND_REQUEST_COUNT</string>
+<<<<<<< HEAD
     <string name="FR_Accept">Accept</string>
     <string name="FR_Reject">Reject</string>
     <string name="FR_SendReq">Send Friend Request</string>
     <string name="FR_UndoReq">Undo Friend Request</string>
+=======
+    <string name="API_user_img">USER_IMG</string>
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
 </resources>

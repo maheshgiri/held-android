@@ -85,21 +85,27 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
     }
 
     protected void addFragment(ParentFragment fragment, String tag) {
+        mDisplayedFragment=fragment;
+
         addFragment(fragment, tag, false,
                 mFragEnterAnim, mFragExitAnim, mFragPopEnterAnim, mFragPopExitAnim);
     }
 
     protected void replaceFragment(ParentFragment fragment, String tag) {
+        mDisplayedFragment=fragment;
+
         replaceFragment(fragment, tag, false,
                 mFragEnterAnim, mFragExitAnim, mFragPopEnterAnim, mFragPopExitAnim);
     }
 
     protected void addFragment(ParentFragment fragment, String tag, boolean addToBackStack) {
+        mDisplayedFragment=fragment;
         addFragment(fragment, tag, addToBackStack,
                 mFragEnterAnim, mFragExitAnim, mFragPopEnterAnim, mFragPopExitAnim);
     }
 
     protected void replaceFragment(ParentFragment fragment, String tag, boolean addToBackStack) {
+        mDisplayedFragment=fragment;
         replaceFragment(fragment, tag, addToBackStack,
                 mFragEnterAnim, mFragExitAnim, mFragPopEnterAnim, mFragPopExitAnim);
     }

@@ -52,6 +52,8 @@
                 android:textSize="13sp"
                 android:background="@layout/text_border"
                 android:textAlignment="center"
+                android:imeOptions="actionNext"
+                android:singleLine="true"
                 android:fontFamily="@string/benton_sans_book" />
 
             <LinearLayout
@@ -90,17 +92,14 @@
                     android:fontFamily="@string/benton_sans_book" />
 
             </LinearLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/button_with_shadow">
+
             <Button
                 android:id="@+id/REG_register_btn"
                 android:layout_width="285dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="54dp"
                 android:layout_marginRight="4dp"
-                android:background="@color/new_btn_color"
+                android:background="@drawable/register_btn_selector"
                 android:gravity="center"
                 android:text="Register"
                 android:textAllCaps="false"
@@ -109,27 +108,7 @@
                 android:textAlignment="center"
                 android:fontFamily="@string/benton_sans_book"
                 />
-                <View
-                    android:layout_width="285dp"
-                    android:layout_height="3dp"
-                    android:background="@color/shadow_color"
-                    android:alpha=".10"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="1dp"
-                    android:layout_below="@+id/REG_register_btn"
-                    android:layout_centerHorizontal="true"
-                    />
-                <View
-                    android:layout_width="3dp"
-                    android:layout_height="46dp"
-                    android:background="@color/shadow_color"
-                    android:alpha=".10"
 
-                    android:layout_marginTop="59dp"
-                    android:layout_alignRight="@id/REG_register_btn"
-                    android:layout_alignParentRight="true"
-                    />
-            </RelativeLayout>
             <TextView
                 android:id="@+id/SPLASH_terms_condition_txt"
                 android:layout_width="match_parent"

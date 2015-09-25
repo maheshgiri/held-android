@@ -7,12 +7,15 @@ public class VerificationResponse {
 
 
     private boolean verified;
-    private String session_token;
+    private String rid;
 
-    public String getSession_token() {
-        return session_token;
-    }
     public boolean isVerified() {
         return verified;
     }
+
+    public String getRegistrationId(){
+        return rid;
+    }
+
+
 }

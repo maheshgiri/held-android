@@ -5,6 +5,10 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.held.activity.ParentActivity;
+import com.held.activity.R;
+import com.held.fragment.ParentFragment;
+
 /**
  * Created by jay on 1/8/15.
  */
@@ -25,6 +29,13 @@ public class Utils {
 //        View focusView = activity.getCurrentFocus();
 ////        if (focusView != null)
             inputMethodManager.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
+    }
+
+    public static ParentFragment getCurrVisibleFragment(ParentActivity activity) {
+        if (activity != null) {
+            return (ParentFragment) activity.getSupportFragmentManager().findFragmentById(R.id.frag_container);
+        }
+        return null;
     }
 
 }

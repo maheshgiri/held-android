@@ -7,10 +7,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+<<<<<<< HEAD
 import android.util.Log;
+=======
+import android.view.KeyEvent;
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,9 +29,14 @@ import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.SearchUserResponse;
+<<<<<<< HEAD
 import com.held.utils.AppConstants;
+=======
+import com.held.utils.DialogUtils;
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
+import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -44,18 +56,27 @@ public class ProfileFragment extends ParentFragment {
     private long mStart = System.currentTimeMillis();
     private int mLimit = 5;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+<<<<<<< HEAD
     private String mUid, mUserName,user_id;
     private PreferenceHelper mPreference;
     private ImageView mFullImg,mUserImg;
     private FeedActivity mActivity;
+=======
+    private String mUid, mUserName, mUserImg = "";
+    private ImageView mFullImg;
+    private EditText mSearchEdt;
+
+
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
     public static final String TAG = ProfileFragment.class.getSimpleName();
     private ImageView mProfilePic;
     private TextView mUserNameText;
 
-    public static ProfileFragment newInstance(String uid) {
+    public static ProfileFragment newInstance(String uid, String userImg) {
         ProfileFragment profileFragment = new ProfileFragment();
         Bundle bundle = new Bundle();
         bundle.putString("uid", uid);
+        bundle.putString("userImg", userImg);
         profileFragment.setArguments(bundle);
         return profileFragment;
     }
@@ -75,6 +96,7 @@ public class ProfileFragment extends ParentFragment {
         mRecyclerView.setAdapter(mProfileAdapter);
         mFullImg = (ImageView) view.findViewById(R.id.PROFILE_full_img);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.PROFILE_swipe_refresh_layout);
+<<<<<<< HEAD
         //mUserName = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_name));
         mUserImg=(ImageView)view.findViewById(R.id.profile_img);
         mProfilePic=(ImageView)view.findViewById(R.id.PROFILE_pic);
@@ -82,6 +104,29 @@ public class ProfileFragment extends ParentFragment {
        // mUserNameText=(TextView)view.findViewById(R.id.PROFILE_name);
        // mUserNameText.setText(mUserName);
         //loadProfile();
+=======
+        mSearchEdt = (EditText) getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_search_edt);
+
+        mSearchEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    Utils.hideSoftKeyboard(getCurrActivity());
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        if (getArguments() != null) {
+            mUserName = getArguments().getString("uid");
+            mUserImg = getArguments().getString("userImg");
+        } else {
+            mUserName = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_name));
+            mUserImg = "http://139.162.1.137/api/user_images/tejasshah_1440819300949.jpg";//PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_img));
+        }
+
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -156,6 +201,8 @@ public class ProfileFragment extends ParentFragment {
     }
 
     public void showFullImg(String url) {
+        getCurrActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getCurrActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
         mFullImg.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setVisibility(View.GONE);
         getCurrActivity().getToolbar().setVisibility(View.GONE);
@@ -165,6 +212,8 @@ public class ProfileFragment extends ParentFragment {
     }
 
     public void showRCView() {
+        getCurrActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+        getCurrActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mFullImg.setVisibility(View.GONE);
         mSwipeRefreshLayout.setVisibility(View.VISIBLE);
         getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
@@ -204,6 +253,7 @@ public class ProfileFragment extends ParentFragment {
     public void onClicked(View v) {
 
     }
+<<<<<<< HEAD
     public void loadProfile()
     {
         HeldService.getService().searchUser(mPreference.readPreference(getString(R.string.API_session_token)),
@@ -224,5 +274,14 @@ public class ProfileFragment extends ParentFragment {
                     }
                 });
 
+=======
+
+    public String getUserName() {
+        return mUserName;
+    }
+
+    public String getUserImg() {
+        return mUserImg;
+>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
     }
 }
