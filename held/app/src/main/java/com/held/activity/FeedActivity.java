@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.GestureDetector;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,13 +33,13 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
 //        mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar_main);
-       /* if (getIntent() != null && getIntent().getExtras() != null) {
+       if (getIntent() != null && getIntent().getExtras() != null) {
             if (getIntent().getExtras().getBoolean("isProfile")) {
                 launchProfileScreen(PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_user_name)));
             }
         } else {
             launchFeedScreen();
-        }*/
+        }
 
         setToolbar();
         launchFeedScreen();
@@ -53,10 +54,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mSearch_img.setOnClickListener(this);
         mNotification_img.setOnClickListener(this);
         mPost_img.setOnClickListener(this);
-
         mSearch_edt.setVisibility(View.GONE);
-
-
 
 
 
@@ -167,7 +165,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 perform(0, null);
                 break;
             case R.id.toolbar_search_img:
-
+                visibleTextView();
                 break;
         }
     }
@@ -186,4 +184,15 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         launchChatListScreen();
     }
 
+    public void callSerachFriendApi()
+    {
+
+    }
+    public void visibleTextView(){
+
+        mSearch_edt.setVisibility(View.VISIBLE);
+        mTitle_txt.setVisibility(View.GONE);
+
+
+    }
 }

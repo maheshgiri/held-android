@@ -47,6 +47,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
         mFriendRequestList = friendRequestList;
         mIsLastPage = isLastPage;
         mFriendRequestFragment = friendRequestFragment;
+
     }
 
     @Override

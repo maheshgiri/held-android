@@ -18,6 +18,7 @@ import com.held.fragment.NotificationFragment;
 import com.held.fragment.PostFragment;
 import com.held.fragment.SendFriendRequestFragment;
 import com.held.utils.AppConstants;
+import com.held.utils.PreferenceHelper;
 
 /**
  * Created by jay on 5/8/15.
@@ -31,11 +32,14 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
     private Button mRetakeBtn, mPostBtn;
     private TextView mUsername;
     private RelativeLayout toolbar;
+    private PreferenceHelper mPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+
+
 
         mChat = (ImageView) findViewById(R.id.toolbar_chat_img);
         mCamera = (ImageView) findViewById(R.id.toolbar_post_img);
@@ -48,16 +52,17 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
         mChat.setOnClickListener(this);
         mCamera.setOnClickListener(this);
         mNotification.setOnClickListener(this);
+        mPreference=PreferenceHelper.getInstance(getApplicationContext());
       //  mRetakeBtn.setOnClickListener(this);
       //  mPostBtn.setOnClickListener(this);
         toolbar.setVisibility(View.GONE);
         Log.i("PostActivity","@@Inside post Activity");
 
-//        if (PreferenceHelper.getInstance(getApplicationContext()).readPreference("isFirstPostCreated", false)) {
-//            launchFeedScreen();
-//        } else {
+        if (mPreference.readPreference("isFirstPostCreated", false)) {
+            launchFeedScreen();
+      } else {
         launchCreatePostScreen();
-//        }
+      }
     }
 
     private void launchFeedScreen() {

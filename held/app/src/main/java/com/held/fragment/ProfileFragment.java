@@ -1,6 +1,7 @@
 package com.held.fragment;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.held.activity.FeedActivity;
 import com.held.activity.R;
 import com.held.adapters.ProfileAdapter;
 import com.held.customview.PicassoCache;
@@ -42,11 +45,12 @@ public class ProfileFragment extends ParentFragment {
     private int mLimit = 5;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private String mUid, mUserName,user_id;
-
+    private PreferenceHelper mPreference;
     private ImageView mFullImg,mUserImg;
-
+    private FeedActivity mActivity;
     public static final String TAG = ProfileFragment.class.getSimpleName();
     private ImageView mProfilePic;
+    private TextView mUserNameText;
 
     public static ProfileFragment newInstance(String uid) {
         ProfileFragment profileFragment = new ProfileFragment();
@@ -71,17 +75,20 @@ public class ProfileFragment extends ParentFragment {
         mRecyclerView.setAdapter(mProfileAdapter);
         mFullImg = (ImageView) view.findViewById(R.id.PROFILE_full_img);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.PROFILE_swipe_refresh_layout);
-        mUserName = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_name));
+        //mUserName = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_name));
         mUserImg=(ImageView)view.findViewById(R.id.profile_img);
         mProfilePic=(ImageView)view.findViewById(R.id.PROFILE_pic);
-
+        mPreference=PreferenceHelper.getInstance(getCurrActivity());
+       // mUserNameText=(TextView)view.findViewById(R.id.PROFILE_name);
+       // mUserNameText.setText(mUserName);
+        //loadProfile();
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int totalItemCount = mLayoutManager.getItemCount();
                 int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
-                loadProfile();
+
                 if (!mIsLastPage && (lastVisibleItemPosition + 1) == totalItemCount && !mIsLoading) {
                     callProfilePostAPi();
                 }
@@ -111,8 +118,8 @@ public class ProfileFragment extends ParentFragment {
     }
 
     private void callUserSearchApi() {
-        HeldService.getService().searchUser(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)), new Callback<SearchUserResponse>() {
+        HeldService.getService().searchUser(mPreference.readPreference(getString(R.string.API_session_token)),
+                mPreference.readPreference(getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
                         user_id = searchUserResponse.getRid();
@@ -167,8 +174,8 @@ public class ProfileFragment extends ParentFragment {
 
     private void callProfilePostAPi() {
         mIsLoading = true;
-        HeldService.getService().getUserPosts(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)), mStart, mLimit,
+        HeldService.getService().getUserPosts(mPreference.readPreference(getString(R.string.API_session_token)),
+                mPreference.readPreference(getString(R.string.API_user_regId)), mStart, mLimit,
                 new Callback<FeedResponse>() {
                     @Override
                     public void success(FeedResponse feedResponse, Response response) {
@@ -199,17 +206,16 @@ public class ProfileFragment extends ParentFragment {
     }
     public void loadProfile()
     {
-        HeldService.getService().searchUser(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)), new Callback<SearchUserResponse>() {
+        HeldService.getService().searchUser(mPreference.readPreference(getString(R.string.API_session_token)),
+                mPreference.readPreference(getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
                         Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
-
-                        PicassoCache.getPicassoInstance(getCurrActivity())
+                        PicassoCache.getPicassoInstance(mActivity)
                                 .load(AppConstants.BASE_URL+searchUserResponse.getProfilePic())
                                 .placeholder(R.drawable.user_icon)
                                 .into(mProfilePic);
-                        mUserName=searchUserResponse.getDisplayName();
+                        mUserNameText.setText(searchUserResponse.getDisplayName());
                     }
 
                     @Override

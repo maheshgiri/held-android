@@ -29,7 +29,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
 
     private Button mGetStartedBtn;
     private TextView mSigninTxt,mHeadLinetxt,mPolicy,mHave;
-
+    private PreferenceHelper mPrefernce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,31 +53,32 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
             mHave.setTypeface(type);
 
         }
+        mPrefernce=PreferenceHelper.getInstance(getApplicationContext());
         setupGCM();
 
-        if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
-                PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) != 0) {
+        if (!mPrefernce.readPreference(getString(R.string.API_phone_no)).isEmpty() &&
+                mPrefernce.readPreference(getString(R.string.API_pin), 0) != 0) {
             if (getNetworkStatus()) {
                 DialogUtils.showProgressBar();
                 callLoginApi();
             } else {
                 UiUtils.showSnackbarToast(findViewById(R.id.root_view), "You are not connected to internet");
             }
-        } else if (!PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_phone_no)).isEmpty() &&
-                 PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) == 0)
+        } else if (!mPrefernce.readPreference(getString(R.string.API_phone_no)).isEmpty() &&
+                 mPrefernce.readPreference(getString(R.string.API_pin), 0) == 0)
         { launchVerificationActivity();}
 
     }
 
     private void callLoginApi() {
-        HeldService.getService().loginUser(PreferenceHelper.getInstance(this).
-                readPreference(getString(R.string.API_phone_no)), PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_pin), 0) + "","", new Callback<LoginUserResponse>() {
+        HeldService.getService().loginUser(mPrefernce.readPreference(getString(R.string.API_phone_no)),
+                mPrefernce.readPreference(getString(R.string.API_pin), 0) + "","", new Callback<LoginUserResponse>() {
             @Override
             public void success(LoginUserResponse loginUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
                 Log.i("@@REG KEY in Splash",loginUserResponse.getUser().getRid());
-                PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSessionToken());
-                PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_registration_key), loginUserResponse.getUser().getRid());
+                mPrefernce.writePreference(getString(R.string.API_session_token), loginUserResponse.getSessionToken());
+                mPrefernce.writePreference(getString(R.string.API_user_regId), loginUserResponse.getUser().getRid());
                 launchPostActivity();
                 /*if (loginUserResponse.isLogin()) {
                     PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSession_token());
@@ -159,7 +160,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
 
     private void callUpdateRegIdApi() {
         HeldService.getService().updateRegID(PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_session_token)),
-                "notification_token", PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_registration_key)), new Callback<SearchUserResponse>() {
+                "notification_token", PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
                         if (PreferenceHelper.getInstance(getApplicationContext()).readPreference(getString(R.string.API_is_first_post), false)) {

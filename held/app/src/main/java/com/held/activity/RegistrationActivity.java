@@ -39,6 +39,7 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
     private String mCountryCode;
     private int mPin;
     private String mRegKey,mAccessToken;
+    private PreferenceHelper mPrefernce;
 private TextView mPolicy;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ private TextView mPolicy;
             mPolicy.setTypeface(type);
 
         }
+        mPrefernce=PreferenceHelper.getInstance(this);
     }
 
     @Override
@@ -129,8 +131,8 @@ private TextView mPolicy;
                 {
                     return;
                 }
-                PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_phone_no), mCountryCode + mPhoneNoEdt.getText().toString().trim());
-                PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_user_name), mUserNameEdt.getText().toString().trim());
+                mPrefernce.writePreference(getString(R.string.API_phone_no), mCountryCode + mPhoneNoEdt.getText().toString().trim());
+                mPrefernce.writePreference(getString(R.string.API_user_name), mUserNameEdt.getText().toString().trim());
 
                 mPin = createUserResponse.getPin();
                 mRegKey=createUserResponse.getRid();

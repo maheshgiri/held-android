@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.held.activity.ParentActivity;
 import com.held.activity.R;
 import com.held.customview.BlurTransformation;
+import com.held.customview.PicassoCache;
 import com.held.fragment.ProfileFragment;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
@@ -44,7 +45,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private GestureDetector mGestureDetector;
     private ProfileFragment mProfileFragment;
     private ItemViewHolder mItemViewHolder;
-
+    private PreferenceHelper mPreference;
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_DATA = 1;
     private static final int TYPE_FOOTER = 2;
@@ -58,6 +59,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mProfileFragment = profileFragment;
         mBlurTransformation = new BlurTransformation(mActivity, 18);
         mGestureDetector = new GestureDetector(mActivity, new GestureListener());
+        mPreference=PreferenceHelper.getInstance(mActivity);
     }
 
     @Override
@@ -105,8 +107,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             final ItemViewHolder viewHolder = (ItemViewHolder) holder;
             mItemViewHolder = viewHolder;
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getUser().getProfilePic()).into(viewHolder.mUserImg);
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getUser().getProfilePic()).transform(mBlurTransformation).into(viewHolder.mFeedImg);
+            PicassoCache.getPicassoInstance(mActivity).load(AppConstants.BASE_URL + mPostList.get(position).getCreator().getProfilePic()).into(viewHolder.mUserImg);
+            //Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getUser().getProfilePic()).into(viewHolder.mUserImg);
+            PicassoCache.getPicassoInstance(mActivity).load(AppConstants.BASE_URL + mPostList.get(position).getCreator().getProfilePic()).transform(mBlurTransformation).into(viewHolder.mFeedImg);
             setTimeText(mPostList.get(position - 1).getHeld(), viewHolder.mTimeTxt);
             viewHolder.mFeedTxt.setText(mPostList.get(position - 1).getText());
             viewHolder.mFeedImg.setOnTouchListener(new View.OnTouchListener() {
@@ -130,7 +133,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         case MotionEvent.ACTION_UP:
                             mProfileFragment.showRCView();
                             view.getParent().requestDisallowInterceptTouchEvent(false);
-                            Picasso.with(mActivity).load("http://139.162.1.137/api" + mPostList.get(position - 1).getImageUri()).
+                            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getImageUri()).
                                     transform(new BlurTransformation(mActivity, 18)).into(viewHolder.mFeedImg);
                             viewHolder.mTimeTxt.setVisibility(View.VISIBLE);
                             callReleaseApi(mPostList.get(position - 1).getUser().getRid(), viewHolder.mTimeTxt);
@@ -147,8 +150,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void callReleaseApi(String postId, final TextView textView) {
-        HeldService.getService().releasePostProfile(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"),postId,
-                new Callback<ReleaseResponse>()  {
+        HeldService.getService().releasePostProfile(mPreference.readPreference("SESSION_TOKEN"),postId,new Callback<ReleaseResponse>()  {
                     @Override
                     public void success(ReleaseResponse releaseResponse, Response response) {
                         setTimeText(releaseResponse.getHeld(), textView);
@@ -246,8 +248,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public void onLongPress(MotionEvent e) {
             if (mActivity.getNetworkStatus()) {
 //                Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(mPosition).getImage()).into(feedViewHolder.mFeedImg);
-                if (!mPostList.get(mPosition).getUser().getDisplayName().equals(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_user_name)))) {
-                    callHoldApi(mPostList.get(mPosition).getUser().getRid(),String.valueOf(System.currentTimeMillis()));
+                if (!mPostList.get(mPosition).getUser().getDisplayName().equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
+                    callHoldApi(mPostList.get(mPosition).getCreator().getRid(),String.valueOf(System.currentTimeMillis()));
                 }
                 mItemViewHolder.mTimeTxt.setVisibility(View.INVISIBLE);
                 mItemViewHolder.mFeedImg.getParent().requestDisallowInterceptTouchEvent(true);
@@ -262,7 +264,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void callHoldApi(String postId,String start_tm) {
-        HeldService.getService().holdPost(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"),postId,start_tm,"" ,new Callback<HoldResponse>(){
+        HeldService.getService().holdPost(mPreference.readPreference("SESSION_TOKEN"),postId,start_tm,"" ,new Callback<HoldResponse>(){
         @Override
             public void success(HoldResponse holdResponse, Response response) {
 
