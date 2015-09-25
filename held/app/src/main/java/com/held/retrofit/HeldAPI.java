@@ -107,6 +107,13 @@ public interface HeldAPI {
    @GET("/users/")
    void searchFriend(@Header("Authorization") String token,@Query("name") String frndName,Callback<User> friendSearchResult);
 
+    @GET("/friends/decline")
+    void declineFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<DeclineFriendResponse> declineFriendResponseCallback);
+
+    @GET("/friends/approve")
+    void approveFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<ApproveFriendResponse> approveFriendResponseCallback);
+
+
 
 
     @GET("/posts/")
@@ -124,11 +131,9 @@ public interface HeldAPI {
     @GET("/friends/add")
     void addFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<AddFriendResponse> addFriendResponseCallback);
 
-    @GET("/friends/approve")
-    void approveFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<ApproveFriendResponse> approveFriendResponseCallback);
 
-    @GET("/friends/decline")
-    void declineFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<DeclineFriendResponse> declineFriendResponseCallback);
+
+
 
     @GET("/friends/undecline")
     void undeclineFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<UnDeclineFriendResponse> unDeclineFriendResponseCallback);
