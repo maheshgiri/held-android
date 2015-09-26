@@ -93,4 +93,14 @@ public class HomeFragment extends ParentFragment implements ViewPager.OnPageChan
         if (mViewPager != null)
             mViewPager.setCurrentItem(position);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
 }

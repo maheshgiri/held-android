@@ -1,6 +1,7 @@
 package com.held.activity;
 
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -271,7 +272,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
             mChat.setVisibility(View.VISIBLE);
             mSearch_edt.setVisibility(View.VISIBLE);
            // mUsername.setVisibility(View.INVISIBLE);
-            mChat.setImageResource(R.drawable.camera);
+            mChat.setImageResource(R.drawable.icon_camera);
             mCamera.setImageResource(R.drawable.icon_feed);
 
         }

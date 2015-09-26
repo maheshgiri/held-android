@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.held.activity.FeedActivity;
@@ -85,6 +86,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+
         if (viewHolder instanceof FeedViewHolder) {
             final FeedViewHolder holder = (FeedViewHolder) viewHolder;
 
@@ -251,7 +253,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         // each data item is just a string in this case
         public final TextView mUserNameTxt, mFeedTxt, mTimeTxt;
         public final ImageView mFeedImg, mUserImg;
-
+        public final RelativeLayout myLayout = (RelativeLayout) itemView.findViewById(R.id.BOX_layout);
         private FeedViewHolder(View v) {
             super(v);
 
@@ -260,6 +262,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mUserImg = (ImageView) v.findViewById(R.id.profile_img);
             mFeedTxt = (TextView) v.findViewById(R.id.post_txt);
             mTimeTxt = (TextView) v.findViewById(R.id.box_time_txt);
+            myLayout.setPadding(0,15,0,0);
+
         }
     }
 
