@@ -70,14 +70,14 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
     }
 
     private void launchFeedScreen() {
-//        Intent intent = new Intent(PostActivity.this, FeedActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        intent.putExtra("isProfile", true);
-//        startActivity(intent);
-        finish();
-//        updateToolbar(true, false, true, false, true, true, false, "");
-//        addFragment(FeedFragment.newInstance(), FeedFragment.TAG, true);
-//        mDisplayFragment = FeedFragment.newInstance();
+       Intent intent = new Intent(PostActivity.this, FeedActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("isProfile", true);
+        startActivity(intent);
+        //finish();
+       /* updateToolbar(true, false, true, false, true, true, false, "");
+        addFragment(FeedFragment.newInstance(), FeedFragment.TAG, true);
+        mDisplayFragment = FeedFragment.newInstance();*/
     }
 
     private void launchCreatePostScreen() {
