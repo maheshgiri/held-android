@@ -397,11 +397,11 @@ public class PostFragment extends ParentFragment {
                 }
 
 
-               /* getCurrActivity().perform(1, null);
+                getCurrActivity().perform(1, null);
                 if (getCurrActivity() instanceof PostActivity)
                     getCurrActivity().perform(1, null);
                 else
-                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);*/
+                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);
 
             }
 

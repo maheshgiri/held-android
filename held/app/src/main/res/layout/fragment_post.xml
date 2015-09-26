@@ -70,7 +70,8 @@
         android:maxLength="150"
         android:textColor="#acacac"
         android:textColorHint="#20acacac"
-
+        android:imeOptions="actionNext"
+        android:singleLine="true"
         android:textSize="18sp"/>
 
     <TextView

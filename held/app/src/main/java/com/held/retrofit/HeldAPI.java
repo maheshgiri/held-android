@@ -59,7 +59,7 @@ public interface HeldAPI {
     void createUser(@Query("name") String name,@Query("phone") String phoneNo, @Body()String empty, Callback<CreateUserResponse> createUserResponseCallback);
 
     @GET(RESEND_SMS)
-    void resendSms(@Header("Authorization")String auth, @Path("registration_id") String RegId, @Body()String body, Callback<CreateUserResponse> createUserResponseCallback);
+    void resendSms(@Header("Authorization")String auth, @Path("registration_id") String RegId, Callback<CreateUserResponse> createUserResponseCallback);
 
     @GET(VOICE_CALL)
     void voiceCall(@Header("Authorization")String auth, @Path("registration_id") String RegId, Callback<VoiceCallResponse> voiceCallResponseCallback);

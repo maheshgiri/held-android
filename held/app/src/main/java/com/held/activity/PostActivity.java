@@ -66,7 +66,6 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
             Log.v(TAG, "Launching post screen");
             launchCreatePostScreen();
         }
-//>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
     }
 
     private void launchFeedScreen() {

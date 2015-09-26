@@ -368,7 +368,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
     }
 
     private void callResendSmsApi() {
-        HeldService.getService().resendSms( mAuth, mRegId, "",
+        HeldService.getService().resendSms( mAuth, mRegId,
                 new Callback<CreateUserResponse>() {
             @Override
             public void success(CreateUserResponse createUserResponse, Response response) {
