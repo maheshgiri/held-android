@@ -50,7 +50,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<FeedData> mFeedList;
     private boolean mIsLastPage;
     private FeedFragment mFeedFragment;
-
+    private PreferenceHelper mPreference;
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
@@ -63,6 +63,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mPersonalChatDetector = new GestureDetector(mActivity, new PersonalChatListener());
         mIsLastPage = isLastPage;
         mFeedFragment = feedFragment;
+        mPreference=PreferenceHelper.getInstance(mActivity);
     }
 
     @Override
@@ -184,7 +185,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void callReleaseApi(String postId, final TextView textView,String start_tm) {
-        HeldService.getService().releasePost(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"),postId,start_tm ,String.valueOf(System.currentTimeMillis()),
+        HeldService.getService().releasePost(mPreference.readPreference("SESSION_TOKEN"),postId,start_tm ,String.valueOf(System.currentTimeMillis()),
                 "",new Callback<ReleaseResponse>() {
                     @Override
                     public void success(ReleaseResponse releaseResponse, Response response) {
@@ -212,7 +213,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void callHoldApi(String postId,String start_tm) {
-        HeldService.getService().holdPost(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"),postId,start_tm, "",new Callback<HoldResponse>() {
+        HeldService.getService().holdPost(mPreference.readPreference("SESSION_TOKEN"),postId,start_tm, "",new Callback<HoldResponse>() {
             @Override
             public void success(HoldResponse holdResponse, Response response) {
 
@@ -320,7 +321,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         // event when double tap occurs
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            if (!mOwnerDisplayName.equals(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_user_name)))) {
+            if (!mOwnerDisplayName.equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
                 Bundle bundle = new Bundle();
                 bundle.putString("owner_displayname", mOwnerDisplayName);
                 mActivity.perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, bundle);
@@ -334,12 +335,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             Bundle bundle = new Bundle();
-
-           /* bundle.putString("uid", mFeedList.get(mPosition).getOwner_display_name());
-            bundle.putString("userImg", AppConstants.BASE_URL + mFeedList.get(mPosition).getOwner_pic());
-            mActivity.perform(AppConstants.LAUNCH_PROFILE_SCREEN, bundle);*/
             bundle.putString("uid", mFeedList.get(mPosition).getCreator().getDisplayName());
-            mActivity.perform(8, bundle);
+            bundle.putString("userImg", AppConstants.BASE_URL + mFeedList.get(mPosition).getThumbnailUri());
+            mActivity.perform(AppConstants.LAUNCH_PROFILE_SCREEN, bundle);
 
             return true;
         }

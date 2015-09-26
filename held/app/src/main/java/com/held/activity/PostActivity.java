@@ -32,11 +32,14 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
     private Button mRetakeBtn, mPostBtn;
     private TextView mUsername;
     private RelativeLayout toolbar;
+    private PreferenceHelper mPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+
+
 
         mChat = (ImageView) findViewById(R.id.toolbar_chat_img);
         mCamera = (ImageView) findViewById(R.id.toolbar_post_img);
@@ -49,6 +52,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
         mChat.setOnClickListener(this);
         mCamera.setOnClickListener(this);
         mNotification.setOnClickListener(this);
+        mPreference=PreferenceHelper.getInstance(getApplicationContext());
       //  mRetakeBtn.setOnClickListener(this);
       //  mPostBtn.setOnClickListener(this);
         toolbar.setVisibility(View.GONE);
@@ -56,12 +60,13 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
 
         // todo: this check is not very good. Should check with server whether user has an account
         // and skip to feed
-        if (PreferenceHelper.getInstance(getApplicationContext()).readPreference("isFirstPostCreated", false)) {
+        if (mPreference.readPreference("isFirstPostCreated", false)) {
             launchFeedScreen();
         } else {
             Log.v(TAG, "Launching post screen");
             launchCreatePostScreen();
         }
+//>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
     }
 
     private void launchFeedScreen() {

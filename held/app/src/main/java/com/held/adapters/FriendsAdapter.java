@@ -57,11 +57,10 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             FriendViewHolder viewHolder = (FriendViewHolder) holder;
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mFriendList.get(position).getPic()).into(viewHolder.mProfilePic);
 
-            /*viewHolder.mUserName.setText(mFriendList.get(position).getDisplay_name());
-            String date[]=mFriendList.get(position).getJoin_date().split(" ");
-            viewHolder.mTimeTxt.setText(date[3]+" "+date[4]);*/
-
             viewHolder.mUserName.setText(mFriendList.get(position).getDisplayName());
+
+            String date[]=mFriendList.get(position).getJoin_date().split(" ");
+            viewHolder.mTimeTxt.setText(date[3]+" "+date[4]);
 
             viewHolder.mProfilePic.setOnTouchListener(new View.OnTouchListener() {
                 @Override

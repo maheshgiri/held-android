@@ -6,7 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -62,6 +65,7 @@ public class FeedFragment extends ParentFragment {
     private long mStart = System.currentTimeMillis();
     private ImageView mFullImg,mUserImg;
     private GestureDetector mGestureDetector;
+    private PreferenceHelper mPrefernce;
 
     public static FeedFragment newInstance() {
         return new FeedFragment();
@@ -84,10 +88,11 @@ public class FeedFragment extends ParentFragment {
         mLayoutManager = new LinearLayoutManager(getCurrActivity());
         mFeedRecyclerView.setLayoutManager(mLayoutManager);
         mFeedResponse = new FeedResponse();
+
         blurTransformation = new BlurTransformation(getCurrActivity(), 25f);
         mFeedAdapter = new FeedAdapter((FeedActivity) getCurrActivity(), mFeedList, blurTransformation, isLastPage, this);
         mFeedRecyclerView.setAdapter(mFeedAdapter);
-
+        mPrefernce=PreferenceHelper.getInstance(getCurrActivity());
 //        mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());
 //
 //        mFeedRecyclerView.setOnTouchListener(new View.OnTouchListener() {
@@ -100,11 +105,12 @@ public class FeedFragment extends ParentFragment {
         if (getCurrActivity().getNetworkStatus()) {
 //            DialogUtils.showProgressBar();
             callFeedApi();
-        } else
+        } else {
             UiUtils.showSnackbarToast(getView(), "Sorry! You don't seem to connected to internet");
-       // mSearchEdt = (EditText) getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_search_edt);
+        }
 
-/*        mSearchEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+  /*      mSearchEdt = (EditText) view.findViewById(R.id.toolbar_search_edt_txt);
+        mSearchEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_DONE) {
@@ -120,7 +126,7 @@ public class FeedFragment extends ParentFragment {
             }
         });
 
-       /* mSearchEdt.addTextChangedListener(new TextWatcher() {
+        mSearchEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
 
@@ -140,7 +146,9 @@ public class FeedFragment extends ParentFragment {
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
                 }
             }
-        });*/
+        });
+        */
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.FEED_swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_to_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -219,17 +227,17 @@ public class FeedFragment extends ParentFragment {
     }
 
     private void callUserSearchApi() {
-        HeldService.getService().searchUser(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
+        HeldService.getService().searchUser(mPrefernce.readPreference(getString(R.string.API_session_token)),
                 mSearchEdt.getText().toString().trim(), new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
                         DialogUtils.stopProgressDialog();
                         Utils.hideSoftKeyboard(getCurrActivity());
                         Bundle bundle = new Bundle();
-                        //getCurrActivity().perform(AppConstants.LAUNCH_FRIEND_REQUEST_SCREEN, bundle);
+
                         bundle.putString("name", searchUserResponse.getDisplayName());
-                        bundle.putString("image", searchUserResponse.getProfilePic());
-                        getCurrActivity().perform(5, bundle);
+                        bundle.putString("image", searchUserResponse.getPic());
+                        getCurrActivity().perform(AppConstants.LAUNCH_FRIEND_REQUEST_SCREEN, bundle);
 
                     }
 
@@ -253,7 +261,7 @@ public class FeedFragment extends ParentFragment {
     private void callFeedApi() {
         isLoading = true;
         if (getCurrActivity().getNetworkStatus()) {//PreferenceHelper.getInstance(getCurrActivity()).readPreference("SESSION_TOKEN")
-            HeldService.getService().feedPostWithPage(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
+            HeldService.getService().feedPostWithPage(mPrefernce.readPreference(getString(R.string.API_session_token)),
                     mLimit, mStart, new Callback<FeedResponse>() {
                         @Override
                         public void success(FeedResponse feedResponse, Response response) {
@@ -263,7 +271,7 @@ public class FeedFragment extends ParentFragment {
                             mFeedResponse = feedResponse;
                             mFeedList.addAll(mFeedResponse.getObjects());
                             isLastPage = mFeedResponse.isLastPage();
-                            Log.i("Errrooooeeerrr is","@@@ list :::"+mFeedList);
+
                             mFeedAdapter.setFeedResponse(mFeedList, isLastPage);
                             mStart = mFeedResponse.getNextPageStart();
                             isLoading = false;

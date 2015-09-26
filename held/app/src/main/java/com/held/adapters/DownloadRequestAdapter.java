@@ -182,10 +182,10 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
 
         public DownloadRequestViewHolder(View itemView) {
             super(itemView);
-            mProfileImg = (ImageView) itemView.findViewById(R.id.RFR_user_img);
-            mUserNameTxt = (TextView) itemView.findViewById(R.id.RFR_user_name_txt);
-            mAcceptBtn = (Button) itemView.findViewById(R.id.RFR_accept_btn);
-            mDeleteBtn = (Button) itemView.findViewById(R.id.RFR_delete_btn);
+            mProfileImg = (ImageView) itemView.findViewById(R.id.user_profile_pic);
+            mUserNameTxt = (TextView) itemView.findViewById(R.id.user_name_txt);
+            mAcceptBtn = (Button) itemView.findViewById(R.id.acceptBtn);
+            mDeleteBtn = (Button) itemView.findViewById(R.id.rejectBtn);
         }
     }
 }

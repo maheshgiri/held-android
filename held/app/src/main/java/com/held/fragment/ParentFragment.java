@@ -16,7 +16,6 @@ public abstract class ParentFragment extends Fragment implements View.OnClickLis
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initialiseView(view, savedInstanceState);
         bindListeners(view);
         callInitialApi();

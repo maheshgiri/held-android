@@ -63,6 +63,7 @@ public class PostFragment extends ParentFragment {
     private Fragment mfragment;
     private GestureDetector mGestureDetector;
     private Button mPostBtn;
+    private PreferenceHelper mPrefernce;
 
     public static PostFragment newInstance() {
 
@@ -92,6 +93,7 @@ public class PostFragment extends ParentFragment {
         mCancelTxt = (TextView) view.findViewById(R.id.POST_cancel);
         mOkTxt = (TextView) view.findViewById(R.id.POST_ok);
         mPostBtn=(Button)view.findViewById(R.id.post_button);
+        mPrefernce=PreferenceHelper.getInstance(getCurrActivity());
 
         mBackImg.setOnClickListener(this);
         mPostBtn.setOnClickListener(this);
@@ -99,13 +101,9 @@ public class PostFragment extends ParentFragment {
         mTimeTxt = (TextView) view.findViewById(R.id.box_time_txt);
         mTimeTxt.setText("Click here to upload Image");
 
-//        mTimeTxt.setVisibility(View.GONE);
+        mTimeTxt.setVisibility(View.GONE);
         if (getCurrActivity() instanceof PostActivity)
             openImageIntent();
-
-        mTimeTxt.setVisibility(View.VISIBLE);
-        mTimeTxt.setText("");
-        mTimeTxt.setVisibility(View.GONE);
 
         mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());
 
@@ -123,7 +121,7 @@ public class PostFragment extends ParentFragment {
             }
         });
 
-    //loadProfile();
+        loadProfile();
 
     }
 
@@ -392,19 +390,21 @@ public class PostFragment extends ParentFragment {
                         callPicUpdateApi(postResponse.getImageUri());
                         callThumbnailUpdateApi(postResponse.getThumbnailUri());
 
-                        PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
+
+                PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
                 if (!myhelper.readPreference("isFirstPostCreated", false)) {
                     myhelper.writePreference("isFirstPostCreated", true);
                 }
 
 
-                getCurrActivity().perform(1, null);
+               /* getCurrActivity().perform(1, null);
                 if (getCurrActivity() instanceof PostActivity)
                     getCurrActivity().perform(1, null);
                 else
-                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);
+                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);*/
 
             }
+
 
 
                     @Override
@@ -420,8 +420,8 @@ public class PostFragment extends ParentFragment {
     }
 
     private void callThumbnailUpdateApi(String image) {
-        HeldService.getService().updateProfilePic(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)),"NotificationToken", image, new Callback<ProfilPicUpdateResponse>() {
+        HeldService.getService().updateProfilePic(mPrefernce.readPreference(getString(R.string.API_session_token)),
+                mPrefernce.readPreference(getString(R.string.API_user_regId)),"NotificationToken", image, new Callback<ProfilPicUpdateResponse>() {
                     @Override
                     public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
                         DialogUtils.stopProgressDialog();
@@ -442,8 +442,8 @@ public class PostFragment extends ParentFragment {
     }
 
     private void callPicUpdateApi(String image) {
-        HeldService.getService().updateProfilePic(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)), "pic", image, new Callback<ProfilPicUpdateResponse>() {
+        HeldService.getService().updateProfilePic(mPrefernce.readPreference(getString(R.string.API_session_token)),
+                mPrefernce.readPreference(getString(R.string.API_user_regId)), "pic", image, new Callback<ProfilPicUpdateResponse>() {
                     @Override
                     public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
                         DialogUtils.stopProgressDialog();
@@ -500,8 +500,8 @@ public class PostFragment extends ParentFragment {
 
     public void loadProfile()
     {
-        HeldService.getService().searchUser(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_registration_key)), new Callback<SearchUserResponse>() {
+        HeldService.getService().searchUser(mPrefernce.readPreference(getString(R.string.API_session_token)),
+                mPrefernce.readPreference(getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
                        Log.i("PostFragment","@@Image Url"+searchUserResponse.getProfilePic());
