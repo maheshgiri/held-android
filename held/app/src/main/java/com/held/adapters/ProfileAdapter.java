@@ -90,8 +90,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof HeaderViewHolder) {
             HeaderViewHolder viewHolder = (HeaderViewHolder) holder;
-            Picasso.with(mActivity).load(mProfileFragment.getUserImg()).into(viewHolder.mProfilePic);
-            viewHolder.mUserName.setText("@" + mProfileFragment.getUserName());
+
+            //Picasso.with(mActivity).load(mProfileFragment.getUserImg()).into(viewHolder.mProfilePic);
+            //viewHolder.mUserName.setText("@" + mProfileFragment.getUserName());
+           Picasso.with(mActivity).load(AppConstants.BASE_URL + viewHolder.mProfilePic).into(viewHolder.mProfilePic);
+
         } else if (holder instanceof ProgressViewHolder) {
             ProgressViewHolder viewHolder = (ProgressViewHolder) holder;
 
@@ -106,8 +109,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             final ItemViewHolder viewHolder = (ItemViewHolder) holder;
             mItemViewHolder = viewHolder;
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getOwner_pic()).into(viewHolder.mUserImg);
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getImageUri()).transform(mBlurTransformation).into(viewHolder.mFeedImg);
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getUser().getProfilePic()).into(viewHolder.mUserImg);
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getUser().getProfilePic()).transform(mBlurTransformation).into(viewHolder.mFeedImg);
             setTimeText(mPostList.get(position - 1).getHeld(), viewHolder.mTimeTxt);
             viewHolder.mFeedTxt.setText(mPostList.get(position - 1).getText());
             viewHolder.mFeedImg.setOnTouchListener(new View.OnTouchListener() {
@@ -134,12 +137,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             Picasso.with(mActivity).load("http://139.162.1.137/api" + mPostList.get(position - 1).getImageUri()).
                                     transform(new BlurTransformation(mActivity, 18)).into(viewHolder.mFeedImg);
                             viewHolder.mTimeTxt.setVisibility(View.VISIBLE);
-                            callReleaseApi(mPostList.get(position - 1).getRid(), viewHolder.mTimeTxt,String.valueOf(System.currentTimeMillis()));
+                            callReleaseApi(mPostList.get(position - 1).getUser().getRid(), viewHolder.mTimeTxt);
 //                            mActivity.isBlured = true;
                             break;
 
                     }
-                    mPostId = mPostList.get(position - 1).getRid();
+                    mPostId = mPostList.get(position - 1).getUser().getRid();
                     return mGestureDetector.onTouchEvent(motionEvent);
                 }
 
@@ -147,8 +150,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    private void callReleaseApi(String postId, final TextView textView,String start_tm) {
-        HeldService.getService().releasePost(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"),postId,start_tm ,String.valueOf(System.currentTimeMillis()),"",
+    private void callReleaseApi(String postId, final TextView textView) {
+        HeldService.getService().releasePostProfile(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"),postId,
                 new Callback<ReleaseResponse>()  {
                     @Override
                     public void success(ReleaseResponse releaseResponse, Response response) {
@@ -247,8 +250,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public void onLongPress(MotionEvent e) {
             if (mActivity.getNetworkStatus()) {
 //                Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(mPosition).getImage()).into(feedViewHolder.mFeedImg);
-                if (!mPostList.get(mPosition).getOwner_display_name().equals(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_user_name)))) {
-                    callHoldApi(mPostList.get(mPosition).getRid(),String.valueOf(System.currentTimeMillis()));
+                if (!mPostList.get(mPosition).getUser().getDisplayName().equals(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_user_name)))) {
+                    callHoldApi(mPostList.get(mPosition).getUser().getRid(),String.valueOf(System.currentTimeMillis()));
                 }
                 mItemViewHolder.mTimeTxt.setVisibility(View.INVISIBLE);
                 mItemViewHolder.mFeedImg.getParent().requestDisallowInterceptTouchEvent(true);
@@ -257,7 +260,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             } else {
                 UiUtils.showSnackbarToast(mActivity.findViewById(R.id.frag_container), "You are not connected to internet");
             }
-
 
             super.onLongPress(e);
         }

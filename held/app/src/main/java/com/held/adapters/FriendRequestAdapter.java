@@ -79,13 +79,13 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
             FriendRequestViewHolder viewHolder = (FriendRequestViewHolder) holder;
 
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mFriendRequestList.get(position).getPic()).into(viewHolder.mProfileImg);
-            viewHolder.mUserNameTxt.setText(mFriendRequestList.get(position).getDisplay_name());
+            viewHolder.mUserNameTxt.setText(mFriendRequestList.get(position).getDisplayName());
             viewHolder.mAcceptBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mActivity.getNetworkStatus()) {
                         DialogUtils.showProgressBar();
-                        callUndeclinedApi(mFriendRequestList.get(position).getDisplay_name());
+                        callUndeclinedApi(mFriendRequestList.get(position).getDisplayName());
                     } else
                         UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You are not connected to internet.");
                 }
@@ -95,7 +95,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
                 public void onClick(View view) {
                     if (mActivity.getNetworkStatus()) {
                         DialogUtils.showProgressBar();
-                        callDeclinedFriendRequestApi(mFriendRequestList.get(position).getDisplay_name());
+                        callDeclinedFriendRequestApi(mFriendRequestList.get(position).getDisplayName());
                     } else {
                         UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You are not connected to internet.");
                     }

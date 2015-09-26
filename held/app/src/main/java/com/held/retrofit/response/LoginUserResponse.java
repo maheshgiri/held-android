@@ -1,7 +1,5 @@
 package com.held.retrofit.response;
 
-import com.held.retrofit.User;
-
 /**
  * Created by jay on 1/8/15.
  */

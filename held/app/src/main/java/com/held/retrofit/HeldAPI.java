@@ -28,6 +28,7 @@ import com.held.retrofit.response.ReleaseResponse;
 import com.held.retrofit.response.SearchUserResponse;
 import com.held.retrofit.response.UnDeclineFriendResponse;
 import com.held.retrofit.response.UnFriendResponse;
+import com.held.retrofit.response.User;
 import com.held.retrofit.response.VerificationResponse;
 import com.held.retrofit.response.VoiceCallResponse;
 
@@ -93,10 +94,18 @@ public interface HeldAPI {
 
     @GET("/posts/")
     void feedPostWithPage(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<FeedResponse> feedResponseCallback);
+
+    @GET("/users/{user_id}/posts")
+    void getUserPosts(@Header("Authorization") String token, @Path("user_id")String uid, @Query("start") long start,@Query("limit") int limit, Callback<FeedResponse> feedResponseCallback);
+
+    @GET("/posts/{post_id}/holds/{hold_id}")
+    void releasePostProfile(@Header("Authorization") String token, @Path("hold_id")String hid, Callback<ReleaseResponse> callback);
+
+
     ///////////////////************OLD APIs**************///////////////////////////////
 
-
-
+   @GET("/users/")
+   void searchFriend(@Header("Authorization") String token,@Query("name") String frndName,Callback<User> friendSearchResult);
 
 
 
@@ -165,12 +174,13 @@ public interface HeldAPI {
     @GET("/posts/request_download")
     void requestDownLoadPost(@Header("X-HELD-TOKEN") String token, @Query("post") String fieldValue, Callback<DownloadRequestData> downloadRequestDataCallback);
 
-    @GET("/user_posts/")
-    void getUserPosts(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, @Query("user") String uid, Callback<FeedResponse> feedResponseCallback);
+
 
     @GET("/activities/")
     void getActivitiesFeed(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, @Query("user") String uid, Callback<ActivityFeedDataResponse> activityFeedDataResponseCallback);
 
     @GET("/posts/search")
     void postSearch(@Header("X-HELD-TOKEN") String token, @Query("post") String postId, Callback<PostResponse> postResponseCallback);
+
+
 }
