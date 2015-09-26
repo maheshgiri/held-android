@@ -67,7 +67,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
 
         mSearchEdt.setVisibility(View.INVISIBLE);
         mUsername.setVisibility(View.VISIBLE);
-        mChat.setImageResource(R.drawable.icon_back);
+        mChat.setImageResource(R.drawable.back);
         mCamera.setImageResource(R.drawable.icon_menu);
         if (!isOneToOne) {
             mUsername.setText("Held");
@@ -85,7 +85,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         mSearchEdt.setVisibility(View.INVISIBLE);
         mUsername.setVisibility(View.VISIBLE);
         mCamera.setImageResource(R.drawable.icon_menu);
-        mChat.setImageResource(R.drawable.icon_back);
+        mChat.setImageResource(R.drawable.back);
         if (!isOneToOne) {
             mUsername.setText("Held");
         } else {

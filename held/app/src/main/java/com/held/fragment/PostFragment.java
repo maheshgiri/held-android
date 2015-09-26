@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.held.activity.FeedActivity;
 import com.held.activity.PostActivity;
 import com.held.activity.R;
 import com.held.customview.PicassoCache;
@@ -170,6 +171,8 @@ public class PostFragment extends ParentFragment {
                 updateBoxUI();
                 break;
             case R.id.back_home:
+                Intent intent = new Intent(getCurrActivity(), FeedActivity.class);
+                startActivity(intent);
 
         }
     }

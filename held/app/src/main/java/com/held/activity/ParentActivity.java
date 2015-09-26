@@ -189,6 +189,7 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
     }
 
     public Toolbar getToolbar() {

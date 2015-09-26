@@ -67,7 +67,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
         { launchVerificationActivity();}
         else if(mPrefernce.readPreference(getString(R.string.API_phone_no)).isEmpty() && mPrefernce.readPreference(getString(R.string.API_pin), 0) == 0)
         {
-            UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Click on Get Started button for Registration");
+
         }
 
     }
