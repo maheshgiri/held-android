@@ -161,7 +161,7 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
 
 //        MusicUtils.stopMusic();
         //Unregister here (remove listener)
-        NetworkStateReceiver.unregisterOnNetworkChangeListener(this);
+  //      NetworkStateReceiver.unregisterOnNetworkChangeListener(this);
 
         super.onDestroy();
     }
@@ -176,19 +176,24 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        //overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+        //overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        this.finish();
+
+        //finishing activity
+        //overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
     }
 
     public Toolbar getToolbar() {

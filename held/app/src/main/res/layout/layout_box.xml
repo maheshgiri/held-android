@@ -4,12 +4,16 @@
     android:id="@+id/BOX_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff">
+    android:background="#ffffff"
+
+
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/BOX_top_layout">
+        android:id="@+id/BOX_top_layout"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"

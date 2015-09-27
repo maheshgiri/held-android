@@ -30,6 +30,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
     private Button mGetStartedBtn;
     private TextView mSigninTxt,mHeadLinetxt,mPolicy,mHave;
     private PreferenceHelper mPrefernce;
+    private String mphoneNo,mPin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,27 +55,30 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
 
         }
         mPrefernce=PreferenceHelper.getInstance(getApplicationContext());
+
         setupGCM();
 
-        if (!mPrefernce.readPreference(getString(R.string.API_phone_no)).isEmpty() && mPrefernce.readPreference(getString(R.string.API_pin), 0) != 0) {
+        mphoneNo=mPrefernce.readPreference(getString(R.string.API_phone_no));
+        mPin=mPrefernce.readPreference(getString(R.string.API_pin));
+        if (mphoneNo!=null && mPin!=null) {
             if (getNetworkStatus()) {
                 DialogUtils.showProgressBar();
                 callLoginApi();
             } else {
                 UiUtils.showSnackbarToast(findViewById(R.id.root_view), "You are not connected to internet");
             }
-        } else if (!mPrefernce.readPreference(getString(R.string.API_phone_no)).isEmpty() &&  mPrefernce.readPreference(getString(R.string.API_pin), 0) == 0)
+        } else if (mphoneNo!=null &&  mPin==null)
         { launchVerificationActivity();}
-        else if(mPrefernce.readPreference(getString(R.string.API_phone_no)).isEmpty() && mPrefernce.readPreference(getString(R.string.API_pin), 0) == 0)
+        else if(mphoneNo==null&&mPin==null)
         {
-            UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Click on Get Started button for Registration");
+                return;
         }
 
     }
 
     private void callLoginApi() {
         HeldService.getService().loginUser(mPrefernce.readPreference(getString(R.string.API_phone_no)),
-                mPrefernce.readPreference(getString(R.string.API_pin), 0) + "","", new Callback<LoginUserResponse>() {
+                mPrefernce.readPreference(getString(R.string.API_pin)) + "","", new Callback<LoginUserResponse>() {
             @Override
             public void success(LoginUserResponse loginUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();

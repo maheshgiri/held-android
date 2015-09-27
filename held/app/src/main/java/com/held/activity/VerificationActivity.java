@@ -209,8 +209,6 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                         mPreference.writePreference(getString(R.string.API_user_name), verificationResponse.getDisplayName());
 
                         DialogUtils.showProgressBar();
-                        UiUtils.showSnackbarToast(findViewById(R.id.root_view), "User Verified Successfully..");
-
                         callLoginUserApi();
 
 

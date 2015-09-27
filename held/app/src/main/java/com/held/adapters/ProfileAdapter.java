@@ -93,6 +93,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (holder instanceof HeaderViewHolder) {
             HeaderViewHolder viewHolder = (HeaderViewHolder) holder;
 
+        //TODO : here load user name and user image
 
            //Picasso.with(mActivity).load(AppConstants.BASE_URL + viewHolder.mProfilePic).into(viewHolder.mProfilePic);
 
@@ -115,6 +116,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             final ItemViewHolder viewHolder = (ItemViewHolder) holder;
             mItemViewHolder = viewHolder;
+            //TODO : Load Image of user
         //    PicassoCache.getPicassoInstance(mActivity).load(AppConstants.BASE_URL + mPostList.get(position).getCreator().getProfilePic()).into(viewHolder.mUserImg);
             //Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getUser().getProfilePic()).into(viewHolder.mUserImg);
         //    PicassoCache.getPicassoInstance(mActivity).load(AppConstants.BASE_URL + mPostList.get(position).getCreator().getProfilePic()).transform(mBlurTransformation).into(viewHolder.mFeedImg);

@@ -60,12 +60,17 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
 
         // todo: this check is not very good. Should check with server whether user has an account
         // and skip to feed
-        if (mPreference.readPreference("isFirstPostCreated", false)) {
+        if(getIntent().getExtras()!=null)
+        {
+            launchCreatePostScreen();
+        }
+        else if (mPreference.readPreference("isFirstPostCreated", false)) {
             launchFeedScreen();
         } else {
             Log.v(TAG, "Launching post screen");
             launchCreatePostScreen();
         }
+
     }
 
     private void launchFeedScreen() {
@@ -73,7 +78,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("isProfile", true);
         startActivity(intent);
-        //finish();
+
        /* updateToolbar(true, false, true, false, true, true, false, "");
         addFragment(FeedFragment.newInstance(), FeedFragment.TAG, true);
         mDisplayFragment = FeedFragment.newInstance();*/
@@ -168,13 +173,13 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
                     perform(7, null);
                 } else if (mDisplayFragment instanceof FriendsListFragment) {
                     onBackPressed();
-                    mChat.setImageResource(R.drawable.icon_chat);
+                    mChat.setImageResource(R.drawable.chat);
                 } else if (mDisplayFragment instanceof NotificationFragment) {
                     onBackPressed();
-                    mChat.setImageResource(R.drawable.icon_chat);
+                    mChat.setImageResource(R.drawable.chat);
                 } else if (mDisplayFragment instanceof ChatFragment) {
                     onBackPressed();
-                    mChat.setImageResource(R.drawable.icon_chat);
+                    mChat.setImageResource(R.drawable.chat);
                 }
                 break;
             case R.id.toolbar_notification_img:
@@ -186,7 +191,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
 
                 } else if (mDisplayFragment instanceof ChatFragment) {
                     onBackPressed();
-                    mChat.setImageResource(R.drawable.icon_chat);
+                    mChat.setImageResource(R.drawable.chat);
                 }
                 break;
             case R.id.toolbar_post_img:
@@ -204,6 +209,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
                 break;
             case R.id.toolbar_post_btn:
                 break;*/
+
         }
     }
 
