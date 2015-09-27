@@ -36,6 +36,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "starting Post activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 

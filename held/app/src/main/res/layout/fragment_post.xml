@@ -16,10 +16,20 @@
         android:id="@+id/back_home"
         android:src="@drawable/back"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="26dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="Set profile picture"
+        android:fontFamily="@string/benton_sans_book"
+        android:textSize="18sp"/>
 
     <Button
         android:layout_width="75dp"

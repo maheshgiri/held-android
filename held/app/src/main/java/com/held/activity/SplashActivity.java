@@ -31,9 +31,11 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
     private TextView mSigninTxt,mHeadLinetxt,mPolicy,mHave;
     private PreferenceHelper mPrefernce;
     private String mphoneNo,mPin;
+    private final String TAG = "SplashActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "Startig splash activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         mGetStartedBtn = (Button) findViewById(R.id.startBtn);
@@ -60,7 +62,10 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
 
         mphoneNo=mPrefernce.readPreference(getString(R.string.API_phone_no));
         mPin=mPrefernce.readPreference(getString(R.string.API_pin));
-        if (mphoneNo!=null && mPin!=null) {
+        Log.d(TAG, "phone number: " + mphoneNo);
+        Log.d(TAG, "pin: "+ mPin);
+        if (mphoneNo!=null && mPin!=null &&
+                mphoneNo != ""  && mPin != "") {
             if (getNetworkStatus()) {
                 DialogUtils.showProgressBar();
                 callLoginApi();

@@ -268,4 +268,7 @@
 
     <string name="API_user_img">USER_IMG</string>
 
+    <string name="title_profilepic_upload">Set profile photo</string>
+    <string name="title_photo_upload">Upload photo</string>
+
 </resources>

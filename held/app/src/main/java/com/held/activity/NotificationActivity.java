@@ -1,6 +1,6 @@
 package com.held.activity;
 
-
+import android.util.Log;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,9 +19,11 @@ public class NotificationActivity extends ParentActivity implements View.OnClick
     private EditText mSearchEdt;
     private Button mRetakeBtn, mPostBtn;
     private TextView mUsername;
+    private final String TAG = "NotificationActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "starting notification activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
         mChat = (ImageView) findViewById(R.id.toolbar_chat_img);

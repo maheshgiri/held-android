@@ -51,9 +51,10 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.i("Activity", "VerificationActivity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification);
-        Log.i("Activity", "VeificationActivity");
+
         if (getIntent().getExtras() != null) {
             mUserName = getIntent().getExtras().getString("username");
             mPhoneNo = getIntent().getExtras().getString("phoneno");
