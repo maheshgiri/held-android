@@ -5,7 +5,8 @@ import java.util.List;
 
 public class FriendRequestResponse {
 
-    private List<SearchUserResponse> objects;
+
+    private List<Objects> objects;
     private boolean lastPage;
     private long nextPageStart;
 
@@ -13,11 +14,13 @@ public class FriendRequestResponse {
         return nextPageStart;
     }
 
-    public List<SearchUserResponse> getObjects() {
+    public List<Objects> getObjects() {
         return objects;
     }
 
     public boolean isLastPage() {
         return lastPage;
     }
+
+
 }

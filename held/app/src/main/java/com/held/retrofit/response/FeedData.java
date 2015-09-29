@@ -6,11 +6,12 @@ public class FeedData {
     private String date;
     private String imageUri;
     private long held;
-private String text;
+    private String text;
     private String profilePic;
     private String thumbnailUri;
     private User user;
     private Creator creator;
+    private String rid;
 
     public String getThumbnailUri() {
         return thumbnailUri;
@@ -23,6 +24,10 @@ private String text;
     }
     public long getHeld() {
         return held;
+    }
+
+    public String getRid() {
+        return rid;
     }
 
     public String getText() {
