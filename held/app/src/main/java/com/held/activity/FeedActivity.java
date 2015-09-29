@@ -1,9 +1,12 @@
 package com.held.activity;
 
 import android.util.Log;
+import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.GestureDetector;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -19,6 +22,7 @@ import com.held.fragment.ProfileFragment;
 import com.held.fragment.SendFriendRequestFragment;
 import com.held.utils.AppConstants;
 import com.held.utils.PreferenceHelper;
+import com.held.utils.UiUtils;
 import com.held.utils.Utils;
 
 public class FeedActivity extends ParentActivity implements View.OnClickListener {
@@ -56,7 +60,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
 
         setToolbar();
-        launchFeedScreen();
+        //launchFeedScreen();
         mChat=(ImageView)findViewById(R.id.toolbar_chat_img);
         mSearch=(ImageView)findViewById(R.id.toolbar_search_img);
         mNotification=(ImageView)findViewById(R.id.toolbar_notification_img);
@@ -69,6 +73,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mNotification.setOnClickListener(this);
         mCamera.setOnClickListener(this);
         mSearch_edt.setVisibility(View.GONE);
+
 
 
 
@@ -159,18 +164,20 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     @Override
     public void onBackPressed() {
 
-        Log.d(TAG, "on back pressed of Feedactivity");
+        if (mDisplayedFragment instanceof FeedFragment && mDisplayedFragment.isVisible()) {
 
-     if (mDisplayedFragment instanceof FeedFragment) {
-         Log.d(TAG, "current fragment is feed");
-         super.onBackPressed();
-         updateToolbar(true, false, true, false, true, true, false, "");
-         mDisplayedFragment = Utils.getCurrVisibleFragment(this);
-     }
-        else {
-         Log.d(TAG, "finishing activity");
-            finish();
+          //  this.getSupportFragmentManager().beginTransaction().remove(new FeedFragment()).commit();
+            /*super.onBackPressed();
+            updateToolbar(true, false, true, false, true, true, false, "");
+            mDisplayedFragment = Utils.getCurrVisibleFragment(this);*/
+
+            this.finishActivity(Activity.RESULT_OK);
         }
+        else {
+            super.onBackPressed();
+        }
+
+
     }
 
     @Override

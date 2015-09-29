@@ -90,7 +90,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
                 Log.i("@@REG KEY in Splash",loginUserResponse.getUser().getRid());
                 mPrefernce.writePreference(getString(R.string.API_session_token), loginUserResponse.getSessionToken());
                 mPrefernce.writePreference(getString(R.string.API_user_regId), loginUserResponse.getUser().getRid());
-                launchPostActivity();
+                launchFeedActivity();
                 /*if (loginUserResponse.isLogin()) {
                     PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSession_token());
                     callUpdateRegIdApi();
@@ -174,7 +174,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
                 "notification_token", PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
-                        if (PreferenceHelper.getInstance(getApplicationContext()).readPreference(getString(R.string.API_is_first_post), false)) {
+                        if (mPrefernce.readPreference(getString(R.string.API_is_first_post), false)==true) {
                             launchFeedActivity();
                         } else {
                             launchPostActivity();

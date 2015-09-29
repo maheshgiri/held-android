@@ -178,7 +178,9 @@ public class PostFragment extends ParentFragment {
                 break;
             case R.id.back_home:
                 Intent intent = new Intent(getCurrActivity(), FeedActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                getCurrActivity().finish();
 
         }
     }
@@ -396,14 +398,17 @@ public class PostFragment extends ParentFragment {
                     public void success(PostResponse postResponse, Response response) {
                         DialogUtils.stopProgressDialog();
 
-                        PicassoCache.getPicassoInstance(getCurrActivity()).load(postResponse.getImageUri()).into(mUserImg);
-                        callPicUpdateApi(postResponse.getImageUri());
-                        callThumbnailUpdateApi(postResponse.getThumbnailUri());
-
-
                 PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
-                if (!myhelper.readPreference("isFirstPostCreated", false)) {
-                    myhelper.writePreference("isFirstPostCreated", true);
+                if (myhelper.readPreference(getString(R.string.API_is_first_post), false)==false) {
+                    myhelper.writePreference(getString(R.string.API_is_first_post), true);
+                    PicassoCache.getPicassoInstance(getCurrActivity()).load(postResponse.getImageUri()).into(mUserImg);
+                    callPicUpdateApi(postResponse.getImageUri());
+                    callThumbnailUpdateApi(postResponse.getThumbnailUri());
+                    launchProfileScreen();
+                }
+                else {
+                    callThumbnailUpdateApi(postResponse.getThumbnailUri());
+                    launchFeedScreen();
                 }
 
 
@@ -436,6 +441,7 @@ public class PostFragment extends ParentFragment {
                     public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
                         DialogUtils.stopProgressDialog();
                         UiUtils.showSnackbarToast(getView(), "Post Posted Successfully..");
+
                     }
 
                     @Override
@@ -528,5 +534,17 @@ public class PostFragment extends ParentFragment {
                 });
 
     }
+    private void launchFeedScreen() {
+        Intent intent = new Intent(getCurrActivity(), FeedActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("isProfile", true);
+        startActivity(intent);
+    }
+    private void launchProfileScreen() {
+        Intent intent = new Intent(getCurrActivity(), FeedActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("isProfile", true);
+        startActivity(intent);
+    }
 
-}
+    }

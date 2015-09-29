@@ -53,5 +53,6 @@ public abstract class ParentFragment extends Fragment implements View.OnClickLis
     public void onNetworkStatusChanged(boolean mNetworkStatus) {
 
     }
+
 }
 
