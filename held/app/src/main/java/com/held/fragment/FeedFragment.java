@@ -1,6 +1,7 @@
 package com.held.fragment;
 
 
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -8,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -17,8 +17,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -102,7 +100,7 @@ public class FeedFragment extends ParentFragment {
 //                return mGestureDetector.onTouchEvent(motionEvent);
 //            }
 //        });
-
+        UiUtils.hideSystemUI(this.getView());
         if (getCurrActivity().getNetworkStatus()) {
 //            DialogUtils.showProgressBar();
             callFeedApi();
@@ -182,27 +180,7 @@ public class FeedFragment extends ParentFragment {
         Utils.hideSoftKeyboard(getCurrActivity());
     }
 
-    private void hideSystemUI() {
-        // Set the IMMERSIVE flag.
-        // Set the content to appear under the system bars so that the content
-        // doesn't resize when the system bars hide and show.
-        if (getView() != null) {
-            getView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE
-            );
-        }
-    }
 
-    private void showSystemUI() {
-        if (getView() != null) {
-            getView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        }
-    }
 
     public void showFullImg(String url) {
         getCurrActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -213,7 +191,7 @@ public class FeedFragment extends ParentFragment {
         Picasso.with(getActivity()).load(url).into(mFullImg);
         mFeedRecyclerView.setEnabled(false);
         mSwipeRefreshLayout.setEnabled(false);
-        hideSystemUI();
+        UiUtils.hideSystemUI(this.getView());
     }
 
     public void showRCView() {
@@ -224,7 +202,7 @@ public class FeedFragment extends ParentFragment {
 //        getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
         mFeedRecyclerView.setEnabled(true);
         mSwipeRefreshLayout.setEnabled(true);
-        showSystemUI();
+        //UiUtils.showSystemUI(getView());
     }
 
     private void callUserSearchApi() {
@@ -336,5 +314,6 @@ public class FeedFragment extends ParentFragment {
             return false;
         }
     }
+
 
 }

@@ -33,13 +33,11 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
     private TextView mUsername;
     private RelativeLayout toolbar;
     private PreferenceHelper mPreference;
-
+    String callfrom;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
-
-
 
         mChat = (ImageView) findViewById(R.id.toolbar_chat_img);
         mCamera = (ImageView) findViewById(R.id.toolbar_post_img);
@@ -60,16 +58,19 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
 
         // todo: this check is not very good. Should check with server whether user has an account
         // and skip to feed
+        callfrom=null;
         if(getIntent().getExtras()!=null)
         {
-            launchCreatePostScreen();
+            callfrom= getIntent().getExtras().getString("fromVerification");
         }
-        else if (mPreference.readPreference("isFirstPostCreated", false)) {
+        if (callfrom==null && mPreference.readPreference(getString(R.string.API_is_first_post), false)==true){
+            launchCreatePostScreen();
+        }else if (callfrom==null && mPreference.readPreference(getString(R.string.API_is_first_post), false)) {
             launchFeedScreen();
-        } else {
-            Log.v(TAG, "Launching post screen");
+        } else if(mPreference.readPreference(getString(R.string.API_is_first_post), false)==false && callfrom.equals("VerificationActivity")) {
             launchCreatePostScreen();
         }
+
 
 
 
@@ -81,7 +82,6 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
     private void launchFeedScreen() {
        Intent intent = new Intent(PostActivity.this, FeedActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("isProfile", true);
         startActivity(intent);
 
        /* updateToolbar(true, false, true, false, true, true, false, "");
@@ -214,7 +214,10 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
                 break;
             case R.id.toolbar_post_btn:
                 break;*/
-
+            case R.id.back_home:
+                Intent intent = new Intent(PostActivity.this, FeedActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 

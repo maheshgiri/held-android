@@ -1,9 +1,12 @@
 package com.held.activity;
 
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.GestureDetector;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -19,6 +22,7 @@ import com.held.fragment.ProfileFragment;
 import com.held.fragment.SendFriendRequestFragment;
 import com.held.utils.AppConstants;
 import com.held.utils.PreferenceHelper;
+import com.held.utils.UiUtils;
 import com.held.utils.Utils;
 
 public class FeedActivity extends ParentActivity implements View.OnClickListener {
@@ -55,7 +59,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         }
 
         setToolbar();
-        launchFeedScreen();
+        //launchFeedScreen();
         mChat=(ImageView)findViewById(R.id.toolbar_chat_img);
         mSearch=(ImageView)findViewById(R.id.toolbar_search_img);
         mNotification=(ImageView)findViewById(R.id.toolbar_notification_img);
@@ -68,6 +72,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mNotification.setOnClickListener(this);
         mCamera.setOnClickListener(this);
         mSearch_edt.setVisibility(View.GONE);
+
 
 
 
@@ -157,15 +162,17 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     public void onBackPressed() {
 
 
+        if (mDisplayedFragment instanceof FeedFragment && mDisplayedFragment.isVisible()) {
 
-     if (mDisplayedFragment instanceof FeedFragment) {
-         super.onBackPressed();
-         updateToolbar(true, false, true, false, true, true, false, "");
-         mDisplayedFragment = Utils.getCurrVisibleFragment(this);
-     }
-        else {
-            finish();
+          //  this.getSupportFragmentManager().beginTransaction().remove(new FeedFragment()).commit();
+
+            this.finishActivity(Activity.RESULT_OK);
         }
+        else {
+            super.onBackPressed();
+        }
+
+
     }
 
     @Override

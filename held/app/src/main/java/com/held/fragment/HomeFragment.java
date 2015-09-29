@@ -40,6 +40,7 @@ public class HomeFragment extends ParentFragment implements ViewPager.OnPageChan
         mViewPager.setAdapter(mHomeAdapter);
         mViewPager.setCurrentItem(1);
         mViewPager.addOnPageChangeListener(this);
+
     }
 
     @Override
@@ -94,13 +95,5 @@ public class HomeFragment extends ParentFragment implements ViewPager.OnPageChan
             mViewPager.setCurrentItem(position);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
 }
