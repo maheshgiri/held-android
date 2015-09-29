@@ -33,13 +33,10 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     private EditText mSearch_edt;
     private TextView mTitle;
     private GestureDetector gestureDetector;
-//<<<<<<< HEAD
-    private Toolbar mHeld_toolbar;
 
-//=======
     private int mPosition = 1;
 
-    private RelativeLayout mPosttoolbar;
+
 
 
 
@@ -47,7 +44,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
-//        mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar_main);
+
        if (getIntent() != null && getIntent().getExtras() != null) {
             if (getIntent().getExtras().getBoolean("isProfile")) {
                 launchProfileScreen(PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_user_name)),
@@ -59,6 +56,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         }
 
         setToolbar();
+
         //launchFeedScreen();
         mChat=(ImageView)findViewById(R.id.toolbar_chat_img);
         mSearch=(ImageView)findViewById(R.id.toolbar_search_img);
