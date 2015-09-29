@@ -3,7 +3,7 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/app_background"
+    android:background="@color/bg_color"
     android:clickable="true"
     android:orientation="vertical">
 
@@ -23,7 +23,7 @@
         android:id="@+id/NOTIFY_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#265092"
+        android:background="#f5f7f3"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -35,29 +35,30 @@
             android:layout_weight="1"
             android:background="@color/selected_tab_color">
 
-            <com.held.customview.CustomTextView
+            <TextView
                 android:id="@+id/NOTIFY_friend_request"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:gravity="left"
                 android:text="Friend\nRequests"
-                android:textColor="#ffffff"
-                android:textSize="18sp"
-                custom:typeFace="@string/freight_sans_medium" />
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                 />
 
-            <com.held.customview.CustomTextView
+            <TextView
                 android:id="@+id/NOTIFY_friend_request_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="25dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
                 android:background="#ffcc33"
-                android:padding="2dp"
+                android:textColor="#1c1b1d"
                 android:text="21"
-                android:textSize="16sp"
-                android:visibility="gone" />
+                android:textSize="10sp"
+                android:visibility="visible"
+                android:layout_alignBaseline="@+id/NOTIFY_friend_request"
+                android:layout_alignBottom="@+id/NOTIFY_friend_request"
+                android:layout_toRightOf="@+id/NOTIFY_friend_request"
+                android:layout_toEndOf="@+id/NOTIFY_friend_request" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -67,29 +68,32 @@
             android:layout_gravity="center"
             android:layout_weight="1">
 
-            <com.held.customview.CustomTextView
+            <TextView
                 android:id="@+id/NOTIFY_download_request"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:gravity="left"
                 android:text="Download\nRequests"
-                android:textColor="#4f94cc"
-                android:textSize="18sp"
-                custom:typeFace="@string/freight_sans_medium" />
+                android:textColor="@color/unselected_tab_txt_color"
+                android:textSize="12sp"
+                 />
 
-            <com.held.customview.CustomTextView
+            <TextView
                 android:id="@+id/NOTIFY_download_request_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
                 android:background="#ffcc33"
-                android:padding="2dp"
+                android:textColor="#1c1b1d"
                 android:text="21"
-                android:textSize="16sp"
-                android:visibility="gone" />
+                android:textSize="10sp"
+                android:visibility="visible"
+                android:layout_alignBaseline="@+id/NOTIFY_download_request"
+                android:layout_alignBottom="@+id/NOTIFY_download_request"
+                android:layout_toRightOf="@+id/NOTIFY_download_request"
+                android:layout_toEndOf="@+id/NOTIFY_download_request"
+                android:layout_marginLeft="9dp"
+                android:layout_marginStart="9dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -100,29 +104,32 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1">
 
-            <com.held.customview.CustomTextView
+            <TextView
                 android:id="@+id/NOTIFY_feed_activity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:gravity="left"
                 android:text="Activity\nFeed"
-                android:textColor="#4f94cc"
-                android:textSize="18sp"
-                custom:typeFace="@string/freight_sans_medium" />
+                android:textColor="@color/unselected_tab_txt_color"
+                android:textSize="12sp"
+                />
 
-            <com.held.customview.CustomTextView
+            <TextView
                 android:id="@+id/NOTIFY_feed_activity_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
                 android:background="#ffcc33"
-                android:padding="2dp"
+                android:textColor="#1c1b1d"
                 android:text="21"
-                android:textSize="16sp"
-                android:visibility="gone" />
+                android:textSize="10sp"
+                android:visibility="visible"
+                android:layout_alignBaseline="@+id/NOTIFY_feed_activity"
+                android:layout_alignBottom="@+id/NOTIFY_feed_activity"
+                android:layout_toRightOf="@+id/NOTIFY_feed_activity"
+                android:layout_toEndOf="@+id/NOTIFY_feed_activity"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp" />
         </RelativeLayout>
     </LinearLayout>
 

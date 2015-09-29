@@ -29,6 +29,7 @@
         android:adjustViewBounds="true"
         android:visibility="gone"
         android:scaleType="centerCrop"
-        android:focusableInTouchMode="true"/>
+        android:focusableInTouchMode="true"
+        android:fitsSystemWindows="true"/>
 
 </RelativeLayout>

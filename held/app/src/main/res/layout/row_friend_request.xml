@@ -3,52 +3,71 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
     android:background="@color/bg_color"
     android:orientation="horizontal">
 
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:id="@+id/toolbar_divider"
+        android:background="@color/shadow_color"
+        android:alpha=".20"
+        android:layout_alignParentTop="true"
+        />
     <ImageView
-        android:layout_width="65dp"
-        android:layout_height="65dp"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_marginLeft="20dp"
         android:id="@+id/user_profile_pic"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+
         android:layout_centerVertical="true"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="UserName"
         android:id="@+id/user_name_txt"
         android:layout_centerVertical="true"
+        android:textColor="@color/userName_color"
+
         android:layout_toRightOf="@+id/user_profile_pic"
         android:layout_toLeftOf="@+id/acceptBtn"
          />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="57dp"
+        android:layout_height="22dp"
         android:text="@string/FR_Accept"
         android:id="@+id/acceptBtn"
+        android:textSize="11sp"
         android:background="@color/positve_btn"
         android:textColor="@color/bg_color"
+        android:layout_marginRight="20dp"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/rejectBtn"
-         />
+        android:layout_toLeftOf="@+id/deleteBtn"
+        android:layout_toStartOf="@+id/deleteBtn" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/FR_Reject"
-        android:id="@+id/rejectBtn"
-        android:layout_marginLeft="10dp"
+        android:layout_width="57dp"
+        android:layout_height="22dp"
+        android:text="@string/FR_Delete"
+        android:id="@+id/deleteBtn"
+        android:textSize="11sp"
         android:background="@color/negative_btn"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
         android:textColor="@color/bg_color"
+        android:layout_centerVertical="true"
+        android:layout_alignTop="@+id/acceptBtn"
+        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:id="@+id/toolbar_divider_bottom"
+        android:background="@color/shadow_color"
+        android:alpha=".20"
+        android:layout_below="@+id/user_profile_pic"
+        />
 </RelativeLayout>

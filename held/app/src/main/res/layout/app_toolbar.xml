@@ -4,6 +4,7 @@
     android:layout_width="match_parent" android:layout_height="65dp"
     android:background="@color/bg_color"
     android:id="@+id/toolbar_main"
+    android:visibility="visible"
     >
 <RelativeLayout
     android:layout_width="match_parent"
