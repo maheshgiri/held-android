@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.held.activity.ParentActivity;
@@ -116,7 +117,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         //    PicassoCache.getPicassoInstance(mActivity).load(AppConstants.BASE_URL + mPostList.get(position).getCreator().getProfilePic()).into(viewHolder.mUserImg);
             //Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getUser().getProfilePic()).into(viewHolder.mUserImg);
         //    PicassoCache.getPicassoInstance(mActivity).load(AppConstants.BASE_URL + mPostList.get(position).getCreator().getProfilePic()).transform(mBlurTransformation).into(viewHolder.mFeedImg);
-            setTimeText(mPostList.get(position - 1).getHeld(), viewHolder.mTimeTxt);
+            setTimeText(mPostList.get(position - 1).getHeld(), viewHolder.mTimeMinTxt,viewHolder.mTimeSecTxt);
             viewHolder.mFeedTxt.setText(mPostList.get(position - 1).getText());
             viewHolder.mFeedImg.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -141,8 +142,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             view.getParent().requestDisallowInterceptTouchEvent(false);
                             Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getImageUri()).
                                     transform(new BlurTransformation(mActivity, 18)).into(viewHolder.mFeedImg);
-                            viewHolder.mTimeTxt.setVisibility(View.VISIBLE);
-                            callReleaseApi(mPostList.get(position - 1).getUser().getRid(), viewHolder.mTimeTxt);
+                            viewHolder.myTimeLayout.setVisibility(View.VISIBLE);
+                            callReleaseApi(mPostList.get(position - 1).getUser().getRid(), viewHolder.mTimeMinTxt,viewHolder.mTimeSecTxt);
 //                            mActivity.isBlured = true;
                             break;
 
@@ -155,11 +156,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    private void callReleaseApi(String postId, final TextView textView) {
+    private void callReleaseApi(String postId, final TextView textView1,final TextView textView2) {
         HeldService.getService().releasePostProfile(mPreference.readPreference("SESSION_TOKEN"),postId,new Callback<ReleaseResponse>()  {
                     @Override
                     public void success(ReleaseResponse releaseResponse, Response response) {
-                        setTimeText(releaseResponse.getHeld(), textView);
+                        setTimeText(releaseResponse.getHeld(), textView1,textView2);
                     }
 
                     @Override
@@ -180,12 +181,15 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         notifyDataSetChanged();
     }
 
-    private void setTimeText(long time, TextView textView) {
+    private void setTimeText(long time,  TextView textView1,TextView textView2) {
         int seconds = (int) (time / 1000) % 60;
         int minutes = (int) ((time / (1000 * 60)) % 60);
         int hours = (int) ((time / (1000 * 60 * 60)) % 24);
-        textView.setText(minutes + " Minutes " + seconds + " Seconds");
-        textView.setVisibility(View.VISIBLE);
+        textView1.setText(String.valueOf(minutes));
+        textView2.setText(String.valueOf(seconds));
+        textView1.setVisibility(View.VISIBLE);
+        textView2.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -209,8 +213,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView mUserNameTxt, mFeedTxt, mTimeTxt;
+        private final TextView mUserNameTxt, mFeedTxt, mTimeMinTxt,mTimeSecTxt;
         private final ImageView mFeedImg, mUserImg;
+        public final RelativeLayout myTimeLayout = (RelativeLayout) itemView.findViewById(R.id.time_layout);
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -218,7 +223,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             mFeedImg = (ImageView) itemView.findViewById(R.id.post_image);
             mUserImg = (ImageView) itemView.findViewById(R.id.profile_img);
             mFeedTxt = (TextView) itemView.findViewById(R.id.post_txt);
-            mTimeTxt = (TextView) itemView.findViewById(R.id.box_time_txt);
+            mTimeMinTxt = (TextView) itemView.findViewById(R.id.box_min_txt);
+            mTimeSecTxt=(TextView) itemView.findViewById(R.id.box_sec_txt);
+            myTimeLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -257,7 +264,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if (!mPostList.get(mPosition).getUser().getDisplayName().equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
                     callHoldApi(mPostList.get(mPosition).getCreator().getRid(),String.valueOf(System.currentTimeMillis()));
                 }
-                mItemViewHolder.mTimeTxt.setVisibility(View.INVISIBLE);
+                mItemViewHolder.myTimeLayout.setVisibility(View.INVISIBLE);
                 mItemViewHolder.mFeedImg.getParent().requestDisallowInterceptTouchEvent(true);
                 mProfileFragment.showFullImg(AppConstants.BASE_URL + mPostList.get(mPosition).getImageUri());
 

@@ -54,6 +54,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private PreferenceHelper mPreference;
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
+    private RelativeLayout timeLayout;
 
     public FeedAdapter(FeedActivity activity, List<FeedData> feedDataList, BlurTransformation blurTransformation
             , boolean isLastPage, FeedFragment feedFragment) {
@@ -65,6 +66,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mIsLastPage = isLastPage;
         mFeedFragment = feedFragment;
         mPreference=PreferenceHelper.getInstance(mActivity);
+
     }
 
     @Override
@@ -106,7 +108,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .load(AppConstants.BASE_URL + mFeedList.get(position).getThumbnailUri()).transform(mBlurTransformation)
                     .into(holder.mFeedImg);
             holder.mUserNameTxt.setText(mFeedList.get(position).getCreator().getDisplayName());
-            setTimeText(mFeedList.get(position).getHeld(), holder.mTimeTxt);
+            setTimeText(mFeedList.get(position).getHeld(),holder.mTimeMinTxt,holder.mTimeSecTxt);
 
 //            holder.mUserImg.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -160,8 +162,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             view.getParent().requestDisallowInterceptTouchEvent(false);
                             Picasso.with(mActivity).load(AppConstants.BASE_URL + mFeedList.get(position).getImageUri()).
                                     transform(mBlurTransformation).into(holder.mFeedImg);
-                            holder.mTimeTxt.setVisibility(View.VISIBLE);
-                            callReleaseApi(mFeedList.get(position).getCreator().getRid(), holder.mTimeTxt,String.valueOf(System.currentTimeMillis()));
+                            holder.myTimeLayout.setVisibility(View.VISIBLE);
+                            callReleaseApi(mFeedList.get(position).getRid(), holder.mTimeMinTxt,holder.mTimeSecTxt,String.valueOf(System.currentTimeMillis()));
                             mActivity.isBlured = true;
                             break;
 
@@ -186,12 +188,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    private void callReleaseApi(String postId, final TextView textView,String start_tm) {
+    private void callReleaseApi(String postId, final TextView textView1,final TextView textView2,String start_tm) {
         HeldService.getService().releasePost(mPreference.readPreference("SESSION_TOKEN"),postId,start_tm ,String.valueOf(System.currentTimeMillis()),
                 "",new Callback<ReleaseResponse>() {
                     @Override
                     public void success(ReleaseResponse releaseResponse, Response response) {
-                        setTimeText(releaseResponse.getHeld(), textView);
+                        setTimeText(releaseResponse.getHeld(), textView1,textView2);
                     }
 
                     @Override
@@ -206,12 +208,15 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 });
     }
 
-    private void setTimeText(long time, TextView textView) {
+    private void setTimeText(long time, TextView textView1,TextView textView2) {
         int seconds = (int) (time / 1000) % 60;
         int minutes = (int) ((time / (1000 * 60)) % 60);
         int hours = (int) ((time / (1000 * 60 * 60)) % 24);
-        textView.setText(minutes + " Minutes " + seconds + " Seconds");
-        textView.setVisibility(View.VISIBLE);
+        textView1.setText(String.valueOf(minutes));
+        textView2.setText(String.valueOf(seconds));
+        textView1.setVisibility(View.VISIBLE);
+        textView2.setVisibility(View.VISIBLE);
+
     }
 
     private void callHoldApi(String postId,String start_tm) {
@@ -251,9 +256,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static class FeedViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        public final TextView mUserNameTxt, mFeedTxt, mTimeTxt;
+        public final TextView mUserNameTxt, mFeedTxt, mTimeMinTxt, mTimeSecTxt;
         public final ImageView mFeedImg, mUserImg;
         public final RelativeLayout myLayout = (RelativeLayout) itemView.findViewById(R.id.BOX_layout);
+        public final RelativeLayout myTimeLayout = (RelativeLayout) itemView.findViewById(R.id.time_layout);
+
         private FeedViewHolder(View v) {
             super(v);
 
@@ -261,8 +268,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mFeedImg = (ImageView) v.findViewById(R.id.post_image);
             mUserImg = (ImageView) v.findViewById(R.id.profile_img);
             mFeedTxt = (TextView) v.findViewById(R.id.post_txt);
-            mTimeTxt = (TextView) v.findViewById(R.id.box_time_txt);
-            myLayout.setPadding(0,15,0,0);
+            mTimeMinTxt = (TextView) v.findViewById(R.id.box_min_txt);
+            mTimeSecTxt=(TextView) v.findViewById(R.id.box_sec_txt);
+            myLayout.setPadding(0, 15, 0, 0);
+           // myTimeLayout.setVisibility(View.VISIBLE);
 
         }
     }
@@ -302,7 +311,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
               //  if (!mFeedList.get(mPosition).getOwner_display_name().equals(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_user_name)))) {
                     callHoldApi(mFeedList.get(mPosition).getCreator().getRid(),String.valueOf(System.currentTimeMillis()));
               //  }
-                feedViewHolder.mTimeTxt.setVisibility(View.INVISIBLE);
+                feedViewHolder.myTimeLayout.setVisibility(View.INVISIBLE);
                 feedViewHolder.mFeedImg.getParent().requestDisallowInterceptTouchEvent(true);
                 mFeedFragment.showFullImg(AppConstants.BASE_URL + mFeedList.get(mPosition).getImageUri());
 

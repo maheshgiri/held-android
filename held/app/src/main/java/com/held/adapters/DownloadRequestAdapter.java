@@ -185,7 +185,7 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
             mProfileImg = (ImageView) itemView.findViewById(R.id.user_profile_pic);
             mUserNameTxt = (TextView) itemView.findViewById(R.id.user_name_txt);
             mAcceptBtn = (Button) itemView.findViewById(R.id.acceptBtn);
-            mDeleteBtn = (Button) itemView.findViewById(R.id.rejectBtn);
+            mDeleteBtn = (Button) itemView.findViewById(R.id.deleteBtn);
         }
     }
 }

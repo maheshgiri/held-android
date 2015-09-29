@@ -18,8 +18,10 @@ import com.held.fragment.FriendRequestFragment;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.ApproveFriendResponse;
 import com.held.retrofit.response.DeclineFriendResponse;
+import com.held.retrofit.response.Objects;
 import com.held.retrofit.response.SearchUserResponse;
 import com.held.retrofit.response.UnDeclineFriendResponse;
+import com.held.retrofit.response.User;
 import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
@@ -39,11 +41,11 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
     private static final int TYPE_FOOTER = 1;
 
     private ParentActivity mActivity;
-    private List<SearchUserResponse> mFriendRequestList;
+    private List<Objects> mFriendRequestList;
     private boolean mIsLastPage;
     private FriendRequestFragment mFriendRequestFragment;
 
-    public FriendRequestAdapter(ParentActivity activity, List<SearchUserResponse> friendRequestList, boolean isLastPage, FriendRequestFragment friendRequestFragment) {
+    public FriendRequestAdapter(ParentActivity activity, List<Objects> friendRequestList, boolean isLastPage, FriendRequestFragment friendRequestFragment) {
         mActivity = activity;
         mFriendRequestList = friendRequestList;
         mIsLastPage = isLastPage;
@@ -79,24 +81,24 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
 
             FriendRequestViewHolder viewHolder = (FriendRequestViewHolder) holder;
 
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mFriendRequestList.get(position).getPic()).into(viewHolder.mProfileImg);
-            viewHolder.mUserNameTxt.setText(mFriendRequestList.get(position).getDisplayName());
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + mFriendRequestList.get(position).getFromUser().getProfilePic()).placeholder(R.drawable.user_icon).into(viewHolder.mProfileImg);
+            viewHolder.mUserNameTxt.setText(mFriendRequestList.get(position).getFromUser().getDisplayName());
             viewHolder.mAcceptBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mActivity.getNetworkStatus()) {
                         DialogUtils.showProgressBar();
-                        callUndeclinedApi(mFriendRequestList.get(position).getDisplayName());
+                        callUndeclinedApi(mFriendRequestList.get(position).getFromUser().getDisplayName());
                     } else
                         UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You are not connected to internet.");
                 }
             });
-            viewHolder.mRejectBtn.setOnClickListener(new View.OnClickListener() {
+            viewHolder.mDeleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mActivity.getNetworkStatus()) {
                         DialogUtils.showProgressBar();
-                        callDeclinedFriendRequestApi(mFriendRequestList.get(position).getDisplayName());
+                        callDeclinedFriendRequestApi(mFriendRequestList.get(position).getFromUser().getDisplayName());
                     } else {
                         UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You are not connected to internet.");
                     }
@@ -195,7 +197,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
         return mFriendRequestList.size() == position ? TYPE_FOOTER : TYPE_ITEM;
     }
 
-    public void setFriendRequestList(List<SearchUserResponse> friendRequestList, boolean isLastPage) {
+    public void setFriendRequestList(List<Objects> friendRequestList, boolean isLastPage) {
         mFriendRequestList = friendRequestList;
         mIsLastPage = isLastPage;
         notifyDataSetChanged();
@@ -205,14 +207,14 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
 
         ImageView mProfileImg;
         TextView mUserNameTxt;
-        Button mAcceptBtn, mRejectBtn;
+        Button mAcceptBtn, mDeleteBtn;
 
         public FriendRequestViewHolder(View itemView) {
             super(itemView);
             mProfileImg = (ImageView) itemView.findViewById(R.id.user_profile_pic);
             mUserNameTxt = (TextView) itemView.findViewById(R.id.user_name_txt);
             mAcceptBtn = (Button) itemView.findViewById(R.id.acceptBtn);
-            mRejectBtn = (Button) itemView.findViewById(R.id.rejectBtn);
+            mDeleteBtn = (Button) itemView.findViewById(R.id.deleteBtn);
         }
     }
 }
