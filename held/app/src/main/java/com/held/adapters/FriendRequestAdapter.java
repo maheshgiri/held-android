@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.held.activity.NotificationActivity;
@@ -208,13 +209,14 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
         ImageView mProfileImg;
         TextView mUserNameTxt;
         Button mAcceptBtn, mDeleteBtn;
-
+        public final RelativeLayout myRequestLayout = (RelativeLayout) itemView.findViewById(R.id.row_friend_request);
         public FriendRequestViewHolder(View itemView) {
             super(itemView);
             mProfileImg = (ImageView) itemView.findViewById(R.id.user_profile_pic);
             mUserNameTxt = (TextView) itemView.findViewById(R.id.user_name_txt);
             mAcceptBtn = (Button) itemView.findViewById(R.id.acceptBtn);
             mDeleteBtn = (Button) itemView.findViewById(R.id.deleteBtn);
+            myRequestLayout.setPadding(0,5,0,5);
         }
     }
 }

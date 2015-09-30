@@ -16,7 +16,9 @@ import com.held.activity.R;
 import com.held.adapters.FriendRequestAdapter;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FriendRequestResponse;
+import com.held.retrofit.response.Objects;
 import com.held.retrofit.response.SearchUserResponse;
+import com.held.retrofit.response.User;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
@@ -34,7 +36,7 @@ public class FriendRequestFragment extends ParentFragment {
     public static final String TAG = FriendRequestFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-    private List<SearchUserResponse> mFriendRequestList = new ArrayList<>();
+    private List<Objects> mFriendRequestList = new ArrayList<>();
     private FriendRequestAdapter mFriendRequestAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private long mStart = System.currentTimeMillis();

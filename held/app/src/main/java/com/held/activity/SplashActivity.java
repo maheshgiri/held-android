@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.graphics.Typeface;
@@ -55,7 +56,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
 
         }
         mPrefernce=PreferenceHelper.getInstance(getApplicationContext());
-
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setupGCM();
 
         mphoneNo=mPrefernce.readPreference(getString(R.string.API_phone_no));
