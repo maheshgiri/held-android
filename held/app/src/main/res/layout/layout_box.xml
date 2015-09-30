@@ -91,14 +91,78 @@
         android:scaleType="centerCrop"
         android:fitsSystemWindows="true"
          />
-<TextView
-    android:layout_width="wrap_content"
+<RelativeLayout
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="Hello"
-    android:textColor="#898989"
-    android:textSize="18sp"
-   android:layout_centerInParent="true"
-    android:id="@+id/box_time_txt"/>
+    android:layout_centerInParent="true"
+    android:id="@+id/time_layout"
+
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:id="@+id/box_min_txt"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/box_Min"
+        android:layout_toStartOf="@+id/box_Min"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" minutes"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:id="@+id/box_Min"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/box_sec"
+        android:layout_toStartOf="@+id/box_sec"
+        android:layout_marginRight="15dp"
+         />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:id="@+id/box_sec_txt"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/box_sec"
+        android:layout_toStartOf="@+id/box_sec"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" seconds"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:id="@+id/box_sec"
+        android:layout_marginRight="75dp"
+        android:layout_marginEnd="75dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="by people"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:id="@+id/box_by_people"
+        android:layout_below="@+id/box_min_txt"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_alignRight="@+id/box_sec"
+        android:layout_alignEnd="@+id/box_sec"
+        android:layout_alignLeft="@+id/box_min_txt"
+        android:layout_alignStart="@+id/box_min_txt" />
+
+
+
+</RelativeLayout>
+
 
 </RelativeLayout>
 

@@ -216,6 +216,7 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
 
     }
 
+
     public void updateToolbar(boolean showChat, boolean showRetakeBtn, boolean showSearchBar, boolean showUserName,
                               boolean showCamera, boolean showNotification, boolean showPostBtn, String userNameTxt) {
 
@@ -231,9 +232,13 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
         setToolbar();
     }
 
+
+
     public void perform(int id, Bundle bundle) {
 
+
     }
+
 
 
 }

@@ -174,7 +174,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
                 "notification_token", PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
-                        if (mPrefernce.readPreference(getString(R.string.API_is_first_post), false)==true) {
+                        if (mPrefernce.readPreference(getString(R.string.is_first_post), false)==true) {
                             launchFeedActivity();
                         } else {
                             launchPostActivity();

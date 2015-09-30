@@ -5,7 +5,7 @@
     <string name="indie">Indie.otf</string>
     <string name="freight_sans_medium">FreightSansMedium.TTF</string>
     <string name="freight_sans_book">FreightSansBook.TTF</string>
-<string name="phone_hint">Phone Number</string>
+    <string name="phone_hint">Phone Number</string>
     <string name="user_name_hint">Pick a Username (minimum 6 chars)</string>
     <string name="benton_sans_book">BentonSansBook.otf</string>
     <string name="benton_sans_medium">BentonSansMedium.otf</string>
@@ -23,7 +23,7 @@
     <string name="API_user_name">USER_NAME</string>
     <string name="API_pin">PIN</string>
     <string name="API_user_regId">USER_REGID</string>
-    <string name="API_is_first_post">isFirstPostCreated</string>
+    <string name="is_first_post">isFirstPostCreated</string>
 
     <!--COUNTRY-CODES-->
     <string-array name="country_codes">
@@ -262,11 +262,14 @@
     <string name="API_FRIEND_REQUEST_COUNT">FRIEND_REQUEST_COUNT</string>
 
     <string name="FR_Accept">Accept</string>
-    <string name="FR_Reject">Reject</string>
+    <string name="FR_Delete">Delete</string>
     <string name="FR_SendReq">Send Friend Request</string>
     <string name="FR_UndoReq">Undo Friend Request</string>
 
     <string name="API_user_img">USER_IMG</string>
+    <string name="title_activity_seen_by">Seen By</string>
+
+    <string name="hello_world">Hello world!</string>
 
     <string name="title_profilepic_upload">Set profile photo</string>
     <string name="title_photo_upload">Upload photo</string>

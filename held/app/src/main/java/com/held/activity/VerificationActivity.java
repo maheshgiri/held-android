@@ -306,7 +306,6 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         Intent intent = new Intent(VerificationActivity.this, PostActivity.class);
        // intent.putExtra("session",mSessonToken);
        // intent.putExtra("regId",mNewRegId);
-        intent.putExtra("fromVerification","VerificationActivity");
         startActivity(intent);
         finish();
     }

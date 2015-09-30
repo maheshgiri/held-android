@@ -59,16 +59,12 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
 
         // todo: this check is not very good. Should check with server whether user has an account
         // and skip to feed
-        callfrom=null;
-        if(getIntent().getExtras()!=null)
-        {
-            callfrom= getIntent().getExtras().getString("fromVerification");
-        }
-        if (callfrom==null && mPreference.readPreference(getString(R.string.API_is_first_post), false)==true){
+
+        if (callfrom==null && mPreference.readPreference(getString(R.string.is_first_post), false)==true){
             launchCreatePostScreen();
-        }else if (callfrom==null && mPreference.readPreference(getString(R.string.API_is_first_post), false)) {
+        }else if (callfrom==null && mPreference.readPreference(getString(R.string.is_first_post), false)) {
             launchFeedScreen();
-        } else if(mPreference.readPreference(getString(R.string.API_is_first_post), false)==false && callfrom.equals("VerificationActivity")) {
+        } else if(mPreference.readPreference(getString(R.string.is_first_post), false)==false) {
             launchCreatePostScreen();
         }
 
@@ -210,7 +206,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
             case R.id.toolbar_post_btn:
                 break;*/
             case R.id.back_home:
-                Intent intent = new Intent(PostActivity.this, FeedActivity.class);
+                Intent intent = new Intent(PostActivity.this, SeenByActivity.class);
                 startActivity(intent);
                 break;
         }

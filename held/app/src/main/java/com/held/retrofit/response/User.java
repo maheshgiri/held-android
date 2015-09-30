@@ -10,7 +10,11 @@ public class User {
         String profilePic;
         String displayName;
         String phone;
+        String joinDate;
 
+        public String getJoinDate() {
+                return joinDate;
+        }
 
         public String getDisplayName() {
                 return displayName;
@@ -29,4 +33,5 @@ public class User {
         }
 
         public String getRid(){return rid;}
+
 }

@@ -107,12 +107,14 @@ public interface HeldAPI {
    @GET("/users/")
    void searchFriend(@Header("Authorization") String token,@Query("name") String frndName,Callback<User> friendSearchResult);
 
-    @GET("/friends/decline")
-    void declineFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<DeclineFriendResponse> declineFriendResponseCallback);
+    @GET("/friendshiprequests/{request_id}")
+    void declineFriend(@Header("Authorization") String token, @Query("name") String name, Callback<DeclineFriendResponse> declineFriendResponseCallback);
 
-    @GET("/friends/approve")
-    void approveFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<ApproveFriendResponse> approveFriendResponseCallback);
+    @GET("/friendshiprequests/{request_id}")
+    void approveFriend(@Header("Authorization") String token, @Query("name") String name, Callback<ApproveFriendResponse> approveFriendResponseCallback);
 
+    @GET("/friendshiprequests/")
+    void getFriendRequests(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<FriendRequestResponse> friendRequestResponseCallback);
 
 
 
@@ -122,8 +124,7 @@ public interface HeldAPI {
     @GET("/friends")
     void getFriends(@Header("X-HELD-TOKEN") String token, Callback<FriendsResponse> friendsResponseCallback);
 
-    @GET("/friends/requests")
-    void getFriendRequests(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, Callback<FriendRequestResponse> friendRequestResponseCallback);
+
 
     @GET("/friends/declined")
     void getDeclinedFriends(@Header("X-HELD-TOKEN") String token, Callback<FriendDeclineResponse> friendDeclineResponseCallback);
