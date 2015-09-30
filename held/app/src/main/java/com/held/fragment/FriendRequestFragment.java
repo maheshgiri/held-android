@@ -42,6 +42,7 @@ public class FriendRequestFragment extends ParentFragment {
     private long mStart = System.currentTimeMillis();
     private int mLimit = 7;
     private boolean mIsLastPage, mIsLoading;
+    private PreferenceHelper mPreference;
 
     public static FriendRequestFragment newInstance() {
         return new FriendRequestFragment();
@@ -60,6 +61,7 @@ public class FriendRequestFragment extends ParentFragment {
         mFriendRequestAdapter = new FriendRequestAdapter(getCurrActivity(), mFriendRequestList, mIsLastPage, this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mFriendRequestAdapter);
+        mPreference=PreferenceHelper.getInstance(getCurrActivity());
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.FR_swipe_refresh_layout);
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -97,7 +99,7 @@ public class FriendRequestFragment extends ParentFragment {
 
     public void callFriendRequestListApi() {
         mIsLoading = true;
-        HeldService.getService().getFriendRequests(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
+        HeldService.getService().getFriendRequests(mPreference.readPreference(getString(R.string.API_session_token)),
                 mLimit, mStart, new Callback<FriendRequestResponse>() {
                     @Override
                     public void success(FriendRequestResponse friendRequestResponse, Response response) {
@@ -107,6 +109,7 @@ public class FriendRequestFragment extends ParentFragment {
                         mFriendRequestList.addAll(friendRequestResponse.getObjects());
                         mFriendRequestAdapter.setFriendRequestList(mFriendRequestList, mIsLastPage);
                         mIsLoading = false;
+                        mPreference.writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT),mFriendRequestList.size()-1);
                     }
 
                     @Override

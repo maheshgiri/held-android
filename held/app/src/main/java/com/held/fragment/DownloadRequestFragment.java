@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.held.activity.NotificationActivity;
 import com.held.activity.R;
@@ -38,8 +39,10 @@ public class DownloadRequestFragment extends ParentFragment {
     private DownloadRequestAdapter mDownloadRequestAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private long mStart = System.currentTimeMillis();
-    private int mLimit = 7;
+    private int mLimit = 7,count;
     private boolean mIsLastPage, mIsLoading;
+    private PreferenceHelper mPreference;
+    private TextView downReqCountTxt;
 
     public static DownloadRequestFragment newInstance() {
         return new DownloadRequestFragment();
@@ -58,7 +61,11 @@ public class DownloadRequestFragment extends ParentFragment {
         mDownloadRequestAdapter = new DownloadRequestAdapter(getCurrActivity(), mDownloadRequestList, mIsLastPage, this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mDownloadRequestAdapter);
+
+
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.DR_swipe_refresh_layout);
+        mPreference=PreferenceHelper.getInstance(getCurrActivity());
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -67,7 +74,8 @@ public class DownloadRequestFragment extends ParentFragment {
                 int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
 
                 if (!mIsLastPage && (lastVisibleItemPosition + 1) == totalItemCoount && !mIsLoading) {
-                    callDownloadRequestListApi(mStart);
+                    // mStart=System.currentTimeMillis();
+                    callDownloadRequestListApi();
                 }
             }
         });
@@ -79,17 +87,18 @@ public class DownloadRequestFragment extends ParentFragment {
                 mDownloadRequestList.clear();
                 mIsLastPage = false;
                 if (getCurrActivity().getNetworkStatus()) {
-                    callDownloadRequestListApi(mStart);
+                    callDownloadRequestListApi();
                 } else {
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
                 }
             }
         });
         if(getCurrActivity().getNetworkStatus()){
-            callDownloadRequestListApi(mStart);
+            callDownloadRequestListApi();
         }else{
             UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
         }
+
     }
 
     @Override
@@ -98,10 +107,10 @@ public class DownloadRequestFragment extends ParentFragment {
 
     }
 
-    public void callDownloadRequestListApi(long start) {
+    public void callDownloadRequestListApi() {
         mIsLoading = true;
-        mStart = start;
-        HeldService.getService().getDownLoadRequestList(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
+        mStart=System.currentTimeMillis();
+        HeldService.getService().getDownLoadRequestList(mPreference.readPreference(getString(R.string.API_session_token)),
                 mLimit, mStart, new Callback<DownloadRequestListResponse>() {
                     @Override
                     public void success(DownloadRequestListResponse downloadRequestListResponse, Response response) {
@@ -111,6 +120,10 @@ public class DownloadRequestFragment extends ParentFragment {
                         mDownloadRequestList.addAll(downloadRequestListResponse.getObjects());
                         mDownloadRequestAdapter.setDownloadRequestList(mDownloadRequestList, mIsLastPage);
                         mIsLoading = false;
+                        mPreference.writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT),mDownloadRequestList.size()-1);
+
+
+
                     }
 
                     @Override
@@ -135,4 +148,5 @@ public class DownloadRequestFragment extends ParentFragment {
     public void onClicked(View v) {
 
     }
+
 }

@@ -102,19 +102,22 @@ public interface HeldAPI {
     void releasePostProfile(@Header("Authorization") String token, @Path("hold_id")String hid, Callback<ReleaseResponse> callback);
 
 
-    ///////////////////************OLD APIs**************///////////////////////////////
-
    @GET("/users/")
    void searchFriend(@Header("Authorization") String token,@Query("name") String frndName,Callback<User> friendSearchResult);
 
-    @GET("/friendshiprequests/{request_id}")
-    void declineFriend(@Header("Authorization") String token, @Query("name") String name, Callback<DeclineFriendResponse> declineFriendResponseCallback);
+    @PUT("/friendshiprequests/{request_id}")
+    void declineFriend(@Header("Authorization") String token,@Path("request_id")String rid, @Query("decline") String decline,@Query("approve") String approve,@Body()String body ,Callback<DeclineFriendResponse> declineFriendResponseCallback);
 
-    @GET("/friendshiprequests/{request_id}")
-    void approveFriend(@Header("Authorization") String token, @Query("name") String name, Callback<ApproveFriendResponse> approveFriendResponseCallback);
+    @PUT("/friendshiprequests/{request_id}")
+    void approveFriend(@Header("Authorization") String token, @Path("request_id")String rid,@Query("decline") String decline,@Query("approve") String approve,@Body()String body, Callback<ApproveFriendResponse> approveFriendResponseCallback);
 
     @GET("/friendshiprequests/")
     void getFriendRequests(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<FriendRequestResponse> friendRequestResponseCallback);
+
+    ///////////////////************OLD APIs**************///////////////////////////////
+    @GET("/downloadrequests/")
+    void getDownLoadRequestList(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<DownloadRequestListResponse> downloadRequestListResponseCallback);
+
 
 
 
@@ -164,8 +167,7 @@ public interface HeldAPI {
     @GET("/friends/")
     void getFriendsList(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, Callback<FriendRequestResponse> friendRequestResponseCallback);
 
-    @GET("/posts/download_requests/")
-    void getDownLoadRequestList(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, Callback<DownloadRequestListResponse> downloadRequestListResponseCallback);
+
 
     @GET("/posts/decline_download")
     void declineDownloadRequest(@Header("X-HELD-TOKEN") String token, @Query("request") String rid, Callback<DeclineDownloadResponse> declineDownloadResponseCallback);

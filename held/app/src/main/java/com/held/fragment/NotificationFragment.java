@@ -4,6 +4,7 @@ package com.held.fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ public class NotificationFragment extends ParentFragment {
     private int mId;
     private TextView mFriendRequest, mDownloadRequest, mActivityFeed, mFriendCount, mDownloadCount, mHeldCount;
     private RelativeLayout mFRLayout, mDRLayout, mAFLayout;
+
 
     public static NotificationFragment newInstance() {
         return new NotificationFragment();
@@ -82,6 +84,7 @@ public class NotificationFragment extends ParentFragment {
             mFriendCount.setText(count + "");
         }
         count = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), 0);
+
         if (count != 0) {
             mDownloadCount.setVisibility(View.VISIBLE);
             mDownloadCount.setText(count + "");
@@ -170,7 +173,7 @@ public class NotificationFragment extends ParentFragment {
                 mFriendRequest.setTextColor(Color.WHITE);
                 mDownloadRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
                 mActivityFeed.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
-                PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_FRIEND_REQUEST_COUNT), 0);
+                //PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_FRIEND_REQUEST_COUNT), 0);
                 mFriendCount.setVisibility(View.GONE);
                 break;
             case R.id.NOTIFY_dr_layout:
@@ -181,7 +184,7 @@ public class NotificationFragment extends ParentFragment {
                 mFriendRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
                 mDownloadRequest.setTextColor(Color.WHITE);
                 mActivityFeed.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
-                PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), 0);
+               // PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), 0);
                 mDownloadCount.setVisibility(View.GONE);
                 break;
             case R.id.NOTIFY_af_layout:
@@ -192,7 +195,7 @@ public class NotificationFragment extends ParentFragment {
                 mFriendRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
                 mDownloadRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
                 mActivityFeed.setTextColor(Color.WHITE);
-                PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_HELD_COUNT), 0);
+               // PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_HELD_COUNT), 0);
                 mHeldCount.setVisibility(View.GONE);
                 break;
         }

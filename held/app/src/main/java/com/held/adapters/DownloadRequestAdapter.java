@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.held.activity.NotificationActivity;
@@ -46,12 +47,13 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
         mDownloadRequestList = DownloadRequestList;
         mIsLastPage = isLastPage;
         mDownloadRequestFragment = downloadRequestFragment;
+
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
-            View v = LayoutInflater.from(mActivity).inflate(R.layout.row_friend_request, parent, false);
+            View v = LayoutInflater.from(mActivity).inflate(R.layout.row_download_request, parent, false);
             return new DownloadRequestViewHolder(v);
         } else {
             View v = LayoutInflater.from(mActivity).inflate(R.layout.layout_progress_bar, parent, false);
@@ -76,8 +78,9 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
 
             DownloadRequestViewHolder viewHolder = (DownloadRequestViewHolder) holder;
 
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mDownloadRequestList.get(position).getOwner_pic()).into(viewHolder.mProfileImg);
-            viewHolder.mUserNameTxt.setText(mDownloadRequestList.get(position).getOwner_display_name());
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + mDownloadRequestList.get(position).getUser().getProfilePic()).into(viewHolder.mProfileImg);
+            viewHolder.mUserNameTxt.setText(mDownloadRequestList.get(position).getUser().getDisplayName());
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + mDownloadRequestList.get(position).getPost().getThumbnailUri()).into(viewHolder.mPostimg);
             viewHolder.mAcceptBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -143,7 +146,7 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
                 DialogUtils.stopProgressDialog();
                 mDownloadRequestList.clear();
                 long start = System.currentTimeMillis();
-                mDownloadRequestFragment.callDownloadRequestListApi(start);
+                mDownloadRequestFragment.callDownloadRequestListApi();
             }
 
             @Override
@@ -176,16 +179,19 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
 
     public static class DownloadRequestViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView mProfileImg;
+        ImageView mProfileImg,mPostimg;
         TextView mUserNameTxt;
         Button mAcceptBtn, mDeleteBtn;
-
+        public final RelativeLayout myRequestLayout = (RelativeLayout) itemView.findViewById(R.id.row_download_request);
         public DownloadRequestViewHolder(View itemView) {
             super(itemView);
             mProfileImg = (ImageView) itemView.findViewById(R.id.user_profile_pic);
             mUserNameTxt = (TextView) itemView.findViewById(R.id.user_name_txt);
             mAcceptBtn = (Button) itemView.findViewById(R.id.acceptBtn);
             mDeleteBtn = (Button) itemView.findViewById(R.id.deleteBtn);
+            mPostimg=(ImageView) itemView.findViewById(R.id.post_pic);
+            myRequestLayout.setPadding(0,7,0,0);
+
         }
     }
 }

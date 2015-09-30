@@ -9,6 +9,7 @@ public class FriendRequestResponse {
     private List<Objects> objects;
     private boolean lastPage;
     private long nextPageStart;
+    private String declined,date,rid;
 
     public long getNextPageStart() {
         return nextPageStart;
@@ -22,5 +23,20 @@ public class FriendRequestResponse {
         return lastPage;
     }
 
+    public String getRid() {
+        return rid;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getDeclined() {
+        return declined;
+    }
+
+    public void setDeclined(String declined) {
+        this.declined = declined;
+    }
 
 }
