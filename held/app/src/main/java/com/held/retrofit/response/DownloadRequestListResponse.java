@@ -8,6 +8,11 @@ public class DownloadRequestListResponse {
     private List<DownloadRequestData> objects;
     private boolean lastPage;
     private long nextPageStart;
+    private String imageUri;
+
+    public String getImageUri() {
+        return imageUri;
+    }
 
     public List<DownloadRequestData> getObjects() {
         return objects;

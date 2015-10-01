@@ -16,9 +16,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.held.activity.FeedActivity;
@@ -64,7 +66,7 @@ public class FeedFragment extends ParentFragment {
     private ImageView mFullImg,mUserImg;
     private GestureDetector mGestureDetector;
     private PreferenceHelper mPrefernce;
-
+   // private RelativeLayout toolbar;
     public static FeedFragment newInstance() {
         return new FeedFragment();
     }
@@ -87,7 +89,7 @@ public class FeedFragment extends ParentFragment {
         mLayoutManager = new LinearLayoutManager(getCurrActivity());
         mFeedRecyclerView.setLayoutManager(mLayoutManager);
         mFeedResponse = new FeedResponse();
-
+        //toolbar=(RelativeLayout)getCurrActivity().getWindow().findViewById(R.id.custom_toolbar);
         blurTransformation = new BlurTransformation(getCurrActivity(), 25f);
         mFeedAdapter = new FeedAdapter((FeedActivity) getCurrActivity(), mFeedList, blurTransformation, isLastPage, this);
         mFeedRecyclerView.setAdapter(mFeedAdapter);
@@ -107,7 +109,7 @@ public class FeedFragment extends ParentFragment {
         } else {
             UiUtils.showSnackbarToast(getView(), "Sorry! You don't seem to connected to internet");
         }
-
+       getCurrActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
   /*      mSearchEdt = (EditText) view.findViewById(R.id.toolbar_search_edt_txt);
         mSearchEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -183,15 +185,19 @@ public class FeedFragment extends ParentFragment {
 
 
     public void showFullImg(String url) {
+
         getCurrActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getCurrActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+
         mFullImg.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setVisibility(View.GONE);
-//        getCurrActivity().getToolbar().setVisibility(View.GONE);
+
         Picasso.with(getActivity()).load(url).into(mFullImg);
         mFeedRecyclerView.setEnabled(false);
         mSwipeRefreshLayout.setEnabled(false);
         UiUtils.hideSystemUI(this.getView());
+
+
     }
 
     public void showRCView() {
@@ -203,6 +209,7 @@ public class FeedFragment extends ParentFragment {
         mFeedRecyclerView.setEnabled(true);
         mSwipeRefreshLayout.setEnabled(true);
         //UiUtils.showSystemUI(getView());
+        getCurrActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     private void callUserSearchApi() {

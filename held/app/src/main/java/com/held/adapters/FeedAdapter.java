@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -314,6 +315,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 feedViewHolder.myTimeLayout.setVisibility(View.INVISIBLE);
                 feedViewHolder.mFeedImg.getParent().requestDisallowInterceptTouchEvent(true);
                 mFeedFragment.showFullImg(AppConstants.BASE_URL + mFeedList.get(mPosition).getImageUri());
+
 
             } else {
                 UiUtils.showSnackbarToast(mActivity.findViewById(R.id.frag_container), "You are not connected to internet");

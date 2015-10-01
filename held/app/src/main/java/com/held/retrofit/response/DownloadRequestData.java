@@ -1,6 +1,8 @@
 package com.held.retrofit.response;
 
 
+import com.held.activity.PostActivity;
+
 public class DownloadRequestData {
 
     private String date;
@@ -8,8 +10,23 @@ public class DownloadRequestData {
     private boolean declined;
     private String owner_display_name;
     private String tag;
-    private String rid;
+    private String rid,imageUri;
     private String owner_pic;
+    private User user;
+    private PostData post;
+
+
+    public PostData getPost() {
+        return post;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public User getUser() {
+        return user;
+    }
 
     public String getDate() {
         return date;

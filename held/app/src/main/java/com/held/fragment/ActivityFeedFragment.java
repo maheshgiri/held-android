@@ -39,6 +39,7 @@ public class ActivityFeedFragment extends ParentFragment {
     private long mStart = System.currentTimeMillis();
     private int mLimit = 7;
     private String mUid;
+    private PreferenceHelper mPreference;
 
     public static final String TAG = ActivityFeedFragment.class.getSimpleName();
 
@@ -64,6 +65,7 @@ public class ActivityFeedFragment extends ParentFragment {
         mActivityFeedAdapter = new ActivityFeedAdapter(getCurrActivity(), mActivityFeedDataList, mIsLastPage);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mActivityFeedAdapter);
+        mPreference=PreferenceHelper.getInstance(getCurrActivity());
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.FEED_swipe_refresh_layout);
 
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -134,6 +136,7 @@ public class ActivityFeedFragment extends ParentFragment {
                 mActivityFeedDataList.addAll(activityFeedDataResponse.getObjects());
                 mIsLastPage = activityFeedDataResponse.isLastPage();
                 mActivityFeedAdapter.setActivityFeedList(mActivityFeedDataList, mIsLastPage);
+                mPreference.writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT),mActivityFeedDataList.size()-1);
                 mStart = activityFeedDataResponse.getNextPageStart();
                 mIsLoading = false;
             }

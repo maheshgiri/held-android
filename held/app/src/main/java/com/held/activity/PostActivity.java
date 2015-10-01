@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -67,6 +68,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
         } else if(mPreference.readPreference(getString(R.string.is_first_post), false)==false) {
             launchCreatePostScreen();
         }
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
     }
 

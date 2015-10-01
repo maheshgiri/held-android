@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.held.activity.NotificationActivity;
@@ -44,12 +45,15 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
     private List<Objects> mFriendRequestList;
     private boolean mIsLastPage;
     private FriendRequestFragment mFriendRequestFragment;
+    private PreferenceHelper mPreference;
+
 
     public FriendRequestAdapter(ParentActivity activity, List<Objects> friendRequestList, boolean isLastPage, FriendRequestFragment friendRequestFragment) {
         mActivity = activity;
         mFriendRequestList = friendRequestList;
         mIsLastPage = isLastPage;
         mFriendRequestFragment = friendRequestFragment;
+        mPreference=PreferenceHelper.getInstance(mActivity);
 
     }
 
@@ -77,18 +81,20 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        final String friendReqId;
         if (holder instanceof FriendRequestViewHolder) {
 
             FriendRequestViewHolder viewHolder = (FriendRequestViewHolder) holder;
 
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mFriendRequestList.get(position).getFromUser().getProfilePic()).placeholder(R.drawable.user_icon).into(viewHolder.mProfileImg);
             viewHolder.mUserNameTxt.setText(mFriendRequestList.get(position).getFromUser().getDisplayName());
+            friendReqId=mFriendRequestList.get(position).getRid();
             viewHolder.mAcceptBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mActivity.getNetworkStatus()) {
                         DialogUtils.showProgressBar();
-                        callUndeclinedApi(mFriendRequestList.get(position).getFromUser().getDisplayName());
+                        callAcceptFriendRequestApi(friendReqId);
                     } else
                         UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You are not connected to internet.");
                 }
@@ -98,7 +104,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
                 public void onClick(View view) {
                     if (mActivity.getNetworkStatus()) {
                         DialogUtils.showProgressBar();
-                        callDeclinedFriendRequestApi(mFriendRequestList.get(position).getFromUser().getDisplayName());
+                        callDeclinedFriendRequestApi(mFriendRequestList.get(position).getRid());
                     } else {
                         UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You are not connected to internet.");
                     }
@@ -118,9 +124,9 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void callDeclinedFriendRequestApi(String name) {//PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_session_token))
-        HeldService.getService().declineFriend(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_session_token)),
-                name, new Callback<DeclineFriendResponse>() {
+    private void callDeclinedFriendRequestApi(String friendReqId) {//PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_session_token))
+        HeldService.getService().declineFriend(mPreference.readPreference(mActivity.getString(R.string.API_session_token)),friendReqId,
+                "true","","",new Callback<DeclineFriendResponse>() {
                     @Override
                     public void success(DeclineFriendResponse declineFriendResponse, Response response) {
                         DialogUtils.stopProgressDialog();
@@ -138,9 +144,9 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
                 });
     }
 
-    private void callAcceptFriendRequestApi(String name) {
-        HeldService.getService().approveFriend(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_session_token)),
-                name, new Callback<ApproveFriendResponse>() {
+    private void callAcceptFriendRequestApi(String friendReqId) {
+        HeldService.getService().approveFriend(mPreference.readPreference(mActivity.getString(R.string.API_session_token)),
+                friendReqId,"","true","" ,new Callback<ApproveFriendResponse>() {
                     @Override
                     public void success(ApproveFriendResponse approveFriendResponse, Response response) {
                         DialogUtils.stopProgressDialog();
@@ -160,15 +166,15 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
                 });
     }
 
-    private void callUndeclinedApi(final String name) {
+    private void callUndeclinedApi(final String friendReqId) {
         HeldService.getService().undeclineFriend(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_session_token)),
-                name, new Callback<UnDeclineFriendResponse>() {
+                friendReqId, new Callback<UnDeclineFriendResponse>() {
                     @Override
                     public void success(UnDeclineFriendResponse unDeclineFriendResponse, Response response) {
                         DialogUtils.stopProgressDialog();
                         if (mActivity.getNetworkStatus()) {
                             DialogUtils.showProgressBar();
-                            callAcceptFriendRequestApi(name);
+                            callAcceptFriendRequestApi(friendReqId);
                         } else
                             UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You are not connected to internet.");
                     }
@@ -176,7 +182,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
                     @Override
                     public void failure(RetrofitError error) {
                         DialogUtils.stopProgressDialog();
-                        callAcceptFriendRequestApi(name);
+                        callAcceptFriendRequestApi(friendReqId);
                         if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
                             String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
 //                            UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
@@ -208,13 +214,14 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
         ImageView mProfileImg;
         TextView mUserNameTxt;
         Button mAcceptBtn, mDeleteBtn;
-
+        public final RelativeLayout myRequestLayout = (RelativeLayout) itemView.findViewById(R.id.row_friend_request);
         public FriendRequestViewHolder(View itemView) {
             super(itemView);
             mProfileImg = (ImageView) itemView.findViewById(R.id.user_profile_pic);
             mUserNameTxt = (TextView) itemView.findViewById(R.id.user_name_txt);
             mAcceptBtn = (Button) itemView.findViewById(R.id.acceptBtn);
             mDeleteBtn = (Button) itemView.findViewById(R.id.deleteBtn);
+            myRequestLayout.setPadding(0,5,0,5);
         }
     }
 }

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:id="@+id/row_download_request">
+
+    <View
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:id="@+id/toolbar_divider"
+        android:background="@color/shadow_color"
+        android:alpha=".20"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_centerHorizontal="true" />
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="false"
+        android:id="@+id/requestLayout"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
+        android:layout_below="@id/toolbar_divider"
+        android:gravity="fill">
+        <ImageView
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:id="@+id/user_profile_pic"
+            android:layout_centerVertical="true"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textLayout"
+            android:layout_marginLeft="5dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UserName"
+                android:id="@+id/user_name_txt"
+                android:textColor="@color/userName_color"
+                android:layout_centerVertical="true"
+                android:layout_gravity="fill_horizontal" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonLayout"
+                android:paddingTop="4dp"
+                android:layout_below="@+id/user_name_txt"
+                >
+                <Button
+                    android:layout_width="57dp"
+                    android:layout_height="22dp"
+                    android:text="@string/FR_Accept"
+                    android:id="@+id/acceptBtn"
+                    android:textSize="11sp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/positve_btn"
+                    android:textColor="@color/bg_color"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center" />
+
+                <Button
+                    android:layout_width="57dp"
+                    android:layout_height="22dp"
+                    android:text="@string/FR_Delete"
+                    android:id="@+id/deleteBtn"
+                    android:textSize="11sp"
+                    android:background="@color/negative_btn"
+                    android:textColor="@color/bg_color"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <ImageView
+            android:layout_width="86dp"
+            android:layout_height="43dp"
+            android:layout_marginLeft="40dp"
+            android:id="@+id/post_pic"
+            android:scaleType="centerCrop"
+            android:layout_alignParentRight="true"
+            />
+    </LinearLayout>
+
+    <View
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:id="@+id/toolbar_divider_bottom"
+        android:background="@color/shadow_color"
+        android:alpha=".20"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/requestLayout"
+        android:layout_alignParentBottom="false"
+        android:layout_centerHorizontal="true" />
+
+
+</RelativeLayout>

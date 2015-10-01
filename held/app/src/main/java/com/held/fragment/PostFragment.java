@@ -31,6 +31,7 @@ import android.widget.TextView;
 import com.held.activity.FeedActivity;
 import com.held.activity.PostActivity;
 import com.held.activity.R;
+import com.held.activity.SeenByActivity;
 import com.held.customview.PicassoCache;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.PostResponse;
@@ -57,7 +58,7 @@ public class PostFragment extends ParentFragment {
     private ImageView mPostImg, mUserImg, mImageToUpload,mBackImg;
     private TextView mPostTxt, mUserNameTxt, mCancelTxt, mOkTxt, mTimeTxt;
     private RelativeLayout mPostLayout;
-    private RelativeLayout mBoxLayout;
+    private RelativeLayout mBoxLayout,mTimeLayout;
     private String sourceFileName, mCaption;
     private File mFile;
     private EditText mCaptionEdt;
@@ -95,6 +96,7 @@ public class PostFragment extends ParentFragment {
         mOkTxt = (TextView) view.findViewById(R.id.POST_ok);
         mPostBtn=(Button)view.findViewById(R.id.post_button);
         mPrefernce=PreferenceHelper.getInstance(getCurrActivity());
+
         TextView mTitle = (TextView)view.findViewById(R.id.tv_title);
         PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
         if (!myhelper.readPreference("isFirstPostCreated", false)) {
@@ -103,13 +105,16 @@ public class PostFragment extends ParentFragment {
             mTitle.setText(getString(R.string.title_photo_upload));
         }
 
+        mTimeLayout=(RelativeLayout)view.findViewById(R.id.time_layout);
         mBackImg.setOnClickListener(this);
         mPostBtn.setOnClickListener(this);
         mUserNameTxt.setText(PreferenceHelper.getInstance(getCurrActivity()).readPreference("USER_NAME"));
-        mTimeTxt = (TextView) view.findViewById(R.id.box_time_txt);
-        mTimeTxt.setText("Click here to upload Image");
+        //mTimeTxt = (TextView) view.findViewById(R.id.box_time_txt);
+       // mTimeTxt.setText("Click here to upload Image");
 
-        mTimeTxt.setVisibility(View.GONE);
+      //  mTimeTxt.setVisibility(View.GONE);
+        mTimeLayout.setVisibility(View.GONE);
+
         if (getCurrActivity() instanceof PostActivity)
             openImageIntent();
 
@@ -129,7 +134,7 @@ public class PostFragment extends ParentFragment {
             }
         });
 
-        loadProfile();
+        setProfilePic();
 
     }
 
@@ -177,7 +182,7 @@ public class PostFragment extends ParentFragment {
                 updateBoxUI();
                 break;
             case R.id.back_home:
-                Intent intent = new Intent(getCurrActivity(), FeedActivity.class);
+                Intent intent = new Intent(getCurrActivity(),FeedActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 getCurrActivity().finish();
@@ -275,7 +280,7 @@ public class PostFragment extends ParentFragment {
     private void doCrop(Uri mCurrentPhotoPath) {
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
         cropIntent.setDataAndType(mCurrentPhotoPath, "image/*");
-        if (!PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_is_first_post), false)) {
+        if (!PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.is_first_post), false)) {
             cropIntent.putExtra("crop", "true");
             cropIntent.putExtra("aspectX", 1);
             cropIntent.putExtra("aspectY", 1);
@@ -399,9 +404,9 @@ public class PostFragment extends ParentFragment {
                         DialogUtils.stopProgressDialog();
 
                 PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
-                if (myhelper.readPreference(getString(R.string.API_is_first_post), false)==false) {
-                    myhelper.writePreference(getString(R.string.API_is_first_post), true);
-                    PicassoCache.getPicassoInstance(getCurrActivity()).load(postResponse.getImageUri()).into(mUserImg);
+                if (myhelper.readPreference(getString(R.string.is_first_post), false)==false) {
+                    myhelper.writePreference(getString(R.string.is_first_post), true);
+
                     callPicUpdateApi(postResponse.getImageUri());
                     callThumbnailUpdateApi(postResponse.getThumbnailUri());
                     launchProfileScreen();
@@ -464,7 +469,7 @@ public class PostFragment extends ParentFragment {
                     public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
                         DialogUtils.stopProgressDialog();
                   //      PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_user_img), AppConstants.BASE_URL + profilPicUpdateResponse.getPic());
-                        UiUtils.showSnackbarToast(getView(), "User Profile  Pic Updated..");
+                   //     UiUtils.showSnackbarToast(getView(), "User Profile  Pic Updated..");
 
                     }
 
@@ -514,7 +519,7 @@ public class PostFragment extends ParentFragment {
         }
     }
 
-    public void loadProfile()
+    public void setProfilePic()
     {
         HeldService.getService().searchUser(mPrefernce.readPreference(getString(R.string.API_session_token)),
                 mPrefernce.readPreference(getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
