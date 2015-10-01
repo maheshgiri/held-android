@@ -50,8 +50,12 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
 //        mRetakeBtn.setOnClickListener(this);
   //      mPostBtn.setOnClickListener(this);
         if (getIntent().getExtras() != null) {
-            launchChatScreen(getIntent().getExtras().getString("id"), getIntent().getExtras().getBoolean("isOneToOne"));
+
+            String chatid = getIntent().getExtras().getString("id");
+            Boolean isOneToOne = getIntent().getExtras().getBoolean("isOneToOne");
+            launchChatScreen( chatid, isOneToOne);
         } else {
+            Log.d(TAG, "Launching inbox");
             launchInboxPage();
         }
     }

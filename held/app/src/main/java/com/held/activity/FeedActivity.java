@@ -98,10 +98,11 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         startActivity(intent);
     }
 
-    private void launchChatScreen(String id, boolean isOneToOne) {
+    //private void launchChatScreen(String id, boolean isOneToOne) {
+    private void launchChatScreen() {
         Intent intent = new Intent(FeedActivity.this, ChatActivity.class);
-        intent.putExtra("id", id);
-        intent.putExtra("isOneToOne", isOneToOne);
+        //intent.putExtra("id", id);
+        //intent.putExtra("isOneToOne", isOneToOne);
         startActivity(intent);
     }
 
@@ -124,6 +125,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     @Override
     public void perform(int id, Bundle bundle) {
         super.perform(id, bundle);
+        Log.d(TAG, "performing action " + id);
         switch (id) {
             case AppConstants.LAUNCH_POST_SCREEN:
                 launchCreatePostScreen();
@@ -132,8 +134,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 launchHomeScreen();
                 break;
             case AppConstants.LAUNCH_CHAT_SCREEN:
-                if (bundle != null)
-                    launchChatScreen(bundle.getString("postid"), false);
+                launchChatScreen();
                 break;
             case AppConstants.LAUNCH_NOTIFICATION_SCREEN:
                 launchNotificationScreen();
@@ -143,8 +144,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                     launchRequestFriendScreen(bundle.getString("name"), bundle.getString("image"));
                 break;
             case AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN:
-                if (bundle != null)
-                    launchChatScreen(bundle.getString("owner_displayname"), true);
+                launchChatScreen();
 
                 break;
             case AppConstants.LAUNCH_PROFILE_SCREEN:
@@ -183,24 +183,27 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
+        Log.d(TAG , "onclick detected. mPosition is " + mPosition);
         mDisplayedFragment = Utils.getCurrVisibleFragment(this);
 //        if(mDisplayedFragment==null)
         switch (view.getId()) {
 
 
             case R.id.toolbar_chat_img:
+                Log.d(TAG, "toolbar chat image has been clicked. mPosition is " + mPosition);
 
                 if (mPosition == 0) {
-                    perform(AppConstants.LAUNCH_CHAT_SCREEN, null);
+                    perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, null);
                 } else if (mPosition == 1) {
-                    perform(AppConstants.LAUNCH_CHAT_SCREEN, null);
+                    perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, null);
                 } else if (mPosition == 2) {
-                    perform(AppConstants.LAUNCH_CHAT_SCREEN, null);
+                    perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, null);
                 } else if (mPosition == 3) {
-                    perform(AppConstants.LAUNCH_CHAT_SCREEN, null);
+                    perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, null);
                 }
                 break;
             case R.id.toolbar_notification_img:
+                Log.d(TAG, "toolbar notification image has been clicked");
                 /*if (mPosition == 0) {
                     perform(AppConstants.LAUNCH_NOTIFICATION_SCREEN, null);
                 } else if (mPosition == 1) {
@@ -212,6 +215,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 }*/
                 break;
             case R.id.toolbar_post_img:
+                Log.d(TAG, "toolbar post image has been clicked");
                 if (mPosition == 0) {
                     perform(AppConstants.LAUNCH_POST_SCREEN, null);
                 } else if (mPosition == 1) {
@@ -224,6 +228,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
                 break;
             case R.id.toolbar_search_img:
+                Log.d(TAG, "toolbar search image has been clicked");
                 //visibleTextView();
                 break;
         }
