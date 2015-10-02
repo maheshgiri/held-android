@@ -206,7 +206,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 break;
             case R.id.toolbar_notification_img:
                 Log.d(TAG, "toolbar notification image has been clicked");
-                /*if (mPosition == 0) {
+                if (mPosition == 0) {
                     perform(AppConstants.LAUNCH_NOTIFICATION_SCREEN, null);
                 } else if (mPosition == 1) {
                     perform(AppConstants.LAUNCH_NOTIFICATION_SCREEN, null);
@@ -214,7 +214,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                     perform(AppConstants.LAUNCH_NOTIFICATION_SCREEN, null);
                 } else if (mPosition == 3) {
                     perform(AppConstants.LAUNCH_NOTIFICATION_SCREEN, null);
-                }*/
+                }
                 break;
             case R.id.toolbar_post_img:
                 Log.d(TAG, "toolbar post image has been clicked");

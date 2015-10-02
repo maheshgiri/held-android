@@ -29,7 +29,7 @@
             android:layout_marginLeft="10dp"
             android:layout_alignParentTop="true"
             android:scaleType="centerCrop"
-                android:src="@drawable/home_icon_v2"
+
             />
 
             <LinearLayout

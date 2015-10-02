@@ -41,12 +41,14 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
     private List<DownloadRequestData> mDownloadRequestList;
     private boolean mIsLastPage = true;
     private DownloadRequestFragment mDownloadRequestFragment;
+    private PreferenceHelper mPreference;
 
     public DownloadRequestAdapter(ParentActivity activity, List<DownloadRequestData> DownloadRequestList, boolean isLastPage, DownloadRequestFragment downloadRequestFragment) {
         mActivity = activity;
         mDownloadRequestList = DownloadRequestList;
         mIsLastPage = isLastPage;
         mDownloadRequestFragment = downloadRequestFragment;
+        mPreference=PreferenceHelper.getInstance(mActivity);
 
     }
 
@@ -86,7 +88,7 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
                 public void onClick(View view) {
                     if (mActivity.getNetworkStatus()) {
                         DialogUtils.showProgressBar();
-                        callApproveDownloadApi(mDownloadRequestList.get(position).getRid());
+                        callApproveDownloadApi(mDownloadRequestList.get(position).getRid(),mDownloadRequestList.get(position).getPost().getRid());
                     } else {
                         UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You are not connected to internet.");
                     }
@@ -97,7 +99,7 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
                 public void onClick(View view) {
                     if (mActivity.getNetworkStatus()) {
                         DialogUtils.showProgressBar();
-                        callDeclineDownloadApi(mDownloadRequestList.get(position).getRid());
+                        callDeclineDownloadApi(mDownloadRequestList.get(position).getRid(),mDownloadRequestList.get(position).getPost().getRid());
                     } else {
                         UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You are not connected to internet.");
                     }
@@ -117,13 +119,14 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void callDeclineDownloadApi(String requestId) {
-        HeldService.getService().declineDownloadRequest(PreferenceHelper.getInstance(mActivity)
-                .readPreference(mActivity.getString(R.string.API_session_token)), requestId, new Callback<DeclineDownloadResponse>() {
+    private void callDeclineDownloadApi(final String requestId, final String post_id) {
+        HeldService.getService().declineDownloadRequest(mPreference.readPreference(mActivity.getString(R.string.API_session_token)),
+                post_id,requestId,"true","","", new Callback<DeclineDownloadResponse>() {
             @Override
             public void success(DeclineDownloadResponse declineDownloadResponse, Response response) {
                 DialogUtils.stopProgressDialog();
 
+                callDeclineDownloadApi(requestId,post_id);
             }
 
             @Override
@@ -138,28 +141,47 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
         });
     }
 
-    private void callApproveDownloadApi(String requestId) {
-        HeldService.getService().approveDownloadRequest(PreferenceHelper.getInstance(mActivity)
-                .readPreference(mActivity.getString(R.string.API_session_token)), requestId, new Callback<ApproveDownloadResponse>() {
-            @Override
-            public void success(ApproveDownloadResponse approveDownloadResponse, Response response) {
-                DialogUtils.stopProgressDialog();
-                mDownloadRequestList.clear();
-                long start = System.currentTimeMillis();
-                mDownloadRequestFragment.callDownloadRequestListApi();
-            }
+    private void callApproveDownloadApi(String requestId,String post_id) {
+        HeldService.getService().approveDownloadRequest(mPreference.readPreference(mActivity.getString(R.string.API_session_token)),
+                post_id, requestId, "", "true", "", new Callback<ApproveDownloadResponse>() {
+                    @Override
+                    public void success(ApproveDownloadResponse approveDownloadResponse, Response response) {
+                        DialogUtils.stopProgressDialog();
+                        mDownloadRequestList.clear();
+                        // long start = System.currentTimeMillis();
+                        mDownloadRequestFragment.callDownloadRequestListApi();
+                    }
 
-            @Override
-            public void failure(RetrofitError error) {
-                DialogUtils.stopProgressDialog();
-                if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
-                    String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
-                    UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
-                } else
-                    UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "Some Problem Occurred");
-            }
-        });
+                    @Override
+                    public void failure(RetrofitError error) {
+                        DialogUtils.stopProgressDialog();
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "Some Problem Occurred");
+                    }
+                });
     }
+
+
+    void callDeleteDownloadReqApi(String requestId,String post_id){
+        HeldService.getService().deleteDownloadRequest(mPreference.readPreference(mActivity.getString(R.string.API_session_token)),
+                post_id, requestId, new Callback<DeclineDownloadResponse>() {
+                    @Override
+                    public void success(DeclineDownloadResponse declineDownloadResponse, Response response) {
+                        mDownloadRequestList.clear();
+                        mDownloadRequestFragment.callDownloadRequestListApi();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+
+    }
+
 
     @Override
     public int getItemCount() {

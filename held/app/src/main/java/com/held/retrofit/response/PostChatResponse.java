@@ -8,12 +8,16 @@ public class PostChatResponse {
     private List<PostChatData> objects;
     private boolean lastPage;
 
+
     public boolean isLastPage() {
         return lastPage;
     }
 
     public List<PostChatData> getObjects() {
-
         return objects;
+    }
+
+    public void setObjects(List<PostChatData> objects) {
+        this.objects = objects;
     }
 }

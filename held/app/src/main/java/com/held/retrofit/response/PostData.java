@@ -5,8 +5,9 @@ package com.held.retrofit.response;
  */
 public class PostData {
 
-    private String thumbnailUri,text;
+    private String thumbnailUri,text,rid;
     private Creator creator;
+
 
     public Creator getCreator() {
         return creator;
@@ -18,5 +19,9 @@ public class PostData {
 
     public String getThumbnailUri() {
         return thumbnailUri;
+    }
+
+    public String getRid() {
+        return rid;
     }
 }

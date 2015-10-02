@@ -21,5 +21,15 @@
 <color name="positve_btn">#00c6ae</color>
     <color name="negative_btn">#4c4d4b</color>
     <color name="userName_color">#363636</color>
+    <color name="description_color">#898989</color>
+    <color name="chat_time_color">#333332</color>
+    <color name="chatBox_left_color">#FFFFFF</color>
+    <color name="chatBox_right_color">#252525</color>
+    <color name="chatBox_left_time_color">#1c1b1d</color>
+    <color name="chat_submitBtn_color">#171412</color>
+
+
+
+
 
 </resources>

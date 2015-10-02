@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.held.activity.ChatActivity;
 import com.held.activity.R;
 import com.held.retrofit.response.PostChatData;
+import com.held.retrofit.response.User;
 import com.held.utils.AppConstants;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.Utils;
@@ -35,6 +36,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private int lastPosition = -1;
     private GestureDetector mGestureDetector;
     private boolean delayEnterAnimation = true, animationsLocked;
+    private PreferenceHelper mPreference;
+    private User currentUser=null,friendUser=null;
 
     public ChatAdapter(ChatActivity activity, List<PostChatData> postChatData) {
         mActivity = activity;
@@ -45,8 +48,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public int getItemViewType(int position) {
         // Just as an example, return 0 or 2 depending on position
         // Note that unlike in ListView adapters, types don't have to be contiguous
-        return (mPostChatData.get(position).getOwner_display_name()).
-                equals(PreferenceHelper.getInstance(mActivity).readPreference(Utils.getString(R.string.API_user_name))) ? ITEM_RIGHT : ITEM_LEFT;
+        return (mPostChatData.get(position).getFromUser().getDisplayName()).
+               equals(mPreference.readPreference(Utils.getString(R.string.API_user_name))) ? ITEM_RIGHT : ITEM_LEFT;
+
     }
 
     @Override
@@ -62,30 +66,49 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (viewType == ITEM_RIGHT) {
             v = LayoutInflater.from(mActivity).inflate(R.layout.layout_chat_right, parent, false);
             return new ViewHolder0(v);
-        } else {
+        } else if(viewType == ITEM_RIGHT) {
             v = LayoutInflater.from(mActivity).inflate(R.layout.layout_chat_left, parent, false);
             return new ViewHolder2(v);
         }
-
+        return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
+
+
+        ///Get Current user
+        if(mPreference.readPreference(Utils.getString(R.string.API_user_name)).equals(mPostChatData.get(position).getFromUser().getDisplayName()))
+        {
+            currentUser=mPostChatData.get(position).getFromUser();
+            friendUser=mPostChatData.get(position).getToUser();
+        }
+        else if(mPreference.readPreference(Utils.getString(R.string.API_user_name)).equals(mPostChatData.get(position).getToUser().getDisplayName()))
+        {
+            currentUser=mPostChatData.get(position).getToUser();
+            friendUser=mPostChatData.get(position).getFromUser();
+        }
+
+
+
         if (holder instanceof ViewHolder0) {
+
             ViewHolder0 viewHolder0 = (ViewHolder0) holder;
-            viewHolder0.mUserNameTxt.setText(mPostChatData.get(position).getOwner_display_name());
+            viewHolder0.mUserNameTxt.setText(currentUser.getDisplayName());
             String date[] = mPostChatData.get(position).getDate().split(" ");
-            viewHolder0.mDateTxt.setText(date[3] + " " + date[4]);
-            viewHolder0.mDesTxt.setText(mPostChatData.get(position).getMessage());
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostChatData.get(position).getOwner_pic()).into(viewHolder0.mProfilePic);
-        } else {
+            //viewHolder0.mDateTxt.setText(date[3] + " " + date[4]);
+            viewHolder0.mDateTxt.setText(mPostChatData.get(position).getDate());
+            viewHolder0.mDesTxt.setText(mPostChatData.get(position).getText());
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + currentUser.getProfilePic()).into(viewHolder0.mProfilePic);
+        } else if(holder instanceof ViewHolder2) {
             ViewHolder2 viewHolder = (ViewHolder2) holder;
-            viewHolder.mUserNameTxt.setText(mPostChatData.get(position).getOwner_display_name());
+            viewHolder.mUserNameTxt.setText(friendUser.getDisplayName());
             String date[] = mPostChatData.get(position).getDate().split(" ");
-            viewHolder.mDateTxt.setText(date[3] + " " + date[4]);
-            viewHolder.mDesTxt.setText(mPostChatData.get(position).getMessage());
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostChatData.get(position).getOwner_pic()).into(viewHolder.mProfilePic);
+            viewHolder.mDateTxt.setText(mPostChatData.get(position).getDate());
+          //  viewHolder.mDateTxt.setText(date[3] + " " + date[4]);
+            viewHolder.mDesTxt.setText(mPostChatData.get(position).getText());
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + friendUser.getProfilePic()).into(viewHolder.mProfilePic);
         }
         runEnterAnimation(holder.itemView, position);
     }
@@ -93,8 +116,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void setPostChats(List<PostChatData> postChatData) {
         mPostChatData = postChatData;
-        notifyDataSetChanged();
-//        notifyItemInserted(mPostChatData.size());
+ //       notifyDataSetChanged();
+        notifyItemInserted(mPostChatData.size());
     }
 
     class ViewHolder0 extends RecyclerView.ViewHolder {
