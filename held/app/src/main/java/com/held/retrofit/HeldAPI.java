@@ -118,6 +118,12 @@ public interface HeldAPI {
     @GET("/downloadrequests/")
     void getDownLoadRequestList(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<DownloadRequestListResponse> downloadRequestListResponseCallback);
 
+    @PUT("/posts/{post_id}/downloadrequests/{request_id}")
+    void declineDownloadRequest(@Header("Authorization") String token,@Path("post_id")String postId,@Path("request_id")String rid, @Query("decline") String decline,@Query("approve") String approve,@Body()String body, Callback<DeclineDownloadResponse> declineDownloadResponseCallback);
+
+    @PUT("/posts/{post_id}/downloadrequests/{request_id}")
+    void approveDownloadRequest(@Header("Authorization") String token,@Path("post_id")String postId,@Path("request_id")String rid, @Query("decline") String decline,@Query("approve") String approve,@Body()String body, Callback<ApproveDownloadResponse> approveDownloadResponseCallback);
+
 
 
 
@@ -169,11 +175,6 @@ public interface HeldAPI {
 
 
 
-    @GET("/posts/decline_download")
-    void declineDownloadRequest(@Header("X-HELD-TOKEN") String token, @Query("request") String rid, Callback<DeclineDownloadResponse> declineDownloadResponseCallback);
-
-    @GET("/posts/approve_download")
-    void approveDownloadRequest(@Header("X-HELD-TOKEN") String token, @Query("request") String rid, Callback<ApproveDownloadResponse> approveDownloadResponseCallback);
 
     @GET("/users/profile")
     void updateRegID(@Header("X-HELD-TOKEN") String token, @Query("field") String fieldValue, @Query("value") String image,
