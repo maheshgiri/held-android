@@ -439,6 +439,7 @@ public class PostFragment extends ParentFragment {
                 });
     }
 
+    //todo: what is this function doing??
     private void callThumbnailUpdateApi(String image) {
         HeldService.getService().updateProfilePic(mPrefernce.readPreference(getString(R.string.API_session_token)),
                 mPrefernce.readPreference(getString(R.string.API_user_regId)),"NotificationToken", image, new Callback<ProfilPicUpdateResponse>() {

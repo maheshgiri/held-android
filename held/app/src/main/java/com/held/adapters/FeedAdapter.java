@@ -166,6 +166,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             holder.myTimeLayout.setVisibility(View.VISIBLE);
                             callReleaseApi(mFeedList.get(position).getRid(), holder.mTimeMinTxt,holder.mTimeSecTxt,String.valueOf(System.currentTimeMillis()));
                             mActivity.isBlured = true;
+                            mActivity.showToolbar();
+
                             break;
 
                     }
@@ -315,6 +317,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 feedViewHolder.myTimeLayout.setVisibility(View.INVISIBLE);
                 feedViewHolder.mFeedImg.getParent().requestDisallowInterceptTouchEvent(true);
                 mFeedFragment.showFullImg(AppConstants.BASE_URL + mFeedList.get(mPosition).getImageUri());
+                if(e.getAction() == MotionEvent.ACTION_UP){
+
+                }
 
 
             } else {
@@ -324,6 +329,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             super.onLongPress(e);
         }
+
     }
 
     private class PersonalChatListener extends GestureDetector.SimpleOnGestureListener {

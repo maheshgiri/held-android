@@ -22,6 +22,7 @@ import com.held.utils.AppConstants;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import com.held.retrofit.response.FriendData;
 
 public class FriendsAdapter extends RecyclerView.Adapter {
 
@@ -29,12 +30,12 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     private static final int TYPE_FOOTER = 1;
 
     private ParentActivity mActivity;
-    private List<Objects> mFriendList;
+    private List<FriendData> mFriendList;
     private boolean mIsLastPage;
     private String mOwnerDisplayName;
     private GestureDetector mPersonalGestureDetector;
 
-    public FriendsAdapter(ParentActivity activity, List<Objects> friendList, boolean isLastPage) {
+    public FriendsAdapter(ParentActivity activity, List<FriendData> friendList, boolean isLastPage) {
         mActivity = activity;
         mFriendList = friendList;
         mIsLastPage = isLastPage;
@@ -56,18 +57,20 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof FriendViewHolder) {
+            final FriendData friend  = mFriendList.get(position);
             FriendViewHolder viewHolder = (FriendViewHolder) holder;
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mFriendList.get(position).getFromUser().getProfilePic()).into(viewHolder.mProfilePic);
+            String picUrl = AppConstants.BASE_URL + friend.getProfilePic();
+            Picasso.with(mActivity).load(picUrl).into(viewHolder.mProfilePic);
 
-            viewHolder.mUserName.setText(mFriendList.get(position).getFromUser().getDisplayName());
+            viewHolder.mUserName.setText(friend.getDisplayName());
 
-            String date[]=mFriendList.get(position).getFromUser().getJoinDate().split(" ");
-            viewHolder.mTimeTxt.setText(date[3]+" "+date[4]);
+            //String date[] = friend.getJoinDate().split(" ");
+            viewHolder.mTimeTxt.setText(friend.getJoinDate());
 
             viewHolder.mProfilePic.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    mOwnerDisplayName = mFriendList.get(position).getFromUser().getDisplayName();
+                    mOwnerDisplayName = friend.getDisplayName();
                     return mPersonalGestureDetector.onTouchEvent(motionEvent);
                 }
             });
@@ -119,7 +122,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void setFriendList(List<Objects> friendList, boolean isLastPage) {
+    public void setFriendList(List<FriendData> friendList, boolean isLastPage) {
         mFriendList = friendList;
         mIsLastPage = isLastPage;
         notifyDataSetChanged();

@@ -109,6 +109,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
     @Override
     public void onBackPressed() {
         if (mDisplayFragment instanceof ChatFragment) {
+            Log.d(TAG, "on back pressed. current fragment is chat fragment");
             super.onBackPressed();
             mSearchEdt.setVisibility(View.VISIBLE);
             mUsername.setVisibility(View.INVISIBLE);
@@ -116,6 +117,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
             mChat.setImageResource(R.drawable.icon_chat);
             mDisplayFragment = Utils.getCurrVisibleFragment(this);
         } else {
+            Log.d(TAG, "unknown current fragment");
             super.onBackPressed();
         }
     }

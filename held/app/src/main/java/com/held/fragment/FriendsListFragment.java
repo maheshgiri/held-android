@@ -17,7 +17,7 @@ import com.held.activity.ChatActivity;
 import com.held.activity.R;
 import com.held.adapters.FriendsAdapter;
 import com.held.retrofit.HeldService;
-import com.held.retrofit.response.FriendRequestResponse;
+import com.held.retrofit.response.FriendsResponse;
 import com.held.retrofit.response.Objects;
 import com.held.retrofit.response.SearchUserResponse;
 import com.held.retrofit.response.User;
@@ -30,6 +30,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import com.held.retrofit.response.FriendData;
 
 
 
@@ -38,7 +39,7 @@ public class FriendsListFragment extends ParentFragment {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private FriendsAdapter mFriendAdapter;
-    private List<Objects> mFriendList = new ArrayList<>();
+    private List<FriendData> mFriendList = new ArrayList<>();
     private boolean mIsLastPage, mIsLoading;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private long mStart = System.currentTimeMillis();
@@ -110,12 +111,14 @@ public class FriendsListFragment extends ParentFragment {
     private void callFriendsListApi() {
         mIsLoading = true;
         HeldService.getService().getFriendsList(PreferenceHelper.getInstance(getCurrActivity())
-                .readPreference(getString(R.string.API_session_token)), mLimit, mStart, new Callback<FriendRequestResponse>() {
+                .readPreference(getString(R.string.API_session_token)), mLimit, mStart, new Callback<FriendsResponse>() {
             @Override
-            public void success(FriendRequestResponse friendRequestResponse, Response response) {
-                mIsLastPage = friendRequestResponse.isLastPage();
-                mFriendList.addAll(friendRequestResponse.getObjects());
-                mStart = friendRequestResponse.getNextPageStart();
+            public void success(FriendsResponse friendsResponse, Response response) {
+                Log.d(TAG, "received friends list succesfully");
+                mIsLastPage = friendsResponse.isLastPage();
+                mFriendList.addAll(friendsResponse.getObjects());
+                Log.d(TAG, "received no. of friends: " + mFriendList.size());
+                mStart = friendsResponse.getNextPageStart();
                 mFriendAdapter.setFriendList(mFriendList, mIsLastPage);
                 mIsLoading = false;
             }

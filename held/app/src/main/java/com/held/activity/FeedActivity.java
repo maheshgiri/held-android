@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toolbar;
+import android.support.v7.widget.Toolbar;
 import com.held.fragment.FeedFragment;
 import com.held.fragment.HomeFragment;
 import com.held.fragment.ProfileFragment;
@@ -68,12 +68,14 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mCamera=(ImageView)findViewById(R.id.toolbar_post_img);
         mTitle=(TextView)findViewById(R.id.toolbar_title_txt);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
+        mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
 
         mChat.setOnClickListener(this);
         mSearch.setOnClickListener(this);
         mNotification.setOnClickListener(this);
         mCamera.setOnClickListener(this);
         mSearch_edt.setVisibility(View.GONE);
+
 
 
 
@@ -183,7 +185,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        Log.d(TAG , "onclick detected. mPosition is " + mPosition);
+        Log.d(TAG, "onclick detected. mPosition is " + mPosition);
         mDisplayedFragment = Utils.getCurrVisibleFragment(this);
 //        if(mDisplayedFragment==null)
         switch (view.getId()) {
@@ -299,5 +301,12 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         }
     }
 
+    public void hideToolbar(){
+        mHeld_toolbar.setVisibility(View.GONE);
+    }
+
+    public void showToolbar(){
+        mHeld_toolbar.setVisibility(View.VISIBLE);
+    }
 
 }
