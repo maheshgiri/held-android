@@ -9,34 +9,35 @@
 
     <RelativeLayout
         android:id="@+id/CHATRIGHT_top_layout"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
+        android:layout_width="270dp"
+        android:layout_height="86dp"
         android:layout_alignParentRight="true"
-        android:background="#1a000000">
+        android:background="@color/chatBox_right_color"
+        android:alpha=".95"
+        >
 
         <ImageView
             android:id="@+id/CHATRIGHT_profile_img"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
             android:fitsSystemWindows="true"
             android:scaleType="centerCrop" />
 
-        <com.held.customview.CustomTextView
+        <TextView
             android:id="@+id/CHATRIGHT_user_name_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="7dp"
             android:layout_marginTop="7dp"
+            android:text="Hello"
             android:layout_toLeftOf="@+id/CHATRIGHT_profile_img"
-            android:textColor="#ffffff"
-            android:textSize="18sp"
-            custom:typeFace="@string/freight_sans_medium" />
+            android:textColor="@color/white"
+            android:textSize="13sp"
+             />
 
-        <com.held.customview.CustomTextView
+        <TextView
             android:id="@+id/CHATRIGHT_des_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,22 +46,24 @@
             android:layout_marginTop="5dp"
             android:layout_toLeftOf="@+id/CHATRIGHT_profile_img"
             android:lineSpacingExtra="5dp"
+            android:textColor="@color/white"
+            android:text="Hello"
+            android:textSize="13sp"
+            />
+        <TextView
+            android:id="@+id/CHATRIGHT_date_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="6dp"
             android:textColor="#ffffff"
-            android:textSize="18sp"
-            custom:typeFace="@string/freight_sans_book" />
+            android:text="time"
+            android:textSize="13sp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/CHATRIGHT_profile_img"
+            android:layout_toStartOf="@+id/CHATRIGHT_profile_img" />
     </RelativeLayout>
 
-    <com.held.customview.CustomTextView
-        android:id="@+id/CHATRIGHT_date_txt"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/CHATRIGHT_top_layout"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:gravity="left"
-        android:lineSpacingExtra="5dp"
-        android:textColor="#ffffff"
-        android:textSize="17sp"
-        custom:typeFace="@string/freight_sans_book" />
+
 </RelativeLayout>
