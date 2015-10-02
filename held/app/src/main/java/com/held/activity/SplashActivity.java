@@ -2,6 +2,7 @@ package com.held.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,7 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.graphics.Typeface;
+
 import com.held.gcm.GCMControlManager;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.LoginUserResponse;
@@ -24,6 +25,13 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import com.splunk.mint.Mint;
+import com.splunk.mint.MintLog;
+
+import java.util.List;
+
+import timber.log.Timber;
+import timber.log.Timber.DebugTree;
 
 
 public class SplashActivity extends ParentActivity implements View.OnClickListener {
@@ -37,8 +45,11 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "Startig splash activity");
+        initializeSplunk();
+        initializeTimber();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
         mGetStartedBtn = (Button) findViewById(R.id.startBtn);
         mSigninTxt=(TextView)findViewById(R.id.signinTxt);
         mHeadLinetxt=(TextView)findViewById(R.id.text1);
@@ -78,6 +89,38 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
         else if(mphoneNo==null&&mPin==null)
         {
                 return;
+        }
+
+    }
+
+    private void initializeSplunk(){
+        Mint.initAndStartSession(SplashActivity.this, "332b7321");
+    }
+
+    private void initializeTimber(){
+
+        if (BuildConfig.DEBUG) {
+            // do something for a debug build
+            Timber.plant(new DebugTree());
+        } else {
+            Timber.plant(new CrashReportingTree());
+        }
+
+    }
+
+    /** A tree which logs important information for crash reporting. */
+    private static class CrashReportingTree extends Timber.Tree {
+        @Override protected void log(int priority, String tag, String message, Throwable t) {
+
+            if (priority == Log.VERBOSE || priority == Log.DEBUG) {
+                return;
+            }
+            if (t != null) {
+                if (priority == Log.ERROR) {
+                    MintLog.e(tag, message);
+                }
+            }
+
         }
 
     }
