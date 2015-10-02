@@ -96,6 +96,15 @@ public class PostFragment extends ParentFragment {
         mOkTxt = (TextView) view.findViewById(R.id.POST_ok);
         mPostBtn=(Button)view.findViewById(R.id.post_button);
         mPrefernce=PreferenceHelper.getInstance(getCurrActivity());
+
+        TextView mTitle = (TextView)view.findViewById(R.id.tv_title);
+        PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
+        if (!myhelper.readPreference("isFirstPostCreated", false)) {
+            mTitle.setText(getString(R.string.title_profilepic_upload));
+        }else{
+            mTitle.setText(getString(R.string.title_photo_upload));
+        }
+
         mTimeLayout=(RelativeLayout)view.findViewById(R.id.time_layout);
         mBackImg.setOnClickListener(this);
         mPostBtn.setOnClickListener(this);
@@ -126,7 +135,6 @@ public class PostFragment extends ParentFragment {
         });
 
         setProfilePic();
-
 
     }
 
@@ -409,11 +417,11 @@ public class PostFragment extends ParentFragment {
                 }
 
 
-               /* getCurrActivity().perform(1, null);
+                getCurrActivity().perform(1, null);
                 if (getCurrActivity() instanceof PostActivity)
                     getCurrActivity().perform(1, null);
                 else
-                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);*/
+                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);
 
             }
 
@@ -431,6 +439,7 @@ public class PostFragment extends ParentFragment {
                 });
     }
 
+    //todo: what is this function doing??
     private void callThumbnailUpdateApi(String image) {
         HeldService.getService().updateProfilePic(mPrefernce.readPreference(getString(R.string.API_session_token)),
                 mPrefernce.readPreference(getString(R.string.API_user_regId)),"NotificationToken", image, new Callback<ProfilPicUpdateResponse>() {

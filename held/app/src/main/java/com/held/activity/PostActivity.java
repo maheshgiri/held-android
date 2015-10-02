@@ -37,6 +37,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
     String callfrom;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "starting Post activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
@@ -67,13 +68,8 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
         } else if(mPreference.readPreference(getString(R.string.is_first_post), false)==false) {
             launchCreatePostScreen();
         }
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-
-
-
-
-//>>>>>>> c73f45de2d83aa7516b8ca26b78bd6aa11e0fb88
     }
 
     private void launchFeedScreen() {

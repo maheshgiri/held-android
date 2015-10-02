@@ -8,10 +8,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import android.util.Log;
-
 import android.view.KeyEvent;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +27,8 @@ import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.SearchUserResponse;
-
 import com.held.utils.AppConstants;
-
 import com.held.utils.DialogUtils;
-
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 import com.held.utils.Utils;
@@ -92,6 +87,7 @@ public class ProfileFragment extends ParentFragment {
         mFullImg = (ImageView) view.findViewById(R.id.PROFILE_full_img);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.PROFILE_swipe_refresh_layout);
 
+
         //mUserName = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_name));
 
         mProfilePic=(ImageView)view.findViewById(R.id.PROFILE_pic);
@@ -99,8 +95,9 @@ public class ProfileFragment extends ParentFragment {
        // mUserNameText=(TextView)view.findViewById(R.id.PROFILE_name);
        // mUserNameText.setText(mUserName);
         //loadProfile();
-/*=======
+/*
         mSearchEdt = (EditText) getCurrActivity().getToolbar().findViewById(R.id.TOOLBAR_search_edt);
+
 
         mSearchEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -119,7 +116,9 @@ public class ProfileFragment extends ParentFragment {
         } else {
             mUserName = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_name));
             mUserImg = "http://139.162.1.137/api/user_images/tejasshah_1440819300949.jpg";//PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_img));
+
         }
+
 
 
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -249,9 +248,11 @@ public class ProfileFragment extends ParentFragment {
 
     }
 
+
     public void loadProfile() {
         HeldService.getService().searchUser(mPreference.readPreference(getString(R.string.API_session_token)),
                 mPreference.readPreference(getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
+
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
                         Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
@@ -268,6 +269,7 @@ public class ProfileFragment extends ParentFragment {
                     }
                 });
     }
+
 
 
     public String getUserName() {

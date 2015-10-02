@@ -1,6 +1,6 @@
 package com.held.activity;
 
-
+import android.util.Log;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toolbar;
+import android.support.v7.widget.Toolbar;
 import com.held.fragment.FeedFragment;
 import com.held.fragment.HomeFragment;
 import com.held.fragment.ProfileFragment;
@@ -34,15 +34,16 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     private EditText mSearch_edt;
     private TextView mTitle;
     private GestureDetector gestureDetector;
-
+    private Toolbar mHeld_toolbar;
+    private final String TAG = "FeedActivity";
+    private RelativeLayout mPosttoolbar;
     private int mPosition = 1;
-
-
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "starting feed activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
 
@@ -54,9 +55,10 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         } else {
             launchFeedScreen();
 //            launchHomeScreen();
+
         }
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setToolbar();
 
         //launchFeedScreen();
@@ -66,12 +68,14 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mCamera=(ImageView)findViewById(R.id.toolbar_post_img);
         mTitle=(TextView)findViewById(R.id.toolbar_title_txt);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
+        mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
 
         mChat.setOnClickListener(this);
         mSearch.setOnClickListener(this);
         mNotification.setOnClickListener(this);
         mCamera.setOnClickListener(this);
         mSearch_edt.setVisibility(View.GONE);
+
 
 
 
@@ -96,10 +100,11 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         startActivity(intent);
     }
 
-    private void launchChatScreen(String id, boolean isOneToOne) {
+    //private void launchChatScreen(String id, boolean isOneToOne) {
+    private void launchChatScreen() {
         Intent intent = new Intent(FeedActivity.this, ChatActivity.class);
-        intent.putExtra("id", id);
-        intent.putExtra("isOneToOne", isOneToOne);
+        //intent.putExtra("id", id);
+        //intent.putExtra("isOneToOne", isOneToOne);
         startActivity(intent);
     }
 
@@ -122,6 +127,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     @Override
     public void perform(int id, Bundle bundle) {
         super.perform(id, bundle);
+        Log.d(TAG, "performing action " + id);
         switch (id) {
             case AppConstants.LAUNCH_POST_SCREEN:
                 launchCreatePostScreen();
@@ -130,8 +136,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 launchHomeScreen();
                 break;
             case AppConstants.LAUNCH_CHAT_SCREEN:
-                if (bundle != null)
-                    launchChatScreen(bundle.getString("postid"), false);
+                launchChatScreen();
                 break;
             case AppConstants.LAUNCH_NOTIFICATION_SCREEN:
                 launchNotificationScreen();
@@ -141,10 +146,11 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                     launchRequestFriendScreen(bundle.getString("name"), bundle.getString("image"));
                 break;
             case AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN:
-                if (bundle != null)
-                    launchChatScreen(bundle.getString("owner_displayname"), true);
+                launchChatScreen();
+
                 break;
             case AppConstants.LAUNCH_PROFILE_SCREEN:
+
                 if (bundle != null)
                     launchProfileScreen(bundle.getString("uid"), bundle.getString("userImg"));
                 break;
@@ -161,10 +167,12 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     @Override
     public void onBackPressed() {
 
-
         if (mDisplayedFragment instanceof FeedFragment && mDisplayedFragment.isVisible()) {
 
           //  this.getSupportFragmentManager().beginTransaction().remove(new FeedFragment()).commit();
+            /*super.onBackPressed();
+            updateToolbar(true, false, true, false, true, true, false, "");
+            mDisplayedFragment = Utils.getCurrVisibleFragment(this);*/
 
             this.finishActivity(Activity.RESULT_OK);
         }
@@ -177,23 +185,28 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
+        Log.d(TAG, "onclick detected. mPosition is " + mPosition);
         mDisplayedFragment = Utils.getCurrVisibleFragment(this);
 //        if(mDisplayedFragment==null)
         switch (view.getId()) {
 
+
             case R.id.toolbar_chat_img:
+                Log.d(TAG, "toolbar chat image has been clicked. mPosition is " + mPosition);
+
                 if (mPosition == 0) {
-                    perform(AppConstants.LAUNCH_CHAT_SCREEN, null);
+                    perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, null);
                 } else if (mPosition == 1) {
-                    perform(AppConstants.LAUNCH_CHAT_SCREEN, null);
+                    perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, null);
                 } else if (mPosition == 2) {
-                    perform(AppConstants.LAUNCH_CHAT_SCREEN, null);
+                    perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, null);
                 } else if (mPosition == 3) {
-                    perform(AppConstants.LAUNCH_CHAT_SCREEN, null);
+                    perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, null);
                 }
                 break;
             case R.id.toolbar_notification_img:
-                if (mPosition == 0) {
+                Log.d(TAG, "toolbar notification image has been clicked");
+                /*if (mPosition == 0) {
                     perform(AppConstants.LAUNCH_NOTIFICATION_SCREEN, null);
                 } else if (mPosition == 1) {
                     perform(AppConstants.LAUNCH_NOTIFICATION_SCREEN, null);
@@ -201,9 +214,10 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                     perform(AppConstants.LAUNCH_NOTIFICATION_SCREEN, null);
                 } else if (mPosition == 3) {
                     perform(AppConstants.LAUNCH_NOTIFICATION_SCREEN, null);
-                }
+                }*/
                 break;
             case R.id.toolbar_post_img:
+                Log.d(TAG, "toolbar post image has been clicked");
                 if (mPosition == 0) {
                     perform(AppConstants.LAUNCH_POST_SCREEN, null);
                 } else if (mPosition == 1) {
@@ -216,7 +230,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
                 break;
             case R.id.toolbar_search_img:
-                visibleTextView();
+                Log.d(TAG, "toolbar search image has been clicked");
+                //visibleTextView();
                 break;
         }
     }
@@ -236,7 +251,6 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         launchChatListScreen();
     }
 
-
     public void callSerachFriendApi()
     {
 
@@ -254,6 +268,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
             mChat.setImageResource(R.drawable.chat);
             mCamera.setImageResource(R.drawable.camera);
         } else if (mPosition == 1) {
+
           //  mRetakeBtn.setVisibility(View.GONE);
          //   mPostBtn.setVisibility(View.GONE);
             mCamera.setVisibility(View.VISIBLE);
@@ -282,8 +297,16 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
             mChat.setImageResource(R.drawable.icon_camera);
             mCamera.setImageResource(R.drawable.icon_feed);
 
+
         }
     }
 
+    public void hideToolbar(){
+        mHeld_toolbar.setVisibility(View.GONE);
+    }
+
+    public void showToolbar(){
+        mHeld_toolbar.setVisibility(View.VISIBLE);
+    }
 
 }

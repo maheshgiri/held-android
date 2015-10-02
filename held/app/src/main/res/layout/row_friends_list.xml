@@ -21,14 +21,14 @@
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/FRIEND_profile_pic">
 
-        <com.held.customview.CustomTextView
+        <TextView
             android:id="@+id/FRIEND_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#ffffff"
             android:textSize="18sp" />
 
-        <com.held.customview.CustomTextView
+        <TextView
             android:id="@+id/FRIEND_time_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
             android:textColor="#ffffff"
             android:textSize="18sp" />
 
-        <com.held.customview.CustomTextView
+        <TextView
             android:id="@+id/FRIEND_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,12 +50,11 @@
     </RelativeLayout>
 
 
-    <com.held.customview.CustomButton
+    <Button
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/button_background"
         android:text="21"
         android:textColor="#000000"
         android:visibility="gone" />

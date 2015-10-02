@@ -51,7 +51,7 @@ import retrofit.mime.TypedFile;
 public interface HeldAPI {
 
     String CREATE_USER = "/registrations/";
-    String RESEND_SMS = "/registrations/sms";
+    String RESEND_SMS = "/registrations/{registration_id}/sms";
     String VOICE_CALL = "/registrations/{registration_id}/call";
     String LOGIN_USER = "/sessions/";
     String VERIFY = "/registrations/{registration_id}";
@@ -59,11 +59,11 @@ public interface HeldAPI {
     @POST(CREATE_USER)
     void createUser(@Query("name") String name,@Query("phone") String phoneNo, @Body()String empty, Callback<CreateUserResponse> createUserResponseCallback);
 
-    @POST(RESEND_SMS)
-    void resendSms(@Query("phone") String phone,@Body()String body, Callback<CreateUserResponse> createUserResponseCallback);
+    @GET(RESEND_SMS)
+    void resendSms(@Header("Authorization")String auth, @Path("registration_id") String RegId, Callback<CreateUserResponse> createUserResponseCallback);
 
     @GET(VOICE_CALL)
-    void voiceCall(@Header("Authorization")String auth,@Path("registration_id") String RegId, Callback<VoiceCallResponse> voiceCallResponseCallback);
+    void voiceCall(@Header("Authorization")String auth, @Path("registration_id") String RegId, Callback<VoiceCallResponse> voiceCallResponseCallback);
 
     @POST(LOGIN_USER)
     void loginUser(@Query("phone") String phoneNo, @Query("pin") String pin,@Body()String empty, Callback<LoginUserResponse> loginUserResponseCallback);
@@ -115,6 +115,10 @@ public interface HeldAPI {
     @GET("/friendshiprequests/")
     void getFriendRequests(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<FriendRequestResponse> friendRequestResponseCallback);
 
+    @GET("/friends/")
+    void getFriendsList(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<FriendsResponse> friendsResponseCallback);
+
+
     ///////////////////************OLD APIs**************///////////////////////////////
     @GET("/downloadrequests/")
     void getDownLoadRequestList(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<DownloadRequestListResponse> downloadRequestListResponseCallback);
@@ -132,10 +136,6 @@ public interface HeldAPI {
 
     @GET("/posts/")
     void feedPost(@Header("X-HELD-TOKEN") String token, Callback<FeedResponse> feedResponseCallback);
-
-    @GET("/friends")
-    void getFriends(@Header("X-HELD-TOKEN") String token, Callback<FriendsResponse> friendsResponseCallback);
-
 
 
     @GET("/friends/declined")
@@ -173,8 +173,6 @@ public interface HeldAPI {
     @GET("/friends/messages")
     void getFriendChat(@Header("X-HELD-TOKEN") String token, @Query("friend") String friendId, Callback<PostChatResponse> postChatResponseCallback);
 
-    @GET("/friends/")
-    void getFriendsList(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, Callback<FriendRequestResponse> friendRequestResponseCallback);
 
 
 

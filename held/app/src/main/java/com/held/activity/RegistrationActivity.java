@@ -45,6 +45,7 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
 private TextView mPolicy;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "starting Registration activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         mUserNameEdt = (EditText) findViewById(R.id.REG_user_name_edt);
@@ -142,7 +143,6 @@ private TextView mPolicy;
                 mAccessToken=createUserResponse.getAccessToken();
                 PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), mAccessToken);
                 Log.i("RegistrationActivity", "Profile PIN" + createUserResponse.toString());
-                UiUtils.showToast("PIN: " + mPin);
                 launchVerificationActivity();
             }
 

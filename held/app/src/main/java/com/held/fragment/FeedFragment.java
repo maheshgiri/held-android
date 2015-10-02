@@ -102,7 +102,7 @@ public class FeedFragment extends ParentFragment {
 //                return mGestureDetector.onTouchEvent(motionEvent);
 //            }
 //        });
-        UiUtils.hideSystemUI(this.getView());
+
         if (getCurrActivity().getNetworkStatus()) {
 //            DialogUtils.showProgressBar();
             callFeedApi();
@@ -183,7 +183,6 @@ public class FeedFragment extends ParentFragment {
     }
 
 
-
     public void showFullImg(String url) {
 
         getCurrActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -196,7 +195,7 @@ public class FeedFragment extends ParentFragment {
         mFeedRecyclerView.setEnabled(false);
         mSwipeRefreshLayout.setEnabled(false);
         UiUtils.hideSystemUI(this.getView());
-
+        ((FeedActivity)getCurrActivity()).hideToolbar();
 
     }
 

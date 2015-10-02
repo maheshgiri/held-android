@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -48,21 +47,22 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
     private String mPhoneNo, mUserName, mPin;
     private String mRegId,mAuth,mSessonToken,mNewRegId;
     private ImageView mback;
-    private PreferenceHelper mPrefernce;
+    private PreferenceHelper mPreference;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.i("Activity", "VerificationActivity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        Log.i("Activity", "VeificationActivity");
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         if (getIntent().getExtras() != null) {
             mUserName = getIntent().getExtras().getString("username");
             mPhoneNo = getIntent().getExtras().getString("phoneno");
             mRegId=getIntent().getExtras().getString("regId");
             mAuth=getIntent().getExtras().getString("accessToken");
-            mPin=getIntent().getExtras().getString("pin");
+          //  mPin=getIntent().getExtras().getInt("pin");
         }
 
         mFirstEdt = (EditText) findViewById(R.id.VERIFICATION_code_one);
@@ -80,6 +80,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         mPhoneTxt.setText(""+ mPhoneNo);
         Context ctx = getApplicationContext();
         if (ctx != null) {
+            // todo: user custom text view instead
             Typeface type = Typeface.createFromAsset(ctx.getAssets(),
                     "BentonSansBook.otf");
             mUserNameTxt.setTypeface(type);
@@ -101,9 +102,9 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         mback.setOnClickListener(this);
         mNetWorkStatus = NetworkUtil.isInternetConnected(getApplicationContext());
         NetworkStateReceiver.registerOnNetworkChangeListener(this);
-        mPrefernce=PreferenceHelper.getInstance(this);
+        mPreference =PreferenceHelper.getInstance(this);
 
-
+        callResendSmsApi();
 
 
         mFirstEdt.addTextChangedListener(new TextWatcher() {
@@ -203,12 +204,12 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         HeldService.getService().verifyUser(mAuth,mRegId, mPin,"", new Callback<VerificationResponse>() {
                     @Override
                     public void success(VerificationResponse verificationResponse, Response response) {
-                        mPrefernce.writePreference(getString(R.string.API_pin),mPin);
+                        mPreference.writePreference(getString(R.string.API_pin), mPin);
                         //PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_registration_key), Integer.parseInt(m));
                         Log.i("VerificationActivity","Writting pin and phone no ");
 
-                        mPrefernce.writePreference(getString(R.string.API_phone_no), verificationResponse.getPhone());
-                        mPrefernce.writePreference(getString(R.string.API_user_name),verificationResponse.getDisplayName());
+                        mPreference.writePreference(getString(R.string.API_phone_no), verificationResponse.getPhone());
+                        mPreference.writePreference(getString(R.string.API_user_name), verificationResponse.getDisplayName());
 
                         DialogUtils.showProgressBar();
                         callLoginUserApi();
@@ -269,8 +270,8 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
             public void success(LoginUserResponse loginUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
 
-                mPrefernce.writePreference(getString(R.string.API_session_token), loginUserResponse.getSessionToken());
-                mPrefernce.writePreference(getString(R.string.API_user_regId), loginUserResponse.getUser().getRid());
+                mPreference.writePreference(getString(R.string.API_session_token), loginUserResponse.getSessionToken());
+                mPreference.writePreference(getString(R.string.API_user_regId), loginUserResponse.getUser().getRid());
 
                 launchComposeScreen();
                /* if (loginUserResponse.isLogin()) {
@@ -340,24 +341,24 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
     }
 
     private void callVoiceCallApi() {
-        HeldService.getService().voiceCall(mPrefernce.readPreference(getString(R.string.API_session_token)),mPrefernce.readPreference(getString(R.string.API_user_regId)),
-                 new Callback<VoiceCallResponse>() {
-            @Override
-            public void success(VoiceCallResponse voiceCallResponse, Response response) {
-                DialogUtils.stopProgressDialog();
-                Log.d(TAG, "Voice Call Success");
-            }
+        HeldService.getService().voiceCall(mPreference.readPreference(getString(R.string.API_session_token)), mPreference.readPreference(getString(R.string.API_user_regId)),
+                new Callback<VoiceCallResponse>() {
+                    @Override
+                    public void success(VoiceCallResponse voiceCallResponse, Response response) {
+                        DialogUtils.stopProgressDialog();
+                        Log.d(TAG, "Voice Call Success");
+                    }
 
-            @Override
-            public void failure(RetrofitError error) {
-                DialogUtils.stopProgressDialog();
-                if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
-                    String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
-                    UiUtils.showSnackbarToast(findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
-                } else
-                    UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Some Problem Occurred");
-            }
-        });
+                    @Override
+                    public void failure(RetrofitError error) {
+                        DialogUtils.stopProgressDialog();
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Some Problem Occurred");
+                    }
+                });
     }
 
     private boolean validatePhoneNo() {
@@ -367,12 +368,12 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
     }
 
     private void callResendSmsApi() {
-        HeldService.getService().resendSms(mPrefernce.readPreference(getString(R.string.API_phone_no)),"",
+        HeldService.getService().resendSms( mAuth, mRegId,
                 new Callback<CreateUserResponse>() {
             @Override
             public void success(CreateUserResponse createUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
-                mPrefernce.writePreference(getString(R.string.API_pin), createUserResponse.getPin());
+               // mPreference.writePreference(getString(R.string.API_pin), createUserResponse.getPin());
             }
 
             @Override

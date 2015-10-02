@@ -1,6 +1,6 @@
 package com.held.activity;
 
-
+import android.util.Log;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,6 +24,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
     private Button mRetakeBtn, mPostBtn;
     private TextView mUsername;
     private static ChatActivity activity;
+    private final String TAG = "ChatActivity";
 
     public static ChatActivity getInstance() {
         return activity;
@@ -31,6 +32,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "starting Chat activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         activity = this;
@@ -48,8 +50,12 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
 //        mRetakeBtn.setOnClickListener(this);
   //      mPostBtn.setOnClickListener(this);
         if (getIntent().getExtras() != null) {
-            launchChatScreen(getIntent().getExtras().getString("id"), getIntent().getExtras().getBoolean("isOneToOne"));
+
+            String chatid = getIntent().getExtras().getString("id");
+            Boolean isOneToOne = getIntent().getExtras().getBoolean("isOneToOne");
+            launchChatScreen( chatid, isOneToOne);
         } else {
+            Log.d(TAG, "Launching inbox");
             launchInboxPage();
         }
     }
@@ -103,6 +109,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
     @Override
     public void onBackPressed() {
         if (mDisplayFragment instanceof ChatFragment) {
+            Log.d(TAG, "on back pressed. current fragment is chat fragment");
             super.onBackPressed();
             mSearchEdt.setVisibility(View.VISIBLE);
             mUsername.setVisibility(View.INVISIBLE);
@@ -110,6 +117,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
             mChat.setImageResource(R.drawable.icon_chat);
             mDisplayFragment = Utils.getCurrVisibleFragment(this);
         } else {
+            Log.d(TAG, "unknown current fragment");
             super.onBackPressed();
         }
     }
@@ -132,6 +140,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
                 launchNotificationScreen();
                 break;
 
+
             case R.id.toolbar_post_img:
                 launchCreatePostScreen();
                 break;
@@ -140,6 +149,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
                 if (mDisplayFragment instanceof ChatFragment) {
                     onBackPressed();
                 }
+
                 break;
         }
     }

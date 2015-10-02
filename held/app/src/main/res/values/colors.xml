@@ -11,7 +11,7 @@
     <color name="selected_tab_color">#4c4d4b</color>
     <color name="unselected_tab_txt_color">#898989</color>
 
-    <color name="bg_color" type="color">#ffffff</color>
+    <color name="bg_color">#ffffff</color>
 <color name="new_btn_color">#00c6ae</color>
 
     <color name="white">#ffffff</color>
