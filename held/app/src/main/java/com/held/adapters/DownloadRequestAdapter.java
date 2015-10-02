@@ -119,13 +119,14 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void callDeclineDownloadApi(String requestId,String post_id) {
+    private void callDeclineDownloadApi(final String requestId, final String post_id) {
         HeldService.getService().declineDownloadRequest(mPreference.readPreference(mActivity.getString(R.string.API_session_token)),
                 post_id,requestId,"true","","", new Callback<DeclineDownloadResponse>() {
             @Override
             public void success(DeclineDownloadResponse declineDownloadResponse, Response response) {
                 DialogUtils.stopProgressDialog();
 
+                callDeclineDownloadApi(requestId,post_id);
             }
 
             @Override
@@ -142,26 +143,45 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
 
     private void callApproveDownloadApi(String requestId,String post_id) {
         HeldService.getService().approveDownloadRequest(mPreference.readPreference(mActivity.getString(R.string.API_session_token)),
-                post_id,requestId,"","true","", new Callback<ApproveDownloadResponse>() {
-            @Override
-            public void success(ApproveDownloadResponse approveDownloadResponse, Response response) {
-                DialogUtils.stopProgressDialog();
-                mDownloadRequestList.clear();
-               // long start = System.currentTimeMillis();
-                mDownloadRequestFragment.callDownloadRequestListApi();
-            }
+                post_id, requestId, "", "true", "", new Callback<ApproveDownloadResponse>() {
+                    @Override
+                    public void success(ApproveDownloadResponse approveDownloadResponse, Response response) {
+                        DialogUtils.stopProgressDialog();
+                        mDownloadRequestList.clear();
+                        // long start = System.currentTimeMillis();
+                        mDownloadRequestFragment.callDownloadRequestListApi();
+                    }
 
-            @Override
-            public void failure(RetrofitError error) {
-                DialogUtils.stopProgressDialog();
-                if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
-                    String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
-                    UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
-                } else
-                    UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "Some Problem Occurred");
-            }
-        });
+                    @Override
+                    public void failure(RetrofitError error) {
+                        DialogUtils.stopProgressDialog();
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "Some Problem Occurred");
+                    }
+                });
     }
+
+
+    void callDeleteDownloadReqApi(String requestId,String post_id){
+        HeldService.getService().deleteDownloadRequest(mPreference.readPreference(mActivity.getString(R.string.API_session_token)),
+                post_id, requestId, new Callback<DeclineDownloadResponse>() {
+                    @Override
+                    public void success(DeclineDownloadResponse declineDownloadResponse, Response response) {
+                        mDownloadRequestList.clear();
+                        mDownloadRequestFragment.callDownloadRequestListApi();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+
+    }
+
 
     @Override
     public int getItemCount() {

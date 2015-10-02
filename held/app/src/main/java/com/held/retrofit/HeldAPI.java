@@ -34,6 +34,7 @@ import com.held.retrofit.response.VoiceCallResponse;
 
 import retrofit.Callback;
 import retrofit.http.Body;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Multipart;
@@ -124,6 +125,8 @@ public interface HeldAPI {
     @PUT("/posts/{post_id}/downloadrequests/{request_id}")
     void approveDownloadRequest(@Header("Authorization") String token,@Path("post_id")String postId,@Path("request_id")String rid, @Query("decline") String decline,@Query("approve") String approve,@Body()String body, Callback<ApproveDownloadResponse> approveDownloadResponseCallback);
 
+    @DELETE("/posts/{post_id}/downloadrequests/{request_id}")
+    void deleteDownloadRequest(@Header("Authorization") String token,@Path("post_id")String postId,@Path("request_id")String rid,Callback<DeclineDownloadResponse> DeclineResponseCallback);
 
 
 
