@@ -3,24 +3,16 @@ package com.held.retrofit.response;
 
 public class PostChatData {
 
-    private String date;
-    private String owner_display_name;
     private String tag;
-    private String rid;
-    private String message;
-    private String owner_pic;
+    private String text;
+    private User toUser,fromUser;
+    private String date,rid;
 
-    public String getOwner_pic() {
-        return owner_pic;
-    }
 
     public String getDate() {
         return date;
     }
 
-    public String getOwner_display_name() {
-        return owner_display_name;
-    }
 
     public String getTag() {
         return tag;
@@ -30,7 +22,15 @@ public class PostChatData {
         return rid;
     }
 
-    public String getMessage() {
-        return message;
+    public String getText() {
+        return text;
+    }
+
+    public User getFromUser() {
+        return fromUser;
+    }
+
+    public User getToUser() {
+        return toUser;
     }
 }

@@ -3,6 +3,7 @@ package com.held.adapters;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,13 +30,13 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
 
-    private ParentActivity mActivity;
+    private ChatActivity mActivity;
     private List<FriendData> mFriendList;
     private boolean mIsLastPage;
-    private String mOwnerDisplayName;
+    public String mUserId;
     private GestureDetector mPersonalGestureDetector;
 
-    public FriendsAdapter(ParentActivity activity, List<FriendData> friendList, boolean isLastPage) {
+    public FriendsAdapter(ChatActivity activity, List<FriendData> friendList, boolean isLastPage) {
         mActivity = activity;
         mFriendList = friendList;
         mIsLastPage = isLastPage;
@@ -61,7 +62,8 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             FriendViewHolder viewHolder = (FriendViewHolder) holder;
             String picUrl = AppConstants.BASE_URL + friend.getProfilePic();
             Picasso.with(mActivity).load(picUrl).into(viewHolder.mProfilePic);
-
+            mUserId = friend.getToUser().getRid();
+            Log.i("@@ Friends Adapter @@","get Friend Id :"+mUserId);
             viewHolder.mUserName.setText(friend.getDisplayName());
 
             //String date[] = friend.getJoinDate().split(" ");
@@ -70,7 +72,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             viewHolder.mProfilePic.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    mOwnerDisplayName = friend.getDisplayName();
+                  //  mUserId = friend.getToUser().getRid();
                     return mPersonalGestureDetector.onTouchEvent(motionEvent);
                 }
             });
@@ -140,9 +142,10 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             Bundle bundle = new Bundle();
-            bundle.putString("owner_displayname", mOwnerDisplayName);
+            bundle.putString("user_id", mUserId);
             mActivity.perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, bundle);
             return true;
         }
+
     }
 }

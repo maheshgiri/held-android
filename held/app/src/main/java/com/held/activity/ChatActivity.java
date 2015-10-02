@@ -39,7 +39,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         mChat = (ImageView) findViewById(R.id.toolbar_chat_img);
         mCamera = (ImageView) findViewById(R.id.toolbar_post_img);
         mNotification = (ImageView) findViewById(R.id.toolbar_notification_img);
-      //  mSearchEdt = (EditText) findViewById(R.id.TOOLBAR_search_edt);
+        mSearchEdt = (EditText) findViewById(R.id.toolbar_search_edt_txt);
      //   mRetakeBtn = (Button) findViewById(R.id.TOOLBAR_retake_btn);
      //   mPostBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
        // mUsername = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
@@ -73,14 +73,14 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         updateToolbar(true, false, true, false, true, true, false, "");
 
         mSearchEdt.setVisibility(View.INVISIBLE);
-        mUsername.setVisibility(View.VISIBLE);
+       // mUsername.setVisibility(View.VISIBLE);
         mChat.setImageResource(R.drawable.back);
         mCamera.setImageResource(R.drawable.icon_menu);
-        if (!isOneToOne) {
+      /*  if (!isOneToOne) {
             mUsername.setText("Held");
         } else {
             mUsername.setText("@" + id);
-        }
+        }*/
 
         addFragment(ChatFragment.newInstance(id, isOneToOne), ChatFragment.TAG);
         mDisplayFragment = ChatFragment.newInstance(id, isOneToOne);
@@ -90,14 +90,14 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         updateToolbar(true, false, true, false, true, true, false, "");
 
         mSearchEdt.setVisibility(View.INVISIBLE);
-        mUsername.setVisibility(View.VISIBLE);
+       // mUsername.setVisibility(View.VISIBLE);
         mCamera.setImageResource(R.drawable.icon_menu);
         mChat.setImageResource(R.drawable.back);
-        if (!isOneToOne) {
+       /* if (!isOneToOne) {
             mUsername.setText("Held");
         } else {
             mUsername.setText("@" + id);
-        }
+        }*/
         addFragment(ChatFragment.newInstance(id, isOneToOne), ChatFragment.TAG, true);
         mDisplayFragment = ChatFragment.newInstance(id, isOneToOne);
     }
@@ -112,7 +112,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
             Log.d(TAG, "on back pressed. current fragment is chat fragment");
             super.onBackPressed();
             mSearchEdt.setVisibility(View.VISIBLE);
-            mUsername.setVisibility(View.INVISIBLE);
+//            mUsername.setVisibility(View.INVISIBLE);
             mCamera.setImageResource(R.drawable.icon_feed);
             mChat.setImageResource(R.drawable.icon_chat);
             mDisplayFragment = Utils.getCurrVisibleFragment(this);
@@ -128,7 +128,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         switch (id) {
             case AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN:
                 if (bundle != null)
-                    launchChatScreenFromInbox(bundle.getString("owner_displayname"), true);
+                    launchChatScreenFromInbox(bundle.getString("user_id"),true);
                 break;
         }
     }

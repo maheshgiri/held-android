@@ -22,4 +22,7 @@ public class FriendData {
         return toUser.getJoinDate();
     }
 
+    public User getToUser() {
+        return toUser;
+    }
 }

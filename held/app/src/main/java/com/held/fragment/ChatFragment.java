@@ -57,15 +57,20 @@ public class ChatFragment extends ParentFragment {
     private boolean mIsOneToOne;
     private String mId, mFriendId;
     private BroadcastReceiver broadcastReceiver;
+    private PreferenceHelper mPreference;
+    private int mLimit = 5;
+    private long mStart = System.currentTimeMillis();
 
     public static ChatFragment newInstance(String id, boolean isOneToOne) {
 
         ChatFragment chatFragment = new ChatFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("id", id);
+        bundle.putString("user_id", id);
         bundle.putBoolean("isOneToOne", isOneToOne);
         chatFragment.setArguments(bundle);
+
         return chatFragment;
+
     }
 
     @Nullable
@@ -122,30 +127,32 @@ public class ChatFragment extends ParentFragment {
         mIsOneToOne = getArguments().getBoolean("isOneToOne");
         mDownLoad = (ImageView) view.findViewById(R.id.CHAT_download);
         mDownLoad.setOnClickListener(this);
-        mId = getArguments().getString("id");
-
+        mId = getArguments().getString("user_id");
+        mPreference=PreferenceHelper.getInstance(getCurrActivity());
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                mId = intent.getStringExtra("id");
+                mId = intent.getStringExtra("user_id");
                 mIsOneToOne = intent.getBooleanExtra("isOneToOne", false);
-                if (mIsOneToOne) {
+                callFriendsChatsApi();
+             /*   if (mIsOneToOne) {
                     mDownLoad.setVisibility(View.GONE);
                     callUserSearchApi();
                 } else {
                     if (isAdded())
                         callPostChatApi();
-                }
+                }*/
             }
         };
 
-        if (mIsOneToOne) {
+      /*  if (mIsOneToOne) {
             mDownLoad.setVisibility(View.GONE);
             callUserSearchApi();
         } else {
             if (isAdded())
                 callPostChatApi();
-        }
+        }*/
+
     }
 
     public void onDataReceived(String id, boolean isOneToOne) {
@@ -162,7 +169,7 @@ public class ChatFragment extends ParentFragment {
 
     private void callUserSearchApi() {
         HeldService.getService().searchUser(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                getArguments().getString("id"), new Callback<SearchUserResponse>() {
+                getArguments().getString("user_id"), new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
 //                        DialogUtils.stopProgressDialog();
@@ -185,12 +192,14 @@ public class ChatFragment extends ParentFragment {
     }
 
     private void callFriendChatApi() {
-        HeldService.getService().friendChat(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                mFriendId, mMessageEdt.getText().toString().trim(), new Callback<PostMessageResponse>() {
+        HeldService.getService().friendChat(mPreference.readPreference(getString(R.string.API_session_token)),
+                mId, mMessageEdt.getText().toString().trim(),"", new Callback<PostMessageResponse>() {
                     @Override
                     public void success(PostMessageResponse postMessageResponse, Response response) {
-                        mMessageEdt.setText("");
+                        //mChatAdapter.setPostChats(postChatResponse.getObjects());
                         callFriendsChatsApi();
+                        mMessageEdt.setText("");
+
                     }
 
                     @Override
@@ -206,8 +215,9 @@ public class ChatFragment extends ParentFragment {
     }
 
     private void callFriendsChatsApi() {
-        HeldService.getService().getFriendChat(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                mFriendId, new Callback<PostChatResponse>() {
+
+        HeldService.getService().getFriendChat(mPreference.readPreference(getString(R.string.API_session_token)),
+                mId, mStart,mLimit,new Callback<PostChatResponse>() {
                     @Override
                     public void success(PostChatResponse postChatResponse, Response response) {
                         mChatAdapter.setPostChats(postChatResponse.getObjects());
@@ -278,7 +288,7 @@ public class ChatFragment extends ParentFragment {
 
     private void callDownloadRequestApi() {
         HeldService.getService().requestDownLoadPost(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                getArguments().getString("id"), new Callback<DownloadRequestData>() {
+                getArguments().getString("user_id"), new Callback<DownloadRequestData>() {
                     @Override
                     public void success(DownloadRequestData downloadRequestData, Response response) {
                         DialogUtils.stopProgressDialog();
@@ -299,7 +309,7 @@ public class ChatFragment extends ParentFragment {
 
     private void callChatPostApi() {
         HeldService.getService().postChat(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                getArguments().getString("id"), mMessageEdt.getText().toString().trim(), new Callback<PostMessageResponse>() {
+                getArguments().getString("user_id"), mMessageEdt.getText().toString().trim(), new Callback<PostMessageResponse>() {
                     @Override
                     public void success(PostMessageResponse postMessageResponse, Response response) {
                         mMessageEdt.setText("");

@@ -63,7 +63,7 @@ public class FriendsListFragment extends ParentFragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.FRIENDLIST_recycler_view);
         mLayoutManager = new LinearLayoutManager(getCurrActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mFriendAdapter = new FriendsAdapter(getCurrActivity(), mFriendList, mIsLastPage);
+        mFriendAdapter = new FriendsAdapter((ChatActivity) getCurrActivity(), mFriendList, mIsLastPage);
         mRecyclerView.setAdapter(mFriendAdapter);
 
         mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());

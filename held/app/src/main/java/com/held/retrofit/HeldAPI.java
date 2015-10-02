@@ -118,8 +118,6 @@ public interface HeldAPI {
     @GET("/friends/")
     void getFriendsList(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<FriendsResponse> friendsResponseCallback);
 
-
-    ///////////////////************OLD APIs**************///////////////////////////////
     @GET("/downloadrequests/")
     void getDownLoadRequestList(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<DownloadRequestListResponse> downloadRequestListResponseCallback);
 
@@ -132,6 +130,16 @@ public interface HeldAPI {
     @DELETE("/posts/{post_id}/downloadrequests/{request_id}")
     void deleteDownloadRequest(@Header("Authorization") String token,@Path("post_id")String postId,@Path("request_id")String rid,Callback<DeclineDownloadResponse> DeclineResponseCallback);
 
+    @POST("/users/{user_id}/messages/")
+    void friendChat(@Header("Authorization") String token, @Path("user_id") String userId, @Query("text") String message,@Body()String body, Callback<PostMessageResponse> postMessageResponseCallback);
+
+    @GET("/users/{user_id}/messages/")
+    void getFriendChat(@Header("Authorization") String token, @Path("user_id") String userId, @Query("start") long start, @Query("limit") int limit, Callback<PostChatResponse> postChatResponseCallback);
+
+
+
+
+    ///////////////////************OLD APIs**************///////////////////////////////
 
 
     @GET("/posts/")
@@ -167,11 +175,7 @@ public interface HeldAPI {
 
 
 
-    @GET("/friends/message")
-    void friendChat(@Header("X-HELD-TOKEN") String token, @Query("friend") String friendId, @Query("message") String message, Callback<PostMessageResponse> postMessageResponseCallback);
 
-    @GET("/friends/messages")
-    void getFriendChat(@Header("X-HELD-TOKEN") String token, @Query("friend") String friendId, Callback<PostChatResponse> postChatResponseCallback);
 
 
 
