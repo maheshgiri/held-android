@@ -20,6 +20,7 @@ import com.held.retrofit.response.FriendsResponse;
 import com.held.retrofit.response.HoldResponse;
 import com.held.retrofit.response.LoginUserResponse;
 import com.held.retrofit.response.LogoutUserResponse;
+import com.held.retrofit.response.Objects;
 import com.held.retrofit.response.PostChatResponse;
 import com.held.retrofit.response.PostMessageResponse;
 import com.held.retrofit.response.PostResponse;
@@ -87,7 +88,7 @@ public interface HeldAPI {
 
 
     @PUT("/posts/{post_id}/holds/{hold_id}")
-    void releasePost(@Header("Authorization") String token,@Path("hold_id") String postId,@Query("start_time") String start_tm,@Query("end_time") String end_tm,@Body()String empty, Callback<ReleaseResponse> releaseResponseCallback);
+    void releasePost(@Header("Authorization") String token,@Path("post_id") String postId,@Path("hold_id") String holdId,@Query("start_time") String start_tm,@Query("end_time") String end_tm,@Body()String empty, Callback<ReleaseResponse> releaseResponseCallback);
 
     @POST("/posts/{post_id}/holds/")
     void holdPost(@Header("Authorization") String token,@Path("post_id") String postId,@Query("start_time") String start_tm, @Body()String empty,Callback<HoldResponse> holdResponseCallback);
@@ -104,7 +105,7 @@ public interface HeldAPI {
 
 
    @GET("/users/")
-   void searchFriend(@Header("Authorization") String token,@Query("name") String frndName,Callback<User> friendSearchResult);
+   void searchFriend(@Header("Authorization") String token,@Query("name") String frndName,Callback<Objects> friendSearchResult);
 
     @PUT("/friendshiprequests/{request_id}")
     void declineFriend(@Header("Authorization") String token,@Path("request_id")String rid, @Query("decline") String decline,@Query("approve") String approve,@Body()String body ,Callback<DeclineFriendResponse> declineFriendResponseCallback);
@@ -141,6 +142,10 @@ public interface HeldAPI {
 
     ///////////////////************OLD APIs**************///////////////////////////////
 
+    @GET("/posts/{post_id}/holds/{hold_id}")
+    void getHold(@Header("Authorization") String token, @Path("post_id") String postId,@Path("hold_id") String holdId,Callback<HoldResponse> getHoldResponce);
+
+
 
     @GET("/posts/")
     void feedPost(@Header("X-HELD-TOKEN") String token, Callback<FeedResponse> feedResponseCallback);
@@ -172,7 +177,6 @@ public interface HeldAPI {
 
     @GET("/posts/message")
     void postChat(@Header("X-HELD-TOKEN") String token, @Query("post") String postId, @Query("message") String message, Callback<PostMessageResponse> postMessageResponseCallback);
-
 
 
 

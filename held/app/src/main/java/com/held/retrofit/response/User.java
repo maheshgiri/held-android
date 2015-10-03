@@ -34,4 +34,12 @@ public class User {
 
         public String getRid(){return rid;}
 
+        public void setDisplayName(String displayName) {
+                this.displayName = displayName;
+        }
+
+        public void setProfilePic(String profilePic) {
+                this.profilePic = profilePic;
+        }
+
 }
