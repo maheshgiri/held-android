@@ -9,6 +9,9 @@ import com.held.activity.ParentActivity;
 import com.held.activity.R;
 import com.held.fragment.ParentFragment;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by jay on 1/8/15.
  */
@@ -36,6 +39,23 @@ public class Utils {
             return (ParentFragment) activity.getSupportFragmentManager().findFragmentById(R.id.frag_container);
         }
         return null;
+    }
+
+    // Takes a timestamp string and converts it to a human readable 12 hour time string (timeonly. no date)
+    public static String convertDate(String stamp){
+        long ts = Long.valueOf(stamp);
+        Date date = new Date(ts);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        String suffix = "AM";
+        if(hour > 12){
+            hour = hour - 12;
+            suffix = "PM";
+        }
+        int minutes = cal.get(Calendar.MINUTE);
+        String converted = "" + hour + "." + minutes + " " + suffix;
+        return converted;
     }
 
 }

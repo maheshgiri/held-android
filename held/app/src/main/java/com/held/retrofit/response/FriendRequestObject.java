@@ -3,7 +3,7 @@ package com.held.retrofit.response;
 /**
  * Created by MAHESH on 9/29/2015.
  */
-public class Objects {
+public class FriendRequestObject {
 
 
     User fromUser;

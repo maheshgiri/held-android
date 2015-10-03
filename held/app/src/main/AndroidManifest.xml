@@ -43,6 +43,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
+            android:name=".InboxActivity"
+            android:configChanges="fontScale"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
             android:name=".ChatActivity"
             android:configChanges="fontScale"
             android:screenOrientation="portrait"

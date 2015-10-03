@@ -12,17 +12,14 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.held.activity.NotificationActivity;
 import com.held.activity.ParentActivity;
 import com.held.activity.R;
 import com.held.fragment.FriendRequestFragment;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.ApproveFriendResponse;
 import com.held.retrofit.response.DeclineFriendResponse;
-import com.held.retrofit.response.Objects;
-import com.held.retrofit.response.SearchUserResponse;
+import com.held.retrofit.response.FriendRequestObject;
 import com.held.retrofit.response.UnDeclineFriendResponse;
-import com.held.retrofit.response.User;
 import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
@@ -42,13 +39,13 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
     private static final int TYPE_FOOTER = 1;
 
     private ParentActivity mActivity;
-    private List<Objects> mFriendRequestList;
+    private List<FriendRequestObject> mFriendRequestList;
     private boolean mIsLastPage;
     private FriendRequestFragment mFriendRequestFragment;
     private PreferenceHelper mPreference;
 
 
-    public FriendRequestAdapter(ParentActivity activity, List<Objects> friendRequestList, boolean isLastPage, FriendRequestFragment friendRequestFragment) {
+    public FriendRequestAdapter(ParentActivity activity, List<FriendRequestObject> friendRequestList, boolean isLastPage, FriendRequestFragment friendRequestFragment) {
         mActivity = activity;
         mFriendRequestList = friendRequestList;
         mIsLastPage = isLastPage;
@@ -203,7 +200,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
         return mFriendRequestList.size() == position ? TYPE_FOOTER : TYPE_ITEM;
     }
 
-    public void setFriendRequestList(List<Objects> friendRequestList, boolean isLastPage) {
+    public void setFriendRequestList(List<FriendRequestObject> friendRequestList, boolean isLastPage) {
         mFriendRequestList = friendRequestList;
         mIsLastPage = isLastPage;
         notifyDataSetChanged();

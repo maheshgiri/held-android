@@ -92,7 +92,7 @@ public class NotificationActivity extends ParentActivity implements View.OnClick
     }
 
     private void launchChatListScreen() {
-        Intent intent = new Intent(NotificationActivity.this, ChatActivity.class);
+        Intent intent = new Intent(NotificationActivity.this, InboxActivity.class);
         startActivity(intent);
     }
 }

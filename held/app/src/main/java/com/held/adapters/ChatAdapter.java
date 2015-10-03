@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.held.activity.ChatActivity;
+import com.held.activity.InboxActivity;
 import com.held.activity.R;
 import com.held.retrofit.response.PostChatData;
 import com.held.retrofit.response.User;
@@ -24,6 +25,8 @@ import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -42,14 +45,19 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public ChatAdapter(ChatActivity activity, List<PostChatData> postChatData) {
         mActivity = activity;
         mPostChatData = postChatData;
+        mPreference = PreferenceHelper.getInstance(mActivity);
     }
+
 
     @Override
     public int getItemViewType(int position) {
+        Timber.d("trying to get view type");
         // Just as an example, return 0 or 2 depending on position
         // Note that unlike in ListView adapters, types don't have to be contiguous
-        return (mPostChatData.get(position).getFromUser().getDisplayName()).
+        int type = (mPostChatData.get(position).getFromUser().getDisplayName()).
                equals(mPreference.readPreference(Utils.getString(R.string.API_user_name))) ? ITEM_RIGHT : ITEM_LEFT;
+        Timber.d("chat id " + position + " is type " + type);
+        return type;
 
     }
 
@@ -60,13 +68,17 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        Timber.d(" creating viewholder ");
         View v;
 //        switch (viewType) {
 //            case 0:
         if (viewType == ITEM_RIGHT) {
+            Timber.d("returning viewholder 0");
             v = LayoutInflater.from(mActivity).inflate(R.layout.layout_chat_right, parent, false);
             return new ViewHolder0(v);
-        } else if(viewType == ITEM_RIGHT) {
+        } else if(viewType == ITEM_LEFT) {
+            Timber.d("returning viewholder 2");
             v = LayoutInflater.from(mActivity).inflate(R.layout.layout_chat_left, parent, false);
             return new ViewHolder2(v);
         }
@@ -76,8 +88,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-
-
+        Timber.d("onBind view holder");
         ///Get Current user
         if(mPreference.readPreference(Utils.getString(R.string.API_user_name)).equals(mPostChatData.get(position).getFromUser().getDisplayName()))
         {
@@ -93,20 +104,21 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
         if (holder instanceof ViewHolder0) {
+            Timber.d("populating viewholder 0");
 
             ViewHolder0 viewHolder0 = (ViewHolder0) holder;
             viewHolder0.mUserNameTxt.setText(currentUser.getDisplayName());
-            String date[] = mPostChatData.get(position).getDate().split(" ");
-            //viewHolder0.mDateTxt.setText(date[3] + " " + date[4]);
-            viewHolder0.mDateTxt.setText(mPostChatData.get(position).getDate());
+            String ts = mPostChatData.get(position).getDate();
+            viewHolder0.mDateTxt.setText(Utils.convertDate(ts));
             viewHolder0.mDesTxt.setText(mPostChatData.get(position).getText());
             Picasso.with(mActivity).load(AppConstants.BASE_URL + currentUser.getProfilePic()).into(viewHolder0.mProfilePic);
         } else if(holder instanceof ViewHolder2) {
+
+
             ViewHolder2 viewHolder = (ViewHolder2) holder;
             viewHolder.mUserNameTxt.setText(friendUser.getDisplayName());
-            String date[] = mPostChatData.get(position).getDate().split(" ");
-            viewHolder.mDateTxt.setText(mPostChatData.get(position).getDate());
-          //  viewHolder.mDateTxt.setText(date[3] + " " + date[4]);
+            String ts = mPostChatData.get(position).getDate();
+            viewHolder.mDateTxt.setText(Utils.convertDate(ts));
             viewHolder.mDesTxt.setText(mPostChatData.get(position).getText());
             Picasso.with(mActivity).load(AppConstants.BASE_URL + friendUser.getProfilePic()).into(viewHolder.mProfilePic);
         }

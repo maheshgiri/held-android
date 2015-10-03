@@ -1,17 +1,10 @@
 package com.held.activity;
 
 import android.util.Log;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.view.GestureDetector;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -23,10 +16,7 @@ import com.held.fragment.ProfileFragment;
 import com.held.fragment.SendFriendRequestFragment;
 import com.held.utils.AppConstants;
 import com.held.utils.PreferenceHelper;
-import com.held.utils.UiUtils;
 import com.held.utils.Utils;
-
-import timber.log.Timber;
 
 public class FeedActivity extends ParentActivity implements View.OnClickListener {
 
@@ -104,14 +94,14 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
     //private void launchChatScreen(String id, boolean isOneToOne) {
     private void launchChatScreen() {
-        Intent intent = new Intent(FeedActivity.this, ChatActivity.class);
+        Intent intent = new Intent(FeedActivity.this, InboxActivity.class);
         //intent.putExtra("id", id);
         //intent.putExtra("isOneToOne", isOneToOne);
         startActivity(intent);
     }
 
     private void launchChatListScreen() {
-        Intent intent = new Intent(FeedActivity.this, ChatActivity.class);
+        Intent intent = new Intent(FeedActivity.this, InboxActivity.class);
         startActivity(intent);
     }
 

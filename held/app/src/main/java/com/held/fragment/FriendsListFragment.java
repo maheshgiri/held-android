@@ -13,14 +13,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import com.held.activity.ChatActivity;
+import com.held.activity.InboxActivity;
 import com.held.activity.R;
 import com.held.adapters.FriendsAdapter;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FriendsResponse;
-import com.held.retrofit.response.Objects;
-import com.held.retrofit.response.SearchUserResponse;
-import com.held.retrofit.response.User;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
@@ -63,7 +60,7 @@ public class FriendsListFragment extends ParentFragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.FRIENDLIST_recycler_view);
         mLayoutManager = new LinearLayoutManager(getCurrActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mFriendAdapter = new FriendsAdapter((ChatActivity) getCurrActivity(), mFriendList, mIsLastPage);
+        mFriendAdapter = new FriendsAdapter((InboxActivity) getCurrActivity(), mFriendList, mIsLastPage);
         mRecyclerView.setAdapter(mFriendAdapter);
 
         mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());
@@ -166,12 +163,12 @@ public class FriendsListFragment extends ParentFragment {
                 // Left swipe
                 if (diff > SWIPE_MIN_DISTANCE
                         && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    ((ChatActivity) getCurrActivity()).onLeftSwipe();
+                    ((InboxActivity) getCurrActivity()).onLeftSwipe();
 
                     // Right swipe
                 } else if (-diff > SWIPE_MIN_DISTANCE
                         && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    ((ChatActivity) getCurrActivity()).onRightSwipe();
+                    ((InboxActivity) getCurrActivity()).onRightSwipe();
                 }
             } catch (Exception e) {
                 Log.e("YourActivity", "Error on gestures");

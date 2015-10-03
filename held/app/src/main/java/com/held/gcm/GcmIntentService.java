@@ -15,7 +15,7 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.held.activity.ChatActivity;
+import com.held.activity.InboxActivity;
 import com.held.activity.FeedActivity;
 import com.held.activity.NotificationActivity;
 import com.held.activity.R;
@@ -106,7 +106,7 @@ public class GcmIntentService extends IntentService {
 
             break;
         case "friend:approve":
-            intent = new Intent(this, ChatActivity.class);
+            intent = new Intent(this, InboxActivity.class);
             sendNotification(intent, title, message);
             break;
         case "friend:message":
@@ -119,7 +119,7 @@ public class GcmIntentService extends IntentService {
                 localBroadcastManager.sendBroadcast(intent);
 
             } else {
-                intent = new Intent(this, ChatActivity.class);
+                intent = new Intent(this, InboxActivity.class);
                 intent.putExtra("id", str[0]);
                 intent.putExtra("isOneToOne", true);
                 sendNotification(intent, title, message);
@@ -149,14 +149,14 @@ public class GcmIntentService extends IntentService {
                 localBroadcastManager.sendBroadcast(intent);
             }
 //                else if (HeldApplication.IS_APP_FOREGROUND) {
-//                    intent = new Intent(this, ChatActivity.class);
+//                    intent = new Intent(this, InboxActivity.class);
 //                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                    intent.putExtra("id", entity);
 //                    intent.putExtra("isOneToOne", false);
 //                    startActivity(intent);
 //                }
             else {
-                intent = new Intent(this, ChatActivity.class);
+                intent = new Intent(this, InboxActivity.class);
                 intent.putExtra("id", entity);
                 intent.putExtra("isOneToOne", false);
                 sendNotification(intent, title, message);

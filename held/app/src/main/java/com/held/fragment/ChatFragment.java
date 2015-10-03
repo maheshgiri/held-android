@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.held.activity.ChatActivity;
+import com.held.activity.InboxActivity;
 import com.held.activity.R;
 import com.held.adapters.ChatAdapter;
 import com.held.customview.SlideInUpAnimator;
@@ -43,6 +44,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import timber.log.Timber;
 
 public class ChatFragment extends ParentFragment {
 
@@ -67,6 +69,7 @@ public class ChatFragment extends ParentFragment {
         Bundle bundle = new Bundle();
         bundle.putString("user_id", id);
         bundle.putBoolean("isOneToOne", isOneToOne);
+        Timber.d("ChatFragment new instance received arguments: user id: " +  id + " isonetoone: " + isOneToOne);
         chatFragment.setArguments(bundle);
 
         return chatFragment;
@@ -76,7 +79,12 @@ public class ChatFragment extends ParentFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        mId = getArguments().getString("user_id");
+        mIsOneToOne = getArguments().getBoolean("isOneToOne", false);
+        Timber.d("ChatFragment new instance received arguments: user id: " +  mId + " isonetoone: " + mIsOneToOne);
         return inflater.inflate(R.layout.fragment_chat, container, false);
+
     }
 
     @Override
@@ -94,6 +102,7 @@ public class ChatFragment extends ParentFragment {
     @Override
     public void onStart() {
         super.onStart();
+        Timber.d("ChatFragment onStart called");
         HeldApplication.IS_CHAT_FOREGROUND = true;
         LocalBroadcastManager.getInstance(getCurrActivity()).registerReceiver((broadcastReceiver),
                 new IntentFilter("CHAT"));
@@ -127,23 +136,8 @@ public class ChatFragment extends ParentFragment {
         mIsOneToOne = getArguments().getBoolean("isOneToOne");
         mDownLoad = (ImageView) view.findViewById(R.id.CHAT_download);
         mDownLoad.setOnClickListener(this);
-        mId = getArguments().getString("user_id");
         mPreference=PreferenceHelper.getInstance(getCurrActivity());
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                mId = intent.getStringExtra("user_id");
-                mIsOneToOne = intent.getBooleanExtra("isOneToOne", false);
-                callFriendsChatsApi();
-             /*   if (mIsOneToOne) {
-                    mDownLoad.setVisibility(View.GONE);
-                    callUserSearchApi();
-                } else {
-                    if (isAdded())
-                        callPostChatApi();
-                }*/
-            }
-        };
+        callFriendsChatsApi();
 
       /*  if (mIsOneToOne) {
             mDownLoad.setVisibility(View.GONE);
@@ -216,10 +210,12 @@ public class ChatFragment extends ParentFragment {
 
     private void callFriendsChatsApi() {
 
+        Timber.d("Calling friends chat api");
         HeldService.getService().getFriendChat(mPreference.readPreference(getString(R.string.API_session_token)),
                 mId, mStart,mLimit,new Callback<PostChatResponse>() {
                     @Override
                     public void success(PostChatResponse postChatResponse, Response response) {
+                        Timber.d("friends chat call success");
                         mChatAdapter.setPostChats(postChatResponse.getObjects());
                     }
 

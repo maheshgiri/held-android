@@ -12,16 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/CHAT_bottom_layout"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp"
+        android:background="@color/bg_color_one"/>
 
-    <ImageView
+    <!-- ImageView
         android:id="@+id/CHAT_download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_margin="10dp"
         android:padding="10dp"
-        android:src="@drawable/icon_download" />
+        android:src="@drawable/icon_download" / -->
 
     <RelativeLayout
         android:id="@+id/CHAT_bottom_layout"
@@ -48,6 +49,8 @@
                 android:maxLength="100"
                 android:textColor="@color/black"
                 android:textSize="13sp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
              />
 
             <Button

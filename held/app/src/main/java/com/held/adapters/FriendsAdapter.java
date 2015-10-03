@@ -11,36 +11,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.held.activity.ChatActivity;
-import com.held.activity.ParentActivity;
+import com.held.activity.InboxActivity;
 import com.held.activity.R;
-import com.held.retrofit.response.Objects;
-import com.held.retrofit.response.SearchUserResponse;
-import com.held.retrofit.response.User;
 import com.held.utils.AppConstants;
+import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import com.held.retrofit.response.FriendData;
+
+import timber.log.Timber;
 
 public class FriendsAdapter extends RecyclerView.Adapter {
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
 
-    private ChatActivity mActivity;
+    private InboxActivity mActivity;
     private List<FriendData> mFriendList;
     private boolean mIsLastPage;
-    public String mUserId;
     private GestureDetector mPersonalGestureDetector;
 
-    public FriendsAdapter(ChatActivity activity, List<FriendData> friendList, boolean isLastPage) {
+    public FriendsAdapter(InboxActivity activity, List<FriendData> friendList, boolean isLastPage) {
         mActivity = activity;
         mFriendList = friendList;
         mIsLastPage = isLastPage;
-        mPersonalGestureDetector = new GestureDetector(mActivity, new PersonalChatListener());
+       // mPersonalGestureDetector = new GestureDetector(mActivity, new PersonalChatListener());
     }
 
     @Override
@@ -62,20 +63,32 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             FriendViewHolder viewHolder = (FriendViewHolder) holder;
             String picUrl = AppConstants.BASE_URL + friend.getProfilePic();
             Picasso.with(mActivity).load(picUrl).into(viewHolder.mProfilePic);
-            mUserId = friend.getToUser().getRid();
-            Log.i("@@ Friends Adapter @@","get Friend Id :"+mUserId);
             viewHolder.mUserName.setText(friend.getDisplayName());
 
-            //String date[] = friend.getJoinDate().split(" ");
-            viewHolder.mTimeTxt.setText(friend.getJoinDate());
-
-            viewHolder.mProfilePic.setOnTouchListener(new View.OnTouchListener() {
+            String ts = friend.getJoinDate();
+            viewHolder.mTimeTxt.setText(Utils.convertDate(ts));
+            /*viewHolder.mContainer.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                   //  mUserId = friend.getToUser().getRid();
                     return mPersonalGestureDetector.onTouchEvent(motionEvent);
                 }
+            });*/
+            final String userId = friend.getToUser().getRid();
+            viewHolder.mContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Timber.d("Sending user id " + userId + " to perform");
+                    Bundle bundle = new Bundle();
+                    bundle.putString("user_id", userId);
+                    mActivity.perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, bundle);
+
+                }
             });
+
+
+
         } else {
             ProgressViewHolder viewHolder = (ProgressViewHolder) holder;
             if (mIsLastPage) {
@@ -103,9 +116,11 @@ public class FriendsAdapter extends RecyclerView.Adapter {
 
         private ImageView mProfilePic;
         private TextView mUserName, mUserDetail, mTimeTxt;
+        private RelativeLayout mContainer;
 
         public FriendViewHolder(View itemView) {
             super(itemView);
+            mContainer = (RelativeLayout) itemView.findViewById(R.id.chat_row_container);
             mProfilePic = (ImageView) itemView.findViewById(R.id.FRIEND_profile_pic);
             mUserName = (TextView) itemView.findViewById(R.id.FRIEND_name);
             mUserDetail = (TextView) itemView.findViewById(R.id.FRIEND_description);
@@ -130,22 +145,23 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    private class PersonalChatListener extends GestureDetector.SimpleOnGestureListener {
+    /*private class PersonalChatListener extends GestureDetector.SimpleOnGestureListener {
 
         @Override
         public boolean onDown(MotionEvent e) {
-
-            return true;
-        }
-
-        // event when double tap occurs
-        @Override
-        public boolean onDoubleTap(MotionEvent e) {
+            Timber.d("Sending user id " + mUserId + " to perform");
             Bundle bundle = new Bundle();
             bundle.putString("user_id", mUserId);
             mActivity.perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, bundle);
             return true;
         }
 
-    }
+        // event when double tap occurs
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+
+            return true;
+        }
+
+    }*/
 }

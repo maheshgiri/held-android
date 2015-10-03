@@ -6,7 +6,7 @@ import java.util.List;
 public class FriendRequestResponse {
 
 
-    private List<Objects> objects;
+    private List<FriendRequestObject> objects;
     private boolean lastPage;
     private long nextPageStart;
     private String declined,date,rid;
@@ -15,7 +15,7 @@ public class FriendRequestResponse {
         return nextPageStart;
     }
 
-    public List<Objects> getObjects() {
+    public List<FriendRequestObject> getObjects() {
         return objects;
     }
 
