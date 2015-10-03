@@ -1,5 +1,6 @@
 package com.held.activity;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,15 +37,23 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         activity = this;
+        TextView title = (TextView)findViewById(R.id.toolbar_title_txt);
+        title.setText("Inbox");
         mChat = (ImageView) findViewById(R.id.toolbar_chat_img);
         mCamera = (ImageView) findViewById(R.id.toolbar_post_img);
         mNotification = (ImageView) findViewById(R.id.toolbar_notification_img);
         mSearchEdt = (EditText) findViewById(R.id.toolbar_search_edt_txt);
+        mSearchEdt.setVisibility(View.GONE);
      //   mRetakeBtn = (Button) findViewById(R.id.TOOLBAR_retake_btn);
      //   mPostBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
        // mUsername = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        mChat.setOnClickListener(this);
+        //Drawable homeIcon = Utils.getDrawable(R.drawable.home_icon_v2);
+        mCamera.setImageResource(R.drawable.home_icon_v2);
+        mCamera.setVisibility(View.VISIBLE);
+        //mCamera.setImageDrawable(homeIcon);
+        mChat.setVisibility(View.GONE);
+
         mCamera.setOnClickListener(this);
         mNotification.setOnClickListener(this);
 //        mRetakeBtn.setOnClickListener(this);
@@ -61,11 +70,11 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
     }
 
     private void launchInboxPage() {
-        updateToolbar(true, false, true, false, true, true, false, "");
+        //updateToolbar(true, false, true, false, true, true, false, "");
         addFragment(FriendsListFragment.newInstance(), FriendsListFragment.TAG);
 //        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.card_flip_right_in, R.anim.card_flip_right_out,
 //                R.anim.card_flip_left_in, R.anim.card_flip_left_out);
-        mCamera.setImageResource(R.drawable.icon_feed);
+        //mCamera.setImageResource(R.drawable.icon_feed);
         mDisplayFragment = FriendsListFragment.newInstance();
     }
 
@@ -111,7 +120,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         if (mDisplayFragment instanceof ChatFragment) {
             Log.d(TAG, "on back pressed. current fragment is chat fragment");
             super.onBackPressed();
-            mSearchEdt.setVisibility(View.VISIBLE);
+            mSearchEdt.setVisibility(View.GONE);
 //            mUsername.setVisibility(View.INVISIBLE);
             mCamera.setImageResource(R.drawable.icon_feed);
             mChat.setImageResource(R.drawable.icon_chat);

@@ -201,6 +201,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
             case R.id.startBtn:
                 Intent intent = new Intent(SplashActivity.this, RegistrationActivity.class);
                 startActivity(intent);
+                finish();
                 break;
             case R.id.signinTxt :
                 callLoginApi();

@@ -52,7 +52,7 @@
             android:configChanges="fontScale"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"
-            android:noHistory="true">
+            >
         </activity>
 
         <activity

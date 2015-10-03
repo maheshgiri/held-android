@@ -106,10 +106,12 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
         mDisplayFragment = ChatFragment.newInstance(id, isOneToOne);
     }
 
+    /*
     @Override
     public void onBackPressed() {
         launchFeedScreen();
     }
+    */
 
     @Override
     public void perform(int id, Bundle bundle) {

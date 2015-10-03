@@ -26,6 +26,8 @@ import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 import com.held.utils.Utils;
 
+import timber.log.Timber;
+
 public class FeedActivity extends ParentActivity implements View.OnClickListener {
 
     //    private Fragment mDisplayFragment;
@@ -167,18 +169,26 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     @Override
     public void onBackPressed() {
 
+        super.onBackPressed();
+/*
+
         if (mDisplayedFragment instanceof FeedFragment && mDisplayedFragment.isVisible()) {
 
           //  this.getSupportFragmentManager().beginTransaction().remove(new FeedFragment()).commit();
-            /*super.onBackPressed();
+            */
+/*super.onBackPressed();
             updateToolbar(true, false, true, false, true, true, false, "");
-            mDisplayedFragment = Utils.getCurrVisibleFragment(this);*/
+            mDisplayedFragment = Utils.getCurrVisibleFragment(this);*//*
+
+            Timber.d("finishing feed activity");
 
             this.finishActivity(Activity.RESULT_OK);
         }
         else {
+            Timber.d("Calling super.onbackpressed");
             super.onBackPressed();
         }
+*/
 
 
     }
