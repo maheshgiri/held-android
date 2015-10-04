@@ -15,12 +15,12 @@ import com.held.retrofit.response.DownloadRequestListResponse;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.FriendDeclineResponse;
+import com.held.retrofit.response.FriendRequestObject;
 import com.held.retrofit.response.FriendRequestResponse;
 import com.held.retrofit.response.FriendsResponse;
 import com.held.retrofit.response.HoldResponse;
 import com.held.retrofit.response.LoginUserResponse;
 import com.held.retrofit.response.LogoutUserResponse;
-import com.held.retrofit.response.Objects;
 import com.held.retrofit.response.PostChatResponse;
 import com.held.retrofit.response.PostMessageResponse;
 import com.held.retrofit.response.PostResponse;
@@ -105,7 +105,7 @@ public interface HeldAPI {
 
 
    @GET("/users/")
-   void searchFriend(@Header("Authorization") String token,@Query("name") String frndName,Callback<Objects> friendSearchResult);
+   void searchFriend(@Header("Authorization") String token,@Query("name") String frndName,Callback<FriendRequestObject> friendSearchResult);
 
     @PUT("/friendshiprequests/{request_id}")
     void declineFriend(@Header("Authorization") String token,@Path("request_id")String rid, @Query("decline") String decline,@Query("approve") String approve,@Body()String body ,Callback<DeclineFriendResponse> declineFriendResponseCallback);

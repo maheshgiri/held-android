@@ -3,53 +3,52 @@
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:background="@color/bg_color"
     android:layout_margin="10dp"
+    android:orientation="vertical"
     >
-    <View
-        android:layout_width="300dp"
-        android:layout_height="1dp"
-        android:id="@+id/toolbar_divider"
-        android:background="@color/shadow_color"
-        android:alpha=".20"
 
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"/>
+
     <ImageView
         android:layout_width="43dp"
         android:layout_height="43dp"
         android:id="@+id/profile_img"
-        android:layout_below="@+id/toolbar_divider"
-        android:layout_centerVertical="true"
-        android:scaleType="centerCrop"/>
+        android:layout_margin="10dp"
+        android:scaleType="centerCrop"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:layout_margin="10dp"
+        android:text="Friends name"
         android:id="@+id/user_name_txt"
+        android:textSize="13sp"
         android:textColor="@color/userName_color"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/profile_img"
-        android:layout_toLeftOf="@+id/button"
-        android:layout_toStartOf="@+id/button" />
+        android:layout_toEndOf="@+id/profile_img"
+        />
 
     <Button
         android:layout_width="127dp"
         android:layout_height="22dp"
-        android:text="New Button"
         android:id="@+id/button"
         android:textColor="@color/white"
+        android:text="Add as Friend"
+        android:textSize="11sp"
         android:background="@color/friend_btn_color"
-        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        />
+
     <View
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:id="@+id/toolbar_divider_bottom"
         android:background="@color/shadow_color"
         android:alpha=".20"
-        android:layout_below="@+id/profile_img"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"/>
+        android:layout_alignParentBottom="true"
+        />
+
 </RelativeLayout>

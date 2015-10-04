@@ -1,5 +1,6 @@
 package com.held.activity;
 
+import android.graphics.Typeface;
 import android.util.Log;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +41,9 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
         activity = this;
         TextView title = (TextView)findViewById(R.id.toolbar_title_txt);
         title.setText("Inbox");
+        Typeface medium = Typeface.createFromAsset(getAssets(), "BentonSansMedium.otf");
+        title.setTypeface(medium);
+
         mChat = (ImageView) findViewById(R.id.toolbar_chat_img);
         mCamera = (ImageView) findViewById(R.id.toolbar_post_img);
         mNotification = (ImageView) findViewById(R.id.toolbar_notification_img);

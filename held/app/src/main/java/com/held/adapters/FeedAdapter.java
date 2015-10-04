@@ -42,6 +42,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import timber.log.Timber;
 
 public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -59,7 +60,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private PreferenceHelper mPreference;
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
-    private RelativeLayout timeLayout;
+    private boolean isFullScreenMode = false;
 
 
 
@@ -124,6 +125,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.mPersonCountTxt2.setTypeface(book);
             holder.mTimeTxt.setTypeface(book);
             holder.mTimeTxt2.setTypeface(book);
+
+            //username
+            holder.mUserNameTxt.setTypeface(medium);
+            holder.mFeedTxt.setTypeface(book);
 
 
 
@@ -196,7 +201,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             Picasso.with(mActivity).load(AppConstants.BASE_URL + mFeedList.get(position).getImageUri()).
                                     transform(mBlurTransformation).into(holder.mFeedImg);
                             holder.myTimeLayout.setVisibility(View.VISIBLE);
-                            callReleaseApi(mFeedList.get(position).getRid(),holder.mTimeMinTxt,holder.mTimeSecTxt,String.valueOf(System.currentTimeMillis()));
+                            if(isFullScreenMode){
+                                callReleaseApi(mFeedList.get(position).getRid(),holder.mTimeMinTxt,holder.mTimeSecTxt,String.valueOf(System.currentTimeMillis()));
+                                isFullScreenMode = false;
+                            }
+
                             mActivity.isBlured = true;
                             mActivity.showToolbar();
 
@@ -224,6 +233,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void callReleaseApi(String postId, final TextView textView1,final TextView textView2,String start_tm) {
+        Timber.d("calling release api");
         HeldService.getService().releasePost(mPreference.readPreference("SESSION_TOKEN"),postId,mholdId,start_tm ,String.valueOf(System.currentTimeMillis()),
                 "",new Callback<ReleaseResponse>() {
                     @Override
@@ -255,6 +265,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void callHoldApi(String postId, final String start_tm) {
+        Timber.d("calling hold api");
         HeldService.getService().holdPost(mPreference.readPreference("SESSION_TOKEN"),postId,start_tm, "",new Callback<HoldResponse>() {
             @Override
             public void success(HoldResponse holdResponse, Response response) {
@@ -358,6 +369,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 if(e.getAction() == MotionEvent.ACTION_UP){
 
                 }
+                isFullScreenMode = true;
 
 
             } else {

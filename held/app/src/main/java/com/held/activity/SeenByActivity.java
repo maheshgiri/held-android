@@ -1,5 +1,6 @@
 package com.held.activity;
 
+import android.graphics.Typeface;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 
 import com.held.adapters.SeenByAdapter;
 import com.held.retrofit.HeldService;
-import com.held.retrofit.response.Objects;
+import com.held.retrofit.response.FriendRequestObject;
 import com.held.retrofit.response.User;
 import com.held.utils.PreferenceHelper;
 
@@ -22,6 +23,7 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import timber.log.Timber;
 
 public class SeenByActivity extends ParentActivity {
 
@@ -63,17 +65,19 @@ public class SeenByActivity extends ParentActivity {
 
         mChat.setImageResource(R.drawable.back);
         mChat.setVisibility(View.VISIBLE);
+
+        Typeface medium = Typeface.createFromAsset(getAssets(), "BentonSansMedium.otf");
+        mTitle.setTypeface(medium);
         mTitle.setText("Seen By");
-        setToolbar();
+        //setToolbar();
         mPrefernce=PreferenceHelper.getInstance(this);
         mSeenRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mSeenRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
-        Log.i("@@Adapter calling@@", "Before");
+        Timber.d("setting seen by adapter");
         mSeenByAdapter = new SeenByAdapter(this,username,img,isLastPage);
         mSeenRecyclerView.setAdapter(mSeenByAdapter);
-        Log.i("@@Adapter calling@@", "After");
 
 
         mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_layout);
@@ -104,9 +108,9 @@ return;
     {
         User user1=new User();
         HeldService.getService().searchFriend(mPrefernce.readPreference(getString(R.string.API_session_token)), username,
-                new Callback<Objects>() {
+                new Callback<FriendRequestObject>() {
                     @Override
-                    public void success(Objects objects, Response response) {
+                    public void success(FriendRequestObject objects, Response response) {
                        // user1.setDisplayName(objects.getCreator().getDisplayName());
                        // user1.setProfilePic(objects.getCreator().getProfilePic());
                     }

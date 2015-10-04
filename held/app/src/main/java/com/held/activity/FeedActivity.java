@@ -1,5 +1,6 @@
 package com.held.activity;
 
+import android.graphics.Typeface;
 import android.util.Log;
 import android.content.Intent;
 import android.os.Bundle;
@@ -59,6 +60,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mNotification=(ImageView)findViewById(R.id.toolbar_notification_img);
         mCamera=(ImageView)findViewById(R.id.toolbar_post_img);
         mTitle=(TextView)findViewById(R.id.toolbar_title_txt);
+        Typeface medium = Typeface.createFromAsset(getAssets(), "BentonSansMedium.otf");
+        mTitle.setTypeface(medium);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
         mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
 

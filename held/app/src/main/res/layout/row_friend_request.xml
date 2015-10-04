@@ -4,80 +4,72 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/bg_color"
-    android:orientation="horizontal"
     android:id="@+id/row_friend_request">
 
-    <View
-        android:layout_width="300dp"
-        android:layout_height="1dp"
-        android:id="@+id/toolbar_divider"
-        android:background="@color/shadow_color"
-        android:alpha=".20"
-        android:layout_alignTop="@+id/requestLayout"
 
-        android:layout_centerHorizontal="true" />
-    <LinearLayout
-        android:layout_width="300dp"
+    <ImageView
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/user_profile_pic"
+        android:layout_centerVertical="true"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:layout_alignParentLeft="true"
-        android:id="@+id/requestLayout"
-        android:layout_centerInParent="true">
-        <ImageView
-            android:layout_width="43dp"
-            android:layout_height="43dp"
-            android:layout_marginLeft="20dp"
-            android:id="@+id/user_profile_pic"
-            android:layout_centerVertical="true"
-            android:scaleType="centerCrop"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="7dp"
-            android:layout_gravity="center" />
+        android:text="UserName"
+        android:textSize="13sp"
+        android:id="@+id/user_name_txt"
+        android:textColor="@color/userName_color"
+        android:layout_toRightOf="@+id/user_profile_pic"
+        android:layout_toEndOf="@+id/user_profile_pic"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="UserName"
-            android:id="@+id/user_name_txt"
-            android:textColor="@color/userName_color"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center" />
+    <Button
+        android:layout_width="57dp"
+        android:layout_height="22dp"
+        android:text="@string/FR_Accept"
+        android:id="@+id/acceptBtn"
+        android:textSize="11sp"
+        android:background="@color/positve_btn"
+        android:textColor="@color/bg_color"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/deleteBtn"
+     />
 
-        <Button
-            android:layout_width="57dp"
-            android:layout_height="22dp"
-            android:text="@string/FR_Accept"
-            android:id="@+id/acceptBtn"
-            android:textSize="11sp"
-            android:background="@color/positve_btn"
-            android:textColor="@color/bg_color"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
+    <Button
+        android:layout_width="57dp"
+        android:layout_height="22dp"
+        android:text="@string/FR_Delete"
+        android:id="@+id/deleteBtn"
+        android:textSize="11sp"
+        android:background="@color/negative_btn"
+        android:textColor="@color/bg_color"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        />
 
-            android:layout_gravity="center" />
-
-        <Button
-            android:layout_width="57dp"
-            android:layout_height="22dp"
-            android:text="@string/FR_Delete"
-            android:id="@+id/deleteBtn"
-            android:textSize="11sp"
-            android:background="@color/negative_btn"
-            android:textColor="@color/bg_color"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center" />
-    </LinearLayout>
 
     <View
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_height="1dp"
         android:id="@+id/toolbar_divider_bottom"
         android:background="@color/shadow_color"
         android:alpha=".20"
-
-        android:layout_below="@+id/requestLayout"
-        android:layout_alignParentBottom="false"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        />
 </RelativeLayout>

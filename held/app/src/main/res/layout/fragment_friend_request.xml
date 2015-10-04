@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:background="@color/bg_color"
     android:clickable="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="10dp" >
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/FR_swipe_refresh_layout"
@@ -16,6 +17,6 @@
             android:id="@+id/FR_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp" />
+            />
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

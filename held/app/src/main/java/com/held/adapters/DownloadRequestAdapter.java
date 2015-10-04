@@ -1,5 +1,6 @@
 package com.held.adapters;
 
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -82,6 +83,8 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
 
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mDownloadRequestList.get(position).getUser().getProfilePic()).into(viewHolder.mProfileImg);
             viewHolder.mUserNameTxt.setText(mDownloadRequestList.get(position).getUser().getDisplayName());
+            Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
+            viewHolder.mUserNameTxt.setTypeface(medium);
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mDownloadRequestList.get(position).getPost().getThumbnailUri()).into(viewHolder.mPostimg);
             viewHolder.mAcceptBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

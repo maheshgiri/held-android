@@ -1,6 +1,7 @@
 package com.held.adapters;
 
 
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -85,6 +86,14 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
 
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mFriendRequestList.get(position).getFromUser().getProfilePic()).placeholder(R.drawable.user_icon).into(viewHolder.mProfileImg);
             viewHolder.mUserNameTxt.setText(mFriendRequestList.get(position).getFromUser().getDisplayName());
+
+
+            Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
+            Typeface book = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansBook.otf");
+            viewHolder.mUserNameTxt.setTypeface(medium);
+            viewHolder.mAcceptBtn.setTypeface(book);
+            viewHolder.mDeleteBtn.setTypeface(book);
+
             friendReqId=mFriendRequestList.get(position).getRid();
             viewHolder.mAcceptBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

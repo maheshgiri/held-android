@@ -2,6 +2,7 @@ package com.held.fragment;
 
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -59,6 +60,11 @@ public class NotificationFragment extends ParentFragment {
         mFriendCount = (TextView) view.findViewById(R.id.NOTIFY_friend_request_count);
         mDownloadCount = (TextView) view.findViewById(R.id.NOTIFY_download_request_count);
         mHeldCount = (TextView) view.findViewById(R.id.NOTIFY_feed_activity_count);
+
+        Typeface medium = Typeface.createFromAsset(getActivity().getAssets(), "BentonSansMedium.otf");
+        mFriendCount.setTypeface(medium);
+        mDownloadCount.setTypeface(medium);
+        mHeldCount.setTypeface(medium);
 
         mFRLayout = (RelativeLayout) view.findViewById(R.id.NOTIFY_fr_layout);
         mDRLayout = (RelativeLayout) view.findViewById(R.id.NOTIFY_dr_layout);

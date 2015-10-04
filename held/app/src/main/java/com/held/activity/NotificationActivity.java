@@ -1,5 +1,6 @@
 package com.held.activity;
 
+import android.graphics.Typeface;
 import android.util.Log;
 import android.content.Intent;
 import android.os.Bundle;
@@ -47,8 +48,9 @@ public class NotificationActivity extends ParentActivity implements View.OnClick
         mCamera.setImageResource(R.drawable.home);
         mSearchEdt.setVisibility(View.GONE);
         mTitle.setText("Notifications");
+        Typeface medium = Typeface.createFromAsset(getAssets(), "BentonSansMedium.otf");
+        mTitle.setTypeface(medium);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         if (getIntent().getExtras() != null) {
             launchNotificationScreen(getIntent().getExtras().getInt("id"));

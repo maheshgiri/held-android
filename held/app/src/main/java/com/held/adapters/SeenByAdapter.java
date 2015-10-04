@@ -1,5 +1,6 @@
 package com.held.adapters;
 
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,11 +14,14 @@ import android.widget.TextView;
 import com.held.activity.ParentActivity;
 import com.held.activity.R;
 import com.held.customview.PicassoCache;
+import com.held.retrofit.response.SeenByData;
 import com.held.utils.AppConstants;
 import com.held.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Created by MAHESH on 10/3/2015.
@@ -25,25 +29,13 @@ import java.util.List;
 public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ParentActivity mActivity;
-   // private List<String[]> mActivityDataList;
     private boolean mIsLastPage;
-    private static final int TYPE_DATA = 0;
-    private static final int TYPE_FOOTER = 1;
-    String musers[][];
-    String userName,img;
-    private ArrayList<String[]> mList;
-
-
-
 
 
 
     public SeenByAdapter(ParentActivity activity,String user,String imgUrl, boolean isLastPage){
         mActivity = activity;
-        img=imgUrl;
-        userName=user;
         mIsLastPage = isLastPage;
-
 
 
     }
@@ -52,63 +44,60 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        if (viewType == TYPE_FOOTER) {
-            View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.layout_progress_bar, parent, false);
-            return new ProgressViewHolder(v);
-        } else {
-            View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.row_seenby, parent, false);
-            return new SeenByViewHolder(v);
-        }
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.row_seenby, parent, false);
+        Timber.d("created seenby view holder");
+        return new SeenByViewHolder(v);
+
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-       // user[0]=mActivityDataList.get(position).toString();
+        String userName = null,img = null;
+        String requestStatus =null;
 
-        if (holder instanceof ProgressViewHolder) {
-            ProgressViewHolder viewHolder = (ProgressViewHolder) holder;
-            if (mIsLastPage) {
-                viewHolder.mIndicationTxt.setVisibility(View.VISIBLE);
-                viewHolder.progressBar.setVisibility(View.GONE);
-            } else {
-                viewHolder.progressBar.setVisibility(View.VISIBLE);
-                viewHolder.mIndicationTxt.setVisibility(View.GONE);
-                viewHolder.progressBar.setIndeterminate(true);
-            }
-        } else {
-
-            SeenByViewHolder viewHolder = (SeenByViewHolder) holder;
-            viewHolder.mUserName.setText(userName);
-            PicassoCache.getPicassoInstance(mActivity)
-                    .load(AppConstants.BASE_URL + img)
-                    .placeholder(R.drawable.user_icon)
-                    .into(viewHolder.mProfilePic);
-
-            viewHolder.mButton.setText("Request Sent");
-             /*setColor(viewHolder.mButton);
-            if(viewHolder.mButton.getText().equals("Add as Freiend")){
-                viewHolder.mButton.setBackgroundColor(g(R.color.positve_btn)));
-                viewHolder.mButton.setTextColor(Integer.parseInt(Utils.getString(R.color.white)));
-            }else if(viewHolder.mButton.getText().equals("Freiends")){
-                viewHolder.mButton.setBackgroundColor(Integer.parseInt(Utils.getString(R.drawable.button_background)));
-                viewHolder.mButton.setTextColor(Integer.parseInt(Utils.getString(R.color.friend_btn_color)));
-            }else if(viewHolder.mButton.getText().equals("Request Sent")){
-                viewHolder.mButton.setBackgroundColor(Integer.parseInt(Utils.getString(R.color.friend_btn_color)));
-                viewHolder.mButton.setTextColor(Integer.parseInt(Utils.getString(R.color.white)));
-            }*/
-
+        Timber.d("on bind viewholder");
+        SeenByViewHolder viewHolder = (SeenByViewHolder) holder;
+        switch(position){
+            case 0:
+                userName = "swapnil3";
+                img = "/user_thumbnails/swapnil3_1443690679233.jpg";
+                requestStatus = "Add as Friend";
+                viewHolder.mButton.setBackgroundColor(mActivity.getResources().getColor(R.color.new_btn_color));
+                break;
+            case 1:
+                userName = "vinay123";
+                img = "/user_images/swapnil_1443349455353.jpg";
+                requestStatus = "Friends";
+                viewHolder.mButton.setBackgroundColor(mActivity.getResources().getColor(R.color.white));
+                viewHolder.mButton.setTextColor(mActivity.getResources().getColor(R.color.friend_btn_color));
+                break;
+            case 2:
+                userName = "swapnil4";
+                img = "/user_thumbnails/vinay123_1443851725451.jpg";
+                requestStatus = "Request Sent";
+                viewHolder.mButton.setBackgroundColor(mActivity.getResources().getColor(R.color.friend_req_color));
+                break;
 
         }
+        Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
+        viewHolder.mUserName.setTypeface(medium);
+        viewHolder.mUserName.setText(userName);
+        PicassoCache.getPicassoInstance(mActivity)
+                .load(AppConstants.BASE_URL + img)
+                .placeholder(R.drawable.user_icon)
+                .into(viewHolder.mProfilePic);
+
+        viewHolder.mButton.setText(requestStatus);
+
+
     }
 
     @Override
     public int getItemCount() {
-       // return mList.size()+1;
-        //mActivityDataList.size()+1;
-        return 1;
+       //todo: fix later
+        return 3;
     }
 
 
@@ -132,21 +121,12 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         }
     }
-    public static class ProgressViewHolder extends RecyclerView.ViewHolder {
-        private ProgressBar progressBar;
-        private TextView mIndicationTxt;
 
-        public ProgressViewHolder(View v) {
-            super(v);
-            progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
-            mIndicationTxt = (TextView) v.findViewById(R.id.indication_txt);
-        }
-    }
     public void setColor(Button btn){
-        if(btn.getText().equals("Add as Freiend")){
+        if(btn.getText().equals("Add as Friend")){
             btn.setBackgroundColor(Integer.parseInt(Utils.getString(R.color.positve_btn)));
             btn.setTextColor(Integer.parseInt(Utils.getString(R.color.white)));
-        }else if(btn.getText().equals("Freiends")){
+        }else if(btn.getText().equals("Friends")){
             btn.setBackgroundColor(Integer.parseInt(Utils.getString(R.drawable.button_background)));
             btn.setTextColor(Integer.parseInt(Utils.getString(R.color.friend_btn_color)));
         }else if(btn.getText().equals("Request Sent")){

@@ -1,6 +1,7 @@
 package com.held.adapters;
 
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -67,6 +68,13 @@ public class FriendsAdapter extends RecyclerView.Adapter {
 
             String ts = friend.getJoinDate();
             viewHolder.mTimeTxt.setText(Utils.convertDate(ts));
+
+            Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
+            Typeface book = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansBook.otf");
+            viewHolder.mUserName.setTypeface(medium);
+            viewHolder.mUserDetail.setTypeface(book);
+            viewHolder.mTimeTxt.setTypeface(book);
+
             /*viewHolder.mContainer.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
