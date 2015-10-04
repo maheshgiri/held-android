@@ -50,7 +50,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
         }
 
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setToolbar();
 
         //launchFeedScreen();

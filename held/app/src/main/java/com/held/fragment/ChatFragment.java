@@ -134,8 +134,8 @@ public class ChatFragment extends ParentFragment {
         mMessageEdt = (EditText) view.findViewById(R.id.CHAT_message);
         mSubmitBtn.setOnClickListener(this);
         mIsOneToOne = getArguments().getBoolean("isOneToOne");
-        mDownLoad = (ImageView) view.findViewById(R.id.CHAT_download);
-        mDownLoad.setOnClickListener(this);
+        /*mDownLoad = (ImageView) view.findViewById(R.id.CHAT_download);
+        mDownLoad.setOnClickListener(this);*/
         mPreference=PreferenceHelper.getInstance(getCurrActivity());
         callFriendsChatsApi();
 
@@ -271,14 +271,14 @@ public class ChatFragment extends ParentFragment {
                         UiUtils.showSnackbarToast(getView(), "Message should not be empty");
                 }
                 break;
-            case R.id.CHAT_download:
+            /*case R.id.CHAT_download:
                 if (getCurrActivity().getNetworkStatus()) {
                     DialogUtils.showProgressBar();
                     callDownloadRequestApi();
                 } else
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
 
-                break;
+                break;*/
         }
     }
 

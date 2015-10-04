@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:background="#ffffff"
     android:layout_marginTop="20dp"
-
     >
 
     <RelativeLayout
@@ -80,88 +79,87 @@
     </RelativeLayout>
 
 
-    <ImageView
-        android:layout_width="640dp"
-        android:layout_height="343dp"
-        android:id="@+id/post_image"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/time_layout"
         android:layout_below="@+id/BOX_top_layout"
         android:layout_marginTop="10dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:scaleType="centerCrop"
-        android:fitsSystemWindows="true"
-         />
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_centerInParent="true"
-    android:id="@+id/time_layout"
+        >
+        <ImageView
+            android:layout_width="640dp"
+            android:layout_height="343dp"
+            android:id="@+id/post_image"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:scaleType="centerCrop"
+            android:fitsSystemWindows="true"
+             />
 
-    >
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:id="@+id/box_min_txt"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/box_Min"
-        android:layout_toStartOf="@+id/box_Min"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=" minutes"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:id="@+id/box_Min"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/box_sec"
-        android:layout_toStartOf="@+id/box_sec"
-        android:layout_marginRight="15dp"
-         />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:id="@+id/box_sec_txt"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/box_sec"
-        android:layout_toStartOf="@+id/box_sec"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=" seconds"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:id="@+id/box_sec"
-        android:layout_marginRight="75dp"
-        android:layout_marginEnd="75dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="by people"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:id="@+id/box_by_people"
-        android:layout_below="@+id/box_min_txt"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:layout_alignRight="@+id/box_sec"
-        android:layout_alignEnd="@+id/box_sec"
-        android:layout_alignLeft="@+id/box_min_txt"
-        android:layout_alignStart="@+id/box_min_txt" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:id="@+id/box_min_txt"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" minutes "
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                     />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:id="@+id/box_sec_txt"
+
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" seconds"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="by 0 people"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textAlignment="center"
+                    android:id="@+id/tv_hold_people"/>
 
 
+            </LinearLayout>
+        </LinearLayout>
 
-</RelativeLayout>
+
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

@@ -89,7 +89,6 @@ public class FeedFragment extends ParentFragment {
         mLayoutManager = new LinearLayoutManager(getCurrActivity());
         mFeedRecyclerView.setLayoutManager(mLayoutManager);
         mFeedResponse = new FeedResponse();
-        //toolbar=(RelativeLayout)getCurrActivity().getWindow().findViewById(R.id.custom_toolbar);
         blurTransformation = new BlurTransformation(getCurrActivity(), 25f);
         mFeedAdapter = new FeedAdapter((FeedActivity) getCurrActivity(), mFeedList, blurTransformation, isLastPage, this);
         mFeedRecyclerView.setAdapter(mFeedAdapter);
@@ -109,7 +108,7 @@ public class FeedFragment extends ParentFragment {
         } else {
             UiUtils.showSnackbarToast(getView(), "Sorry! You don't seem to connected to internet");
         }
-       getCurrActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
   /*      mSearchEdt = (EditText) view.findViewById(R.id.toolbar_search_edt_txt);
         mSearchEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -204,11 +203,9 @@ public class FeedFragment extends ParentFragment {
         getCurrActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mFullImg.setVisibility(View.GONE);
         mSwipeRefreshLayout.setVisibility(View.VISIBLE);
-//        getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
         mFeedRecyclerView.setEnabled(true);
         mSwipeRefreshLayout.setEnabled(true);
-        //UiUtils.showSystemUI(getView());
-        getCurrActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
     }
 
     private void callUserSearchApi() {
