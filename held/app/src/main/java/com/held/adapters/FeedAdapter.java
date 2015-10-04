@@ -2,6 +2,7 @@ package com.held.adapters;
 
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -108,6 +110,24 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             .placeholder(R.drawable.user_icon)
                             .into(holder.mUserImg);
 
+            Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
+            Typeface book = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansBook.otf");
+
+            // Set typeface of numbers as Benton Sans medium
+            holder.mTimeMinTxt.setTypeface(medium);
+            holder.mTimeSecTxt.setTypeface(medium);
+            holder.mPersonCount.setTypeface(medium);
+
+
+            // Set typeface of remaining text to Benton Sans Book
+            holder.mPersonCountTxt.setTypeface(book);
+            holder.mPersonCountTxt2.setTypeface(book);
+            holder.mTimeTxt.setTypeface(book);
+            holder.mTimeTxt2.setTypeface(book);
+
+
+
+
             holder.mFeedTxt.setText(mFeedList.get(position).getText());
 
             PicassoCache.getPicassoInstance(mActivity)
@@ -142,7 +162,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     return mPersonalChatDetector.onTouchEvent(motionEvent);
                 }
             });
-            holder.myTimeLayout.setOnClickListener(new View.OnClickListener() {
+            holder.myCountLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -275,6 +295,12 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public final ImageView mFeedImg, mUserImg;
         public final RelativeLayout myLayout = (RelativeLayout) itemView.findViewById(R.id.BOX_layout);
         public final RelativeLayout myTimeLayout = (RelativeLayout) itemView.findViewById(R.id.time_layout);
+        public final LinearLayout myCountLayout = (LinearLayout) itemView.findViewById(R.id.layout_people_count);
+        public final TextView mPersonCountTxt = (TextView) itemView.findViewById(R.id.tv_count_people);
+        public final TextView mPersonCountTxt2 = (TextView) itemView.findViewById(R.id.tv_count_people2);
+        public final TextView mPersonCount = (TextView) itemView.findViewById(R.id.count_hold_people);
+        public final TextView mTimeTxt = (TextView) itemView.findViewById(R.id.time_txt);
+        public final TextView mTimeTxt2 = (TextView) itemView.findViewById(R.id.time_txt2);
 
         private FeedViewHolder(View v) {
             super(v);
