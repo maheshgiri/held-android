@@ -8,6 +8,7 @@ public class FriendRequestObject {
 
     User fromUser;
     User toUser;
+    User creator;
     String rid,imageUri;
     public User getFromUser() {
         return fromUser;
@@ -23,5 +24,9 @@ public class FriendRequestObject {
 
     public String getImageUri() {
         return imageUri;
+    }
+
+    public User getCreator() {
+        return creator;
     }
 }

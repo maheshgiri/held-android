@@ -1,6 +1,7 @@
 package com.held.adapters;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.held.activity.FeedActivity;
 import com.held.activity.R;
+import com.held.activity.SeenByActivity;
 import com.held.customview.BlurTransformation;
 import com.held.customview.PicassoCache;
 import com.held.fragment.FeedFragment;
@@ -46,7 +48,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private FeedActivity mActivity;
     private BlurTransformation mBlurTransformation;
     private GestureDetector mGestureDetector, mPersonalChatDetector;
-    private String mPostId, mOwnerDisplayName;
+    private String mPostId, mOwnerDisplayName,mholdId;
     private int mPosition;
     private FeedViewHolder feedViewHolder;
     private List<FeedData> mFeedList;
@@ -56,6 +58,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
     private RelativeLayout timeLayout;
+
+
 
     public FeedAdapter(FeedActivity activity, List<FeedData> feedDataList, BlurTransformation blurTransformation
             , boolean isLastPage, FeedFragment feedFragment) {
@@ -67,6 +71,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mIsLastPage = isLastPage;
         mFeedFragment = feedFragment;
         mPreference=PreferenceHelper.getInstance(mActivity);
+
 
     }
 
@@ -137,6 +142,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     return mPersonalChatDetector.onTouchEvent(motionEvent);
                 }
             });
+            holder.myTimeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    mActivity.launchSeenBy();
+                }
+            });
 
             holder.mFeedImg.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -164,7 +176,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             Picasso.with(mActivity).load(AppConstants.BASE_URL + mFeedList.get(position).getImageUri()).
                                     transform(mBlurTransformation).into(holder.mFeedImg);
                             holder.myTimeLayout.setVisibility(View.VISIBLE);
-                            callReleaseApi(mFeedList.get(position).getRid(), holder.mTimeMinTxt,holder.mTimeSecTxt,String.valueOf(System.currentTimeMillis()));
+                            callReleaseApi(mFeedList.get(position).getRid(),holder.mTimeMinTxt,holder.mTimeSecTxt,String.valueOf(System.currentTimeMillis()));
                             mActivity.isBlured = true;
                             mActivity.showToolbar();
 
@@ -192,7 +204,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void callReleaseApi(String postId, final TextView textView1,final TextView textView2,String start_tm) {
-        HeldService.getService().releasePost(mPreference.readPreference("SESSION_TOKEN"),postId,start_tm ,String.valueOf(System.currentTimeMillis()),
+        HeldService.getService().releasePost(mPreference.readPreference("SESSION_TOKEN"),postId,mholdId,start_tm ,String.valueOf(System.currentTimeMillis()),
                 "",new Callback<ReleaseResponse>() {
                     @Override
                     public void success(ReleaseResponse releaseResponse, Response response) {
@@ -222,11 +234,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     }
 
-    private void callHoldApi(String postId,String start_tm) {
+    private void callHoldApi(String postId, final String start_tm) {
         HeldService.getService().holdPost(mPreference.readPreference("SESSION_TOKEN"),postId,start_tm, "",new Callback<HoldResponse>() {
             @Override
             public void success(HoldResponse holdResponse, Response response) {
-
+                mholdId=holdResponse.getRid();
             }
 
             @Override
@@ -312,7 +324,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (mActivity.getNetworkStatus()) {
 //                Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(mPosition).getImage()).into(feedViewHolder.mFeedImg);
               //  if (!mFeedList.get(mPosition).getOwner_display_name().equals(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_user_name)))) {
-                    callHoldApi(mFeedList.get(mPosition).getCreator().getRid(),String.valueOf(System.currentTimeMillis()));
+                    callHoldApi(mFeedList.get(mPosition).getRid(),String.valueOf(System.currentTimeMillis()));
               //  }
                 feedViewHolder.myTimeLayout.setVisibility(View.INVISIBLE);
                 feedViewHolder.mFeedImg.getParent().requestDisallowInterceptTouchEvent(true);
@@ -362,6 +374,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             return true;
         }
+
+
     }
+
 
 }
