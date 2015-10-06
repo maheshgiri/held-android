@@ -24,6 +24,8 @@ import com.held.activity.ChatActivity;
 import com.held.activity.InboxActivity;
 import com.held.activity.R;
 import com.held.adapters.ChatAdapter;
+import com.held.customview.BlurTransformation;
+import com.held.customview.PicassoCache;
 import com.held.customview.SlideInUpAnimator;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.DownloadRequestData;
@@ -31,6 +33,7 @@ import com.held.retrofit.response.PostChatData;
 import com.held.retrofit.response.PostChatResponse;
 import com.held.retrofit.response.PostMessageResponse;
 import com.held.retrofit.response.SearchUserResponse;
+import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.HeldApplication;
 import com.held.utils.PreferenceHelper;
@@ -55,13 +58,14 @@ public class ChatFragment extends ParentFragment {
     private List<PostChatData> mPostChatData = new ArrayList<>();
     private Button mSubmitBtn;
     private EditText mMessageEdt;
-    private ImageView mDownLoad;
+    private ImageView mDownLoad, mChatBackImage;
     private boolean mIsOneToOne;
     private String mId, mFriendId;
     private BroadcastReceiver broadcastReceiver;
     private PreferenceHelper mPreference;
     private int mLimit = 5;
     private long mStart = System.currentTimeMillis();
+    private BlurTransformation mBlurTransformation;
 
     public static ChatFragment newInstance(String id, boolean isOneToOne) {
 
@@ -83,6 +87,7 @@ public class ChatFragment extends ParentFragment {
         mId = getArguments().getString("user_id");
         mIsOneToOne = getArguments().getBoolean("isOneToOne", false);
         Timber.d("ChatFragment new instance received arguments: user id: " +  mId + " isonetoone: " + mIsOneToOne);
+        mBlurTransformation=new BlurTransformation(getCurrActivity(), 25f);
         return inflater.inflate(R.layout.fragment_chat, container, false);
 
     }
@@ -134,6 +139,9 @@ public class ChatFragment extends ParentFragment {
         mMessageEdt = (EditText) view.findViewById(R.id.CHAT_message);
         mSubmitBtn.setOnClickListener(this);
         mIsOneToOne = getArguments().getBoolean("isOneToOne");
+
+        mChatBackImage=(ImageView) view.findViewById(R.id.background_imageView);
+
         /*mDownLoad = (ImageView) view.findViewById(R.id.CHAT_download);
         mDownLoad.setOnClickListener(this);*/
         mPreference=PreferenceHelper.getInstance(getCurrActivity());
@@ -147,6 +155,10 @@ public class ChatFragment extends ParentFragment {
                 callPostChatApi();
         }*/
 
+        PicassoCache.getPicassoInstance(getCurrActivity())
+                                                .load(R.drawable.milana_vayntrub)
+                                                .transform(mBlurTransformation)
+                                                .into(mChatBackImage);
     }
 
     public void onDataReceived(String id, boolean isOneToOne) {
@@ -187,7 +199,7 @@ public class ChatFragment extends ParentFragment {
 
     private void callFriendChatApi() {
         HeldService.getService().friendChat(mPreference.readPreference(getString(R.string.API_session_token)),
-                mId, mMessageEdt.getText().toString().trim(),"", new Callback<PostMessageResponse>() {
+                mId, mMessageEdt.getText().toString().trim(), "", new Callback<PostMessageResponse>() {
                     @Override
                     public void success(PostMessageResponse postMessageResponse, Response response) {
                         //mChatAdapter.setPostChats(postChatResponse.getObjects());

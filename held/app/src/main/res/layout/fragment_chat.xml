@@ -3,9 +3,18 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_color"
     android:clickable="true"
     android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/background_imageView"
+        android:scaleType="centerCrop"
+        android:layout_centerInParent="true"
+        android:src="@drawable/milana_vayntrub"
+        android:alpha=".3"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/CHAT_recycler_view"
@@ -13,7 +22,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/CHAT_bottom_layout"
         android:layout_marginTop="15dp"
-        android:background="@color/bg_color_one"/>
+        />
 
     <!-- ImageView
         android:id="@+id/CHAT_download"
