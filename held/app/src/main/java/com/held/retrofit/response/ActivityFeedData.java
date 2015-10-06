@@ -6,7 +6,11 @@ public class ActivityFeedData {
     private String date;
     private String owner_display_name;
     private String text;
-    private String rid;
+    private String rid,postPic;
+
+    public String getPostPic() {
+        return postPic;
+    }
 
     public String getDate() {
         return date;

@@ -33,4 +33,24 @@ public class PostChatData {
     public User getToUser() {
         return toUser;
     }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setFromUser(User fromUser) {
+        this.fromUser = fromUser;
+    }
+
+    public void setRid(String rid) {
+        this.rid = rid;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setToUser(User toUser) {
+        this.toUser = toUser;
+    }
 }

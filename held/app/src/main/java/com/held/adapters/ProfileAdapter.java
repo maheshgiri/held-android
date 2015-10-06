@@ -4,6 +4,7 @@ package com.held.adapters;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,10 +24,12 @@ import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.HoldResponse;
 import com.held.retrofit.response.ReleaseResponse;
+import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
+import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -51,9 +54,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_DATA = 1;
     private static final int TYPE_FOOTER = 2;
     private BlurTransformation mBlurTransformation;
+    private PreferenceHelper mPrefernce;
 
 
-    public ProfileAdapter(ParentActivity activity, List<FeedData> postList, boolean isLastPage, ProfileFragment profileFragment) {
+
+    public ProfileAdapter(ParentActivity activity,String userName,List<FeedData> postList, boolean isLastPage, ProfileFragment profileFragment) {
         mActivity = activity;
         mPostList = postList;
         mIsLastPage = isLastPage;
@@ -61,6 +66,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mBlurTransformation = new BlurTransformation(mActivity, 18);
         mGestureDetector = new GestureDetector(mActivity, new GestureListener());
         mPreference=PreferenceHelper.getInstance(mActivity);
+        mOwnerDisplayName=userName;
     }
 
     @Override
@@ -95,7 +101,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             HeaderViewHolder viewHolder = (HeaderViewHolder) holder;
 
         //TODO : here load user name and user image
-
+            setUserProfile(viewHolder);
            //Picasso.with(mActivity).load(AppConstants.BASE_URL + viewHolder.mProfilePic).into(viewHolder.mProfilePic);
 
           //  Picasso.with(mActivity).load(AppConstants.BASE_URL+viewHolder.mProfilePic).into(viewHolder.mProfilePic);
@@ -117,11 +123,15 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             final ItemViewHolder viewHolder = (ItemViewHolder) holder;
             mItemViewHolder = viewHolder;
-            //TODO : Load Image of user
+            PicassoCache.getPicassoInstance(mActivity)
+                    .load(mPostList.get(position).getProfilePic())
+                    .into(viewHolder.mUserImg);
+            //TODO : Load Image of user--->> done
+
         //    PicassoCache.getPicassoInstance(mActivity).load(AppConstants.BASE_URL + mPostList.get(position).getCreator().getProfilePic()).into(viewHolder.mUserImg);
             //Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getUser().getProfilePic()).into(viewHolder.mUserImg);
         //    PicassoCache.getPicassoInstance(mActivity).load(AppConstants.BASE_URL + mPostList.get(position).getCreator().getProfilePic()).transform(mBlurTransformation).into(viewHolder.mFeedImg);
-            setTimeText(mPostList.get(position - 1).getHeld(), viewHolder.mTimeMinTxt,viewHolder.mTimeSecTxt);
+            setTimeText(mPostList.get(position - 1).getHeld(), viewHolder.mTimeMinTxt, viewHolder.mTimeSecTxt);
             viewHolder.mFeedTxt.setText(mPostList.get(position - 1).getText());
             viewHolder.mFeedImg.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -297,5 +307,27 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "Some Problem Occurred");
             }
         });
+    }
+    public void setUserProfile(final HeaderViewHolder  viewHolder)
+    {
+
+        HeldService.getService().searchUser(mPrefernce.readPreference(Utils.getString(R.string.API_session_token)),
+                mPrefernce.readPreference(Utils.getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
+                    @Override
+                    public void success(SearchUserResponse searchUserResponse, Response response) {
+                        Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
+                        viewHolder.mUserName.setText(searchUserResponse.getDisplayName());
+                        PicassoCache.getPicassoInstance(mActivity)
+                                .load(AppConstants.BASE_URL + searchUserResponse.getProfilePic())
+                                .placeholder(R.drawable.user_icon)
+                                .into(viewHolder.mProfilePic);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+
     }
 }

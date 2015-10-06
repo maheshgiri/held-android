@@ -98,7 +98,7 @@ public interface HeldAPI {
     void feedPostWithPage(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<FeedResponse> feedResponseCallback);
 
     @GET("/users/{user_id}/posts")
-    void getUserPosts(@Header("Authorization") String token, @Path("user_id")String uid, @Query("start") long start,@Query("limit") int limit, Callback<FeedResponse> feedResponseCallback);
+    void getUserPosts(@Header("Authorization") String token, @Path("user_id") String userId,@Query("start") long start,@Query("limit") int limit, Callback<FeedResponse> feedResponseCallback);
 
     @GET("/posts/{post_id}/holds/{hold_id}")
     void releasePostProfile(@Header("Authorization") String token, @Path("hold_id")String hid, Callback<ReleaseResponse> callback);
@@ -132,7 +132,7 @@ public interface HeldAPI {
     void deleteDownloadRequest(@Header("Authorization") String token,@Path("post_id")String postId,@Path("request_id")String rid,Callback<DeclineDownloadResponse> DeclineResponseCallback);
 
     @POST("/users/{user_id}/messages/")
-    void friendChat(@Header("Authorization") String token, @Path("user_id") String userId, @Query("text") String message,@Body()String body, Callback<PostMessageResponse> postMessageResponseCallback);
+    void sendfriendChat(@Header("Authorization") String token, @Path("user_id") String userId, @Query("text") String message,@Body()String body, Callback<PostMessageResponse> postMessageResponseCallback);
 
     @GET("/users/{user_id}/messages/")
     void getFriendChat(@Header("Authorization") String token, @Path("user_id") String userId, @Query("start") long start, @Query("limit") int limit, Callback<PostChatResponse> postChatResponseCallback);
@@ -146,20 +146,25 @@ public interface HeldAPI {
     void getHold(@Header("Authorization") String token, @Path("post_id") String postId,@Path("hold_id") String holdId,Callback<HoldResponse> getHoldResponce);
 
 
-
     @GET("/posts/")
     void feedPost(@Header("X-HELD-TOKEN") String token, Callback<FeedResponse> feedResponseCallback);
-
 
     @GET("/friends/declined")
     void getDeclinedFriends(@Header("X-HELD-TOKEN") String token, Callback<FriendDeclineResponse> friendDeclineResponseCallback);
 
+
+    @GET("/posts/{post_id}/messages/")
+    void getPostChat(@Header("Authorization") String token, @Query("post_id") String postId,@Query("start") long start, @Query("limit") int limit, Callback<PostChatResponse> postChatResponseCallback);
+
+    @POST("/posts/{post_id}/messages/")
+    void postChat(@Header("Authorization") String token, @Path("post_id") String postId, @Query("text") String message,@Body() String body, Callback<PostMessageResponse> postMessageResponseCallback);
+
+
+
+
+
     @GET("/friends/add")
     void addFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<AddFriendResponse> addFriendResponseCallback);
-
-
-
-
 
     @GET("/friends/undecline")
     void undeclineFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<UnDeclineFriendResponse> unDeclineFriendResponseCallback);
@@ -167,23 +172,8 @@ public interface HeldAPI {
     @GET("/friends/unfriend")
     void unFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<UnFriendResponse> unFriendResponseCallback);
 
-
-
     @GET("/users/logout")
     void logoutUser(@Header("X-HELD-TOKEN") String token, @Query("phone") String phone, @Query("pin") int pin, Callback<LogoutUserResponse> logoutUserResponseCallback);
-
-    @GET("/posts/messages/")
-    void getPostChat(@Header("X-HELD-TOKEN") String token, @Query("post") String postId, Callback<PostChatResponse> postChatResponseCallback);
-
-    @GET("/posts/message")
-    void postChat(@Header("X-HELD-TOKEN") String token, @Query("post") String postId, @Query("message") String message, Callback<PostMessageResponse> postMessageResponseCallback);
-
-
-
-
-
-
-
 
     @GET("/users/profile")
     void updateRegID(@Header("X-HELD-TOKEN") String token, @Query("field") String fieldValue, @Query("value") String image,
@@ -192,13 +182,10 @@ public interface HeldAPI {
     @GET("/posts/request_download")
     void requestDownLoadPost(@Header("X-HELD-TOKEN") String token, @Query("post") String fieldValue, Callback<DownloadRequestData> downloadRequestDataCallback);
 
-
-
     @GET("/activities/")
     void getActivitiesFeed(@Header("X-HELD-TOKEN") String token, @Query("limit") int limit, @Query("start") long start, @Query("user") String uid, Callback<ActivityFeedDataResponse> activityFeedDataResponseCallback);
 
     @GET("/posts/search")
     void postSearch(@Header("X-HELD-TOKEN") String token, @Query("post") String postId, Callback<PostResponse> postResponseCallback);
-
 
 }

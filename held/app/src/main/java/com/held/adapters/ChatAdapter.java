@@ -127,9 +127,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     public void setPostChats(List<PostChatData> postChatData) {
-        mPostChatData = postChatData;
- //       notifyDataSetChanged();
-        notifyItemInserted(mPostChatData.size());
+        mPostChatData=postChatData;
+        notifyDataSetChanged();
     }
 
     class ViewHolder0 extends RecyclerView.ViewHolder {

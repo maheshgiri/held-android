@@ -1,11 +1,16 @@
 package com.held.activity;
 
 import android.graphics.Typeface;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -15,9 +20,18 @@ import com.held.fragment.FeedFragment;
 import com.held.fragment.HomeFragment;
 import com.held.fragment.ProfileFragment;
 import com.held.fragment.SendFriendRequestFragment;
+import com.held.retrofit.HeldService;
+import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.AppConstants;
+import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
+import com.held.utils.UiUtils;
 import com.held.utils.Utils;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
 
 public class FeedActivity extends ParentActivity implements View.OnClickListener {
 
@@ -31,6 +45,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     private final String TAG = "FeedActivity";
     private RelativeLayout mPosttoolbar;
     private int mPosition = 1;
+    private PreferenceHelper mPreference;
 
 
 
@@ -42,8 +57,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
        if (getIntent() != null && getIntent().getExtras() != null) {
             if (getIntent().getExtras().getBoolean("isProfile")) {
-                launchProfileScreen(PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_user_name)),
-                        PreferenceHelper.getInstance(this).readPreference(getString(R.string.API_user_img)));
+                launchProfileScreen(mPreference.readPreference(getString(R.string.API_user_name)));
             }
         } else {
             launchFeedScreen();
@@ -64,6 +78,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mTitle.setTypeface(medium);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
         mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
+        
 
         mChat.setOnClickListener(this);
         mSearch.setOnClickListener(this);
@@ -71,7 +86,57 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mCamera.setOnClickListener(this);
         mSearch_edt.setVisibility(View.GONE);
 
+        mSearch_edt = (EditText) findViewById(R.id.toolbar_search_edt_txt);
+        mSearch_edt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    if (getNetworkStatus()) {
+                        DialogUtils.showProgressBar();
+                        callUserSearchApi();
+                    } else {
+                        UiUtils.showSnackbarToast(getWindow().getDecorView().getRootView(), "You are not connected to internet.");
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
+        mSearch_edt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (getNetworkStatus()) {
+                    DialogUtils.showProgressBar();
+                    callUserSearchApi();
+                } else {
+                    UiUtils.showSnackbarToast(getWindow().getDecorView().getRootView(), "You are not connected to internet.");
+                }
+            }
+        });
+        mSearch_edt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mSearch.setVisibility(View.GONE);
+                    mTitle.setVisibility(View.GONE);
+                } else {
+                    mSearch.setVisibility(View.VISIBLE);
+                    mTitle.setVisibility(View.VISIBLE);
+                    mSearch_edt.setVisibility(View.GONE);
+                }
+            }
+        });
 
 
 
@@ -150,15 +215,15 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
             case AppConstants.LAUNCH_PROFILE_SCREEN:
 
                 if (bundle != null)
-                    launchProfileScreen(bundle.getString("uid"), bundle.getString("userImg"));
+                    launchProfileScreen(bundle.getString("name"));
                 break;
 
         }
     }
 
-    private void launchProfileScreen(String uid, String userImg) {
+    private void launchProfileScreen(String uid) {
         updateToolbar(true, false, true, false, true, true, false, "");
-        addFragment(ProfileFragment.newInstance(uid, userImg), ProfileFragment.TAG, true);
+        addFragment(ProfileFragment.newInstance(uid), ProfileFragment.TAG, true);
         mDisplayedFragment = Utils.getCurrVisibleFragment(this);
     }
 
@@ -237,7 +302,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 break;
             case R.id.toolbar_search_img:
                 Log.d(TAG, "toolbar search image has been clicked");
-                //visibleTextView();
+                visibleTextView();
+
                 break;
         }
     }
@@ -314,6 +380,35 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     public void showToolbar(){
         mHeld_toolbar.setVisibility(View.VISIBLE);
     }
+
+    private void callUserSearchApi() {
+        HeldService.getService().searchUser(mPreference.readPreference(getString(R.string.API_session_token)),
+                mSearch_edt.getText().toString().trim(), new Callback<SearchUserResponse>() {
+                    @Override
+                    public void success(SearchUserResponse searchUserResponse, Response response) {
+                        DialogUtils.stopProgressDialog();
+
+                        Bundle bundle = new Bundle();
+
+                        bundle.putString("name", searchUserResponse.getDisplayName());
+                       // bundle.putString("image", searchUserResponse.getPic());
+                        perform(AppConstants.LAUNCH_FRIEND_REQUEST_SCREEN, bundle);
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        DialogUtils.stopProgressDialog();
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            UiUtils.showSnackbarToast(getWindow().getDecorView().getRootView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                        } else
+                            UiUtils.showSnackbarToast(getWindow().getDecorView().getRootView(), "Some Problem Occurred");
+                    }
+                });
+    }
+
+
 
 
 }
