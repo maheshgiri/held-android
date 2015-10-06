@@ -111,7 +111,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             String ts = mPostChatData.get(position).getDate();
             viewHolder0.mDateTxt.setText(Utils.convertDate(ts));
             viewHolder0.mDesTxt.setText(mPostChatData.get(position).getText());
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + currentUser.getProfilePic()).into(viewHolder0.mProfilePic);
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostChatData.get(position).getImageUri()).into(viewHolder0.mProfilePic);
         } else if(holder instanceof ViewHolder2) {
 
 
@@ -120,7 +120,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             String ts = mPostChatData.get(position).getDate();
             viewHolder.mDateTxt.setText(Utils.convertDate(ts));
             viewHolder.mDesTxt.setText(mPostChatData.get(position).getText());
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + friendUser.getProfilePic()).into(viewHolder.mProfilePic);
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostChatData.get(position).getImageUri()).into(viewHolder.mProfilePic);
         }
         runEnterAnimation(holder.itemView, position);
     }

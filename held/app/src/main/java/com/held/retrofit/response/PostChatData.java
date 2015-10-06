@@ -4,15 +4,26 @@ package com.held.retrofit.response;
 public class PostChatData {
 
     private String tag;
-    private String text;
-    private User toUser,fromUser;
+    private String text,imageUri,thumbnailUri;
+    private User toUser,fromUser,creator;
     private String date,rid;
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
 
 
     public String getDate() {
         return date;
     }
 
+    public String getThumbnailUri() {
+        return thumbnailUri;
+    }
 
     public String getTag() {
         return tag;

@@ -3,17 +3,34 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_color"
-    android:clickable="true"
-    android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/CHAT_recycler_view"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:id="@+id/fragment_chat_layout">
+
+
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/CHAT_bottom_layout"
-        android:layout_marginTop="15dp"
-        android:background="@color/bg_color_one"/>
+        android:id="@+id/background_imageView"
+        android:scaleType="centerCrop"
+        android:layout_centerInParent="true"
+        android:src="@drawable/milana_vayntrub"
+        android:alpha=".3"
+      />
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/CHAT_recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@+id/CHAT_bottom_layout"
+    android:layout_centerInParent="true"
+
+    >
+</android.support.v7.widget.RecyclerView>
+
+
+
+
 
     <!-- ImageView
         android:id="@+id/CHAT_download"
@@ -30,14 +47,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/bg_color"
-        android:alpha=".50">
+        android:layout_marginTop="5dp"
+        android:alpha=".20">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@color/bg_color"
-            android:padding="10dp">
+            android:padding="10dp"
+            >
 
             <EditText
                 android:id="@+id/CHAT_message"
@@ -65,6 +84,10 @@
                 android:textSize="13sp"
                  />
         </RelativeLayout>
+
     </RelativeLayout>
+
+
+
 
 </RelativeLayout>

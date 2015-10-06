@@ -5,7 +5,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.NetworkOnMainThreadException;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,11 +26,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.held.activity.ChatActivity;
 import com.held.activity.InboxActivity;
 import com.held.activity.R;
 import com.held.adapters.ChatAdapter;
+import com.held.customview.BlurTransformation;
+import com.held.customview.PicassoCache;
 import com.held.customview.SlideInUpAnimator;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.DownloadRequestData;
@@ -31,12 +41,16 @@ import com.held.retrofit.response.PostChatData;
 import com.held.retrofit.response.PostChatResponse;
 import com.held.retrofit.response.PostMessageResponse;
 import com.held.retrofit.response.SearchUserResponse;
+import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.HeldApplication;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 import com.held.utils.Utils;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +69,7 @@ public class ChatFragment extends ParentFragment {
     private List<PostChatData> mPostChatData = new ArrayList<>();
     private Button mSubmitBtn;
     private EditText mMessageEdt;
-    private ImageView mDownLoad;
+    private ImageView mDownLoad,mChatBackImage;
     private boolean mIsOneToOne;
     private String mId, mFriendId;
     private BroadcastReceiver broadcastReceiver;
@@ -64,6 +78,8 @@ public class ChatFragment extends ParentFragment {
     private long mStart = System.currentTimeMillis();
     private PostChatData objPostChat=new PostChatData();
     private List<PostChatData> tmpList=new ArrayList<PostChatData>();
+    private BlurTransformation mBlurTransformation;
+
 
     public static ChatFragment newInstance(String id, boolean isOneToOne) {
 
@@ -71,9 +87,8 @@ public class ChatFragment extends ParentFragment {
         Bundle bundle = new Bundle();
         bundle.putString("user_id", id);
         bundle.putBoolean("isOneToOne", isOneToOne);
-        Timber.d("ChatFragment new instance received arguments: user id: " +  id + " isonetoone: " + isOneToOne);
+        Timber.d("ChatFragment new instance received arguments: user id: " + id + " isonetoone: " + isOneToOne);
         chatFragment.setArguments(bundle);
-
         return chatFragment;
 
     }
@@ -84,7 +99,8 @@ public class ChatFragment extends ParentFragment {
 
         mId = getArguments().getString("user_id");
         mIsOneToOne = getArguments().getBoolean("isOneToOne", false);
-        Timber.d("ChatFragment new instance received arguments: user id: " +  mId + " isonetoone: " + mIsOneToOne);
+        Timber.d("ChatFragment new instance received arguments: user id: " + mId + " isonetoone: " + mIsOneToOne);
+        mBlurTransformation=new BlurTransformation(getCurrActivity(), 25f);
         return inflater.inflate(R.layout.fragment_chat, container, false);
 
     }
@@ -136,13 +152,14 @@ public class ChatFragment extends ParentFragment {
         mMessageEdt = (EditText) view.findViewById(R.id.CHAT_message);
         mSubmitBtn.setOnClickListener(this);
         mIsOneToOne = getArguments().getBoolean("isOneToOne");
+        mChatBackImage=(ImageView) view.findViewById(R.id.background_imageView);
         /*mDownLoad = (ImageView) view.findViewById(R.id.CHAT_download);
         mDownLoad.setOnClickListener(this);*/
         mPreference=PreferenceHelper.getInstance(getCurrActivity());
         callFriendsChatsApi();
 
         if (mIsOneToOne) {
-            mDownLoad.setVisibility(View.GONE);
+//            mDownLoad.setVisibility(View.GONE);
             callUserSearchApi();
         } else {
             if (isAdded())
@@ -154,10 +171,12 @@ public class ChatFragment extends ParentFragment {
                 super.onScrolled(recyclerView, dx, dy);
                 int totalItemCount = mLayoutManager.getItemCount();
                 int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
+                mChatAdapter.notifyDataSetChanged();
                 callFriendsChatsApi();
 
             }
         });
+
 
     }
 
@@ -165,7 +184,7 @@ public class ChatFragment extends ParentFragment {
         mId = id;
         mIsOneToOne = isOneToOne;
         if (mIsOneToOne) {
-            mDownLoad.setVisibility(View.GONE);
+       //     mDownLoad.setVisibility(View.GONE);
             callUserSearchApi();
         } else {
             if (isAdded())
@@ -181,6 +200,13 @@ public class ChatFragment extends ParentFragment {
 //                        DialogUtils.stopProgressDialog();
                         Utils.hideSoftKeyboard(getCurrActivity());
                         mFriendId = searchUserResponse.getRid();
+
+                        PicassoCache.getPicassoInstance(getCurrActivity())
+                                .load(AppConstants.BASE_URL + searchUserResponse.getThumbnailUri())
+                                .placeholder(R.drawable.milana_vayntrub)
+                                .transform(mBlurTransformation)
+                                .into(mChatBackImage);
+
 //                        if (!mMessageEdt.getText().toString().isEmpty())
                         callFriendsChatsApi();
                     }
@@ -204,14 +230,17 @@ public class ChatFragment extends ParentFragment {
                     @Override
                     public void success(PostMessageResponse postMessageResponse, Response response) {
                         Timber.d("##$$@@post msg response" + postMessageResponse.getFromUser().getDisplayName());
-
-
+                        objPostChat.setDate(postMessageResponse.getDate());
+                        objPostChat.setRid(postMessageResponse.getRid());
+                        objPostChat.setText(postMessageResponse.getText());
+                        objPostChat.setToUser(postMessageResponse.getToUser());
+                        objPostChat.setFromUser(postMessageResponse.getFromUser());
+                        tmpList.add(objPostChat);
+                        mPostChatData.addAll(tmpList);
+                        tmpList.clear();
+                        mChatAdapter.notifyDataSetChanged();
                         callFriendsChatsApi();
-
                         mMessageEdt.setText("");
-
-
-
 
 
                         //Timber.i("Inside chat submit",""+postMessageResponse);
@@ -229,7 +258,7 @@ public class ChatFragment extends ParentFragment {
                             UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
                     }
                 });
-        callFriendsChatsApi();
+
     }
 
     private void callFriendsChatsApi() {
@@ -241,7 +270,7 @@ public class ChatFragment extends ParentFragment {
                     public void success(PostChatResponse postChatResponse, Response response) {
                         Timber.d("friends chat call success");
                         mChatAdapter.setPostChats(postChatResponse.getObjects());
-                        mPostChatData.addAll(postChatResponse.getObjects());
+                       // mPostChatData.addAll(postChatResponse.getObjects());
                         mChatAdapter.notifyDataSetChanged();
                     }
 
@@ -259,7 +288,7 @@ public class ChatFragment extends ParentFragment {
 
     private void callPostChatApi() {
         HeldService.getService().getPostChat(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                getArguments().getString("user_id"),mStart,mLimit,new Callback<PostChatResponse>() {
+                getArguments().getString("user_id"), mStart, mLimit, new Callback<PostChatResponse>() {
                     @Override
                     public void success(PostChatResponse postChatResponse, Response response) {
                         mChatAdapter.setPostChats(postChatResponse.getObjects());
@@ -289,9 +318,7 @@ public class ChatFragment extends ParentFragment {
                 if (mIsOneToOne) {
                     if (!mMessageEdt.getText().toString().isEmpty()) {
                         callFriendChatApi();
-
-
-
+                        callFriendsChatsApi();
                     }
                     else
                         UiUtils.showSnackbarToast(getView(), "Message should not be empty");
@@ -336,7 +363,7 @@ public class ChatFragment extends ParentFragment {
 
     private void callChatPostApi() {
         HeldService.getService().postChat(mPreference.readPreference(getString(R.string.API_session_token)),
-                getArguments().getString("user_id"), mMessageEdt.getText().toString().trim(),"", new Callback<PostMessageResponse>() {
+                getArguments().getString("user_id"), mMessageEdt.getText().toString().trim(), "", new Callback<PostMessageResponse>() {
                     @Override
                     public void success(PostMessageResponse postMessageResponse, Response response) {
                         mMessageEdt.setText("");
@@ -354,4 +381,5 @@ public class ChatFragment extends ParentFragment {
                     }
                 });
     }
+
 }
