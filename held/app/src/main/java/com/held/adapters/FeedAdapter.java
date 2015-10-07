@@ -170,8 +170,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.myCountLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    mActivity.launchSeenBy();
+                    mPostId = mFeedList.get(position).getRid();
+                    mActivity.launchSeenBy(mPostId);
                 }
             });
 
@@ -406,8 +406,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             Bundle bundle = new Bundle();
-            bundle.putString("uid", mFeedList.get(mPosition).getCreator().getDisplayName());
-            bundle.putString("userImg", AppConstants.BASE_URL + mFeedList.get(mPosition).getThumbnailUri());
+            bundle.putString("name", mFeedList.get(mPosition).getCreator().getDisplayName());
+           // bundle.putString("userImg", AppConstants.BASE_URL + mFeedList.get(mPosition).getThumbnailUri());
             mActivity.perform(AppConstants.LAUNCH_PROFILE_SCREEN, bundle);
 
             return true;

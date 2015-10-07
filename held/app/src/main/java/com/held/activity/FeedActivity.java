@@ -46,7 +46,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     private RelativeLayout mPosttoolbar;
     private int mPosition = 1;
     private PreferenceHelper mPreference;
-
+    private Toolbar toolbar;
 
 
     @Override
@@ -78,7 +78,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mTitle.setTypeface(medium);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
         mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
-        
+      //  setSupportActionBar(mHeld_toolbar);
 
         mChat.setOnClickListener(this);
         mSearch.setOnClickListener(this);
@@ -183,8 +183,9 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         addFragment(SendFriendRequestFragment.newInstance(name, AppConstants.BASE_URL + image), SendFriendRequestFragment.TAG, true);
         mDisplayedFragment = Utils.getCurrVisibleFragment(this);
     }
-    public void launchSeenBy(){
+    public void launchSeenBy(String post_id){
         Intent intent = new Intent(FeedActivity.this, SeenByActivity.class);
+        intent.putExtra("post_id",post_id);
         startActivity(intent);
     }
     @Override

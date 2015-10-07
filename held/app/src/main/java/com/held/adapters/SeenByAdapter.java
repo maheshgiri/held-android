@@ -13,7 +13,11 @@ import android.widget.TextView;
 
 import com.held.activity.ParentActivity;
 import com.held.activity.R;
+import com.held.activity.SeenByActivity;
 import com.held.customview.PicassoCache;
+import com.held.retrofit.response.Engager;
+import com.held.retrofit.response.EngagersResponse;
+import com.held.retrofit.response.LatestHold;
 import com.held.retrofit.response.SeenByData;
 import com.held.utils.AppConstants;
 import com.held.utils.Utils;
@@ -30,12 +34,14 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private ParentActivity mActivity;
     private boolean mIsLastPage;
+    private List<Engager> mEngagersList=new ArrayList<Engager>();
 
 
 
-    public SeenByAdapter(ParentActivity activity,String user,String imgUrl, boolean isLastPage){
+    public SeenByAdapter(SeenByActivity activity,List<Engager> engagerList,boolean isLastPage){
         mActivity = activity;
         mIsLastPage = isLastPage;
+        mEngagersList=engagerList;
 
 
     }
@@ -58,8 +64,16 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         String requestStatus =null;
 
         Timber.d("on bind viewholder");
+        Timber.d("SeenBy Profile Url"+mEngagersList.get(position).getUser().getProfilePic());
         SeenByViewHolder viewHolder = (SeenByViewHolder) holder;
-        switch(position){
+        PicassoCache.getPicassoInstance(mActivity)
+                .load(mEngagersList.get(position).getUser().getProfilePic())
+                .into(viewHolder.mProfilePic);
+      //
+        viewHolder.mUserName.setText(mEngagersList.get(position).getUser().getDisplayName());
+        viewHolder.mButton.setBackgroundColor(mActivity.getResources().getColor(R.color.white));
+        viewHolder.mButton.setTextColor(mActivity.getResources().getColor(R.color.friend_btn_color));
+        /*switch(position){
             case 0:
                 userName = "swapnil3";
                 img = "/user_thumbnails/swapnil3_1443690679233.jpg";
@@ -80,16 +94,16 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 viewHolder.mButton.setBackgroundColor(mActivity.getResources().getColor(R.color.friend_req_color));
                 break;
 
-        }
+        }*/
         Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
         viewHolder.mUserName.setTypeface(medium);
-        viewHolder.mUserName.setText(userName);
+       /*/ viewHolder.mUserName.setText(userName);
         PicassoCache.getPicassoInstance(mActivity)
                 .load(AppConstants.BASE_URL + img)
                 .placeholder(R.drawable.user_icon)
                 .into(viewHolder.mProfilePic);
 
-        viewHolder.mButton.setText(requestStatus);
+        //viewHolder.mButton.setText(requestStatus);*/
 
 
     }
@@ -97,7 +111,9 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemCount() {
        //todo: fix later
-        return 3;
+        //return mEngagersList.size();
+        return 1;
+
     }
 
 
