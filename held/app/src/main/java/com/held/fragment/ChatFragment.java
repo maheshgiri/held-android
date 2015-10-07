@@ -70,7 +70,7 @@ public class ChatFragment extends ParentFragment {
     private Button mSubmitBtn;
     private EditText mMessageEdt;
     private ImageView mDownLoad,mChatBackImage;
-    private boolean mIsOneToOne;
+    private boolean mIsOneToOne,misLastPage;
     private String mId, mFriendId;
     private BroadcastReceiver broadcastReceiver;
     private PreferenceHelper mPreference;
@@ -140,14 +140,9 @@ public class ChatFragment extends ParentFragment {
         mLayoutManager = new LinearLayoutManager(getCurrActivity());
         mLayoutManager.setReverseLayout(true);
         mLayoutManager.scrollToPositionWithOffset(mPostChatData.size(), 0);
-        mChatAdapter = new ChatAdapter((ChatActivity) getCurrActivity(), mPostChatData);
         SlideInUpAnimator slideInUpAnimator = new SlideInUpAnimator();
         slideInUpAnimator.setAddDuration(1000);
         mChatList.setItemAnimator(slideInUpAnimator);
-
-        mChatList.setLayoutManager(mLayoutManager);
-        mChatList.setAdapter(mChatAdapter);
-
         mSubmitBtn = (Button) view.findViewById(R.id.CHAT_submit_btn);
         mMessageEdt = (EditText) view.findViewById(R.id.CHAT_message);
         mSubmitBtn.setOnClickListener(this);
@@ -157,27 +152,35 @@ public class ChatFragment extends ParentFragment {
         mDownLoad.setOnClickListener(this);*/
         mPreference=PreferenceHelper.getInstance(getCurrActivity());
         callFriendsChatsApi();
+        mChatAdapter = new ChatAdapter((ChatActivity) getCurrActivity(), mPostChatData);
+        mChatList.setLayoutManager(mLayoutManager);
+        mChatList.setAdapter(mChatAdapter);
 
         if (mIsOneToOne) {
 //            mDownLoad.setVisibility(View.GONE);
             callUserSearchApi();
+           // callFriendsChatsApi();
         } else {
             if (isAdded())
                 callPostChatApi();
         }
-        mChatList.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        if (getCurrActivity().getNetworkStatus()||misLastPage==false) {
+            callFriendsChatsApi();
+        } else {
+            UiUtils.showSnackbarToast(getView(), "Sorry! You don't seem to connected to internet");
+        }
+
+    /*    mChatList.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int totalItemCount = mLayoutManager.getItemCount();
+                int totalItemCoount = mLayoutManager.getItemCount();
                 int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
-                mChatAdapter.notifyDataSetChanged();
+               // mChatAdapter.notifyDataSetChanged();
                 callFriendsChatsApi();
 
             }
-        });
-
-
+        });*/
     }
 
     public void onDataReceived(String id, boolean isOneToOne) {
@@ -185,7 +188,8 @@ public class ChatFragment extends ParentFragment {
         mIsOneToOne = isOneToOne;
         if (mIsOneToOne) {
        //     mDownLoad.setVisibility(View.GONE);
-            callUserSearchApi();
+          //  callUserSearchApi();
+            callFriendsChatsApi();
         } else {
             if (isAdded())
                 callPostChatApi();
@@ -236,13 +240,14 @@ public class ChatFragment extends ParentFragment {
                         objPostChat.setToUser(postMessageResponse.getToUser());
                         objPostChat.setFromUser(postMessageResponse.getFromUser());
                         tmpList.add(objPostChat);
+
                         mPostChatData.addAll(tmpList);
-                        tmpList.clear();
-                        mChatAdapter.notifyDataSetChanged();
-                        callFriendsChatsApi();
+                        mChatAdapter.setPostChats(mPostChatData);
+
+
                         mMessageEdt.setText("");
-
-
+                        tmpList.clear();
+                        callFriendsChatsApi();
                         //Timber.i("Inside chat submit",""+postMessageResponse);
 
 
@@ -258,7 +263,7 @@ public class ChatFragment extends ParentFragment {
                             UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
                     }
                 });
-
+        callFriendsChatsApi();
     }
 
     private void callFriendsChatsApi() {
@@ -269,9 +274,11 @@ public class ChatFragment extends ParentFragment {
                     @Override
                     public void success(PostChatResponse postChatResponse, Response response) {
                         Timber.d("friends chat call success");
+                        mPostChatData.clear();
+                        mPostChatData.addAll(postChatResponse.getObjects());
                         mChatAdapter.setPostChats(postChatResponse.getObjects());
-                       // mPostChatData.addAll(postChatResponse.getObjects());
-                        mChatAdapter.notifyDataSetChanged();
+                        misLastPage=postChatResponse.isLastPage();
+                       // mChatAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -292,7 +299,7 @@ public class ChatFragment extends ParentFragment {
                     @Override
                     public void success(PostChatResponse postChatResponse, Response response) {
                         mChatAdapter.setPostChats(postChatResponse.getObjects());
-                        mChatAdapter.notifyDataSetChanged();
+                       // mChatAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -318,7 +325,8 @@ public class ChatFragment extends ParentFragment {
                 if (mIsOneToOne) {
                     if (!mMessageEdt.getText().toString().isEmpty()) {
                         callFriendChatApi();
-                        callFriendsChatsApi();
+                        //callFriendsChatsApi();
+
                     }
                     else
                         UiUtils.showSnackbarToast(getView(), "Message should not be empty");

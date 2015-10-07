@@ -38,7 +38,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<PostChatData> mPostChatData;
     private int lastPosition = -1;
     private GestureDetector mGestureDetector;
-    private boolean delayEnterAnimation = true, animationsLocked;
+    private boolean delayEnterAnimation = true, animationsLocked,mIsLastPage;
     private PreferenceHelper mPreference;
     private User currentUser=null,friendUser=null;
 
@@ -111,7 +111,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             String ts = mPostChatData.get(position).getDate();
             viewHolder0.mDateTxt.setText(Utils.convertDate(ts));
             viewHolder0.mDesTxt.setText(mPostChatData.get(position).getText());
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostChatData.get(position).getImageUri()).into(viewHolder0.mProfilePic);
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + currentUser.getProfilePic()).into(viewHolder0.mProfilePic);
         } else if(holder instanceof ViewHolder2) {
 
 
@@ -120,13 +120,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             String ts = mPostChatData.get(position).getDate();
             viewHolder.mDateTxt.setText(Utils.convertDate(ts));
             viewHolder.mDesTxt.setText(mPostChatData.get(position).getText());
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostChatData.get(position).getImageUri()).into(viewHolder.mProfilePic);
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + friendUser.getProfilePic()).into(viewHolder.mProfilePic);
         }
         runEnterAnimation(holder.itemView, position);
     }
 
 
     public void setPostChats(List<PostChatData> postChatData) {
+        mPostChatData.clear();
         mPostChatData=postChatData;
         notifyDataSetChanged();
     }
