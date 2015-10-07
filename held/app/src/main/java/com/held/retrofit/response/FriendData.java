@@ -25,4 +25,10 @@ public class FriendData {
     public User getToUser() {
         return toUser;
     }
+
+    public User getFromUser() {
+        return fromUser;
+    }
+
+
 }

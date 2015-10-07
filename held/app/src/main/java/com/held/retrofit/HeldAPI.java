@@ -12,6 +12,7 @@ import com.held.retrofit.response.DeclineDownloadResponse;
 import com.held.retrofit.response.DeclineFriendResponse;
 import com.held.retrofit.response.DownloadRequestData;
 import com.held.retrofit.response.DownloadRequestListResponse;
+import com.held.retrofit.response.EngagersResponse;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.FriendDeclineResponse;
@@ -159,7 +160,8 @@ public interface HeldAPI {
     @POST("/posts/{post_id}/messages/")
     void postChat(@Header("Authorization") String token, @Path("post_id") String postId, @Query("text") String message,@Body() String body, Callback<PostMessageResponse> postMessageResponseCallback);
 
-
+    @GET("/posts/{post_id}/engagers")
+    void getPostEngagers(@Header("Authorization") String token, @Path("post_id") String postId, @Query("limit") int limit, @Query("shuffle") boolean shuffle, Callback<EngagersResponse> engagersResponseCallback);
 
 
 

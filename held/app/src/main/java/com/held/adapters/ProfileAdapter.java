@@ -312,7 +312,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     {
 
         HeldService.getService().searchUser(mPrefernce.readPreference(Utils.getString(R.string.API_session_token)),
-                mPrefernce.readPreference(Utils.getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
+                mOwnerDisplayName, new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
                         Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());

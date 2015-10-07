@@ -169,6 +169,7 @@ public class PostFragment extends ParentFragment {
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
                 }
                 mCaptionEdt.setVisibility(View.GONE);
+
                 break;
             case R.id.POST_cancel:
                 Utils.hideSoftKeyboard(getCurrActivity());
@@ -275,6 +276,7 @@ public class PostFragment extends ParentFragment {
 
         builder.show();
 
+
     }
 
     private void doCrop(Uri mCurrentPhotoPath) {
@@ -355,6 +357,7 @@ public class PostFragment extends ParentFragment {
             updateBoxUI();
 //            updateUI();
         }
+        updateBoxUI();
 
     }
 
@@ -397,7 +400,7 @@ public class PostFragment extends ParentFragment {
         String sessionToken = helper.readPreference(getString(R.string.API_session_token));
         Log.i("PostFrgament", "Session token: " + sessionToken);
 
-        HeldService.getService().uploadFile( sessionToken,
+        HeldService.getService().uploadFile(sessionToken,
                 mCaptionEdt.getText().toString().trim(), new TypedFile("multipart/form-data", mFile), "", new Callback<PostResponse>() {
                     @Override
                     public void success(PostResponse postResponse, Response response) {

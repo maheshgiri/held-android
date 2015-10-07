@@ -10,8 +10,12 @@ public class User {
         String profilePic,imageUri;
         String displayName;
         String phone;
-        String joinDate;
+        String joinDate,friendCount;
 
+
+        public String getFriendCount() {
+                return friendCount;
+        }
 
         public String getJoinDate() {
                 return joinDate;

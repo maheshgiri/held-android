@@ -1,6 +1,8 @@
 package com.held.retrofit.response;
 
 
+import java.util.List;
+
 public class FeedData {
 
     private String date;
@@ -12,6 +14,9 @@ public class FeedData {
     private User user;
     private Creator creator;
     private String rid;
+
+
+
 
     public String getThumbnailUri() {
         return thumbnailUri;
