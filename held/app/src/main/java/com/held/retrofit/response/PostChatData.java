@@ -5,7 +5,7 @@ public class PostChatData {
 
     private String tag;
     private String text,imageUri,thumbnailUri;
-    private User toUser,fromUser,creator;
+    private User toUser,fromUser,creator,user;
     private String date,rid;
 
     public String getImageUri() {
@@ -16,6 +16,9 @@ public class PostChatData {
         return creator;
     }
 
+    public User getUser() {
+        return user;
+    }
 
     public String getDate() {
         return date;

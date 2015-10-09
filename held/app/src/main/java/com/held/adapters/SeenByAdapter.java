@@ -1,5 +1,6 @@
 package com.held.adapters;
 
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,9 +39,9 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
 
-    public SeenByAdapter(SeenByActivity activity,List<Engager> engagerList,boolean isLastPage){
+    public SeenByAdapter(SeenByActivity activity,List<Engager> engagerList){
         mActivity = activity;
-        mIsLastPage = isLastPage;
+      //  mIsLastPage = isLastPage;
         mEngagersList=engagerList;
 
 
@@ -64,14 +65,17 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         String requestStatus =null;
 
         Timber.d("on bind viewholder");
-        Timber.d("SeenBy Profile Url"+mEngagersList.get(position).getUser().getProfilePic());
+       // Timber.d("SeenBy Profile Url"+mEngagersList.get(position).getUser().getProfilePic());
         SeenByViewHolder viewHolder = (SeenByViewHolder) holder;
         PicassoCache.getPicassoInstance(mActivity)
-                .load(mEngagersList.get(position).getUser().getProfilePic())
+                .load(AppConstants.BASE_URL+mEngagersList.get(position).getUser().getProfilePic())
                 .into(viewHolder.mProfilePic);
-      //
+
         viewHolder.mUserName.setText(mEngagersList.get(position).getUser().getDisplayName());
-        viewHolder.mButton.setBackgroundColor(mActivity.getResources().getColor(R.color.white));
+       // viewHolder.mButton.setText((CharSequence) mEngagersList.get(position).getFriendshipStatus());
+        requestStatus=mEngagersList.get(position).getFriendshipStatus();
+        setBtnColor(viewHolder.mButton,requestStatus);
+       /* viewHolder.mButton.setBackgroundColor(mActivity.getResources().getColor(R.color.white));
         viewHolder.mButton.setTextColor(mActivity.getResources().getColor(R.color.friend_btn_color));
         /*switch(position){
             case 0:
@@ -96,7 +100,9 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         }*/
         Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
+        Typeface sanBook = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansBook.otf");
         viewHolder.mUserName.setTypeface(medium);
+        viewHolder.mButton.setTypeface(medium);
        /*/ viewHolder.mUserName.setText(userName);
         PicassoCache.getPicassoInstance(mActivity)
                 .load(AppConstants.BASE_URL + img)
@@ -111,18 +117,19 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemCount() {
        //todo: fix later
-        //return mEngagersList.size();
-        return 1;
+        return mEngagersList.size();
+       // return 1;
 
     }
 
 
 
-    /*public void setActivityFeedList(List<> activitySeenList, boolean isLastPage) {
+    public void setEngagersList(List<Engager> activitySeenList) {
         //mActivityDataList = activitySeenList;
-        mIsLastPage = isLastPage;
+        mEngagersList=activitySeenList;
+       // mIsLastPage = isLastPage;
         notifyDataSetChanged();
-    }*/
+    }
     public static class SeenByViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView mProfilePic;
@@ -138,16 +145,20 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    public void setColor(Button btn){
-        if(btn.getText().equals("Add as Friend")){
-            btn.setBackgroundColor(Integer.parseInt(Utils.getString(R.color.positve_btn)));
-            btn.setTextColor(Integer.parseInt(Utils.getString(R.color.white)));
-        }else if(btn.getText().equals("Friends")){
-            btn.setBackgroundColor(Integer.parseInt(Utils.getString(R.drawable.button_background)));
-            btn.setTextColor(Integer.parseInt(Utils.getString(R.color.friend_btn_color)));
-        }else if(btn.getText().equals("Request Sent")){
-            btn.setBackgroundColor(Integer.parseInt(Utils.getString(R.color.friend_btn_color)));
-            btn.setTextColor(Integer.parseInt(Utils.getString(R.color.white)));
+    public void setBtnColor(Button btn,String reqStatus){
+        if(reqStatus.equalsIgnoreCase("Add as friends")){
+            ///Have to check request status for this for add as friends
+          //  btn.setCompoundDrawables(mActivity.getResources().getDrawable(R.drawable.friendrequest),0,0,0);
+            btn.setBackgroundColor(mActivity.getResources().getColor(R.color.positve_btn));
+            btn.setTextColor(mActivity.getResources().getColor(R.color.white));
+        }else if(reqStatus.equalsIgnoreCase("friends")){
+            btn.setText("Friends");
+            btn.setBackground(mActivity.getResources().getDrawable(R.drawable.button_background));
+            btn.setTextColor(mActivity.getResources().getColor(R.color.friend_btn_color));
+        } else if(reqStatus.equalsIgnoreCase("XXfriends")){
+            ///Have to check request status for this
+            btn.setBackgroundColor(mActivity.getResources().getColor(R.color.friend_btn_color));
+            btn.setTextColor(mActivity.getResources().getColor(R.color.white));
         }
 
 
