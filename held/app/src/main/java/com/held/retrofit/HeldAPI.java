@@ -155,7 +155,7 @@ public interface HeldAPI {
 
 
     @GET("/posts/{post_id}/messages/")
-    void getPostChat(@Header("Authorization") String token, @Query("post_id") String postId,@Query("start") long start, @Query("limit") int limit, Callback<PostChatResponse> postChatResponseCallback);
+    void getPostChat(@Header("Authorization") String token, @Path("post_id") String postId,@Query("start") long start, @Query("limit") int limit, Callback<PostChatResponse> postChatResponseCallback);
 
     @POST("/posts/{post_id}/messages/")
     void postChat(@Header("Authorization") String token, @Path("post_id") String postId, @Query("text") String message,@Body() String body, Callback<PostMessageResponse> postMessageResponseCallback);

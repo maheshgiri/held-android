@@ -140,7 +140,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .into(holder.mFeedImg);
             holder.mUserNameTxt.setText(mFeedList.get(position).getCreator().getDisplayName());
             setTimeText(mFeedList.get(position).getHeld(),holder.mTimeMinTxt,holder.mTimeSecTxt);
-
+            mPostId=mFeedList.get(position).getRid();
 //            holder.mUserImg.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
@@ -213,7 +213,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                     }
                     feedViewHolder = holder;
-                    mPostId = mFeedList.get(position).getCreator().getRid();
+                    //mPostId = mFeedList.get(position).getCreator().getRid();
                     return mGestureDetector.onTouchEvent(motionEvent);
                 }
 
@@ -351,7 +351,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             Bundle bundle = new Bundle();
+
             bundle.putString("postid", mPostId);
+            bundle.putBoolean("oneToOne",false);
+            //bundle.putBoolean("flag",false);
             mActivity.perform(AppConstants.LAUNCH_CHAT_SCREEN, bundle);
             return true;
         }

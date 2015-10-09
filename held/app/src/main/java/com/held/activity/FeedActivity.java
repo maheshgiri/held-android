@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
+
+import com.held.fragment.ChatFragment;
 import com.held.fragment.FeedFragment;
 import com.held.fragment.HomeFragment;
 import com.held.fragment.ProfileFragment;
@@ -161,11 +163,20 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     }
 
     //private void launchChatScreen(String id, boolean isOneToOne) {
-    private void launchChatScreen() {
-        Intent intent = new Intent(FeedActivity.this, InboxActivity.class);
+    private void launchChatScreen(String postid,boolean isOneToOne) {
+        Intent intent = new Intent(FeedActivity.this, ChatActivity.class);
+        intent.putExtra("postid", postid);
+        intent.putExtra("isOneToOne",isOneToOne);
+        //intent.putExtra("flag",flag);
+        startActivity(intent);
+
+       // mDisplayedFragment = Utils.getCurrVisibleFragment(this);
+       /*
+       this is commented bcoz it opens inbox we need personalchat design
+       Intent intent = new Intent(FeedActivity.this, InboxActivity.class);
         //intent.putExtra("id", id);
         //intent.putExtra("isOneToOne", isOneToOne);
-        startActivity(intent);
+        startActivity(intent);*/
     }
 
     private void launchChatListScreen() {
@@ -185,7 +196,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     }
     public void launchSeenBy(String post_id){
         Intent intent = new Intent(FeedActivity.this, SeenByActivity.class);
-        intent.putExtra("post_id",post_id);
+        intent.putExtra("post_id", post_id);
         startActivity(intent);
     }
     @Override
@@ -200,7 +211,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 launchHomeScreen();
                 break;
             case AppConstants.LAUNCH_CHAT_SCREEN:
-                launchChatScreen();
+                if (bundle != null)
+                    launchChatScreen(bundle.getString("postid"),bundle.getBoolean("oneToOne"));
                 break;
             case AppConstants.LAUNCH_NOTIFICATION_SCREEN:
                 launchNotificationScreen();
@@ -210,8 +222,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                     launchRequestFriendScreen(bundle.getString("name"), bundle.getString("image"));
                 break;
             case AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN:
-                launchChatScreen();
-
+                launchChatListScreen();
                 break;
             case AppConstants.LAUNCH_PROFILE_SCREEN:
 
@@ -265,7 +276,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
             case R.id.toolbar_chat_img:
                 Log.d(TAG, "toolbar chat image has been clicked. mPosition is " + mPosition);
-
+//Here launch_personal_chat is repalced by launch_chat_screen
                 if (mPosition == 0) {
                     perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, null);
                 } else if (mPosition == 1) {

@@ -25,6 +25,8 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
     EditText mSearchEdt;
     Activity mActivity;
     Fragment mDisplayFragment;
+    String mChatId,mPostId,mId;
+    boolean flag;
 
 
     @Override
@@ -46,14 +48,34 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         mNotification.setOnClickListener(this);
         Bundle extras = getIntent().getExtras();
         boolean isOneToOne = extras.getBoolean("isOneToOne");
-        String chatId = extras.getString("chatId");
-        Timber.d("Chat activity received chat id " + chatId + " isontotone: " + isOneToOne);
-        launchChatScreen(chatId, isOneToOne);
+        mChatId=extras.getString("chatId");
+        mPostId=extras.getString("postid");
+        if(isOneToOne){
+            mId=mChatId;
+        }
+        else {
+            mId=mPostId;
+        }
+
+
+
+
+       // flag=extras.getBoolean("flag");
+       // String chatId = extras.getString("chatId");
+       // Timber.d("Chat activity received chat id " + chatId + " isontotone: " + isOneToOne);
+        launchChatScreen(mId, isOneToOne);
     }
 
     private void launchChatScreen(String id, boolean isOneToOne) {
         ParentFragment frag = ChatFragment.newInstance(id, isOneToOne);
-        addFragment( frag, ChatFragment.TAG);
+        Bundle bundle=new Bundle();
+
+        if(isOneToOne)
+            bundle.putString("user_id",id);
+        else
+            bundle.putString("postid",id);
+        frag.setArguments(bundle);
+        addFragment(ChatFragment.newInstance(id,isOneToOne), ChatFragment.TAG, false);
         mDisplayFragment = frag;
     }
 

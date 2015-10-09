@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.held.activity.ChatActivity;
 import com.held.activity.InboxActivity;
+import com.held.activity.ParentActivity;
 import com.held.activity.R;
 import com.held.retrofit.response.PostChatData;
 import com.held.retrofit.response.User;
@@ -34,7 +35,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int ITEM_RIGHT = 1;
 
 
-    private ChatActivity mActivity;
+    private ParentActivity mActivity;
     private List<PostChatData> mPostChatData;
     private int lastPosition = -1;
     private GestureDetector mGestureDetector;
@@ -42,7 +43,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private PreferenceHelper mPreference;
     private User currentUser=null,friendUser=null;
 
-    public ChatAdapter(ChatActivity activity, List<PostChatData> postChatData) {
+    public ChatAdapter(ParentActivity activity, List<PostChatData> postChatData) {
         mActivity = activity;
         mPostChatData = postChatData;
         mPreference = PreferenceHelper.getInstance(mActivity);
@@ -54,8 +55,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Timber.d("trying to get view type");
         // Just as an example, return 0 or 2 depending on position
         // Note that unlike in ListView adapters, types don't have to be contiguous
-        int type = (mPostChatData.get(position).getFromUser().getDisplayName()).
-               equals(mPreference.readPreference(Utils.getString(R.string.API_user_name))) ? ITEM_RIGHT : ITEM_LEFT;
+        int type;
+        if(mPostChatData.get(position).getUser()==null) {
+            type = (mPostChatData.get(position).getFromUser().getDisplayName()).
+                    equals(mPreference.readPreference(Utils.getString(R.string.API_user_name))) ? ITEM_RIGHT : ITEM_LEFT;
+        }else {
+            type = (mPostChatData.get(position).getUser().getDisplayName()).
+                    equals(mPreference.readPreference(Utils.getString(R.string.API_user_name))) ? ITEM_RIGHT : ITEM_LEFT;
+        }
         Timber.d("chat id " + position + " is type " + type);
         return type;
 
@@ -90,17 +97,24 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         Timber.d("onBind view holder");
         ///Get Current user
-        if(mPreference.readPreference(Utils.getString(R.string.API_user_name)).equals(mPostChatData.get(position).getFromUser().getDisplayName()))
-        {
-            currentUser=mPostChatData.get(position).getFromUser();
-            friendUser=mPostChatData.get(position).getToUser();
+        String userName=mPreference.readPreference(Utils.getString(R.string.API_user_name));
+        if(mPostChatData.get(position).getUser()==null) {
+            if (userName.equals(mPostChatData.get(position).getFromUser().getDisplayName())) {
+                currentUser = mPostChatData.get(position).getFromUser();
+                friendUser = mPostChatData.get(position).getToUser();
+            } else if (userName.equals(mPostChatData.get(position).getToUser().getDisplayName()) && mPostChatData.get(position).getUser() == null) {
+                currentUser = mPostChatData.get(position).getToUser();
+                friendUser = mPostChatData.get(position).getFromUser();
+            }
         }
-        else if(mPreference.readPreference(Utils.getString(R.string.API_user_name)).equals(mPostChatData.get(position).getToUser().getDisplayName()))
-        {
-            currentUser=mPostChatData.get(position).getToUser();
-            friendUser=mPostChatData.get(position).getFromUser();
+        else {
+            if (userName.equals(mPostChatData.get(position).getUser().getDisplayName()))
+            {
+                currentUser = mPostChatData.get(position).getUser();
+            } else if(!userName.equals(mPostChatData.get(position).getUser().getDisplayName())) {
+                friendUser = mPostChatData.get(position).getUser();
+            }
         }
-
 
 
         if (holder instanceof ViewHolder0) {

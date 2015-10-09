@@ -28,6 +28,7 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
     private TextView mUsername;
     private static InboxActivity activity;
     private final String TAG = "InboxActivity";
+    private final boolean flag=true;
 
     public static InboxActivity getInstance() {
         return activity;
