@@ -34,7 +34,7 @@
         android:layout_height="22dp"
         android:id="@+id/button"
         android:textColor="@color/white"
-        android:text="Add as Friend"
+
         android:textSize="11sp"
         android:background="@color/friend_btn_color"
         android:layout_margin="10dp"

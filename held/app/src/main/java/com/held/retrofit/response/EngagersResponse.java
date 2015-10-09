@@ -7,11 +7,9 @@ import java.util.List;
  * Created by MAHESH on 10/7/2015.
  */
 public class EngagersResponse {
-    private List<Engager> engagerList=new ArrayList<>();
+    private List<Engager> objects;
 
-    public List<Engager> getEngagerList() {
-        return engagerList;
+    public List<Engager> getObjects() {
+        return objects;
     }
-
-
 }

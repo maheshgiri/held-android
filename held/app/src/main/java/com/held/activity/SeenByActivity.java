@@ -81,7 +81,7 @@ public class SeenByActivity extends ParentActivity {
         callSeenByApi();
 
         Timber.d("setting seen by adapter");
-        mSeenByAdapter = new SeenByAdapter(this,mEngagersList,isLastPage);
+        mSeenByAdapter = new SeenByAdapter(this,mEngagersList);
         mSeenRecyclerView.setAdapter(mSeenByAdapter);
 
 
@@ -115,7 +115,9 @@ return;
                 new Callback<EngagersResponse>() {
                     @Override
                     public void success(EngagersResponse engagersResponse, Response response) {
-                        mEngagersList.addAll(engagersResponse.getEngagerList());
+                        mEngagersList.addAll(engagersResponse.getObjects());
+                        mSeenByAdapter.setEngagersList(mEngagersList);
+                        Timber.d("Print SeenBy List\n"+mEngagersList.toString());
 
                     }
 
