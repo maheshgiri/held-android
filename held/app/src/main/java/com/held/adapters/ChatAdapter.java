@@ -38,7 +38,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<PostChatData> mPostChatData;
     private int lastPosition = -1;
     private GestureDetector mGestureDetector;
-    private boolean delayEnterAnimation = true, animationsLocked;
+    private boolean delayEnterAnimation = true, animationsLocked,mIsLastPage;
     private PreferenceHelper mPreference;
     private User currentUser=null,friendUser=null;
 
@@ -127,9 +127,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     public void setPostChats(List<PostChatData> postChatData) {
-        mPostChatData = postChatData;
- //       notifyDataSetChanged();
-        notifyItemInserted(mPostChatData.size());
+        mPostChatData.clear();
+        mPostChatData=postChatData;
+        notifyDataSetChanged();
     }
 
     class ViewHolder0 extends RecyclerView.ViewHolder {

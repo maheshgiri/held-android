@@ -1,21 +1,19 @@
 package com.held.retrofit.response;
 
+import java.util.List;
+
 public class PostMessageResponse {
 
-    private String date;
-    private String owner_display_name;
     private String tag;
-    private String rid;
-    private String message;
-    private String owner_pic;
+    private String text;
+    private User toUser,fromUser;
+    private String date,rid;
+
 
     public String getDate() {
         return date;
     }
 
-    public String getOwner_display_name() {
-        return owner_display_name;
-    }
 
     public String getTag() {
         return tag;
@@ -25,11 +23,15 @@ public class PostMessageResponse {
         return rid;
     }
 
-    public String getMessage() {
-        return message;
+    public String getText() {
+        return text;
     }
 
-    public String getOwner_pic() {
-        return owner_pic;
+    public User getFromUser() {
+        return fromUser;
+    }
+
+    public User getToUser() {
+        return toUser;
     }
 }

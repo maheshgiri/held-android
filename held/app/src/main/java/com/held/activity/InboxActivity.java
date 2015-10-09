@@ -53,7 +53,7 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
      //   mPostBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
        // mUsername = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
 
-        mCamera.setImageResource(R.drawable.home_icon_v2);
+        mCamera.setImageResource(R.drawable.home);
         mCamera.setVisibility(View.VISIBLE);
         //mCamera.setImageDrawable(homeIcon);
         mChat.setVisibility(View.GONE);

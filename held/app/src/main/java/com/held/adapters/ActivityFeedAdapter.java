@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.held.activity.ParentActivity;
 import com.held.activity.R;
+import com.held.customview.PicassoCache;
 import com.held.retrofit.response.ActivityFeedData;
 
 import java.util.List;
@@ -39,7 +40,7 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return new ProgressViewHolder(v);
         } else {
             View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.row_friends_list, parent, false);
+                    .inflate(R.layout.row_activity_feed, parent, false);
             return new FeedViewHolder(v);
         }
     }
@@ -58,9 +59,12 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         } else {
             FeedViewHolder viewHolder = (FeedViewHolder) holder;
-            viewHolder.mUserName.setText(mActivityFeedDataList.get(position).getOwner_display_name());
-            viewHolder.mUserDetail.setText(mActivityFeedDataList.get(position).getText());
-            viewHolder.mDate.setText(mActivityFeedDataList.get(position).getDate());
+            PicassoCache.getPicassoInstance(mActivity)
+                    .load(mActivityFeedDataList.get(position).getPostPic())
+                    .into(viewHolder.mPostImg);
+            viewHolder.mActivityFeedDes.setText(mActivityFeedDataList.get(position).getOwner_display_name());
+            viewHolder.mActivityFeedDesTime.setText(mActivityFeedDataList.get(position).getText());
+            viewHolder.mActivityFeedTime.setText(mActivityFeedDataList.get(position).getDate());
         }
     }
 
@@ -82,15 +86,15 @@ public class ActivityFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public static class FeedViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mProfilePic;
-        private TextView mUserName, mUserDetail, mDate;
+        private ImageView mPostImg;
+        private TextView mActivityFeedDes, mActivityFeedDesTime, mActivityFeedTime;
 
         public FeedViewHolder(View itemView) {
             super(itemView);
-            mProfilePic = (ImageView) itemView.findViewById(R.id.FRIEND_profile_pic);
-            mUserName = (TextView) itemView.findViewById(R.id.FRIEND_name);
-            mUserDetail = (TextView) itemView.findViewById(R.id.FRIEND_description);
-            mDate = (TextView) itemView.findViewById(R.id.FRIEND_time_txt);
+            mPostImg = (ImageView) itemView.findViewById(R.id.post_img);
+            mActivityFeedDes = (TextView) itemView.findViewById(R.id.activity_feed_txt);
+            mActivityFeedDesTime = (TextView) itemView.findViewById(R.id.feed_desc_time);
+            mActivityFeedTime = (TextView) itemView.findViewById(R.id.activity_feed_time_txt);
         }
     }
 

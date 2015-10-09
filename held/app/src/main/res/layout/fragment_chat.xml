@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/fragment_chat_layout">
+
 
     <ImageView
         android:layout_width="match_parent"
@@ -24,6 +26,9 @@
         android:layout_marginTop="15dp"
         />
 
+
+
+
     <!-- ImageView
         android:id="@+id/CHAT_download"
         android:layout_width="wrap_content"
@@ -39,14 +44,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/bg_color"
-        android:alpha=".50">
+        android:layout_marginTop="5dp"
+        android:alpha=".70"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@color/bg_color"
-            android:padding="10dp">
+            android:padding="10dp"
+            >
 
             <EditText
                 android:id="@+id/CHAT_message"
@@ -74,6 +82,10 @@
                 android:textSize="13sp"
                  />
         </RelativeLayout>
+
     </RelativeLayout>
+
+
+
 
 </RelativeLayout>

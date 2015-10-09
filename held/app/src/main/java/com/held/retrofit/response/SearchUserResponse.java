@@ -16,7 +16,15 @@ public class SearchUserResponse {
     private String pic;
     private String rid;
     private String displayName;
-    private String profilePic;
+    private String profilePic,imageUri,thumbnailUri;
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public String getThumbnailUri() {
+        return thumbnailUri;
+    }
 
 
     public String getDisplayName() {

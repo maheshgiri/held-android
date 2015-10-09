@@ -62,11 +62,11 @@ public class ProfileFragment extends ParentFragment {
     private ImageView mProfilePic;
     private TextView mUserNameText;
 
-    public static ProfileFragment newInstance(String uid, String userImg) {
+    public static ProfileFragment newInstance(String userName) {
         ProfileFragment profileFragment = new ProfileFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("uid", uid);
-        bundle.putString("userImg", userImg);
+        bundle.putString("name", userName);
+        ///bundle.putString("userImg");
         profileFragment.setArguments(bundle);
         return profileFragment;
     }
@@ -81,7 +81,7 @@ public class ProfileFragment extends ParentFragment {
     protected void initialiseView(View view, Bundle savedInstanceState) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.PROFILE_rc_view);
         mLayoutManager = new LinearLayoutManager(getCurrActivity());
-        mProfileAdapter = new ProfileAdapter(getCurrActivity(), mPostList, mIsLastPage, this);
+        mProfileAdapter = new ProfileAdapter(getCurrActivity(),getArguments().getString("name"), mPostList, mIsLastPage, this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mProfileAdapter);
         mFullImg = (ImageView) view.findViewById(R.id.PROFILE_full_img);
@@ -90,7 +90,7 @@ public class ProfileFragment extends ParentFragment {
 
         //mUserName = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_name));
 
-        mProfilePic=(ImageView)view.findViewById(R.id.PROFILE_pic);
+        //mProfilePic=(ImageView)view.findViewById(R.id.PROFILE_pic);
         mPreference=PreferenceHelper.getInstance(getCurrActivity());
        // mUserNameText=(TextView)view.findViewById(R.id.PROFILE_name);
        // mUserNameText.setText(mUserName);
@@ -111,11 +111,11 @@ public class ProfileFragment extends ParentFragment {
         });*/
 
         if (getArguments() != null) {
-            mUserName = getArguments().getString("uid");
-            mUserImg = getArguments().getString("userImg");
+            mUserName = getArguments().getString("name");
+            //mUserImg = getArguments().getString("userImg");
         } else {
             mUserName = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_name));
-            mUserImg = "http://139.162.1.137/api/user_images/tejasshah_1440819300949.jpg";//PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_img));
+           // mUserImg = "http://139.162.1.137/api/user_images/tejasshah_1440819300949.jpg";//PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_img));
 
         }
 
@@ -157,11 +157,12 @@ public class ProfileFragment extends ParentFragment {
     }
 
     private void callUserSearchApi() {
+        loadProfile();
         HeldService.getService().searchUser(mPreference.readPreference(getString(R.string.API_session_token)),
-                mPreference.readPreference(getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
+                user_id, new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
-                        user_id = searchUserResponse.getRid();
+
                         callProfilePostAPi();
                     }
 
@@ -217,8 +218,7 @@ public class ProfileFragment extends ParentFragment {
 
     private void callProfilePostAPi() {
         mIsLoading = true;
-        HeldService.getService().getUserPosts(mPreference.readPreference(getString(R.string.API_session_token)),
-                mPreference.readPreference(getString(R.string.API_user_regId)), mStart, mLimit,
+        HeldService.getService().getUserPosts(mPreference.readPreference(getString(R.string.API_session_token)),user_id,mStart, mLimit,
                 new Callback<FeedResponse>() {
                     @Override
                     public void success(FeedResponse feedResponse, Response response) {
@@ -251,7 +251,7 @@ public class ProfileFragment extends ParentFragment {
 
     public void loadProfile() {
         HeldService.getService().searchUser(mPreference.readPreference(getString(R.string.API_session_token)),
-                mPreference.readPreference(getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
+                mUserName, new Callback<SearchUserResponse>() {
 
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
@@ -261,6 +261,7 @@ public class ProfileFragment extends ParentFragment {
                                 .placeholder(R.drawable.user_icon)
                                 .into(mProfilePic);
                         mUserNameText.setText(searchUserResponse.getDisplayName());
+                        user_id=searchUserResponse.getRid();
                     }
 
                     @Override

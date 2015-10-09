@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.held.adapters.SeenByAdapter;
 import com.held.retrofit.HeldService;
+import com.held.retrofit.response.Engager;
+import com.held.retrofit.response.EngagersResponse;
 import com.held.retrofit.response.FriendRequestObject;
 import com.held.retrofit.response.User;
 import com.held.utils.PreferenceHelper;
@@ -40,6 +42,9 @@ public class SeenByActivity extends ParentActivity {
     private PreferenceHelper mPrefernce;
     private ArrayList<String[]> mList;
     private String string1[]={"maheshTest2","/user_thumbnails/maheshTest2_1443592731143.jpg","Add as Friend"};
+    private String mPostId;
+    private int mlimit=10;
+    private List<Engager> mEngagersList=new ArrayList<Engager>();
 
 
 
@@ -56,7 +61,7 @@ public class SeenByActivity extends ParentActivity {
         mTitle=(TextView)findViewById(R.id.toolbar_title_txt);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
 
-
+        mPostId=getIntent().getExtras().getString("post_id");
 
         mSearch.setVisibility(View.GONE);
         mNotification.setVisibility(View.GONE);
@@ -73,10 +78,10 @@ public class SeenByActivity extends ParentActivity {
         mPrefernce=PreferenceHelper.getInstance(this);
         mSeenRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mSeenRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        callSeenByApi();
 
         Timber.d("setting seen by adapter");
-        mSeenByAdapter = new SeenByAdapter(this,username,img,isLastPage);
+        mSeenByAdapter = new SeenByAdapter(this,mEngagersList,isLastPage);
         mSeenRecyclerView.setAdapter(mSeenByAdapter);
 
 
@@ -104,15 +109,14 @@ return;
 */
 
     }
-    public User setProfile(String username)
+    public void callSeenByApi()
     {
-        User user1=new User();
-        HeldService.getService().searchFriend(mPrefernce.readPreference(getString(R.string.API_session_token)), username,
-                new Callback<FriendRequestObject>() {
+        HeldService.getService().getPostEngagers(mPrefernce.readPreference(getString(R.string.API_session_token)), mPostId, mlimit, false,
+                new Callback<EngagersResponse>() {
                     @Override
-                    public void success(FriendRequestObject objects, Response response) {
-                       // user1.setDisplayName(objects.getCreator().getDisplayName());
-                       // user1.setProfilePic(objects.getCreator().getProfilePic());
+                    public void success(EngagersResponse engagersResponse, Response response) {
+                        mEngagersList.addAll(engagersResponse.getEngagerList());
+
                     }
 
                     @Override
@@ -121,7 +125,6 @@ return;
                     }
                 });
 
-        return user1;
     }
 
 

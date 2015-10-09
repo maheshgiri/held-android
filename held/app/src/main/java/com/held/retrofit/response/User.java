@@ -7,10 +7,15 @@ public class User {
 
         String rid;
         String pin;
-        String profilePic;
+        String profilePic,imageUri;
         String displayName;
         String phone;
-        String joinDate;
+        String joinDate,friendCount;
+
+
+        public String getFriendCount() {
+                return friendCount;
+        }
 
         public String getJoinDate() {
                 return joinDate;
@@ -42,4 +47,7 @@ public class User {
                 this.profilePic = profilePic;
         }
 
+        public String getImageUri() {
+                return imageUri;
+        }
 }
