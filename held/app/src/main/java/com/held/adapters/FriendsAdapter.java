@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.held.activity.InboxActivity;
 import com.held.activity.R;
+import com.held.retrofit.response.InboxData;
 import com.held.utils.AppConstants;
 import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
@@ -34,11 +35,11 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     private static final int TYPE_FOOTER = 1;
 
     private InboxActivity mActivity;
-    private List<FriendData> mFriendList;
+    private List<InboxData> mFriendList;
     private boolean mIsLastPage;
     private GestureDetector mPersonalGestureDetector;
 
-    public FriendsAdapter(InboxActivity activity, List<FriendData> friendList, boolean isLastPage) {
+    public FriendsAdapter(InboxActivity activity, List<InboxData> friendList, boolean isLastPage) {
         mActivity = activity;
         mFriendList = friendList;
         mIsLastPage = isLastPage;
@@ -60,7 +61,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof FriendViewHolder) {
-            final FriendData friend  = mFriendList.get(position);
+            final InboxData friend  = mFriendList.get(position);
             FriendViewHolder viewHolder = (FriendViewHolder) holder;
             String picUrl = AppConstants.BASE_URL + friend.getProfilePic();
             Picasso.with(mActivity).load(picUrl).into(viewHolder.mProfilePic);
@@ -82,7 +83,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
                     return mPersonalGestureDetector.onTouchEvent(motionEvent);
                 }
             });*/
-            final String userId = friend.getToUser().getRid();
+            final String userId = friend.getFromUser().getRid();
             viewHolder.mContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -147,7 +148,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void setFriendList(List<FriendData> friendList, boolean isLastPage) {
+    public void setFriendList(List<InboxData> friendList, boolean isLastPage) {
         mFriendList = friendList;
         mIsLastPage = isLastPage;
         notifyDataSetChanged();

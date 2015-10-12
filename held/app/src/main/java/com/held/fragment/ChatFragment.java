@@ -40,6 +40,7 @@ import com.held.retrofit.response.DownloadRequestData;
 import com.held.retrofit.response.PostChatData;
 import com.held.retrofit.response.PostChatResponse;
 import com.held.retrofit.response.PostMessageResponse;
+import com.held.retrofit.response.PostResponse;
 import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
@@ -53,6 +54,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -71,7 +74,7 @@ public class ChatFragment extends ParentFragment {
     private EditText mMessageEdt;
     private ImageView mDownLoad,mChatBackImage;
     private boolean mIsOneToOne,misLastPage;
-    private String mId, mFriendId,mPostId;
+    private String mId, mFriendId,mPostId,mChatBackImg;
     private BroadcastReceiver broadcastReceiver;
     private PreferenceHelper mPreference;
     private int mLimit = 5;
@@ -79,6 +82,7 @@ public class ChatFragment extends ParentFragment {
     private PostChatData objPostChat=new PostChatData();
     private List<PostChatData> tmpList=new ArrayList<PostChatData>();
     private BlurTransformation mBlurTransformation;
+
    // private boolean mflag=true;
 
     public static ChatFragment newInstance(String id, boolean isOneToOne) {
@@ -88,6 +92,7 @@ public class ChatFragment extends ParentFragment {
         bundle.putString("user_id", id);
         bundle.putString("postid", id);
         bundle.putBoolean("isOneToOne", isOneToOne);
+       // bundle.putString("chatBackImg",backImg);
        // Timber.d("ChatFragment new instance received arguments: user id: " + id + " isonetoone: " + isOneToOne);
         chatFragment.setArguments(bundle);
         return chatFragment;
@@ -99,11 +104,8 @@ public class ChatFragment extends ParentFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
        // mflag=getArguments().getBoolean("flag");
-
-
-
         //Timber.d("ChatFragment new instance received arguments: user id: " + mId + " isonetoone: " + mIsOneToOne);
-        mBlurTransformation=new BlurTransformation(getCurrActivity(), 25f);
+
         return inflater.inflate(R.layout.fragment_chat, container, false);
 
     }
@@ -142,32 +144,40 @@ public class ChatFragment extends ParentFragment {
         mChatList = (RecyclerView) view.findViewById(R.id.CHAT_recycler_view);
         mLayoutManager = new LinearLayoutManager(getCurrActivity());
         mLayoutManager.setReverseLayout(true);
-        mLayoutManager.scrollToPositionWithOffset(mPostChatData.size(), 0);
+        mLayoutManager.scrollToPositionWithOffset(mPostChatData.size(),0);
         SlideInUpAnimator slideInUpAnimator = new SlideInUpAnimator();
         slideInUpAnimator.setAddDuration(1000);
         mChatList.setItemAnimator(slideInUpAnimator);
         mSubmitBtn = (Button) view.findViewById(R.id.CHAT_submit_btn);
         mMessageEdt = (EditText) view.findViewById(R.id.CHAT_message);
         mSubmitBtn.setOnClickListener(this);
+        mBlurTransformation=new BlurTransformation(getCurrActivity(), 25f);
        // mIsOneToOne = getArguments().getBoolean("isOneToOne");
         mChatBackImage=(ImageView) view.findViewById(R.id.background_imageView);
         /*mDownLoad = (ImageView) view.findViewById(R.id.CHAT_download);
         mDownLoad.setOnClickListener(this);*/
         mPreference=PreferenceHelper.getInstance(getCurrActivity());
+       /* mChatBackImg=getArguments().getString("chatBackImg");
+        PicassoCache.getPicassoInstance(getCurrActivity())
+                .load(AppConstants.BASE_URL+mChatBackImg)
+                .placeholder(R.drawable.milana_vayntrub)
+                .into(mChatBackImage);*/
        // callFriendsChatsApi();
-
-
-        if (mIsOneToOne==true) {
+        mChatAdapter=null;
+        if (getCurrActivity().getNetworkStatus()) {
+            if (mIsOneToOne == true) {
 //            mDownLoad.setVisibility(View.GONE);
-            callUserSearchApi();
-           // callFriendsChatsApi();
-        } else {
-            //if (isAdded())
+                //callUserSearchApi();
+                callFriendsChatsApi();
+            } else {
+                //if (isAdded())
                 callPostChatApi();
+            }
         }
-        mChatAdapter = new ChatAdapter( getCurrActivity(), mPostChatData);
+        mChatAdapter = new ChatAdapter(getCurrActivity(), mPostChatData);
         mChatList.setLayoutManager(mLayoutManager);
         mChatList.setAdapter(mChatAdapter);
+
      /*   if (getCurrActivity().getNetworkStatus()||misLastPage==false) {
             callFriendsChatsApi();
         } else {
@@ -209,11 +219,12 @@ public class ChatFragment extends ParentFragment {
                         Utils.hideSoftKeyboard(getCurrActivity());
                         mFriendId = searchUserResponse.getRid();
 
-                        PicassoCache.getPicassoInstance(getCurrActivity())
+                     /*this code should not here
+                     PicassoCache.getPicassoInstance(getCurrActivity())
                                 .load(AppConstants.BASE_URL + searchUserResponse.getThumbnailUri())
                                 .placeholder(R.drawable.milana_vayntrub)
                                 .transform(mBlurTransformation)
-                                .into(mChatBackImage);
+                                .into(mChatBackImage);*/
 
 //                        if (!mMessageEdt.getText().toString().isEmpty())
                         callFriendsChatsApi();
@@ -247,11 +258,10 @@ public class ChatFragment extends ParentFragment {
 
                         mPostChatData.addAll(tmpList);
                         mChatAdapter.setPostChats(mPostChatData);
-
-
                         mMessageEdt.setText("");
                         tmpList.clear();
-                        callFriendsChatsApi();
+                            callFriendsChatsApi();
+
                         //Timber.i("Inside chat submit",""+postMessageResponse);
 
 
@@ -267,7 +277,7 @@ public class ChatFragment extends ParentFragment {
                             UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
                     }
                 });
-        callFriendsChatsApi();
+       // callFriendsChatsApi();
     }
 
     private void callFriendsChatsApi() {
@@ -278,11 +288,13 @@ public class ChatFragment extends ParentFragment {
                     @Override
                     public void success(PostChatResponse postChatResponse, Response response) {
                         Timber.d("friends chat call success");
+                        mChatAdapter.setPostChats(postChatResponse.getObjects());
                         mPostChatData.clear();
                         mPostChatData.addAll(postChatResponse.getObjects());
-                        mChatAdapter.setPostChats(postChatResponse.getObjects());
-                        misLastPage=postChatResponse.isLastPage();
-                       // mChatAdapter.notifyDataSetChanged();
+                        // mChatAdapter.setPostChats(mPostChatData);
+                        mChatAdapter.notifyDataSetChanged();
+                        misLastPage = postChatResponse.isLastPage();
+                        // mChatAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -298,13 +310,20 @@ public class ChatFragment extends ParentFragment {
     }
 
     private void callPostChatApi() {
-        Timber.d("@@@@@Post Id from Feed"+getArguments().getString("postid"));
+       // Timber.d("@@@@@Post Id from Feed" + getArguments().getString("postid"));
         HeldService.getService().getPostChat(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
                 getArguments().getString("postid"), mStart, mLimit, new Callback<PostChatResponse>() {
                     @Override
                     public void success(PostChatResponse postChatResponse, Response response) {
                         mChatAdapter.setPostChats(postChatResponse.getObjects());
-                       // mChatAdapter.notifyDataSetChanged();
+                        mPostChatData.clear();
+                        mPostChatData.addAll(postChatResponse.getObjects());
+                        //mChatAdapter.setPostChats(mPostChatData);
+                        mChatAdapter.notifyDataSetChanged();
+                        callSearchPostApi();
+
+                        //setChatBackImg();
+                        // mChatAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -327,20 +346,21 @@ public class ChatFragment extends ParentFragment {
     public void onClicked(View v) {
         switch (v.getId()) {
             case R.id.CHAT_submit_btn:
-                if (mIsOneToOne) {
-                    if (!mMessageEdt.getText().toString().isEmpty()) {
-                        callFriendChatApi();
-                        //callFriendsChatsApi();
-
+                if (getCurrActivity().getNetworkStatus()) {
+                    if (mIsOneToOne) {
+                        if (!mMessageEdt.getText().toString().isEmpty()) {
+                            callFriendChatApi();
+                            //callFriendsChatsApi();
+                        } else
+                            UiUtils.showSnackbarToast(getView(), "Message should not be empty");
+                    } else {
+                        if (!mMessageEdt.getText().toString().isEmpty()) {
+                            callChatPostApi();
+                        } else
+                            UiUtils.showSnackbarToast(getView(), "Message should not be empty");
                     }
-                    else
-                        UiUtils.showSnackbarToast(getView(), "Message should not be empty");
-                } else {
-                    if (!mMessageEdt.getText().toString().isEmpty())
-                        callChatPostApi();
-                    else
-                        UiUtils.showSnackbarToast(getView(), "Message should not be empty");
                 }
+
                 break;
             /*case R.id.CHAT_download:
                 if (getCurrActivity().getNetworkStatus()) {
@@ -394,6 +414,36 @@ public class ChatFragment extends ParentFragment {
                     }
                 });
     }
+    public void setChatBackImg(){
+        Timber.i("@@@@@Chat Background");
+        if(mPostChatData.size()!=0){
+            PicassoCache.getPicassoInstance(getCurrActivity())
+                    .load(AppConstants.BASE_URL+mPostChatData.get(0).getPost().getImageUri())
+                    .placeholder(R.drawable.milana_vayntrub)
+                    .into(mChatBackImage);
+        }
+        else {
+            return;
+        }
 
+    }
+    public void callSearchPostApi(){
+        HeldService.getService().getSearchCurrentPost(mPreference.readPreference(getString(R.string.API_session_token)), getArguments().getString("postid"),
+                new Callback<PostResponse>() {
+                    @Override
+                    public void success(PostResponse postResponse, Response response) {
+                        PicassoCache.getPicassoInstance(getCurrActivity())
+                                .load(AppConstants.BASE_URL+postResponse.getImageUri())
+                                .transform(mBlurTransformation)
+                                .placeholder(R.drawable.milana_vayntrub)
+                                .into(mChatBackImage);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+    }
 
 }
