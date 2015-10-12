@@ -341,8 +341,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
     }
 
     private void callVoiceCallApi() {
-        HeldService.getService().voiceCall(mPreference.readPreference(getString(R.string.API_session_token)), mPreference.readPreference(getString(R.string.API_user_regId)),
-                new Callback<VoiceCallResponse>() {
+        HeldService.getService().voiceCall(mPhoneNo,"",new Callback<VoiceCallResponse>() {
                     @Override
                     public void success(VoiceCallResponse voiceCallResponse, Response response) {
                         DialogUtils.stopProgressDialog();
@@ -368,8 +367,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
     }
 
     private void callResendSmsApi() {
-        HeldService.getService().resendSms( mAuth, mRegId,
-                new Callback<CreateUserResponse>() {
+        HeldService.getService().resendSms( mPhoneNo,"",new Callback<CreateUserResponse>() {
             @Override
             public void success(CreateUserResponse createUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
