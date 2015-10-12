@@ -167,6 +167,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         Intent intent = new Intent(FeedActivity.this, ChatActivity.class);
         intent.putExtra("postid", postid);
         intent.putExtra("isOneToOne",isOneToOne);
+        //intent.putExtra("chatBackImg",backImg);
         //intent.putExtra("flag",flag);
         startActivity(intent);
 

@@ -51,7 +51,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private FeedActivity mActivity;
     private BlurTransformation mBlurTransformation;
     private GestureDetector mGestureDetector, mPersonalChatDetector;
-    private String mPostId, mOwnerDisplayName,mholdId;
+    private String mPostId, mOwnerDisplayName,mholdId,mPostImgUrl;
     private int mPosition;
     private FeedViewHolder feedViewHolder;
     private List<FeedData> mFeedList;
@@ -132,7 +132,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
 
-
+            holder.mPersonCount.setText(mFeedList.get(position).getViews());
             holder.mFeedTxt.setText(mFeedList.get(position).getText());
 
             PicassoCache.getPicassoInstance(mActivity)
@@ -140,7 +140,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .into(holder.mFeedImg);
             holder.mUserNameTxt.setText(mFeedList.get(position).getCreator().getDisplayName());
             setTimeText(mFeedList.get(position).getHeld(),holder.mTimeMinTxt,holder.mTimeSecTxt);
-            mPostId=mFeedList.get(position).getRid();
+
 //            holder.mUserImg.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
@@ -213,6 +213,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                     }
                     feedViewHolder = holder;
+                    //Post id sent to chat
+                    mPostImgUrl=mFeedList.get(position).getImageUri();
+                    mPostId=mFeedList.get(position).getRid();
                     //mPostId = mFeedList.get(position).getCreator().getRid();
                     return mGestureDetector.onTouchEvent(motionEvent);
                 }
@@ -234,7 +237,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void callReleaseApi(String postId, final TextView textView1,final TextView textView2,String start_tm) {
         Timber.d("calling release api");
-        HeldService.getService().releasePost(mPreference.readPreference("SESSION_TOKEN"),postId,mholdId,start_tm ,String.valueOf(System.currentTimeMillis()),
+        HeldService.getService().releasePost(mPreference.readPreference("SESSION_TOKEN"),postId,mholdId,"",String.valueOf(System.currentTimeMillis()),
                 "",new Callback<ReleaseResponse>() {
                     @Override
                     public void success(ReleaseResponse releaseResponse, Response response) {
@@ -354,7 +357,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             bundle.putString("postid", mPostId);
             bundle.putBoolean("oneToOne",false);
-            //bundle.putBoolean("flag",false);
+           // bundle.putString("chatBackImg",mPostImgUrl); we have post img url in api
+            //bundle.putBoolean("flag",false);//not necessary
             mActivity.perform(AppConstants.LAUNCH_CHAT_SCREEN, bundle);
             return true;
         }

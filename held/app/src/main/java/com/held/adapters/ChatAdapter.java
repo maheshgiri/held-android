@@ -18,6 +18,7 @@ import com.held.activity.ChatActivity;
 import com.held.activity.InboxActivity;
 import com.held.activity.ParentActivity;
 import com.held.activity.R;
+import com.held.customview.PicassoCache;
 import com.held.retrofit.response.PostChatData;
 import com.held.retrofit.response.User;
 import com.held.utils.AppConstants;
@@ -42,11 +43,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private boolean delayEnterAnimation = true, animationsLocked,mIsLastPage;
     private PreferenceHelper mPreference;
     private User currentUser=null,friendUser=null;
+    private String mchatBackUrl;
+    private ImageView mChatBackground;
 
     public ChatAdapter(ParentActivity activity, List<PostChatData> postChatData) {
         mActivity = activity;
         mPostChatData = postChatData;
         mPreference = PreferenceHelper.getInstance(mActivity);
+      // mChatBackground=(ImageView)mActivity.findViewById(R.id.background_imageView);
     }
 
 
@@ -96,6 +100,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         Timber.d("onBind view holder");
+
         ///Get Current user
         String userName=mPreference.readPreference(Utils.getString(R.string.API_user_name));
         if(mPostChatData.get(position).getUser()==null) {
@@ -114,6 +119,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else if(!userName.equals(mPostChatData.get(position).getUser().getDisplayName())) {
                 friendUser = mPostChatData.get(position).getUser();
             }
+            /*mchatBackUrl=mPostChatData.get(position).getPost().getImageUri();
+            PicassoCache.getPicassoInstance(mActivity)
+                    .load(AppConstants.BASE_URL+mchatBackUrl)
+                    .into(mChatBackground);*/
         }
 
 
@@ -141,9 +150,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     public void setPostChats(List<PostChatData> postChatData) {
+        Timber.d("Inside SetPostChat");
         mPostChatData.clear();
         mPostChatData=postChatData;
-        notifyDataSetChanged();
+        this.notifyDataSetChanged();
     }
 
     class ViewHolder0 extends RecyclerView.ViewHolder {
@@ -189,7 +199,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (position > lastPosition) {
             lastPosition = position;
             view.setTranslationY(100);
-            view.setAlpha(0.f);
+            view.setAlpha(1.f);
             view.animate()
                     .translationY(0).alpha(1.f)
                     .setStartDelay(delayEnterAnimation ? 50 * (position) : 0)
