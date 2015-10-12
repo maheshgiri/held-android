@@ -7,6 +7,7 @@ import com.held.retrofit.response.ActivityFeedDataResponse;
 import com.held.retrofit.response.AddFriendResponse;
 import com.held.retrofit.response.ApproveDownloadResponse;
 import com.held.retrofit.response.ApproveFriendResponse;
+import com.held.retrofit.response.ChatHeadResponse;
 import com.held.retrofit.response.CreateUserResponse;
 import com.held.retrofit.response.DeclineDownloadResponse;
 import com.held.retrofit.response.DeclineFriendResponse;
@@ -53,10 +54,10 @@ import retrofit.mime.TypedFile;
 public interface HeldAPI {
 
     String CREATE_USER = "/registrations/";
-    String RESEND_SMS = "/registrations/{registration_id}/sms";
-    String VOICE_CALL = "/registrations/{registration_id}/call";
+    String RESEND_SMS = "/registrations/{registration_id}/sms/";
+    String VOICE_CALL = "/registrations/{registration_id}/call/";
     String LOGIN_USER = "/sessions/";
-    String VERIFY = "/registrations/{registration_id}";
+    String VERIFY = "/registrations/{registration_id}/";
 
     @POST(CREATE_USER)
     void createUser(@Query("name") String name,@Query("phone") String phoneNo, @Body()String empty, Callback<CreateUserResponse> createUserResponseCallback);
@@ -80,15 +81,15 @@ public interface HeldAPI {
 
 
     @Multipart
-    @PUT("/users/{user_id}")
+    @PUT("/users/{user_id}/")
     void updateProfilePic(@Header("Authorization") String token,@Path("user_id")String uid, @Query("field") String fieldValue, @Part("value") String image,
                           Callback<ProfilPicUpdateResponse> profilPicUpdateResponseCallback);
 
-    @GET("/users/{user_id}")
+    @GET("/users/{user_id}/")
     void searchUser(@Header("Authorization") String token, @Path("user_id") String uid, Callback<SearchUserResponse> searchUserResponseCallback);
 
 
-    @PUT("/posts/{post_id}/holds/{hold_id}")
+    @PUT("/posts/{post_id}/holds/{hold_id}/")
     void releasePost(@Header("Authorization") String token,@Path("post_id") String postId,@Path("hold_id") String holdId,@Query("start_time") String start_tm,@Query("end_time") String end_tm,@Body()String empty, Callback<ReleaseResponse> releaseResponseCallback);
 
     @POST("/posts/{post_id}/holds/")
@@ -98,20 +99,20 @@ public interface HeldAPI {
     @GET("/posts/")
     void feedPostWithPage(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<FeedResponse> feedResponseCallback);
 
-    @GET("/users/{user_id}/posts")
+    @GET("/users/{user_id}/posts/")
     void getUserPosts(@Header("Authorization") String token, @Path("user_id") String userId,@Query("start") long start,@Query("limit") int limit, Callback<FeedResponse> feedResponseCallback);
 
-    @GET("/posts/{post_id}/holds/{hold_id}")
+    @GET("/posts/{post_id}/holds/{hold_id}/")
     void releasePostProfile(@Header("Authorization") String token, @Path("hold_id")String hid, Callback<ReleaseResponse> callback);
 
 
    @GET("/users/")
    void searchFriend(@Header("Authorization") String token,@Query("name") String frndName,Callback<FriendRequestObject> friendSearchResult);
 
-    @PUT("/friendshiprequests/{request_id}")
+    @PUT("/friendshiprequests/{request_id}/")
     void declineFriend(@Header("Authorization") String token,@Path("request_id")String rid, @Query("decline") String decline,@Query("approve") String approve,@Body()String body ,Callback<DeclineFriendResponse> declineFriendResponseCallback);
 
-    @PUT("/friendshiprequests/{request_id}")
+    @PUT("/friendshiprequests/{request_id}/")
     void approveFriend(@Header("Authorization") String token, @Path("request_id")String rid,@Query("decline") String decline,@Query("approve") String approve,@Body()String body, Callback<ApproveFriendResponse> approveFriendResponseCallback);
 
     @GET("/friendshiprequests/")
@@ -120,22 +121,25 @@ public interface HeldAPI {
     @GET("/friends/")
     void getFriendsList(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<FriendsResponse> friendsResponseCallback);
 
+    @GET("//chatheads/")
+    void getChatHeadList(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<ChatHeadResponse> chatHeadResponseCallback);
+
     @GET("/downloadrequests/")
     void getDownLoadRequestList(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<DownloadRequestListResponse> downloadRequestListResponseCallback);
 
-    @PUT("/posts/{post_id}/downloadrequests/{request_id}")
+    @PUT("/posts/{post_id}/downloadrequests/{request_id}/")
     void declineDownloadRequest(@Header("Authorization") String token,@Path("post_id")String postId,@Path("request_id")String rid, @Query("decline") String decline,@Query("approve") String approve,@Body()String body, Callback<DeclineDownloadResponse> declineDownloadResponseCallback);
 
-    @PUT("/posts/{post_id}/downloadrequests/{request_id}")
+    @PUT("/posts/{post_id}/downloadrequests/{request_id}/")
     void approveDownloadRequest(@Header("Authorization") String token,@Path("post_id")String postId,@Path("request_id")String rid, @Query("decline") String decline,@Query("approve") String approve,@Body()String body, Callback<ApproveDownloadResponse> approveDownloadResponseCallback);
 
-    @DELETE("/posts/{post_id}/downloadrequests/{request_id}")
+    @DELETE("/posts/{post_id}/downloadrequests/{request_id}/")
     void deleteDownloadRequest(@Header("Authorization") String token,@Path("post_id")String postId,@Path("request_id")String rid,Callback<DeclineDownloadResponse> DeclineResponseCallback);
 
-    @POST("/users/{user_id}/messages/")
+    @POST("//users/{user_id}/messages/")
     void sendfriendChat(@Header("Authorization") String token, @Path("user_id") String userId, @Query("text") String message,@Body()String body, Callback<PostMessageResponse> postMessageResponseCallback);
 
-    @GET("/users/{user_id}/messages/")
+    @GET("//users/{user_id}/messages/")
     void getFriendChat(@Header("Authorization") String token, @Path("user_id") String userId, @Query("start") long start, @Query("limit") int limit, Callback<PostChatResponse> postChatResponseCallback);
 
 
@@ -143,7 +147,7 @@ public interface HeldAPI {
 
     ///////////////////************OLD APIs**************///////////////////////////////
 
-    @GET("/posts/{post_id}/holds/{hold_id}")
+    @GET("/posts/{post_id}/holds/{hold_id}/")
     void getHold(@Header("Authorization") String token, @Path("post_id") String postId,@Path("hold_id") String holdId,Callback<HoldResponse> getHoldResponce);
 
 
@@ -160,10 +164,11 @@ public interface HeldAPI {
     @POST("/posts/{post_id}/messages/")
     void postChat(@Header("Authorization") String token, @Path("post_id") String postId, @Query("text") String message,@Body() String body, Callback<PostMessageResponse> postMessageResponseCallback);
 
-    @GET("/posts/{post_id}/engagers")
+    @GET("/posts/{post_id}/engagers/")
     void getPostEngagers(@Header("Authorization") String token, @Path("post_id") String postId, @Query("limit") int limit, @Query("shuffle") boolean shuffle, Callback<EngagersResponse> engagersResponseCallback);
 
-
+    @GET("/posts/{post_id}/")
+    void getSearchCurrentPost(@Header("Authorization") String token, @Path("post_id") String postId,Callback<PostResponse> postResponseCallback);
 
     @GET("/friends/add")
     void addFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<AddFriendResponse> addFriendResponseCallback);

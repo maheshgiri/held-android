@@ -13,10 +13,12 @@ public class FeedData {
     private String thumbnailUri;
     private User user;
     private Creator creator;
-    private String rid;
+    private String rid,views;
 
 
-
+    public String getViews() {
+        return views;
+    }
 
     public String getThumbnailUri() {
         return thumbnailUri;

@@ -7,9 +7,14 @@ public class PostChatData {
     private String text,imageUri,thumbnailUri;
     private User toUser,fromUser,creator,user;
     private String date,rid;
+    private PostData post;
 
     public String getImageUri() {
         return imageUri;
+    }
+
+    public PostData getPost() {
+        return post;
     }
 
     public User getCreator() {
