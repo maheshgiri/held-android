@@ -15,9 +15,6 @@
         android:id="@+id/background_imageView"
         android:scaleType="centerCrop"
         android:layout_centerInParent="true"
-
-        android:alpha=".20"
-
       />
 <android.support.v7.widget.RecyclerView
     android:id="@+id/CHAT_recycler_view"
