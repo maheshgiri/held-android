@@ -15,6 +15,8 @@ import com.held.utils.PreferenceHelper;
 
 import java.io.IOException;
 
+import timber.log.Timber;
+
 
 public class GCMControlManager {
 
@@ -102,7 +104,8 @@ public class GCMControlManager {
                     }
                     mRegistrationId = gcm.register(mActivity.getString(R.string.sender_id));
                     msg = "Device registered, registration ID=" + mRegistrationId;
-
+                    PreferenceHelper.getInstance(mActivity).writePreference(mActivity.getString(R.string.API_gcm_registration_key), mRegistrationId);
+                    Timber.i("@@@@GCM ID :"+PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_gcm_registration_key)));
                     // You should send the registration ID to your server over HTTP,
                     // so it can use GCM/HTTP or CCS to send messages to your app.
                     // The request to your server should be authenticated if your app

@@ -2,8 +2,10 @@ package com.held.adapters;
 
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,7 +110,7 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
             Typeface sanBook = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansBook.otf");
             viewHolder.mUserName.setTypeface(medium);
-            viewHolder.mButton.setTypeface(medium);
+            viewHolder.mButton.setTypeface(sanBook);
 
        /*/ viewHolder.mUserName.setText(userName);
         PicassoCache.getPicassoInstance(mActivity)
@@ -156,16 +158,20 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if(reqStatus.equalsIgnoreCase("none")){
             ///Have to check request status for this for add as friends
             btn.setCompoundDrawablesWithIntrinsicBounds(mActivity.getResources().getDrawable(R.drawable.friendrequest),null,null,null);
-            btn.setCompoundDrawablePadding(-30);
+            btn.setGravity(Gravity.CENTER);
             btn.setBackgroundColor(mActivity.getResources().getColor(R.color.positve_btn));
             btn.setTextColor(mActivity.getResources().getColor(R.color.white));
-            btn.setPadding(20,0,0,0);
+           // btn.setPadding(20,0,0,0);
             btn.setText("Add as Friend");
+
+
 
         }else if(reqStatus.equalsIgnoreCase("friends")){
             btn.setText("Friends");
             btn.setBackground(mActivity.getResources().getDrawable(R.drawable.button_background));
             btn.setTextColor(mActivity.getResources().getColor(R.color.friend_btn_color));
+            Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
+            btn.setTypeface(medium);
         } else if(reqStatus.equalsIgnoreCase("XXfriends")){
             ///Have to check request status for this
             btn.setBackgroundColor(mActivity.getResources().getColor(R.color.friend_btn_color));

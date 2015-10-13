@@ -445,7 +445,7 @@ public class PostFragment extends ParentFragment {
     //todo: what is this function doing??
     private void callThumbnailUpdateApi(String image) {
         HeldService.getService().updateProfilePic(mPrefernce.readPreference(getString(R.string.API_session_token)),
-                mPrefernce.readPreference(getString(R.string.API_user_regId)),"NotificationToken", image, new Callback<ProfilPicUpdateResponse>() {
+                mPrefernce.readPreference(getString(R.string.API_user_regId)),"NotificationToken",mPrefernce.readPreference(getString(R.string.API_gcm_registration_key)), new Callback<ProfilPicUpdateResponse>() {
                     @Override
                     public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
                         DialogUtils.stopProgressDialog();

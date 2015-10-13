@@ -35,6 +35,7 @@ import java.io.IOException;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import timber.log.Timber;
 
 public class GcmIntentService extends IntentService {
 
@@ -85,10 +86,11 @@ public class GcmIntentService extends IntentService {
 //
         String type = bundleResponse.getString("type");
 
-        Log.i(TAG, " type: " + type);
+        Timber.i(TAG, "@@ type: " + type);
         String message = bundleResponse.getString("gcm.notification.body");
         String title = bundleResponse.getString("gcm.notification.title");
-        Log.i(TAG, " title: " + title);
+        Timber.i(TAG, "@@ title: " + title);
+        Timber.i(TAG, "@@ Body: " + message);
 
         int gameId, oppToken;
         if(type!=null) {
