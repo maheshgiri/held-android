@@ -48,10 +48,12 @@ public class GcmIntentService extends IntentService {
     public GcmIntentService() {
         super("GcmIntentService");
         localBroadcastManager = LocalBroadcastManager.getInstance(HeldApplication.getAppContext());
+        Timber.i(TAG, "GCM Intent service invoked");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Timber.i(TAG, "GCM Intent service inside HandleIntent");
         am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
@@ -59,17 +61,17 @@ public class GcmIntentService extends IntentService {
 
         if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
             if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-                Log.d(TAG, "Send error : " + extras.toString());
+                Timber.d(TAG, "Send error : " + extras.toString());
 
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
-                Log.d(TAG, "Deleted messages on server: " + extras.toString());
+                Timber.d(TAG, "Deleted messages on server: " + extras.toString());
 
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 checkNotificationType(extras);
-                Log.i(TAG, "Received: " + extras.toString());
+                Timber.i(TAG, "Received: " + extras.toString());
             }
         } else {
-            Log.i(TAG, "Received Empty push notification message");
+            Timber.i(TAG, "Received Empty push notification message");
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.
         GcmBroadcastReceiver.completeWakefulIntent(intent);

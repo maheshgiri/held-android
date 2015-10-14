@@ -6,6 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
+import timber.log.Timber;
+
+import static timber.log.Timber.i;
+
 
 public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 
@@ -18,10 +22,12 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 //        if (TextUtils.isEmpty(PreferenceHelper.getSessionToken())) return;
 
         // Explicitly specify that GcmIntentService will handle the intent.
+        Timber.i(TAG, "Inside onRecive");
         ComponentName comp = new ComponentName(context.getPackageName(), GcmIntentService.class.getName());
 
         // Start the service, keeping the device awake while it is launching.
         startWakefulService(context, (intent.setComponent(comp)));
+        Timber.i(TAG, "Inside onRecive");
         setResultCode(Activity.RESULT_OK);
     }
 }
