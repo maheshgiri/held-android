@@ -37,6 +37,7 @@
         android:textSize="11sp"
         android:background="@color/friend_btn_color"
         android:layout_margin="10dp"
+
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"

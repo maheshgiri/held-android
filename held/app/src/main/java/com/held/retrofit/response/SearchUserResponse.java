@@ -15,8 +15,17 @@ public class SearchUserResponse {
     private boolean banned;
     private String pic;
     private String rid;
-    private String displayName;
+    private String displayName,friendshipstatus;
     private String profilePic,imageUri,thumbnailUri;
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public String getFriendshipstatus() {
+        return friendshipstatus;
+    }
 
     public String getImageUri() {
         return imageUri;

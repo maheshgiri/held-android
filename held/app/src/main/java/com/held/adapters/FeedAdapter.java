@@ -51,7 +51,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private FeedActivity mActivity;
     private BlurTransformation mBlurTransformation;
     private GestureDetector mGestureDetector, mPersonalChatDetector;
-    private String mPostId, mOwnerDisplayName,mholdId,mPostImgUrl;
+    private String mPostId, mOwnerDisplayName,mholdId,mPostImgUrl,mUserId;
     private int mPosition;
     private FeedViewHolder feedViewHolder;
     private List<FeedData> mFeedList;
@@ -164,6 +164,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             break;
                     }
                     mOwnerDisplayName = mFeedList.get(position).getCreator().getDisplayName();
+                    mUserId = mFeedList.get(position).getCreator().getRid();
                     return mPersonalChatDetector.onTouchEvent(motionEvent);
                 }
             });
@@ -413,7 +414,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             Bundle bundle = new Bundle();
-            bundle.putString("name", mFeedList.get(mPosition).getCreator().getDisplayName());
+            Timber.i("User Id"+mUserId);
+            bundle.putString("user_id",mUserId);
            // bundle.putString("userImg", AppConstants.BASE_URL + mFeedList.get(mPosition).getThumbnailUri());
             mActivity.perform(AppConstants.LAUNCH_PROFILE_SCREEN, bundle);
 

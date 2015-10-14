@@ -102,8 +102,7 @@ public class ChatFragment extends ParentFragment {
     public void onResume() {
         super.onResume();
         HeldApplication.IS_CHAT_FOREGROUND = true;
-        LocalBroadcastManager.getInstance(getCurrActivity()).registerReceiver((broadcastReceiver),
-                new IntentFilter("CHAT"));
+        //LocalBroadcastManager.getInstance(getCurrActivity()).registerReceiver((broadcastReceiver),new IntentFilter("CHAT"));
     }
 
     @Override
@@ -117,13 +116,12 @@ public class ChatFragment extends ParentFragment {
         super.onStart();
         Timber.d("ChatFragment onStart called");
         HeldApplication.IS_CHAT_FOREGROUND = true;
-        LocalBroadcastManager.getInstance(getCurrActivity()).registerReceiver((broadcastReceiver),
-                new IntentFilter("CHAT"));
+        //LocalBroadcastManager.getInstance(getCurrActivity()).registerReceiver((broadcastReceiver),new IntentFilter("CHAT"));
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getCurrActivity()).unregisterReceiver(broadcastReceiver);
+        //LocalBroadcastManager.getInstance(getCurrActivity()).unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 
@@ -147,7 +145,7 @@ public class ChatFragment extends ParentFragment {
         /*mDownLoad = (ImageView) view.findViewById(R.id.CHAT_download);
         mDownLoad.setOnClickListener(this);*/
         mPreference = PreferenceHelper.getInstance(getCurrActivity());
-        runnable = new Runnable() {
+      /*  runnable = new Runnable() {
             @Override
             public void run() {
                 try{
@@ -162,7 +160,7 @@ public class ChatFragment extends ParentFragment {
         };
 
 
-       /* mChatBackImg=getArguments().getString("chatBackImg");
+        mChatBackImg=getArguments().getString("chatBackImg");
         PicassoCache.getPicassoInstance(getCurrActivity())
                 .load(AppConstants.BASE_URL+mChatBackImg)
                 .placeholder(R.drawable.milana_vayntrub)
@@ -185,7 +183,7 @@ public class ChatFragment extends ParentFragment {
         mChatAdapter = new ChatAdapter(getCurrActivity(), mPostChatData);
         mChatList.setLayoutManager(mLayoutManager);
         mChatList.setAdapter(mChatAdapter);
-        mChatList.scrollToPosition(mChatAdapter.getItemCount());
+        //mChatList.scrollToPosition(mChatAdapter.getItemCount());
 
        // handler.postDelayed((Runnable) this, 1000);
      /*   if (getCurrActivity().getNetworkStatus()||misLastPage==false) {
@@ -206,7 +204,7 @@ public class ChatFragment extends ParentFragment {
             }
         });*/
 
-       mChatList.postDelayed(runnable, 100);
+      // mChatList.postDelayed(runnable, 100);
 
     }
     public void refreshMessages() {

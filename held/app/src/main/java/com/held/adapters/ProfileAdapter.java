@@ -25,6 +25,7 @@ import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.HoldResponse;
 import com.held.retrofit.response.ReleaseResponse;
 import com.held.retrofit.response.SearchUserResponse;
+import com.held.retrofit.response.User;
 import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
@@ -38,6 +39,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import timber.log.Timber;
 
 public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -55,6 +57,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_FOOTER = 2;
     private BlurTransformation mBlurTransformation;
     private PreferenceHelper mPrefernce;
+    private String mUserName,mprofileUrl,mUserId;
 
 
 
@@ -66,7 +69,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mBlurTransformation = new BlurTransformation(mActivity, 18);
         mGestureDetector = new GestureDetector(mActivity, new GestureListener());
         mPreference=PreferenceHelper.getInstance(mActivity);
-        mOwnerDisplayName=userName;
+        Timber.i("User Name In Profile "+userName);
+        mUserId=userName;
+
     }
 
     @Override
@@ -101,11 +106,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             HeaderViewHolder viewHolder = (HeaderViewHolder) holder;
 
         //TODO : here load user name and user image
-            setUserProfile(viewHolder);
-           //Picasso.with(mActivity).load(AppConstants.BASE_URL + viewHolder.mProfilePic).into(viewHolder.mProfilePic);
+            setUserProfile();
+
+           Picasso.with(mActivity).load(AppConstants.BASE_URL + mprofileUrl).into(viewHolder.mProfilePic);
 
           //  Picasso.with(mActivity).load(AppConstants.BASE_URL+viewHolder.mProfilePic).into(viewHolder.mProfilePic);
-           // viewHolder.mUserName.setText("@" + mProfileFragment.getUserName());
+            viewHolder.mUserName.setText(mUserName);
 
 
 
@@ -308,19 +314,18 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         });
     }
-    public void setUserProfile(final HeaderViewHolder  viewHolder)
+    public void setUserProfile()
     {
 
         HeldService.getService().searchUser(mPrefernce.readPreference(Utils.getString(R.string.API_session_token)),
-                mOwnerDisplayName, new Callback<SearchUserResponse>() {
+                mUserId, new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
                         Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
-                        viewHolder.mUserName.setText(searchUserResponse.getDisplayName());
-                        PicassoCache.getPicassoInstance(mActivity)
-                                .load(AppConstants.BASE_URL + searchUserResponse.getProfilePic())
-                                .placeholder(R.drawable.user_icon)
-                                .into(viewHolder.mProfilePic);
+                        mUserId=searchUserResponse.getRid();
+                        mprofileUrl=searchUserResponse.getProfilePic();
+                        mUserName=searchUserResponse.getDisplayName();
+
                     }
 
                     @Override
