@@ -7,7 +7,8 @@ public class InboxData {
     User fromUser;
     User toUser;
     String date;
-    String rid;
+    String rid,text;
+
     public String getProfilePic(){
         return  fromUser.getProfilePic();
     }
@@ -30,5 +31,9 @@ public class InboxData {
 
     public String getDate() {
         return date;
+    }
+
+    public String getText() {
+        return text;
     }
 }

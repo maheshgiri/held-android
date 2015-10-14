@@ -66,7 +66,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             String picUrl = AppConstants.BASE_URL + friend.getProfilePic();
             Picasso.with(mActivity).load(picUrl).into(viewHolder.mProfilePic);
             viewHolder.mUserName.setText(friend.getDisplayName());
-
+            viewHolder.mUserDetail.setText(friend.getText());
             String ts = friend.getJoinDate();
             viewHolder.mTimeTxt.setText(Utils.convertDate(ts));
 

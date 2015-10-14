@@ -27,6 +27,7 @@ import com.held.customview.PicassoCache;
 import com.held.customview.SlideInUpAnimator;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.DownloadRequestData;
+import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.PostChatData;
 import com.held.retrofit.response.PostChatResponse;
 import com.held.retrofit.response.PostMessageResponse;
@@ -172,6 +173,7 @@ public class ChatFragment extends ParentFragment {
             if (mIsOneToOne == true) {
 //            mDownLoad.setVisibility(View.GONE);
                 //callUserSearchApi();
+                callGetUserPostApi();
                 callFriendsChatsApi();
             } else {
                 //if (isAdded())
@@ -436,7 +438,7 @@ public class ChatFragment extends ParentFragment {
                     @Override
                     public void success(PostResponse postResponse, Response response) {
                         PicassoCache.getPicassoInstance(getCurrActivity())
-                                .load(AppConstants.BASE_URL+postResponse.getImageUri())
+                                .load(AppConstants.BASE_URL + postResponse.getImageUri())
                                 .transform(mBlurTransformation)
                                 .placeholder(R.drawable.milana_vayntrub)
                                 .into(mChatBackImage);
@@ -449,4 +451,22 @@ public class ChatFragment extends ParentFragment {
                 });
     }
 
+    public void callGetUserPostApi(){
+        HeldService.getService().getUserPosts(mPreference.readPreference(getString(R.string.API_session_token)),
+                getArguments().getString("user_id"), mStart, mLimit, new Callback<FeedResponse>() {
+                    @Override
+                    public void success(FeedResponse feedResponse, Response response) {
+                        PicassoCache.getPicassoInstance(getCurrActivity())
+                                .load(AppConstants.BASE_URL + feedResponse.getObjects().get(0).getImageUri())
+                                .transform(mBlurTransformation)
+                                .placeholder(R.drawable.milana_vayntrub)
+                                .into(mChatBackImage);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+    }
 }

@@ -170,6 +170,7 @@ public interface HeldAPI {
     @GET("/posts/{post_id}/")
     void getSearchCurrentPost(@Header("Authorization") String token, @Path("post_id") String postId,Callback<PostResponse> postResponseCallback);
 
+
     @GET("/friends/add")
     void addFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<AddFriendResponse> addFriendResponseCallback);
 
