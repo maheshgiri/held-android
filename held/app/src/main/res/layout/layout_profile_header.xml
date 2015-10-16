@@ -7,7 +7,7 @@
     android:background="@color/bg_color">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
     <LinearLayout
@@ -15,29 +15,30 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center"
+        android:layout_marginTop="30dp"
         android:id="@+id/profile_img_with_icon">
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:id="@+id/PROFILE_friendReq"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center_vertical"
             android:layout_marginRight="25dp"
             android:src="@drawable/friendrequest"
 
             />
-        <ImageView
+        <com.held.customview.CircularImageView
             android:layout_width="62dp"
             android:layout_height="62dp"
             android:id="@+id/PROFILE_pic"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/milana_vayntrub"
-            android:scaleType="centerCrop"/>
+            android:scaleType="fitCenter"/>
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:id="@+id/PROFILE_Chat"
             android:layout_marginLeft="25dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/chat"
             />
     </LinearLayout>
@@ -45,6 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginTop="12dp"
         android:id="@+id/user_name_layout"
         >
         <TextView
@@ -52,7 +54,9 @@
             android:layout_height="wrap_content"
             android:text="UserName"
             android:id="@+id/PROFILE_name"
-            android:layout_gravity="center_horizontal" />
+            android:textSize="15sp"
+            android:textColor="@color/userName_color"
+            android:layout_gravity="center" />
     </LinearLayout>
     </LinearLayout>
     <LinearLayout
@@ -60,26 +64,31 @@
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:id="@+id/count_layout"
-        android:layout_alignParentBottom="true"
         android:gravity="center"
+        android:layout_marginTop="140dp"
+        android:background="@color/profiel_infoBar_color"
 
         >
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="center"
+            android:id="@+id/photo_count_layout"
         >
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="12"
                 android:gravity="center"
+                android:textSize="15sp"
+                android:textColor="@color/userName_color"
                 android:id="@+id/PROFILE_count_photos"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Photos"
+                android:textSize="11sp"
+                android:textColor="@color/userName_color"
                 android:id="@+id/PROFILE_txt_photos"/>
         </LinearLayout>
 
@@ -88,18 +97,24 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center"
+        android:id="@+id/friend_count_layout"
+        android:layout_marginLeft="15dp"
         >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="123"
             android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/userName_color"
             android:id="@+id/PROFILE_count_friends"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Friends"
             android:gravity="center"
+            android:textSize="11sp"
+            android:textColor="@color/userName_color"
             android:id="@+id/PROFILE_txt_friends"/>
     </LinearLayout>
     </LinearLayout>

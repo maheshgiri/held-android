@@ -10,8 +10,11 @@ public class User {
         String profilePic,imageUri;
         String displayName;
         String phone;
-        String joinDate,friendCount;
+        String joinDate,friendCount,postCount;
 
+        public String getPostCount() {
+                return postCount;
+        }
 
         public String getFriendCount() {
                 return friendCount;
@@ -49,5 +52,13 @@ public class User {
 
         public String getImageUri() {
                 return imageUri;
+        }
+
+        public void setFriendCount(String friendCount) {
+                this.friendCount = friendCount;
+        }
+
+        public void setPostCount(String postCount) {
+                this.postCount = postCount;
         }
 }

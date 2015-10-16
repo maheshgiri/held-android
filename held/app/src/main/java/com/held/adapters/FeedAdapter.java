@@ -324,10 +324,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mFeedImg = (ImageView) v.findViewById(R.id.post_image);
             mUserImg = (ImageView) v.findViewById(R.id.profile_img);
             mFeedTxt = (TextView) v.findViewById(R.id.post_txt);
-            mTimeMinTxt = (TextView) v.findViewById(R.id.box_min_txt);
-            mTimeSecTxt=(TextView) v.findViewById(R.id.box_sec_txt);
-            myLayout.setPadding(0, 15, 0, 0);
-           // myTimeLayout.setVisibility(View.VISIBLE);
+            mTimeMinTxt = (TextView) itemView.findViewById(R.id.box_min_txt);
+            mTimeSecTxt=(TextView) itemView.findViewById(R.id.box_sec_txt);
+            myTimeLayout.setVisibility(View.VISIBLE);
 
         }
     }

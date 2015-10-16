@@ -13,8 +13,15 @@ public class FeedData {
     private String thumbnailUri;
     private User user;
     private Creator creator;
-    private String rid,views;
+    private String rid,views,friendCount,postCount;
 
+    public String getFriendCount() {
+        return friendCount;
+    }
+
+    public String getPostCount() {
+        return postCount;
+    }
 
     public String getViews() {
         return views;
