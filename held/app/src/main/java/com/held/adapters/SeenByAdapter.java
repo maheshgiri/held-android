@@ -2,8 +2,10 @@ package com.held.adapters;
 
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +23,11 @@ import com.held.retrofit.response.EngagersResponse;
 import com.held.retrofit.response.LatestHold;
 import com.held.retrofit.response.SeenByData;
 import com.held.utils.AppConstants;
+import com.held.utils.PreferenceHelper;
 import com.held.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import timber.log.Timber;
@@ -36,6 +40,7 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private ParentActivity mActivity;
     private boolean mIsLastPage;
     private List<Engager> mEngagersList=new ArrayList<Engager>();
+    private PreferenceHelper mPreference;
 
 
 
@@ -43,7 +48,7 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mActivity = activity;
       //  mIsLastPage = isLastPage;
         mEngagersList=engagerList;
-
+        mPreference=PreferenceHelper.getInstance(mActivity);
 
     }
 
@@ -53,7 +58,9 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_seenby, parent, false);
+        //removeCurrentUser();
         Timber.d("created seenby view holder");
+
         return new SeenByViewHolder(v);
 
     }
@@ -64,17 +71,18 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         String userName = null,img = null;
         String requestStatus =null;
 
-        Timber.d("on bind viewholder");
-       // Timber.d("SeenBy Profile Url"+mEngagersList.get(position).getUser().getProfilePic());
-        SeenByViewHolder viewHolder = (SeenByViewHolder) holder;
-        PicassoCache.getPicassoInstance(mActivity)
-                .load(AppConstants.BASE_URL+mEngagersList.get(position).getUser().getProfilePic())
-                .into(viewHolder.mProfilePic);
+            Timber.d("on bind viewholder");
+            // Timber.d("SeenBy Profile Url"+mEngagersList.get(position).getUser().getProfilePic());
+            SeenByViewHolder viewHolder = (SeenByViewHolder) holder;
+            PicassoCache.getPicassoInstance(mActivity)
+                    .load(AppConstants.BASE_URL + mEngagersList.get(position).getUser().getProfilePic())
+                    .into(viewHolder.mProfilePic);
 
-        viewHolder.mUserName.setText(mEngagersList.get(position).getUser().getDisplayName());
-       // viewHolder.mButton.setText((CharSequence) mEngagersList.get(position).getFriendshipStatus());
-        requestStatus=mEngagersList.get(position).getFriendshipStatus();
-        setBtnColor(viewHolder.mButton,requestStatus);
+            viewHolder.mUserName.setText(mEngagersList.get(position).getUser().getDisplayName());
+            // viewHolder.mButton.setText((CharSequence) mEngagersList.get(position).getFriendshipStatus());
+            requestStatus = mEngagersList.get(position).getFriendshipStatus();
+            setBtnColor(viewHolder.mButton, requestStatus);
+
        /* viewHolder.mButton.setBackgroundColor(mActivity.getResources().getColor(R.color.white));
         viewHolder.mButton.setTextColor(mActivity.getResources().getColor(R.color.friend_btn_color));
         /*switch(position){
@@ -99,10 +107,11 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 break;
 
         }*/
-        Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
-        Typeface sanBook = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansBook.otf");
-        viewHolder.mUserName.setTypeface(medium);
-        viewHolder.mButton.setTypeface(medium);
+            Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
+            Typeface sanBook = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansBook.otf");
+            viewHolder.mUserName.setTypeface(medium);
+            viewHolder.mButton.setTypeface(sanBook);
+
        /*/ viewHolder.mUserName.setText(userName);
         PicassoCache.getPicassoInstance(mActivity)
                 .load(AppConstants.BASE_URL + img)
@@ -124,9 +133,9 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
 
-    public void setEngagersList(List<Engager> activitySeenList) {
+    public void setEngagersList(List<Engager> engagersList) {
         //mActivityDataList = activitySeenList;
-        mEngagersList=activitySeenList;
+        mEngagersList=engagersList;
        // mIsLastPage = isLastPage;
         notifyDataSetChanged();
     }
@@ -146,15 +155,23 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public void setBtnColor(Button btn,String reqStatus){
-        if(reqStatus.equalsIgnoreCase("Add as friends")){
+        if(reqStatus.equalsIgnoreCase("none")){
             ///Have to check request status for this for add as friends
-          //  btn.setCompoundDrawables(mActivity.getResources().getDrawable(R.drawable.friendrequest),0,0,0);
+            btn.setCompoundDrawablesWithIntrinsicBounds(mActivity.getResources().getDrawable(R.drawable.friendrequest),null,null,null);
+            btn.setGravity(Gravity.CENTER);
             btn.setBackgroundColor(mActivity.getResources().getColor(R.color.positve_btn));
             btn.setTextColor(mActivity.getResources().getColor(R.color.white));
+           // btn.setPadding(20,0,0,0);
+            btn.setText("Add as Friend");
+
+
+
         }else if(reqStatus.equalsIgnoreCase("friends")){
             btn.setText("Friends");
             btn.setBackground(mActivity.getResources().getDrawable(R.drawable.button_background));
             btn.setTextColor(mActivity.getResources().getColor(R.color.friend_btn_color));
+            Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
+            btn.setTypeface(medium);
         } else if(reqStatus.equalsIgnoreCase("XXfriends")){
             ///Have to check request status for this
             btn.setBackgroundColor(mActivity.getResources().getColor(R.color.friend_btn_color));

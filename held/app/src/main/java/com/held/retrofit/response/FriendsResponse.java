@@ -7,6 +7,7 @@ import com.held.retrofit.response.FriendData;
 public class FriendsResponse {
 
     private List<FriendData> objects;
+
     private boolean lastPage;
     private long nextPageStart;
     private String declined,date,rid;

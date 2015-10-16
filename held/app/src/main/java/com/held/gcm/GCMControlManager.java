@@ -15,6 +15,8 @@ import com.held.utils.PreferenceHelper;
 
 import java.io.IOException;
 
+import timber.log.Timber;
+
 
 public class GCMControlManager {
 
@@ -29,7 +31,7 @@ public class GCMControlManager {
     }
 
     private String getRegistrationIdFromPrefs(Context context) {
-        String registrationId = PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_registration_key));
+        String registrationId = PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_gcm_registration_key));
 
 
         if (registrationId.isEmpty()) {
@@ -63,7 +65,9 @@ public class GCMControlManager {
      */
     private int getAppVersion(Context context) {
         try {
+            Timber.i(TAG, "Inside try of getAppVersion()");
             PackageInfo packageInfo = mActivity.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            Timber.i(TAG, "getAppVersion() Value:"+packageInfo.versionCode);
             return packageInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             // should never happen
@@ -102,7 +106,8 @@ public class GCMControlManager {
                     }
                     mRegistrationId = gcm.register(mActivity.getString(R.string.sender_id));
                     msg = "Device registered, registration ID=" + mRegistrationId;
-
+                    PreferenceHelper.getInstance(mActivity).writePreference(mActivity.getString(R.string.API_gcm_registration_key), mRegistrationId);
+                    Timber.i("@@@@GCM ID :"+PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_gcm_registration_key)));
                     // You should send the registration ID to your server over HTTP,
                     // so it can use GCM/HTTP or CCS to send messages to your app.
                     // The request to your server should be authenticated if your app
@@ -135,7 +140,7 @@ public class GCMControlManager {
 
     private void storeRegistrationIdIntoPrefs(Context context, String regId) {
         int appVersion = getAppVersion(context);
-        Log.i(TAG, "Saving regId on app version " + appVersion);
+        Timber.i(TAG, "Saving regId on app version " + appVersion);
         PreferenceHelper.getInstance(mActivity).writePreference(mActivity.getString(R.string.API_gcm_registration_key), regId);
         PreferenceHelper.getInstance(mActivity).writePreference(mActivity.getString(R.string.API_app_version), appVersion);
     }
@@ -147,12 +152,12 @@ public class GCMControlManager {
         if (checkPlayServices()) {
             gcm = GoogleCloudMessaging.getInstance(mActivity);
             mRegistrationId = getRegistrationIdFromPrefs(mActivity);
-            Log.d(TAG, "mRegistrationId : " + mRegistrationId);
+            Timber.d(TAG, "mRegistrationId : " + mRegistrationId);
 //            if (mRegistrationId.isEmpty()) {
                 registerInBackground();
 //            }
         } else {
-            Log.i(TAG, "No valid Google Play Services APK found.");
+            Timber.i(TAG, "No valid Google Play Services APK found.");
         }
     }
 }

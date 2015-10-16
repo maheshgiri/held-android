@@ -20,6 +20,7 @@ import com.held.retrofit.response.User;
 import com.held.utils.PreferenceHelper;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import retrofit.Callback;
@@ -39,12 +40,13 @@ public class SeenByActivity extends ParentActivity {
     private boolean isLastPage,isLoading;
     private LinearLayoutManager mLayoutManager;
     private String username="maheshTest2",img="/user_thumbnails/maheshTest2_1443592731143.jpg";
-    private PreferenceHelper mPrefernce;
+    private PreferenceHelper mPreference;;
     private ArrayList<String[]> mList;
     private String string1[]={"maheshTest2","/user_thumbnails/maheshTest2_1443592731143.jpg","Add as Friend"};
     private String mPostId;
     private int mlimit=10;
     private List<Engager> mEngagersList=new ArrayList<Engager>();
+    private List<Engager> tempList=new ArrayList<Engager>();
 
 
 
@@ -75,16 +77,17 @@ public class SeenByActivity extends ParentActivity {
         mTitle.setTypeface(medium);
         mTitle.setText("Seen By");
         //setToolbar();
-        mPrefernce=PreferenceHelper.getInstance(this);
+        mPreference=PreferenceHelper.getInstance(this);
         mSeenRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mSeenRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         callSeenByApi();
 
         Timber.d("setting seen by adapter");
         mSeenByAdapter = new SeenByAdapter(this,mEngagersList);
+        mSeenByAdapter.setEngagersList(mEngagersList);
         mSeenRecyclerView.setAdapter(mSeenByAdapter);
 
-
+       // removeCurrentUser();
         mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_to_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -111,13 +114,15 @@ return;
     }
     public void callSeenByApi()
     {
-        HeldService.getService().getPostEngagers(mPrefernce.readPreference(getString(R.string.API_session_token)), mPostId, mlimit, false,
+        HeldService.getService().getPostEngagers(mPreference.readPreference(getString(R.string.API_session_token)), mPostId, mlimit, false,
                 new Callback<EngagersResponse>() {
                     @Override
                     public void success(EngagersResponse engagersResponse, Response response) {
                         mEngagersList.addAll(engagersResponse.getObjects());
+                        tempList.addAll(engagersResponse.getObjects());
+                        removeCurrentUser();
                         mSeenByAdapter.setEngagersList(mEngagersList);
-                        Timber.d("Print SeenBy List\n"+mEngagersList.toString());
+                      //  Timber.d("Print SeenBy List\n"+mEngagersList.toString());
 
                     }
 
@@ -129,5 +134,24 @@ return;
 
     }
 
+    public void removeCurrentUser(){
+        String currentUser=mPreference.readPreference(getString(R.string.API_user_name));
+        int sizeofList=tempList.size();
+        try{
+           for(int i=0;i<=sizeofList;i++)
+           {
+               if(tempList.get(i).getUser().getDisplayName().equals(currentUser))
+               {
+                   tempList.remove(i);
+                   Timber.i("User Removed");
+                   break;
+               }
+           }
+            mEngagersList=tempList;
+       }catch (IndexOutOfBoundsException e)
+       {
+           e.printStackTrace();
+       }
 
+    }
 }

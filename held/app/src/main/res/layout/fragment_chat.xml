@@ -14,17 +14,19 @@
         android:id="@+id/background_imageView"
         android:scaleType="centerCrop"
         android:layout_centerInParent="true"
-        android:src="@drawable/milana_vayntrub"
-        android:alpha=".3"
-        />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/CHAT_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/CHAT_bottom_layout"
-        android:layout_marginTop="15dp"
-        />
+      />
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/CHAT_recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@+id/CHAT_bottom_layout"
+    android:layout_centerInParent="true"
+
+    >
+</android.support.v7.widget.RecyclerView>
+
+
 
 
 

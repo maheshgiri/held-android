@@ -71,7 +71,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
         mPrefernce=PreferenceHelper.getInstance(getApplicationContext());
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setupGCM();
-
+        Timber.d(TAG, "GCM Key: " + mPrefernce.readPreference(getString(R.string.API_gcm_registration_key)));
         mphoneNo=mPrefernce.readPreference(getString(R.string.API_phone_no));
         mPin=mPrefernce.readPreference(getString(R.string.API_pin));
         Log.d(TAG, "phone number: " + mphoneNo);

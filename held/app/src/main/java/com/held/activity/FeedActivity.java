@@ -105,27 +105,33 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
             }
         });
 
-        mSearch_edt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+       try{
+           mSearch_edt.addTextChangedListener(new TextWatcher() {
+               @Override
+               public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
 
-            }
+               }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+               @Override
+               public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
 
-            }
+               }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (getNetworkStatus()) {
-                    DialogUtils.showProgressBar();
-                    callUserSearchApi();
-                } else {
-                    UiUtils.showSnackbarToast(getWindow().getDecorView().getRootView(), "You are not connected to internet.");
-                }
-            }
-        });
+               @Override
+               public void afterTextChanged(Editable editable) {
+                   if (getNetworkStatus()) {
+                       DialogUtils.showProgressBar();
+                       callUserSearchApi();
+                   } else {
+                       UiUtils.showSnackbarToast(getWindow().getDecorView().getRootView(), "You are not connected to internet.");
+                   }
+               }
+           });
+       }catch (Exception e){
+           e.printStackTrace();
+       }
+
+
         mSearch_edt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -167,6 +173,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         Intent intent = new Intent(FeedActivity.this, ChatActivity.class);
         intent.putExtra("postid", postid);
         intent.putExtra("isOneToOne",isOneToOne);
+        //intent.putExtra("chatBackImg",backImg);
         //intent.putExtra("flag",flag);
         startActivity(intent);
 
@@ -227,7 +234,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
             case AppConstants.LAUNCH_PROFILE_SCREEN:
 
                 if (bundle != null)
-                    launchProfileScreen(bundle.getString("name"));
+                    launchProfileScreen(bundle.getString("user_id"));
                 break;
 
         }
@@ -235,8 +242,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
     private void launchProfileScreen(String uid) {
         updateToolbar(true, false, true, false, true, true, false, "");
-        addFragment(ProfileFragment.newInstance(uid), ProfileFragment.TAG, true);
-        mDisplayedFragment = Utils.getCurrVisibleFragment(this);
+        replaceFragment(ProfileFragment.newInstance(uid), ProfileFragment.TAG, true);
+        mDisplayedFragment = ProfileFragment.newInstance(uid);
     }
 
     @Override

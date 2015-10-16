@@ -93,7 +93,7 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
         } else {
             mUsername.setText("@" + id);
         }*/
-
+/////add chat back image for personal chat
         addFragment(ChatFragment.newInstance(id, isOneToOne), ChatFragment.TAG);
         mDisplayFragment = ChatFragment.newInstance(id, isOneToOne);
     }

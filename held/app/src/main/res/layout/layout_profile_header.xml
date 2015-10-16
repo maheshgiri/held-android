@@ -5,74 +5,118 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/bg_color">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/PROFILE_pic"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:scaleType="centerCrop" />
-
-    <TextView
-        android:id="@+id/PROFILE_name"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/PROFILE_pic"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:textColor="#363636"
-        android:textSize="18sp"
-       />
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:id="@+id/profile_img_with_icon">
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/PROFILE_friendReq"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="25dp"
+            android:src="@drawable/friendrequest"
 
+            />
+        <com.held.customview.CircularImageView
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:id="@+id/PROFILE_pic"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/milana_vayntrub"
+            android:scaleType="fitCenter"/>
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/PROFILE_Chat"
+            android:layout_marginLeft="25dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/chat"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="12dp"
+        android:id="@+id/user_name_layout"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UserName"
+            android:id="@+id/PROFILE_name"
+            android:textSize="15sp"
+            android:textColor="@color/userName_color"
+            android:layout_gravity="center" />
+    </LinearLayout>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@id/PROFILE_name"
-        android:layout_marginTop="20dp"
-        android:background="#1affffff"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/count_layout"
+        android:gravity="center"
+        android:layout_marginTop="140dp"
+        android:background="@color/profiel_infoBar_color"
 
-        <TextView
-            android:id="@+id/PROFILE_photos"
-            android:layout_width="0dp"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Photos"
-            android:textColor="#ffffff"
-            android:textSize="18sp"
-             />
+            android:orientation="vertical"
+            android:id="@+id/photo_count_layout"
+        >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="12"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textColor="@color/userName_color"
+                android:id="@+id/PROFILE_count_photos"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Photos"
+                android:textSize="11sp"
+                android:textColor="@color/userName_color"
+                android:id="@+id/PROFILE_txt_photos"/>
+        </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:id="@+id/friend_count_layout"
+        android:layout_marginLeft="15dp"
+        >
         <TextView
-            android:id="@+id/PROFILE_friends"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
+            android:text="123"
             android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/userName_color"
+            android:id="@+id/PROFILE_count_friends"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Friends"
-            android:textColor="#ffffff"
-            android:textSize="18sp"
-        />
-
-        <ImageView
-            android:id="@+id/PROFILE_chat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:src="@drawable/icon_single_chat" />
-
-        <ImageView
-            android:id="@+id/PROFILE_invite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:src="@drawable/icon_add_friend" />
-
+            android:gravity="center"
+            android:textSize="11sp"
+            android:textColor="@color/userName_color"
+            android:id="@+id/PROFILE_txt_friends"/>
+    </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

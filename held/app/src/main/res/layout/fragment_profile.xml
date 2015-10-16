@@ -5,6 +5,7 @@
     android:background="@drawable/app_background"
     android:clickable="true"
     android:orientation="vertical">
+    <!--<include layout="@layout/layout_profile_header" android:id="@+id/profile_header"></include>-->
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/PROFILE_swipe_refresh_layout"

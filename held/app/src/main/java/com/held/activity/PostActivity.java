@@ -102,6 +102,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
 
     private void launchChatScreen(String id, boolean isOneToOne) {
         updateToolbar(true, false, true, false, true, true, false, "");
+        /////add chat back image for personal chat
         addFragment(ChatFragment.newInstance(id, isOneToOne), ChatFragment.TAG, true);
         mDisplayFragment = ChatFragment.newInstance(id, isOneToOne);
     }

@@ -40,6 +40,7 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import timber.log.Timber;
 
 public class ProfileFragment extends ParentFragment {
 
@@ -52,22 +53,22 @@ public class ProfileFragment extends ParentFragment {
     private int mLimit = 5;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private String mUid, mUserName,user_id,mUserImg = "";
+    private String mUserName,mUserImg = "",mUserId;
     private PreferenceHelper mPreference;
     private ImageView mFullImg;
     private FeedActivity mActivity;
     private EditText mSearchEdt;
 
     public static final String TAG = ProfileFragment.class.getSimpleName();
-    private ImageView mProfilePic;
-    private TextView mUserNameText;
 
-    public static ProfileFragment newInstance(String userName) {
+
+    public static ProfileFragment newInstance(String userId) {
         ProfileFragment profileFragment = new ProfileFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("name", userName);
+        bundle.putString("user_id", userId);
         ///bundle.putString("userImg");
         profileFragment.setArguments(bundle);
+
         return profileFragment;
     }
 
@@ -81,17 +82,26 @@ public class ProfileFragment extends ParentFragment {
     protected void initialiseView(View view, Bundle savedInstanceState) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.PROFILE_rc_view);
         mLayoutManager = new LinearLayoutManager(getCurrActivity());
-        mProfileAdapter = new ProfileAdapter(getCurrActivity(),getArguments().getString("name"), mPostList, mIsLastPage, this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mProfileAdapter);
         mFullImg = (ImageView) view.findViewById(R.id.PROFILE_full_img);
+        mPreference=PreferenceHelper.getInstance(getCurrActivity());
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.PROFILE_swipe_refresh_layout);
+        mUserId= getArguments().getString("user_id");
+        mProfileAdapter=null;
+        if (getCurrActivity().getNetworkStatus()) {
+            //callUserSearchApi();
+            callProfilePostAPi();
+        } else {
+            UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
+        }
+        mProfileAdapter = new ProfileAdapter(getCurrActivity(),mUserId ,mPostList, mIsLastPage, this);
+        mRecyclerView.setAdapter(mProfileAdapter);
 
 
         //mUserName = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_name));
 
         //mProfilePic=(ImageView)view.findViewById(R.id.PROFILE_pic);
-        mPreference=PreferenceHelper.getInstance(getCurrActivity());
+
        // mUserNameText=(TextView)view.findViewById(R.id.PROFILE_name);
        // mUserNameText.setText(mUserName);
         //loadProfile();
@@ -108,7 +118,7 @@ public class ProfileFragment extends ParentFragment {
                 }
                 return false;
             }
-        });*/
+        });
 
         if (getArguments() != null) {
             mUserName = getArguments().getString("name");
@@ -117,7 +127,7 @@ public class ProfileFragment extends ParentFragment {
             mUserName = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_name));
            // mUserImg = "http://139.162.1.137/api/user_images/tejasshah_1440819300949.jpg";//PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_img));
 
-        }
+        }*/
 
 
 
@@ -149,17 +159,13 @@ public class ProfileFragment extends ParentFragment {
             }
         });
 
-        if (getCurrActivity().getNetworkStatus()) {
-            callUserSearchApi();
-        } else {
-            UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
-        }
+
     }
 
     private void callUserSearchApi() {
-        loadProfile();
+
         HeldService.getService().searchUser(mPreference.readPreference(getString(R.string.API_session_token)),
-                user_id, new Callback<SearchUserResponse>() {
+                mUserId, new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
 
@@ -217,11 +223,13 @@ public class ProfileFragment extends ParentFragment {
     }
 
     private void callProfilePostAPi() {
-        mIsLoading = true;
-        HeldService.getService().getUserPosts(mPreference.readPreference(getString(R.string.API_session_token)),user_id,mStart, mLimit,
+        //mIsLoading = true;
+        HeldService.getService().getUserPosts(mPreference.readPreference(getString(R.string.API_session_token)),
+                mUserId, mStart, mLimit,
                 new Callback<FeedResponse>() {
                     @Override
                     public void success(FeedResponse feedResponse, Response response) {
+
                         mPostList.addAll(feedResponse.getObjects());
                         mIsLastPage = feedResponse.isLastPage();
                         mStart = feedResponse.getNextPageStart();
@@ -232,7 +240,7 @@ public class ProfileFragment extends ParentFragment {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        mIsLoading = false;
+                        // mIsLoading = false;
 
                     }
                 });
@@ -248,37 +256,4 @@ public class ProfileFragment extends ParentFragment {
 
     }
 
-
-    public void loadProfile() {
-        HeldService.getService().searchUser(mPreference.readPreference(getString(R.string.API_session_token)),
-                mUserName, new Callback<SearchUserResponse>() {
-
-                    @Override
-                    public void success(SearchUserResponse searchUserResponse, Response response) {
-                        Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
-                        PicassoCache.getPicassoInstance(mActivity)
-                                .load(AppConstants.BASE_URL + searchUserResponse.getProfilePic())
-                                .placeholder(R.drawable.user_icon)
-                                .into(mProfilePic);
-                        mUserNameText.setText(searchUserResponse.getDisplayName());
-                        user_id=searchUserResponse.getRid();
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
-    }
-
-
-
-    public String getUserName() {
-        return mUserName;
-    }
-
-    public String getUserImg() {
-        return mUserImg;
-
-    }
 }

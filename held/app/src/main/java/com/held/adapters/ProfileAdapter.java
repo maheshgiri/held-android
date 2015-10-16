@@ -11,10 +11,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.held.activity.FeedActivity;
 import com.held.activity.ParentActivity;
 import com.held.activity.R;
 import com.held.customview.BlurTransformation;
@@ -25,6 +27,7 @@ import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.HoldResponse;
 import com.held.retrofit.response.ReleaseResponse;
 import com.held.retrofit.response.SearchUserResponse;
+import com.held.retrofit.response.User;
 import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
@@ -32,17 +35,19 @@ import com.held.utils.UiUtils;
 import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import timber.log.Timber;
 
 public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ParentActivity mActivity;
-    private List<FeedData> mPostList;
+    private FeedActivity mActivity;
+    private List<FeedData> mPostList=new ArrayList<>();
     private boolean mIsLastPage;
     private String mPostId, mOwnerDisplayName;
     private int mPosition;
@@ -55,18 +60,24 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_FOOTER = 2;
     private BlurTransformation mBlurTransformation;
     private PreferenceHelper mPrefernce;
+    private String mUserName,mprofileUrl,mUserId,mholdId;
+    private User user=null;
+    private boolean isFullScreenMode = false;
 
 
 
-    public ProfileAdapter(ParentActivity activity,String userName,List<FeedData> postList, boolean isLastPage, ProfileFragment profileFragment) {
-        mActivity = activity;
+    public ProfileAdapter(ParentActivity activity,String userId,List<FeedData> postList, boolean isLastPage, ProfileFragment profileFragment) {
+        mActivity =(FeedActivity)activity;
         mPostList = postList;
         mIsLastPage = isLastPage;
         mProfileFragment = profileFragment;
         mBlurTransformation = new BlurTransformation(mActivity, 18);
         mGestureDetector = new GestureDetector(mActivity, new GestureListener());
         mPreference=PreferenceHelper.getInstance(mActivity);
-        mOwnerDisplayName=userName;
+        Timber.i("User Name In Profile "+userId);
+        mUserId=userId;
+        setUserProfile();
+
     }
 
     @Override
@@ -97,43 +108,37 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+
         if (holder instanceof HeaderViewHolder) {
-            HeaderViewHolder viewHolder = (HeaderViewHolder) holder;
 
-        //TODO : here load user name and user image
-            setUserProfile(viewHolder);
-           //Picasso.with(mActivity).load(AppConstants.BASE_URL + viewHolder.mProfilePic).into(viewHolder.mProfilePic);
-
-          //  Picasso.with(mActivity).load(AppConstants.BASE_URL+viewHolder.mProfilePic).into(viewHolder.mProfilePic);
-           // viewHolder.mUserName.setText("@" + mProfileFragment.getUserName());
-
-
-
-        } else if (holder instanceof ProgressViewHolder) {
-            ProgressViewHolder viewHolder = (ProgressViewHolder) holder;
-
-            if (mIsLastPage) {
-                viewHolder.mIndicationTxt.setVisibility(View.VISIBLE);
-                viewHolder.progressBar.setVisibility(View.GONE);
-            } else {
-                viewHolder.progressBar.setVisibility(View.VISIBLE);
-                viewHolder.mIndicationTxt.setVisibility(View.GONE);
-                viewHolder.progressBar.setIndeterminate(true);
+            HeaderViewHolder viewHolderHead = (HeaderViewHolder) holder;
+                //TODO: Profile header
+            try {
+                viewHolderHead.mUserName.setText(user.getDisplayName());
+                viewHolderHead.mFriendCount.setText(user.getFriendCount());
+                viewHolderHead.mPostCount.setText(user.getPostCount());
+                PicassoCache.getPicassoInstance(mActivity)
+                        .load(AppConstants.BASE_URL + user.getProfilePic())
+                        .into(viewHolderHead.mProfilePic);
+            }catch (Exception e){
+                e.printStackTrace();
             }
-        } else {
-            final ItemViewHolder viewHolder = (ItemViewHolder) holder;
-            mItemViewHolder = viewHolder;
-            PicassoCache.getPicassoInstance(mActivity)
-                    .load(mPostList.get(position).getProfilePic())
-                    .into(viewHolder.mUserImg);
-            //TODO : Load Image of user--->> done
 
-        //    PicassoCache.getPicassoInstance(mActivity).load(AppConstants.BASE_URL + mPostList.get(position).getCreator().getProfilePic()).into(viewHolder.mUserImg);
-            //Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getUser().getProfilePic()).into(viewHolder.mUserImg);
-        //    PicassoCache.getPicassoInstance(mActivity).load(AppConstants.BASE_URL + mPostList.get(position).getCreator().getProfilePic()).transform(mBlurTransformation).into(viewHolder.mFeedImg);
-            setTimeText(mPostList.get(position - 1).getHeld(), viewHolder.mTimeMinTxt, viewHolder.mTimeSecTxt);
+
+
+        } else if(holder instanceof ItemViewHolder) {
+            final ItemViewHolder viewHolder = (ItemViewHolder) holder;
+           // mItemViewHolder = viewHolder;
+
+            mItemViewHolder = viewHolder;
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getCreator().getProfilePic()).into(viewHolder.mUserImg);
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getImageUri()).transform(mBlurTransformation).into(viewHolder.mFeedImg);
+            setTimeText(mPostList.get(position - 1).getHeld(),viewHolder.mTimeMinTxt,viewHolder.mTimeSecTxt);
             viewHolder.mFeedTxt.setText(mPostList.get(position - 1).getText());
-            viewHolder.mFeedImg.setOnTouchListener(new View.OnTouchListener() {
+            viewHolder.mUserNameTxt.setText(mPostList.get(position - 1).getCreator().getDisplayName());
+
+            /*
+           viewHolder.mFeedImg.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                     switch (motionEvent.getAction()) {
@@ -144,8 +149,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             holder.mTimeTxt.setVisibility(View.INVISIBLE);
                         } else {
                             UiUtils.owSnackbarToast(mActivity.findViewById(R.id.frag_container), "You are not connected to internet");
-                        }*/
-                            mPosition = position - 1;
+                        }
+
+                            mPosition = position-1;
                             break;
                         case MotionEvent.ACTION_MOVE:
 //                            mActivity.isBlured = false;
@@ -154,27 +160,44 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         case MotionEvent.ACTION_UP:
                             mProfileFragment.showRCView();
                             view.getParent().requestDisallowInterceptTouchEvent(false);
-                            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getImageUri()).
-                                    transform(new BlurTransformation(mActivity, 18)).into(viewHolder.mFeedImg);
+                            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position-1).getImageUri()).
+                                    transform(mBlurTransformation).into(viewHolder.mFeedImg);
                             viewHolder.myTimeLayout.setVisibility(View.VISIBLE);
-                            callReleaseApi(mPostList.get(position - 1).getUser().getRid(), viewHolder.mTimeMinTxt,viewHolder.mTimeSecTxt);
-//                            mActivity.isBlured = true;
+                            if(isFullScreenMode){
+                                callReleaseApi(mPostList.get(position-1).getRid(),viewHolder.mTimeMinTxt,viewHolder.mTimeSecTxt,String.valueOf(System.currentTimeMillis()));
+                                isFullScreenMode = false;
+                            }
+
+                            mActivity.isBlured = true;
+                            mActivity.showToolbar();
                             break;
 
                     }
-                    mPostId = mPostList.get(position - 1).getUser().getRid();
+                    mPostId = mPostList.get(position-1).getCreator().getRid();
                     return mGestureDetector.onTouchEvent(motionEvent);
                 }
 
-            });
+            });*/
+        } else if (holder instanceof ProgressViewHolder) {
+            ProgressViewHolder viewHolderProgress = (ProgressViewHolder) holder;
+
+            if (mIsLastPage) {
+                viewHolderProgress.mIndicationTxt.setVisibility(View.VISIBLE);
+                viewHolderProgress.progressBar.setVisibility(View.GONE);
+            } else {
+                viewHolderProgress.progressBar.setVisibility(View.VISIBLE);
+                viewHolderProgress.mIndicationTxt.setVisibility(View.GONE);
+                viewHolderProgress.progressBar.setIndeterminate(true);
+            }
         }
     }
 
-    private void callReleaseApi(String postId, final TextView textView1,final TextView textView2) {
-        HeldService.getService().releasePostProfile(mPreference.readPreference("SESSION_TOKEN"),postId,new Callback<ReleaseResponse>()  {
+    private void callReleaseApi(String postId, final TextView textView1,final TextView textView2,String start_tm) {
+        HeldService.getService().releasePost(mPreference.readPreference("SESSION_TOKEN"), postId, mholdId, "", String.valueOf(System.currentTimeMillis()),
+                "", new Callback<ReleaseResponse>() {
                     @Override
                     public void success(ReleaseResponse releaseResponse, Response response) {
-                        setTimeText(releaseResponse.getHeld(), textView1,textView2);
+                        setTimeText(releaseResponse.getHeld(), textView1, textView2);
                     }
 
                     @Override
@@ -208,28 +231,38 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return mPostList.size() + 2;
+        return mPostList.size() +2;
     }
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView mProfilePic;
-        private TextView mUserName, mFriendCount, mPostCount;
+        private TextView mUserName, mFriendCount, mPostCount,mfriendTxt,mPostTxt;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
             mProfilePic = (ImageView) itemView.findViewById(R.id.PROFILE_pic);
             mUserName = (TextView) itemView.findViewById(R.id.PROFILE_name);
-            mFriendCount = (TextView) itemView.findViewById(R.id.PROFILE_friends);
-            mPostCount = (TextView) itemView.findViewById(R.id.PROFILE_photos);
+            mFriendCount = (TextView) itemView.findViewById(R.id.PROFILE_count_friends);
+            mPostCount = (TextView) itemView.findViewById(R.id.PROFILE_count_photos);
+            mfriendTxt = (TextView) itemView.findViewById(R.id.PROFILE_txt_friends);
+            mPostTxt = (TextView) itemView.findViewById(R.id.PROFILE_txt_photos);
+
         }
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView mUserNameTxt, mFeedTxt, mTimeMinTxt,mTimeSecTxt;
-        private final ImageView mFeedImg, mUserImg;
+        public final TextView mUserNameTxt, mFeedTxt, mTimeMinTxt, mTimeSecTxt;
+        public final ImageView mFeedImg, mUserImg;
+        public final RelativeLayout myLayout = (RelativeLayout) itemView.findViewById(R.id.BOX_layout);
         public final RelativeLayout myTimeLayout = (RelativeLayout) itemView.findViewById(R.id.time_layout);
+        public final LinearLayout myCountLayout = (LinearLayout) itemView.findViewById(R.id.layout_people_count);
+        public final TextView mPersonCountTxt = (TextView) itemView.findViewById(R.id.tv_count_people);
+        public final TextView mPersonCountTxt2 = (TextView) itemView.findViewById(R.id.tv_count_people2);
+        public final TextView mPersonCount = (TextView) itemView.findViewById(R.id.count_hold_people);
+        public final TextView mTimeTxt = (TextView) itemView.findViewById(R.id.time_txt);
+        public final TextView mTimeTxt2 = (TextView) itemView.findViewById(R.id.time_txt2);
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -267,7 +300,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public boolean onDoubleTap(MotionEvent e) {
             Bundle bundle = new Bundle();
             bundle.putString("postid", mPostId);
-            mActivity.perform(2, bundle);
+            bundle.putBoolean("oneToOne", false);
+            mActivity.perform(AppConstants.LAUNCH_CHAT_SCREEN, bundle);
             return true;
         }
 
@@ -275,12 +309,16 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public void onLongPress(MotionEvent e) {
             if (mActivity.getNetworkStatus()) {
 //                Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(mPosition).getImage()).into(feedViewHolder.mFeedImg);
-                if (!mPostList.get(mPosition).getUser().getDisplayName().equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
-                    callHoldApi(mPostList.get(mPosition).getCreator().getRid(),String.valueOf(System.currentTimeMillis()));
+                if (!mPostList.get(mPosition).getCreator().getDisplayName().equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
+                    callHoldApi(mPostList.get(mPosition).getRid(),String.valueOf(System.currentTimeMillis()));
                 }
                 mItemViewHolder.myTimeLayout.setVisibility(View.INVISIBLE);
                 mItemViewHolder.mFeedImg.getParent().requestDisallowInterceptTouchEvent(true);
                 mProfileFragment.showFullImg(AppConstants.BASE_URL + mPostList.get(mPosition).getImageUri());
+                if(e.getAction() == MotionEvent.ACTION_UP){
+
+                }
+                isFullScreenMode = true;
 
             } else {
                 UiUtils.showSnackbarToast(mActivity.findViewById(R.id.frag_container), "You are not connected to internet");
@@ -291,10 +329,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void callHoldApi(String postId,String start_tm) {
-        HeldService.getService().holdPost(mPreference.readPreference("SESSION_TOKEN"),postId,start_tm,"" ,new Callback<HoldResponse>(){
+        HeldService.getService().holdPost(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"),postId,start_tm,"" ,new Callback<HoldResponse>(){
         @Override
             public void success(HoldResponse holdResponse, Response response) {
-
+                mholdId=holdResponse.getRid();
             }
 
             @Override
@@ -308,19 +346,19 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         });
     }
-    public void setUserProfile(final HeaderViewHolder  viewHolder)
+    public void setUserProfile()
     {
 
-        HeldService.getService().searchUser(mPrefernce.readPreference(Utils.getString(R.string.API_session_token)),
-                mOwnerDisplayName, new Callback<SearchUserResponse>() {
+        HeldService.getService().searchUser(PreferenceHelper.getInstance(mActivity).readPreference(Utils.getString(R.string.API_session_token)),
+                mUserId, new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
-                        Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
-                        viewHolder.mUserName.setText(searchUserResponse.getDisplayName());
-                        PicassoCache.getPicassoInstance(mActivity)
-                                .load(AppConstants.BASE_URL + searchUserResponse.getProfilePic())
-                                .placeholder(R.drawable.user_icon)
-                                .into(viewHolder.mProfilePic);
+                        //Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
+                        user.setDisplayName(searchUserResponse.getUser().getDisplayName());
+                        user.setProfilePic(searchUserResponse.getUser().getProfilePic());
+                        user.setPostCount(searchUserResponse.getUser().getPostCount());
+                        user.setFriendCount(searchUserResponse.getUser().getFriendCount());
+                        Timber.i("User Init:"+user.getDisplayName());
                     }
 
                     @Override

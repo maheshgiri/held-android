@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.held.gcm.GCMControlManager;
 import com.held.receiver.NetworkStateReceiver;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.CreateUserResponse;
@@ -215,6 +216,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                         callLoginUserApi();
 
 
+
                         if (verificationResponse.isVerified()) {
                             PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_pin), Integer.parseInt(mPin));
                             Log.i("VerificationActivity", "Responce :" + verificationResponse.toString());
@@ -265,7 +267,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
 
    private void callLoginUserApi() {
         Log.i("VerificationActivity","In callLoginUserApi()");
-        HeldService.getService().loginUser(mPhoneNo, mPin,"", new Callback<LoginUserResponse>() {
+        HeldService.getService().loginUser(mPhoneNo, mPin, "", new Callback<LoginUserResponse>() {
             @Override
             public void success(LoginUserResponse loginUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
@@ -295,7 +297,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
             @Override
             public void failure(RetrofitError error) {
                 DialogUtils.stopProgressDialog();
-                if (error != null && error.getResponse() != null &&!TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
                     String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
                     UiUtils.showSnackbarToast(findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
                 } else
@@ -341,8 +343,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
     }
 
     private void callVoiceCallApi() {
-        HeldService.getService().voiceCall(mPreference.readPreference(getString(R.string.API_session_token)), mPreference.readPreference(getString(R.string.API_user_regId)),
-                new Callback<VoiceCallResponse>() {
+        HeldService.getService().voiceCall(mPhoneNo,"",new Callback<VoiceCallResponse>() {
                     @Override
                     public void success(VoiceCallResponse voiceCallResponse, Response response) {
                         DialogUtils.stopProgressDialog();
@@ -368,8 +369,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
     }
 
     private void callResendSmsApi() {
-        HeldService.getService().resendSms( mAuth, mRegId,
-                new Callback<CreateUserResponse>() {
+        HeldService.getService().resendSms( mPhoneNo,"",new Callback<CreateUserResponse>() {
             @Override
             public void success(CreateUserResponse createUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
