@@ -12,7 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.held.activity.R;
+import com.held.fragment.ChatFragment;
+import com.held.fragment.ParentFragment;
 import com.held.fragment.ProfileFragment;
+
+import timber.log.Timber;
 
 public class ProfileActivity extends ParentActivity implements View.OnClickListener {
 
@@ -42,10 +46,11 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         mNotification.setOnClickListener(this);
         Bundle extras = getIntent().getExtras();
         mUserId=extras.getString("user_id");
-       // launchProfileScreen(mUserId);
+        launchProfileScreen(mUserId);
     }
 
     private void launchProfileScreen(String uid) {
+        ParentFragment frag = ProfileFragment.newInstance(uid);
         Bundle bundle=new Bundle();
         bundle.putString("user_id", uid);
         frag.setArguments(bundle);
@@ -59,6 +64,8 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     @Override
     public void onBackPressed() {
         if (mDisplayFragment instanceof ProfileFragment){
+            super.onBackPressed();
+        }else {
             super.onBackPressed();
         }
     }
