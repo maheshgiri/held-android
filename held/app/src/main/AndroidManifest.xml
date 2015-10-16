@@ -56,10 +56,8 @@
             android:name=".FeedActivity"
             android:configChanges="fontScale"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            >
+            android:windowSoftInputMode="stateHidden|adjustResize" >
         </activity>
-
         <activity
             android:name=".NotificationActivity"
             android:configChanges="fontScale"
@@ -93,6 +91,10 @@
         <activity
             android:name=".SeenByActivity"
             android:label="@string/title_activity_seen_by" >
+        </activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/title_activity_profile" >
         </activity>
     </application>
 
