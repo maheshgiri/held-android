@@ -1,6 +1,7 @@
 package com.held.adapters;
 
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.held.activity.FeedActivity;
 import com.held.activity.ParentActivity;
+import com.held.activity.ProfileActivity;
 import com.held.activity.R;
 import com.held.customview.BlurTransformation;
 import com.held.customview.PicassoCache;
@@ -46,7 +48,7 @@ import timber.log.Timber;
 
 public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private FeedActivity mActivity;
+    private ProfileActivity mActivity;
     private List<FeedData> mPostList=new ArrayList<>();
     private boolean mIsLastPage;
     private String mPostId, mOwnerDisplayName;
@@ -67,7 +69,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
     public ProfileAdapter(ParentActivity activity,String userId,List<FeedData> postList, boolean isLastPage, ProfileFragment profileFragment) {
-        mActivity =(FeedActivity)activity;
+        mActivity =(ProfileActivity)activity;
         mPostList = postList;
         mIsLastPage = isLastPage;
         mProfileFragment = profileFragment;
@@ -120,6 +122,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 PicassoCache.getPicassoInstance(mActivity)
                         .load(AppConstants.BASE_URL + user.getProfilePic())
                         .into(viewHolderHead.mProfilePic);
+            setTypeFace(viewHolderHead.mUserName, "medium");
+            setTypeFace(viewHolderHead.mFriendCount,"medium");
+            setTypeFace(viewHolderHead.mPostCount,"medium");
+            setTypeFace(viewHolderHead.mfriendTxt,"book");
+            setTypeFace(viewHolderHead.mPostTxt,"book");
 //            }catch (Exception e){
 //                e.printStackTrace();
 //            }
@@ -133,9 +140,18 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             mItemViewHolder = viewHolder;
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getCreator().getProfilePic()).into(viewHolder.mUserImg);
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getImageUri()).transform(mBlurTransformation).into(viewHolder.mFeedImg);
-            setTimeText(mPostList.get(position - 1).getHeld(),viewHolder.mTimeMinTxt,viewHolder.mTimeSecTxt);
+            setTimeText(mPostList.get(position - 1).getHeld(), viewHolder.mTimeMinTxt, viewHolder.mTimeSecTxt);
             viewHolder.mFeedTxt.setText(mPostList.get(position - 1).getText());
             viewHolder.mUserNameTxt.setText(mPostList.get(position - 1).getCreator().getDisplayName());
+            setTypeFace(viewHolder.mTimeMinTxt, "medium");
+            setTypeFace(viewHolder.mTimeSecTxt,"medium");
+            setTypeFace(viewHolder.mPersonCount,"medium");
+            setTypeFace(viewHolder.mPersonCountTxt,"book");
+            setTypeFace(viewHolder.mPersonCountTxt2,"book");
+            setTypeFace(viewHolder.mTimeTxt,"book");
+            setTypeFace(viewHolder.mTimeTxt2,"book");
+            setTypeFace(viewHolder.mUserNameTxt,"medium");
+            setTypeFace(viewHolder.mFeedTxt,"book");
 
 
            viewHolder.mFeedImg.setOnTouchListener(new View.OnTouchListener() {
@@ -168,8 +184,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 isFullScreenMode = false;
                             }
 
-                            mActivity.isBlured = true;
-                            mActivity.showToolbar();
+                           // mActivity.isBlured = true;
+                           // mActivity.showToolbar();
                             break;
 
                     }
@@ -359,7 +375,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         user.setPostCount(searchUserResponse.getUser().getPostCount());
                         user.setFriendCount(searchUserResponse.getUser().getFriendCount());
 
-                        Timber.i("User Init:"+user.getDisplayName());
+                        Timber.i("User Init:" + user.getDisplayName());
                     }
 
                     @Override
@@ -368,5 +384,15 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 });
 
+    }
+    public void setTypeFace(TextView tv,String type){
+        Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
+        Typeface book = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansBook.otf");
+        if(type=="book"){
+            tv.setTypeface(book);
+
+        }else {
+            tv.setTypeface(medium);
+        }
     }
 }

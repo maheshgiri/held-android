@@ -447,7 +447,7 @@ public class ChatFragment extends ParentFragment {
                         PicassoCache.getPicassoInstance(getCurrActivity())
                                 .load(AppConstants.BASE_URL + postResponse.getImageUri())
                                 .transform(mBlurTransformation)
-                                .placeholder(R.drawable.milana_vayntrub)
+                                //.placeholder(R.drawable.milana_vayntrub)
                                 .into(mChatBackImage);
                     }
 
@@ -466,7 +466,7 @@ public class ChatFragment extends ParentFragment {
                         PicassoCache.getPicassoInstance(getCurrActivity())
                                 .load(AppConstants.BASE_URL + feedResponse.getObjects().get(0).getImageUri())
                                 .transform(mBlurTransformation)
-                                .placeholder(R.drawable.milana_vayntrub)
+                               // .placeholder(R.drawable.milana_vayntrub)
                                 .into(mChatBackImage);
                     }
 
