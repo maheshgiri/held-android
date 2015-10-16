@@ -21,6 +21,7 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     Activity mActivity;
     Fragment mDisplayFragment;
     String mUserId;
+    ProfileFragment frag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +42,17 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         mNotification.setOnClickListener(this);
         Bundle extras = getIntent().getExtras();
         mUserId=extras.getString("user_id");
-
+       // launchProfileScreen(mUserId);
     }
+
+    private void launchProfileScreen(String uid) {
+        Bundle bundle=new Bundle();
+        bundle.putString("user_id", uid);
+        frag.setArguments(bundle);
+        addFragment(ProfileFragment.newInstance(uid), ProfileFragment.TAG, true);
+        mDisplayedFragment = ProfileFragment.newInstance(uid);
+    }
+
     public Fragment getCurrentFragment() {
         return mDisplayFragment;
     }

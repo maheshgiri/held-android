@@ -32,7 +32,7 @@
             android:id="@+id/PROFILE_pic"
             android:layout_gravity="center_vertical"
             android:src="@drawable/milana_vayntrub"
-            android:scaleType="fitCenter"/>
+            android:scaleType="centerCrop"/>
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
