@@ -54,7 +54,14 @@ public class Utils {
             suffix = "PM";
         }
         int minutes = cal.get(Calendar.MINUTE);
-        String converted = "" + hour + "." + minutes + " " + suffix;
+        String min;
+        if(minutes < 10){
+            min = "0" + minutes;
+        }else{
+            min = "" + minutes;
+        }
+
+        String converted = "" + hour + "." + min + " " + suffix;
         return converted;
     }
 
