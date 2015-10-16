@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.held.activity.FeedActivity;
+import com.held.activity.ProfileActivity;
 import com.held.activity.R;
 import com.held.adapters.ProfileAdapter;
 import com.held.customview.PicassoCache;
@@ -206,20 +207,24 @@ public class ProfileFragment extends ParentFragment {
         getCurrActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
         mFullImg.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setVisibility(View.GONE);
-        getCurrActivity().getToolbar().setVisibility(View.GONE);
+      //  getCurrActivity().getToolbar().setVisibility(View.GONE);
         Picasso.with(getActivity()).load(url).into(mFullImg);
         mSwipeRefreshLayout.setEnabled(false);
-        hideSystemUI();
+        mRecyclerView.setEnabled(false);
+        UiUtils.hideSystemUI(this.getView());
+        ((ProfileActivity)getCurrActivity()).hideToolbar();
     }
 
     public void showRCView() {
         getCurrActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
         getCurrActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mFullImg.setVisibility(View.GONE);
+        mRecyclerView.setEnabled(true);
         mSwipeRefreshLayout.setVisibility(View.VISIBLE);
-        getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
+//        getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setEnabled(true);
-        showSystemUI();
+        ((ProfileActivity)getCurrActivity()).showToolbar();
+        //showSystemUI();
     }
 
     private void callProfilePostAPi() {

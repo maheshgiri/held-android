@@ -203,7 +203,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                     transform(mBlurTransformation).into(holder.mFeedImg);
                             holder.myTimeLayout.setVisibility(View.VISIBLE);
                             if(isFullScreenMode){
-                                callReleaseApi(mFeedList.get(position).getRid(),holder.mTimeMinTxt,holder.mTimeSecTxt,String.valueOf(System.currentTimeMillis()));
+                                if (!mFeedList.get(mPosition).getCreator().getDisplayName().equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
+                                    callReleaseApi(mFeedList.get(position).getRid(), holder.mTimeMinTxt, holder.mTimeSecTxt, String.valueOf(System.currentTimeMillis()));
+                                }
                                 isFullScreenMode = false;
                             }
 
@@ -367,9 +369,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void onLongPress(MotionEvent e) {
             if (mActivity.getNetworkStatus()) {
 //                Picasso.with(mActivity).load("http://139.162.1.137/api" + mFeedList.get(mPosition).getImage()).into(feedViewHolder.mFeedImg);
-              //  if (!mFeedList.get(mPosition).getOwner_display_name().equals(PreferenceHelper.getInstance(mActivity).readPreference(mActivity.getString(R.string.API_user_name)))) {
+                if (!mFeedList.get(mPosition).getCreator().getDisplayName().equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
                     callHoldApi(mFeedList.get(mPosition).getRid(),String.valueOf(System.currentTimeMillis()));
-              //  }
+                }
                 feedViewHolder.myTimeLayout.setVisibility(View.INVISIBLE);
                 feedViewHolder.mFeedImg.getParent().requestDisallowInterceptTouchEvent(true);
                 mFeedFragment.showFullImg(AppConstants.BASE_URL + mFeedList.get(mPosition).getImageUri());
