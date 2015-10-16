@@ -1,0 +1,23 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.held.activity.ProfileActivity"
+    android:background="@color/bg_color">
+
+    <include layout="@layout/app_toolbar" android:id="@+id/toolbar"></include>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/toolbar_divider"
+        android:background="@color/shadow_color"
+        android:alpha=".20"
+        android:layout_below="@+id/toolbar"
+        android:elevation="2dp"
+        />
+    <FrameLayout
+        android:id="@+id/frag_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_divider"
+        ></FrameLayout>
+</RelativeLayout>

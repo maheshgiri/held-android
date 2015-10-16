@@ -241,9 +241,9 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     }
 
     private void launchProfileScreen(String uid) {
-        updateToolbar(true, false, true, false, true, true, false, "");
-        replaceFragment(ProfileFragment.newInstance(uid), ProfileFragment.TAG, true);
-        mDisplayedFragment = ProfileFragment.newInstance(uid);
+        Intent intent = new Intent(FeedActivity.this, ProfileActivity.class);
+        intent.putExtra("user_id",uid);
+        startActivity(intent);
     }
 
     @Override
