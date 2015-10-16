@@ -61,7 +61,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private BlurTransformation mBlurTransformation;
     private PreferenceHelper mPrefernce;
     private String mUserName,mprofileUrl,mUserId,mholdId;
-    private User user=null;
+    private User user=new User();
     private boolean isFullScreenMode = false;
 
 
@@ -113,22 +113,22 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             HeaderViewHolder viewHolderHead = (HeaderViewHolder) holder;
                 //TODO: Profile header
-            try {
+           // try {
                 viewHolderHead.mUserName.setText(user.getDisplayName());
                 viewHolderHead.mFriendCount.setText(user.getFriendCount());
                 viewHolderHead.mPostCount.setText(user.getPostCount());
                 PicassoCache.getPicassoInstance(mActivity)
                         .load(AppConstants.BASE_URL + user.getProfilePic())
                         .into(viewHolderHead.mProfilePic);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+//            }catch (Exception e){
+//                e.printStackTrace();
+//            }
 
 
 
         } else if(holder instanceof ItemViewHolder) {
             final ItemViewHolder viewHolder = (ItemViewHolder) holder;
-           // mItemViewHolder = viewHolder;
+            mItemViewHolder = viewHolder;
 
             mItemViewHolder = viewHolder;
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getCreator().getProfilePic()).into(viewHolder.mUserImg);
@@ -137,7 +137,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolder.mFeedTxt.setText(mPostList.get(position - 1).getText());
             viewHolder.mUserNameTxt.setText(mPostList.get(position - 1).getCreator().getDisplayName());
 
-            /*
+
            viewHolder.mFeedImg.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -149,7 +149,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             holder.mTimeTxt.setVisibility(View.INVISIBLE);
                         } else {
                             UiUtils.owSnackbarToast(mActivity.findViewById(R.id.frag_container), "You are not connected to internet");
-                        }
+                        }*/
 
                             mPosition = position-1;
                             break;
@@ -177,7 +177,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     return mGestureDetector.onTouchEvent(motionEvent);
                 }
 
-            });*/
+            });
         } else if (holder instanceof ProgressViewHolder) {
             ProgressViewHolder viewHolderProgress = (ProgressViewHolder) holder;
 
@@ -358,6 +358,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         user.setProfilePic(searchUserResponse.getUser().getProfilePic());
                         user.setPostCount(searchUserResponse.getUser().getPostCount());
                         user.setFriendCount(searchUserResponse.getUser().getFriendCount());
+
                         Timber.i("User Init:"+user.getDisplayName());
                     }
 
