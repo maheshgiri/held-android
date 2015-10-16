@@ -158,13 +158,12 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if(reqStatus.equalsIgnoreCase("none")){
             ///Have to check request status for this for add as friends
             btn.setCompoundDrawablesWithIntrinsicBounds(mActivity.getResources().getDrawable(R.drawable.friendrequest),null,null,null);
+            btn.setCompoundDrawablePadding(-30);
             btn.setGravity(Gravity.CENTER);
             btn.setBackgroundColor(mActivity.getResources().getColor(R.color.positve_btn));
             btn.setTextColor(mActivity.getResources().getColor(R.color.white));
-           // btn.setPadding(20,0,0,0);
+            btn.setPadding(20,0,0,0);
             btn.setText("Add as Friend");
-
-
 
         }else if(reqStatus.equalsIgnoreCase("friends")){
             btn.setText("Friends");
