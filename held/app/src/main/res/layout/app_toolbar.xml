@@ -9,7 +9,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/toolbar_layout"
-    >
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginRight="14dp">
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"

@@ -144,11 +144,20 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
             @Override
             public void failure(RetrofitError error) {
                 DialogUtils.stopProgressDialog();
-                if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
-                    String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
-                    UiUtils.showSnackbarToast(findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
-                } else
-                    UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Some Problem Occurred");
+                if (error != null && error.getResponse() != null) {
+
+                    Response response = error.getResponse();
+                    if (response.getStatus() == 401) {
+                        Timber.d("No valid session found");
+                    } else {
+                        String body = response.getBody().toString();
+
+                        if (!TextUtils.isEmpty(body)) {
+                            UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Some Problem Occurred");
+                        }
+                    }
+                }
+
             }
         });
     }

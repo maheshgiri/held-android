@@ -73,6 +73,7 @@ public class ChatFragment extends ParentFragment {
    // private boolean mflag=true;
     private Runnable runnable;
 
+
     public static ChatFragment newInstance(String id, boolean isOneToOne) {
 
         ChatFragment chatFragment = new ChatFragment();
@@ -192,6 +193,12 @@ public class ChatFragment extends ParentFragment {
             UiUtils.showSnackbarToast(getView(), "Sorry! You don't seem to connected to internet");
         }*/
 
+
+        PicassoCache.getPicassoInstance(getCurrActivity())
+                                                .load(R.drawable.milana_vayntrub)
+                                                .transform(mBlurTransformation)
+                                                .into(mChatBackImage);
+
     /*    mChatList.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -254,8 +261,10 @@ public class ChatFragment extends ParentFragment {
     }
 
     private void callFriendChatApi() {
+
         Timber.d("Calling friend chat api");
         HeldService.getService().sendfriendChat(mPreference.readPreference(getString(R.string.API_session_token)),
+  //              mId, mMessageEdt.getText().toString().trim(), "", new Callback<PostMessageResponse>() {
                 getArguments().getString("user_id"), mMessageEdt.getText().toString().trim(), "", new Callback<PostMessageResponse>() {
                     @Override
                     public void success(PostMessageResponse postMessageResponse, Response response) {

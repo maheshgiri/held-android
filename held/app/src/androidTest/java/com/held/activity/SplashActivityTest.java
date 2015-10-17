@@ -35,7 +35,7 @@ public class SplashActivityTest extends ActivityInstrumentationTestCase2 <Splash
     public void testStartSecondActivity()
     {
         ActivityMonitor monitor = getInstrumentation().addMonitor(SplashActivity.class.getName(), null, false);
-        final Button buttonStart = (Button) mActivity.findViewById(R.id.SPLASH_get_started_btn);
+        final Button buttonStart = (Button) mActivity.findViewById(R.id.startBtn);
         assertNotNull(buttonStart);
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
