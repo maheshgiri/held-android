@@ -30,14 +30,19 @@
         android:layout_centerInParent="true"
         />
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar_search_edt_txt"
         android:visibility="gone"
         android:editable="true"
         android:maxLength="30"
         android:hint="Search...."
-        android:layout_centerInParent="true" />
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="5dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/toolbar_search_img"
+        android:layout_toRightOf="@+id/toolbar_chat_img"
+        android:layout_toEndOf="@+id/toolbar_chat_img" />
 
 
         <!-- com.held.customview.CustomTextView
@@ -60,7 +65,7 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:id="@+id/toolbar_search_img"
-        android:src="@drawable/search_icon_v2"
+        android:src="@drawable/search"
         android:layout_marginRight="10dp"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/toolbar_notification_img"

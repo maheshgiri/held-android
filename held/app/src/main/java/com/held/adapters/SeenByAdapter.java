@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.held.activity.ParentActivity;
 import com.held.activity.R;
+import com.held.activity.SearchActivity;
 import com.held.activity.SeenByActivity;
 import com.held.customview.PicassoCache;
 import com.held.retrofit.response.Engager;
@@ -50,6 +51,13 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         mEngagersList=engagerList;
         mPreference=PreferenceHelper.getInstance(mActivity);
 
+    }
+
+    public SeenByAdapter(SearchActivity searchActivity, List<Engager> mSearchResultList) {
+        mActivity = searchActivity;
+        //  mIsLastPage = isLastPage;
+        mEngagersList=mSearchResultList;
+        mPreference=PreferenceHelper.getInstance(mActivity);
     }
 
 

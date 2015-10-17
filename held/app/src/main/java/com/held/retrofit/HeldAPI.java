@@ -28,6 +28,7 @@ import com.held.retrofit.response.PostMessageResponse;
 import com.held.retrofit.response.PostResponse;
 import com.held.retrofit.response.ProfilPicUpdateResponse;
 import com.held.retrofit.response.ReleaseResponse;
+import com.held.retrofit.response.SearchByNameResponce;
 import com.held.retrofit.response.SearchUserResponse;
 import com.held.retrofit.response.UnDeclineFriendResponse;
 import com.held.retrofit.response.UnFriendResponse;
@@ -107,7 +108,7 @@ public interface HeldAPI {
 
 
    @GET("/users/")
-   void searchFriend(@Header("Authorization") String token,@Query("name") String frndName,Callback<FriendRequestObject> friendSearchResult);
+   void searchByName(@Header("Authorization") String token,@Query("name") String frndName,Callback<SearchByNameResponce> searchByNameResponceCallback);
 
     @PUT("/friendshiprequests/{request_id}/")
     void declineFriend(@Header("Authorization") String token,@Path("request_id")String rid, @Query("decline") String decline,@Query("approve") String approve,@Body()String body ,Callback<DeclineFriendResponse> declineFriendResponseCallback);

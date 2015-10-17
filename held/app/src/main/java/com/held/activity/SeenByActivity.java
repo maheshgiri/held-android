@@ -93,7 +93,7 @@ public class SeenByActivity extends ParentActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-return;
+                callSeenByApi();
             }
         });
 /*
@@ -122,6 +122,7 @@ return;
                         tempList.addAll(engagersResponse.getObjects());
                         removeCurrentUser();
                         mSeenByAdapter.setEngagersList(mEngagersList);
+                        mSeenByAdapter.notifyDataSetChanged();
                       //  Timber.d("Print SeenBy List\n"+mEngagersList.toString());
 
                     }

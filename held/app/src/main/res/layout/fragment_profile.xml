@@ -6,7 +6,14 @@
     android:clickable="true"
     android:orientation="vertical">
     <!--<include layout="@layout/layout_profile_header" android:id="@+id/profile_header"></include>-->
-
+    <ImageView
+        android:id="@+id/PROFILE_full_img"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:fitsSystemWindows="true"
+        />
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/PROFILE_swipe_refresh_layout"
         android:layout_width="match_parent"
@@ -19,14 +26,6 @@
             android:layout_height="match_parent" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <ImageView
-        android:id="@+id/PROFILE_full_img"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
-        android:fitsSystemWindows="true"
-    />
+
 
 </LinearLayout>

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,6 +50,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     private int mPosition = 1;
     private PreferenceHelper mPreference;
     private Toolbar toolbar;
+    private boolean firstClick=true;
+    private String mUserNameForSearch;
 
 
     @Override
@@ -89,47 +92,47 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mSearch_edt.setVisibility(View.GONE);
 
         mSearch_edt = (EditText) findViewById(R.id.toolbar_search_edt_txt);
-        mSearch_edt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_DONE) {
-                    if (getNetworkStatus()) {
-                        DialogUtils.showProgressBar();
-                        callUserSearchApi();
-                    } else {
-                        UiUtils.showSnackbarToast(getWindow().getDecorView().getRootView(), "You are not connected to internet.");
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
+//        mSearch_edt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+//                if (i == EditorInfo.IME_ACTION_DONE) {
+//                    if (getNetworkStatus()) {
+//                        DialogUtils.showProgressBar();
+//                        //callUserSearchApi();
+//                    } else {
+//                        UiUtils.showSnackbarToast(getWindow().getDecorView().getRootView(), "You are not connected to internet.");
+//                    }
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
 
-       try{
-           mSearch_edt.addTextChangedListener(new TextWatcher() {
-               @Override
-               public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
-               }
-
-               @Override
-               public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
-               }
-
-               @Override
-               public void afterTextChanged(Editable editable) {
-                   if (getNetworkStatus()) {
-                       DialogUtils.showProgressBar();
-                       callUserSearchApi();
-                   } else {
-                       UiUtils.showSnackbarToast(getWindow().getDecorView().getRootView(), "You are not connected to internet.");
-                   }
-               }
-           });
-       }catch (Exception e){
-           e.printStackTrace();
-       }
+//       try{
+//           mSearch_edt.addTextChangedListener(new TextWatcher() {
+//               @Override
+//               public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+//
+//               }
+//
+//               @Override
+//               public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+//
+//               }
+//
+//               @Override
+//               public void afterTextChanged(Editable editable) {
+//                   if (getNetworkStatus()) {
+//                       DialogUtils.showProgressBar();
+//                      // callUserSearchApi();
+//                   } else {
+//                       UiUtils.showSnackbarToast(getWindow().getDecorView().getRootView(), "You are not connected to internet.");
+//                   }
+//               }
+//           });
+//       }catch (Exception e){
+//           e.printStackTrace();
+//       }
 
 
         mSearch_edt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -172,7 +175,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     private void launchChatScreen(String postid,boolean isOneToOne) {
         Intent intent = new Intent(FeedActivity.this, ChatActivity.class);
         intent.putExtra("postid", postid);
-        intent.putExtra("isOneToOne",isOneToOne);
+        intent.putExtra("isOneToOne", isOneToOne);
         //intent.putExtra("chatBackImg",backImg);
         //intent.putExtra("flag",flag);
         startActivity(intent);
@@ -242,10 +245,14 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
     private void launchProfileScreen(String uid) {
         Intent intent = new Intent(FeedActivity.this, ProfileActivity.class);
-        intent.putExtra("user_id",uid);
+        intent.putExtra("user_id", uid);
         startActivity(intent);
     }
-
+    private void launchSearchScreen(String uname) {
+        Intent intent = new Intent(FeedActivity.this, SearchActivity.class);
+        intent.putExtra("userName",uname);
+        startActivity(intent);
+    }
     @Override
     public void onBackPressed() {
 
@@ -321,11 +328,24 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 break;
             case R.id.toolbar_search_img:
                 Log.d(TAG, "toolbar search image has been clicked");
-                visibleTextView();
+                 if(firstClick) {
+                     visibleTextView();
+                     firstClick=false;
+                     mUserNameForSearch= String.valueOf(mSearch_edt.getText());
+                     mSearch_edt.setText("");
+                 }
+                else {
+                     hideTextView();
+                     firstClick=true;
+                     launchSearchScreen(mUserNameForSearch);
+                 }
 
                 break;
         }
     }
+
+
+
     public void updateViewPager(int position) {
         mPosition = position;
         updateToolbar();
@@ -349,9 +369,18 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     public void visibleTextView(){
 
         mSearch_edt.setVisibility(View.VISIBLE);
+        mSearch_edt.setFocusable(true);
+        mSearch_edt.setFocusableInTouchMode(true);
+        mSearch_edt.requestFocus();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         mTitle.setVisibility(View.GONE);
+        mSearch.setVisibility(View.VISIBLE);
+    }
+    public void hideTextView(){
 
-
+        mSearch_edt.setVisibility(View.GONE);
+        mTitle.setVisibility(View.VISIBLE);
+        mSearch.setVisibility(View.VISIBLE);
     }
 
     public void updateToolbar() {
