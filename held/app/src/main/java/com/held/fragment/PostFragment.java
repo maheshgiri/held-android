@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,22 +46,25 @@ import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedFile;
+import timber.log.Timber;
 
 public class PostFragment extends ParentFragment {
 
     public static final String TAG = PostFragment.class.getSimpleName();
     private ImageView mPostImg, mUserImg, mImageToUpload,mBackImg;
-    private TextView mPostTxt, mUserNameTxt, mCancelTxt, mOkTxt, mTimeTxt;
+    private TextView mPostTxt, mUserNameTxt, mCancelTxt, mOkTxt, mTimeTxt,mTitle;
     private RelativeLayout mPostLayout;
     private RelativeLayout mBoxLayout,mTimeLayout;
     private String sourceFileName, mCaption;
     private File mFile;
+    private Uri mFileUri;
     private EditText mCaptionEdt;
     private Fragment mfragment;
     private GestureDetector mGestureDetector;
@@ -96,6 +100,13 @@ public class PostFragment extends ParentFragment {
         mOkTxt = (TextView) view.findViewById(R.id.POST_ok);
         mPostBtn=(Button)view.findViewById(R.id.post_button);
         mPrefernce=PreferenceHelper.getInstance(getCurrActivity());
+        mTitle=(TextView)view.findViewById(R.id.tv_title);
+        setTypeFace(mPostBtn,"book");
+        setTypeFace(mUserNameTxt,"1");
+        setTypeFace(mPostTxt,"book");
+        setTypeFace(mPostBtn,"1");
+        setTypeFace(mTitle,"1");
+        setProfilePic();
 
         TextView mTitle = (TextView)view.findViewById(R.id.tv_title);
         PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
@@ -114,6 +125,7 @@ public class PostFragment extends ParentFragment {
 
       //  mTimeTxt.setVisibility(View.GONE);
         mTimeLayout.setVisibility(View.GONE);
+       // mPostImg.setVisibility(View.VISIBLE);
 
         if (getCurrActivity() instanceof PostActivity)
             openImageIntent();
@@ -134,7 +146,7 @@ public class PostFragment extends ParentFragment {
             }
         });
 
-        setProfilePic();
+
 
     }
 
@@ -180,7 +192,7 @@ public class PostFragment extends ParentFragment {
             case R.id.POST_ok:
                 Utils.hideSoftKeyboard(getCurrActivity());
                 mTimeTxt.setVisibility(View.INVISIBLE);
-                updateBoxUI();
+                //updateBoxUI();
                 break;
             case R.id.back_home:
                 Intent intent = new Intent(getCurrActivity(),FeedActivity.class);
@@ -192,21 +204,32 @@ public class PostFragment extends ParentFragment {
     }
 
     private void updateBoxUI() {
-        getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
+       // getCurrActivity().getToolbar().setVisibility(View.VISIBLE);
         mBoxLayout.setVisibility(View.VISIBLE);
         mPostLayout.setVisibility(View.GONE);
-        mCaption = mCaptionEdt.getText().toString().trim();
-
+       // mCaption = mCaptionEdt.getText().toString().trim();
+        Timber.i("Inside Update Box");
         BitmapFactory.Options options = new BitmapFactory.Options();
         UiUtils.calculateInSampleSize(options,
                 UiUtils.dpToPx(getResources(), 350),
                 UiUtils.dpToPx(getResources(), 350));
         options.inSampleSize = 1;
         options.inJustDecodeBounds = false;
-        Bitmap mAttachment = BitmapFactory.decodeFile(mFile.getAbsolutePath(),
-                options);
+        Bitmap mAttachment;
+        try {
+            mAttachment = MediaStore.Images.Media.getBitmap(getCurrActivity().getContentResolver(), mFileUri);
+            mPostImg.setImageBitmap(mAttachment);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-        mPostImg.setImageBitmap(mAttachment);
+
+
+        Timber.i("End Update Box");
     }
 
     private void openImageIntent() {
@@ -275,7 +298,7 @@ public class PostFragment extends ParentFragment {
                 });
 
         builder.show();
-
+//updateBoxUI();
 
     }
 
@@ -332,15 +355,17 @@ public class PostFragment extends ParentFragment {
                             "/HELD" + sourceFileName);
                     Uri photoUri = Uri.fromFile(photo);
                     doCrop(photoUri);
-//                    mFile = new File(photoUri.getPath());
-//                    updateBoxUI();
+                    mFile = new File(photoUri.getPath());
+                    mFileUri=photoUri;
+                    updateBoxUI();
                     break;
 
                 case AppConstants.REQUEST_GALLERY:
                     Uri PhotoURI = data.getData();
                     doCrop(PhotoURI);
-//                    mFile = new File(PhotoURI.getPath());
-//                    updateBoxUI();
+                    mFile = new File(PhotoURI.getPath());
+                    mFileUri=PhotoURI;
+                    updateBoxUI();
                     break;
             }
         }
@@ -354,10 +379,10 @@ public class PostFragment extends ParentFragment {
                 return;
             }
 
-            updateBoxUI();
-//            updateUI();
+
+
         }
-        updateBoxUI();
+
 
     }
 
@@ -529,9 +554,9 @@ public class PostFragment extends ParentFragment {
                 mPrefernce.readPreference(getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
-                       Log.i("PostFragment","@@Image Url"+searchUserResponse.getProfilePic());
+                      // Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
                         PicassoCache.getPicassoInstance(getCurrActivity())
-                                .load(AppConstants.BASE_URL + searchUserResponse.getProfilePic())
+                                .load(AppConstants.BASE_URL + searchUserResponse.getUser().getProfilePic())
                                 .placeholder(R.drawable.user_icon)
                                 .into(mUserImg);
                     }
@@ -556,4 +581,14 @@ public class PostFragment extends ParentFragment {
         startActivity(intent);
     }
 
+    public void setTypeFace(TextView tv,String type){
+        Typeface medium = Typeface.createFromAsset(getCurrActivity().getAssets(), "BentonSansMedium.otf");
+        Typeface book = Typeface.createFromAsset(getCurrActivity().getAssets(), "BentonSansBook.otf");
+        if(type=="book"){
+            tv.setTypeface(book);
+
+        }else {
+            tv.setTypeface(medium);
+        }
+    }
     }

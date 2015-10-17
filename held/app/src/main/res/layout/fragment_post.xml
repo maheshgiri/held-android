@@ -11,11 +11,11 @@
     android:layout_height="wrap_content"
     android:id="@+id/post_toolbar">
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:id="@+id/back_home"
         android:src="@drawable/back"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="26dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -26,10 +26,12 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
+        android:textColor="@color/new_btn_color"
+        android:textSize="16sp"
         android:layout_marginTop="30dp"
         android:text="Set profile picture"
-        android:fontFamily="@string/benton_sans_book"
-        android:textSize="18sp"/>
+
+         />
 
     <Button
         android:layout_width="75dp"
