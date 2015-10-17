@@ -62,7 +62,7 @@ public class PostFragment extends ParentFragment {
     private TextView mPostTxt, mUserNameTxt, mCancelTxt, mOkTxt, mTimeTxt,mTitle;
     private RelativeLayout mPostLayout;
     private RelativeLayout mBoxLayout,mTimeLayout;
-    private String sourceFileName, mCaption;
+    private String sourceFileName, mCaption,mImageUri;
     private File mFile;
     private Uri mFileUri;
     private EditText mCaptionEdt;
@@ -355,16 +355,16 @@ public class PostFragment extends ParentFragment {
                             "/HELD" + sourceFileName);
                     Uri photoUri = Uri.fromFile(photo);
                     doCrop(photoUri);
-                    mFile = new File(photoUri.getPath());
                     mFileUri=photoUri;
+                    mFile = new File(photoUri.getPath());
                     updateBoxUI();
                     break;
 
                 case AppConstants.REQUEST_GALLERY:
                     Uri PhotoURI = data.getData();
                     doCrop(PhotoURI);
-                    mFile = new File(PhotoURI.getPath());
                     mFileUri=PhotoURI;
+                    mFile = new File(getRealPathFromURI(PhotoURI));
                     updateBoxUI();
                     break;
             }
