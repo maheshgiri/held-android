@@ -45,19 +45,12 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
 
-    public SeenByAdapter(SeenByActivity activity,List<Engager> engagerList){
+    public SeenByAdapter(ParentActivity activity,List<Engager> engagerList){
         mActivity = activity;
       //  mIsLastPage = isLastPage;
         mEngagersList=engagerList;
         mPreference=PreferenceHelper.getInstance(mActivity);
 
-    }
-
-    public SeenByAdapter(SearchActivity searchActivity, List<Engager> mSearchResultList) {
-        mActivity = searchActivity;
-        //  mIsLastPage = isLastPage;
-        mEngagersList=mSearchResultList;
-        mPreference=PreferenceHelper.getInstance(mActivity);
     }
 
 

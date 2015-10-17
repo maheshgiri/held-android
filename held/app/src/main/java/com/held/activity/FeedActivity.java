@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -35,6 +36,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import timber.log.Timber;
 
 public class FeedActivity extends ParentActivity implements View.OnClickListener {
 
@@ -331,13 +333,15 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                  if(firstClick) {
                      visibleTextView();
                      firstClick=false;
-                     mUserNameForSearch= String.valueOf(mSearch_edt.getText());
-                     mSearch_edt.setText("");
                  }
                 else {
+                     mUserNameForSearch= mSearch_edt.getText().toString();
+                     Timber.i("User Name for search :"+mUserNameForSearch);
+                     mSearch_edt.setText("");
                      hideTextView();
                      firstClick=true;
                      launchSearchScreen(mUserNameForSearch);
+
                  }
 
                 break;
@@ -372,9 +376,9 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mSearch_edt.setFocusable(true);
         mSearch_edt.setFocusableInTouchMode(true);
         mSearch_edt.requestFocus();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         mTitle.setVisibility(View.GONE);
         mSearch.setVisibility(View.VISIBLE);
+
     }
     public void hideTextView(){
 

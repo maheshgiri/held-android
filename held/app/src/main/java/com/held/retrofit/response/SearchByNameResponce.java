@@ -7,10 +7,10 @@ import java.util.List;
  */
 public class SearchByNameResponce {
     private List<Engager> objects;
-    private Engager engager;
+    private Engager user;
 
-    public Engager getEngager() {
-        return engager;
+    public Engager getUser() {
+        return user;
     }
 
     public List<Engager> getObjects() {

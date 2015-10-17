@@ -33,7 +33,13 @@ public class Utils {
 ////        if (focusView != null)
             inputMethodManager.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
     }
+    public static void showSoftKeyboard(Activity activity) {
 
+            InputMethodManager imm = (InputMethodManager)activity.
+                    getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(activity.getWindow().getDecorView(), InputMethodManager.SHOW_IMPLICIT);
+
+    }
     public static ParentFragment getCurrVisibleFragment(ParentActivity activity) {
         if (activity != null) {
             return (ParentFragment) activity.getSupportFragmentManager().findFragmentById(R.id.frag_container);

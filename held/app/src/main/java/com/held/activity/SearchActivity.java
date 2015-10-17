@@ -58,10 +58,13 @@ public class SearchActivity extends ParentActivity {
         mUserName=extras.getString("userName");
         mSearchText.setText(mUserName);
         mPreference=PreferenceHelper.getInstance(this);
-        callSearchByNameApi();
         mSearchRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mSearchRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mSeenByAdapter=new SeenByAdapter(this,mSearchResultList);
+        mSearchRecyclerView.setAdapter(mSeenByAdapter);
+        mSeenByAdapter.notifyDataSetChanged();
+        callSearchByNameApi();
+
 
         //add adapter here
 
@@ -71,21 +74,22 @@ public class SearchActivity extends ParentActivity {
             @Override
             public void onRefresh() {
                 callSearchByNameApi();
-                //return;
+                return;
             }
         });
 
     }
     public void callSearchByNameApi(){
         HeldService.getService().searchByName(mPreference.readPreference(getString(R.string.API_session_token)),
-                mUserName, new Callback<SearchByNameResponce>() {
+                mUserName, new Callback<Engager>() {
                     @Override
-                    public void success(SearchByNameResponce searchByNameResponce, Response response) {
-                        searchResult=searchByNameResponce.getEngager();
+                    public void success(Engager engager, Response response) {
+                        searchResult=engager;
                         /*TODO for multiple object
                         mSearchResultList=searchByNameResponce.getObjects();
 
                         */
+                        mSearchResultList.clear();
                         mSearchResultList.add(searchResult);
                         mSeenByAdapter.setEngagersList(mSearchResultList);
                         mSeenByAdapter.notifyDataSetChanged();
