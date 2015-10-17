@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,12 +27,15 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     Fragment mDisplayFragment;
     String mUserId;
     ProfileFragment frag;
+    private Toolbar mHeld_toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         mActivity = this;
+        mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
+        setToolbar();
         TextView title = (TextView)findViewById(R.id.toolbar_title_txt);
         title.setText("Profile");
         mChat = (ImageView) findViewById(R.id.toolbar_chat_img);
@@ -73,5 +77,12 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
+    }
+    public void hideToolbar(){
+        mHeld_toolbar.setVisibility(View.GONE);
+    }
+
+    public void showToolbar(){
+        mHeld_toolbar.setVisibility(View.VISIBLE);
     }
 }

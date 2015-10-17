@@ -22,6 +22,7 @@ import com.held.activity.ParentActivity;
 import com.held.activity.ProfileActivity;
 import com.held.activity.R;
 import com.held.customview.BlurTransformation;
+import com.held.customview.CircularImageView;
 import com.held.customview.PicassoCache;
 import com.held.fragment.ProfileFragment;
 import com.held.retrofit.HeldService;
@@ -114,14 +115,14 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (holder instanceof HeaderViewHolder) {
 
             HeaderViewHolder viewHolderHead = (HeaderViewHolder) holder;
-                //TODO: Profile header
-           // try {
-                viewHolderHead.mUserName.setText(user.getDisplayName());
-                viewHolderHead.mFriendCount.setText(user.getFriendCount());
-                viewHolderHead.mPostCount.setText(user.getPostCount());
-                PicassoCache.getPicassoInstance(mActivity)
-                        .load(AppConstants.BASE_URL + user.getProfilePic())
-                        .into(viewHolderHead.mProfilePic);
+            Timber.i("Profile Post call Successfull ..Position:"+position);
+            viewHolderHead.mUserName.setText(user.getDisplayName());
+            viewHolderHead.mFriendCount.setText(user.getFriendCount());
+            viewHolderHead.mPostCount.setText(user.getPostCount());
+            PicassoCache.getPicassoInstance(mActivity)
+                    .load(AppConstants.BASE_URL + user.getProfilePic())
+                    .into(viewHolderHead.mProfilePic);
+
             setTypeFace(viewHolderHead.mUserName, "medium");
             setTypeFace(viewHolderHead.mFriendCount,"medium");
             setTypeFace(viewHolderHead.mPostCount,"medium");
@@ -136,8 +137,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else if(holder instanceof ItemViewHolder) {
             final ItemViewHolder viewHolder = (ItemViewHolder) holder;
             mItemViewHolder = viewHolder;
-
-            mItemViewHolder = viewHolder;
+            Timber.i("Profile Post call Successfull ..Position:"+position);
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getCreator().getProfilePic()).into(viewHolder.mUserImg);
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getImageUri()).transform(mBlurTransformation).into(viewHolder.mFeedImg);
             setTimeText(mPostList.get(position - 1).getHeld(), viewHolder.mTimeMinTxt, viewHolder.mTimeSecTxt);
@@ -180,7 +180,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     transform(mBlurTransformation).into(viewHolder.mFeedImg);
                             viewHolder.myTimeLayout.setVisibility(View.VISIBLE);
                             if(isFullScreenMode){
-                                callReleaseApi(mPostList.get(position-1).getRid(),viewHolder.mTimeMinTxt,viewHolder.mTimeSecTxt,String.valueOf(System.currentTimeMillis()));
+                                if (!mPostList.get(mPosition).getCreator().getDisplayName().equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
+                                    callReleaseApi(mPostList.get(position - 1).getRid(), viewHolder.mTimeMinTxt, viewHolder.mTimeSecTxt, String.valueOf(System.currentTimeMillis()));
+                                }
                                 isFullScreenMode = false;
                             }
 
@@ -252,12 +254,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mProfilePic;
+        private CircularImageView mProfilePic;
         private TextView mUserName, mFriendCount, mPostCount,mfriendTxt,mPostTxt;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
-            mProfilePic = (ImageView) itemView.findViewById(R.id.PROFILE_pic);
+            mProfilePic = (CircularImageView) itemView.findViewById(R.id.PROFILE_pic);
             mUserName = (TextView) itemView.findViewById(R.id.PROFILE_name);
             mFriendCount = (TextView) itemView.findViewById(R.id.PROFILE_count_friends);
             mPostCount = (TextView) itemView.findViewById(R.id.PROFILE_count_photos);
@@ -354,11 +356,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public void failure(RetrofitError error) {
                 DialogUtils.stopProgressDialog();
+
                 if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
                     String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
 //                    UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
-                } else
-                    UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "Some Problem Occurred");
+                }
+                else
+                UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "Some Problem Occurred");
             }
         });
     }
@@ -370,12 +374,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
                         //Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
-                        user.setDisplayName(searchUserResponse.getUser().getDisplayName());
-                        user.setProfilePic(searchUserResponse.getUser().getProfilePic());
-                        user.setPostCount(searchUserResponse.getUser().getPostCount());
-                        user.setFriendCount(searchUserResponse.getUser().getFriendCount());
-
+                        user=searchUserResponse.getUser();
+                        notifyDataSetChanged();
                         Timber.i("User Init:" + user.getDisplayName());
+
                     }
 
                     @Override
@@ -383,7 +385,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                     }
                 });
-
     }
     public void setTypeFace(TextView tv,String type){
         Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
