@@ -34,6 +34,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import timber.log.Timber;
 
 /**
  * Created by jay on 1/8/15.
@@ -343,11 +344,11 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
     }
 
     private void callVoiceCallApi() {
-        HeldService.getService().voiceCall(mPhoneNo,"",new Callback<VoiceCallResponse>() {
+        HeldService.getService().voiceCall(mPreference.readPreference(getString(R.string.API_session_token)),mRegId,new Callback<VoiceCallResponse>() {
                     @Override
                     public void success(VoiceCallResponse voiceCallResponse, Response response) {
                         DialogUtils.stopProgressDialog();
-                        Log.d(TAG, "Voice Call Success");
+                        Timber.d(TAG, "Voice Call Success");
                     }
 
                     @Override
@@ -369,7 +370,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
     }
 
     private void callResendSmsApi() {
-        HeldService.getService().resendSms( mPhoneNo,"",new Callback<CreateUserResponse>() {
+        HeldService.getService().resendSms( mPreference.readPreference(getString(R.string.API_session_token)),mRegId,new Callback<CreateUserResponse>() {
             @Override
             public void success(CreateUserResponse createUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
