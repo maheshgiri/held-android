@@ -53,20 +53,17 @@ public class SearchActivity extends ParentActivity {
         setTypeFace(mSearchText,"medium");
         setTypeFace(mCancle,"medium");
 
-        //Get bundle here
         Bundle extras = getIntent().getExtras();
         mUserName=extras.getString("userName");
         mSearchText.setText(mUserName);
         mPreference=PreferenceHelper.getInstance(this);
         mSearchRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mSearchRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        callSearchByNameApi();
         mSeenByAdapter=new SeenByAdapter(this,mSearchResultList);
         mSearchRecyclerView.setAdapter(mSeenByAdapter);
         mSeenByAdapter.notifyDataSetChanged();
-        callSearchByNameApi();
 
-
-        //add adapter here
 
         mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_to_refresh);

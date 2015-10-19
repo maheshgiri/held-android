@@ -138,6 +138,8 @@ return;
     public void removeCurrentUser(){
         String currentUser=mPreference.readPreference(getString(R.string.API_user_name));
         int sizeofList=tempList.size();
+        if(sizeofList<=0)
+            return;
         try{
            for(int i=0;i<=sizeofList;i++)
            {
