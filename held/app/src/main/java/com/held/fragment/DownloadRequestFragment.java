@@ -61,9 +61,6 @@ public class DownloadRequestFragment extends ParentFragment {
         mDownloadRequestAdapter = new DownloadRequestAdapter(getCurrActivity(), mDownloadRequestList, mIsLastPage, this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mDownloadRequestAdapter);
-
-
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.DR_swipe_refresh_layout);
         mPreference=PreferenceHelper.getInstance(getCurrActivity());
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -120,8 +117,8 @@ public class DownloadRequestFragment extends ParentFragment {
                         mDownloadRequestList.addAll(downloadRequestListResponse.getObjects());
                         mDownloadRequestAdapter.setDownloadRequestList(mDownloadRequestList, mIsLastPage);
                         mIsLoading = false;
-                        mPreference.writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT),mDownloadRequestList.size()-1);
-
+                        mPreference.writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT),mDownloadRequestList.size());
+                        mDownloadRequestAdapter.notifyDataSetChanged();
 
 
                     }

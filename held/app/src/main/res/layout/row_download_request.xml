@@ -52,9 +52,7 @@
                 android:textColor="@color/bg_color"
                 android:layout_toRightOf="@+id/acceptBtn"
                 android:layout_alignTop="@+id/acceptBtn"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                />
+                android:layout_marginLeft="12dp" />
 
 
         <ImageView
@@ -62,11 +60,10 @@
             android:layout_width="86dp"
             android:layout_height="43dp"
             android:layout_alignTop="@+id/user_profile_pic"
-            android:layout_marginRight="20dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:scaleType="centerCrop"
-            />
+            android:layout_marginRight="10dp" />
 
     <View
         android:layout_width="match_parent"

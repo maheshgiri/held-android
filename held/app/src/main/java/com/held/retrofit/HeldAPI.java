@@ -120,6 +120,9 @@ public interface HeldAPI {
     @GET("/friendshiprequests/")
     void getFriendRequests(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<FriendRequestResponse> friendRequestResponseCallback);
 
+    @POST("/friendshiprequests/")
+    void sendRequests(@Header("Authorization") String token, @Query("user") String userId,@Body()String empty ,Callback<FriendRequestResponse> friendRequestResponseCallback);
+
     @GET("/friends/")
     void getFriendsList(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<FriendsResponse> friendsResponseCallback);
 

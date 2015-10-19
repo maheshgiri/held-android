@@ -136,7 +136,7 @@ public class ActivityFeedFragment extends ParentFragment {
                 mActivityFeedDataList.addAll(activityFeedDataResponse.getObjects());
                 mIsLastPage = activityFeedDataResponse.isLastPage();
                 mActivityFeedAdapter.setActivityFeedList(mActivityFeedDataList, mIsLastPage);
-                mPreference.writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT),mActivityFeedDataList.size()-1);
+                mPreference.writePreference(getString(R.string.API_HELD_COUNT),mActivityFeedDataList.size());
                 mStart = activityFeedDataResponse.getNextPageStart();
                 mIsLoading = false;
             }

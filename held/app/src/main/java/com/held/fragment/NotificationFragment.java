@@ -147,7 +147,6 @@ public class NotificationFragment extends ParentFragment {
                 }
             } else if (mId == 2) {
                 mViewPager.setCurrentItem(2);
-                mViewPager.setCurrentItem(2);
                 mFRLayout.setBackgroundColor(Color.TRANSPARENT);
                 mDRLayout.setBackgroundColor(Color.TRANSPARENT);
                 mAFLayout.setBackgroundColor(getResources().getColor(R.color.selected_tab_color));
@@ -179,8 +178,9 @@ public class NotificationFragment extends ParentFragment {
                 mFriendRequest.setTextColor(Color.WHITE);
                 mDownloadRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
                 mActivityFeed.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
-                //PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_FRIEND_REQUEST_COUNT), 0);
-                mFriendCount.setVisibility(View.GONE);
+
+               PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_FRIEND_REQUEST_COUNT), 0);
+               mFriendCount.setVisibility(View.GONE);
                 break;
             case R.id.NOTIFY_dr_layout:
                 mViewPager.setCurrentItem(1);
@@ -190,7 +190,7 @@ public class NotificationFragment extends ParentFragment {
                 mFriendRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
                 mDownloadRequest.setTextColor(Color.WHITE);
                 mActivityFeed.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
-               // PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), 0);
+                PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), 0);
                 mDownloadCount.setVisibility(View.GONE);
                 break;
             case R.id.NOTIFY_af_layout:
@@ -201,7 +201,7 @@ public class NotificationFragment extends ParentFragment {
                 mFriendRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
                 mDownloadRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
                 mActivityFeed.setTextColor(Color.WHITE);
-               // PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_HELD_COUNT), 0);
+                PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_HELD_COUNT), 0);
                 mHeldCount.setVisibility(View.GONE);
                 break;
         }

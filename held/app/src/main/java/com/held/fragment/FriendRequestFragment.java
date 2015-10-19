@@ -21,12 +21,14 @@ import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import timber.log.Timber;
 
 public class FriendRequestFragment extends ParentFragment {
 
@@ -106,7 +108,8 @@ public class FriendRequestFragment extends ParentFragment {
                         mFriendRequestList.addAll(friendRequestResponse.getObjects());
                         mFriendRequestAdapter.setFriendRequestList(mFriendRequestList, mIsLastPage);
                         mIsLoading = false;
-                        mPreference.writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT),mFriendRequestList.size()-1);
+                        mPreference.writePreference(getString(R.string.API_FRIEND_REQUEST_COUNT), mFriendRequestList.size());
+                        mFriendRequestAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -121,6 +124,8 @@ public class FriendRequestFragment extends ParentFragment {
                     }
                 });
     }
+
+
 
     @Override
     protected void bindListeners(View view) {
