@@ -98,7 +98,7 @@ public class ActivityFeedFragment extends ParentFragment {
         });
 
         if (getCurrActivity().getNetworkStatus()) {
-            callSearcUserApi();
+            //callSearcUserApi();
         } else {
             UiUtils.showSnackbarToast(getView(), "You are not connected to internet");
         }

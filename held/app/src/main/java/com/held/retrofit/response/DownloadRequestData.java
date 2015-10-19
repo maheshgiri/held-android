@@ -7,7 +7,7 @@ public class DownloadRequestData {
 
     private String date;
     private String post_image;
-    private boolean declined;
+    private boolean declined,canDownload;
     private String owner_display_name;
     private String tag;
     private String rid,imageUri;
@@ -15,6 +15,9 @@ public class DownloadRequestData {
     private User user;
     private PostData post;
 
+    public boolean getCanDownload() {
+        return canDownload;
+    }
 
     public PostData getPost() {
         return post;
