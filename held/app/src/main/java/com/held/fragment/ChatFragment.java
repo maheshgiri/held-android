@@ -146,6 +146,9 @@ public class ChatFragment extends ParentFragment {
         /*mDownLoad = (ImageView) view.findViewById(R.id.CHAT_download);
         mDownLoad.setOnClickListener(this);*/
         mPreference = PreferenceHelper.getInstance(getCurrActivity());
+        mChatAdapter = new ChatAdapter(getCurrActivity(), mPostChatData);
+        mChatList.setLayoutManager(mLayoutManager);
+        mChatList.setAdapter(mChatAdapter);
       /*  runnable = new Runnable() {
             @Override
             public void run() {
@@ -167,7 +170,7 @@ public class ChatFragment extends ParentFragment {
                 .placeholder(R.drawable.milana_vayntrub)
                 .into(mChatBackImage);*/
         // callFriendsChatsApi();
-        mChatAdapter = null;
+
         if (getCurrActivity().getNetworkStatus()) {
             if (mIsOneToOne == true) {
 //            mDownLoad.setVisibility(View.GONE);
@@ -181,9 +184,7 @@ public class ChatFragment extends ParentFragment {
 
             }
         }
-        mChatAdapter = new ChatAdapter(getCurrActivity(), mPostChatData);
-        mChatList.setLayoutManager(mLayoutManager);
-        mChatList.setAdapter(mChatAdapter);
+
         //mChatList.scrollToPosition(mChatAdapter.getItemCount());
 
        // handler.postDelayed((Runnable) this, 1000);
