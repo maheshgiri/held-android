@@ -129,7 +129,7 @@ public class DownloadRequestAdapter extends RecyclerView.Adapter {
             public void success(DeclineDownloadResponse declineDownloadResponse, Response response) {
                 DialogUtils.stopProgressDialog();
 
-                callDeclineDownloadApi(requestId,post_id);
+                callDeleteDownloadReqApi(requestId,post_id);
             }
 
             @Override

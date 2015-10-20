@@ -29,6 +29,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import timber.log.Timber;
 
 public class DownloadRequestFragment extends ParentFragment {
 
@@ -61,9 +62,6 @@ public class DownloadRequestFragment extends ParentFragment {
         mDownloadRequestAdapter = new DownloadRequestAdapter(getCurrActivity(), mDownloadRequestList, mIsLastPage, this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mDownloadRequestAdapter);
-
-
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.DR_swipe_refresh_layout);
         mPreference=PreferenceHelper.getInstance(getCurrActivity());
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -118,10 +116,11 @@ public class DownloadRequestFragment extends ParentFragment {
                         mIsLastPage = downloadRequestListResponse.isLastPage();
                         mStart = downloadRequestListResponse.getNextPageStart();
                         mDownloadRequestList.addAll(downloadRequestListResponse.getObjects());
+                        removeAcceptedRequest();
                         mDownloadRequestAdapter.setDownloadRequestList(mDownloadRequestList, mIsLastPage);
                         mIsLoading = false;
-                        mPreference.writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT),mDownloadRequestList.size()-1);
-
+                        mPreference.writePreference(getString(R.string.API_DOWNLOAD_REQUEST_COUNT), mDownloadRequestList.size());
+                        mDownloadRequestAdapter.notifyDataSetChanged();
 
 
                     }
@@ -149,4 +148,25 @@ public class DownloadRequestFragment extends ParentFragment {
 
     }
 
+    public void removeAcceptedRequest(){
+        List<DownloadRequestData> mTempList = new ArrayList<>();
+        mTempList=mDownloadRequestList;
+        if(mDownloadRequestList.size()<=0)
+            return;
+        try{
+            for(int i=0;i<=mDownloadRequestList.size();i++)
+            {
+                if(mTempList.get(i).getCanDownload())
+                {
+                    mTempList.remove(i);
+                    Timber.i("User Removed");
+                    break;
+                }
+            }
+            mDownloadRequestList=mTempList;
+        }catch (IndexOutOfBoundsException e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

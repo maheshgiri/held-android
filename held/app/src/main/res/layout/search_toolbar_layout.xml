@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/cancle_txt"
         android:textColor="@color/friend_req_color"
-        android:text="Cancle"
+        android:text="Cancel"
         android:textSize="13sp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
