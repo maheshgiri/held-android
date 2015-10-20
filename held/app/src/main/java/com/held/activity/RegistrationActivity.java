@@ -35,7 +35,7 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
     private static final String TAG = "RegistrationActivity";
     private ImageView mBackImg;
     private EditText mUserNameEdt, mPhoneNoEdt;
-    private boolean mNetWorStatus;
+    private boolean mNetWorStatus,flag=false;
     private Button mRegisterBtn;
     private Spinner mCountryCodes;
     private String mCountryCode;
@@ -48,6 +48,8 @@ private TextView mPolicy;
         Log.d(TAG, "starting Registration activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        if(getIntent().getExtras()!=null)
+            flag=getIntent().getExtras().getBoolean("ForLogin");
         mUserNameEdt = (EditText) findViewById(R.id.REG_user_name_edt);
         mPhoneNoEdt = (EditText) findViewById(R.id.REG_mobile_no_edt);
         mBackImg = (ImageView) findViewById(R.id.REG_back);
@@ -76,6 +78,11 @@ private TextView mPolicy;
         }
         mPrefernce=PreferenceHelper.getInstance(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        if(flag)
+        {
+            updateToLoginUI();
+        }
     }
 
     @Override
@@ -87,7 +94,10 @@ private TextView mPolicy;
             case R.id.REG_register_btn:
                 Utils.hideSoftKeyboard(this);
                 if (mNetWorStatus)
-                    validateInput();
+                    if(flag)
+                        launchLoginVerificationActivity();
+                    else
+                        validateInput();
                 else
                     UiUtils.showSnackbarToast(findViewById(R.id.root_view), Utils.getString(R.string.error_offline_msg));
                 break;
@@ -115,7 +125,7 @@ private TextView mPolicy;
             mCountryCode = cc[0];
             if (mNetWorStatus) {
                 DialogUtils.showProgressBar();
-                callCreateUserApi();
+                    callCreateUserApi();
             } else {
                 UiUtils.showSnackbarToast(findViewById(R.id.root_view), "You are not connected to internet.");
             }
@@ -177,4 +187,22 @@ private TextView mPolicy;
         mNetWorStatus = isEnabled;
     }
 
+    public void updateToLoginUI(){
+        mUserNameEdt.setVisibility(View.GONE);
+        mRegisterBtn.setText("Loign");
+    }
+
+    public void  launchLoginVerificationActivity(){
+        String cc[] = mCountryCodes.getSelectedItem().toString().split(" ");
+        mCountryCode = cc[0];
+        mPrefernce.writePreference(getString(R.string.API_phone_no), mCountryCode + mPhoneNoEdt.getText().toString().trim());
+        Intent intent = new Intent(RegistrationActivity.this, VerificationActivity.class);
+        intent.putExtra("phoneno", mCountryCode + mPhoneNoEdt.getText().toString().trim());
+        intent.putExtra("ForLogin",true);
+        startActivity(intent);
+        finish();
+    }
+    public void validateLoginInput(){
+
+    }
 }

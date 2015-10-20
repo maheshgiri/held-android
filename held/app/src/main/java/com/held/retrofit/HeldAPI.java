@@ -76,6 +76,10 @@ public interface HeldAPI {
     @PUT(VERIFY)
     void verifyUser(@Header("Authorization")String auth,@Path("registration_id") String RegId , @Query("pin") String pin,@Body()String empty ,Callback<VerificationResponse> verificationResponseCallback);
 
+    @POST("/sessions/sms/")
+    void loginSessionSendPinSmsApi(@Query("phone") String phoneNo,@Body()String empty, Callback<CreateUserResponse> createUserResponseCallback);
+    @POST("/sessions/call")
+    void loginSessionSendPinCallApi(@Query("phone") String phoneNo,@Body()String empty, Callback<VoiceCallResponse> voiceCallResponseCallback);
 
     @Multipart
     @POST("/posts/")

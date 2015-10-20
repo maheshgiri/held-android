@@ -45,7 +45,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
 
     private EditText mFirstEdt, mSecondEdt, mThirdEdt, mForthEdt;
     private TextView mResendSmsTxt, mVoiceCallTxt, mUserNameTxt, mIndicationTxt,mPhoneTxt;
-    private boolean mNetWorkStatus, isBackPressed;
+    private boolean mNetWorkStatus, isBackPressed,flag;
     private String mPhoneNo, mUserName, mPin;
     private String mRegId,mAuth,mSessonToken,mNewRegId;
     private ImageView mback;
@@ -64,6 +64,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
             mPhoneNo = getIntent().getExtras().getString("phoneno");
             mRegId=getIntent().getExtras().getString("regId");
             mAuth=getIntent().getExtras().getString("accessToken");
+            flag=getIntent().getExtras().getBoolean("ForLogin");
           //  mPin=getIntent().getExtras().getInt("pin");
         }
 
@@ -105,8 +106,10 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         mNetWorkStatus = NetworkUtil.isInternetConnected(getApplicationContext());
         NetworkStateReceiver.registerOnNetworkChangeListener(this);
         mPreference =PreferenceHelper.getInstance(this);
-
-        callResendSmsApi();
+        if(flag)
+            callLoginResendSmsApi();
+        else
+            callResendSmsApi();
 
 
         mFirstEdt.addTextChangedListener(new TextWatcher() {
@@ -189,7 +192,10 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                         mThirdEdt.setText("");
                         mForthEdt.setText("");
                         DialogUtils.showProgressBar();  // todo: this leaks window
-                        callVerificationApi();
+                        if (flag)
+                            callLoginUserApi();
+                        else
+                            callVerificationApi();
                     } else
                         UiUtils.showSnackbarToast(findViewById(R.id.root_view), Utils.getString(R.string.error_offline_msg));
                 }
@@ -272,7 +278,8 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
             @Override
             public void success(LoginUserResponse loginUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
-
+                mPreference.writePreference(getString(R.string.API_pin), mPin);
+                mPreference.writePreference(getString(R.string.API_user_name), loginUserResponse.getUser().getDisplayName());
                 mPreference.writePreference(getString(R.string.API_session_token), loginUserResponse.getSessionToken());
                 mPreference.writePreference(getString(R.string.API_user_regId), loginUserResponse.getUser().getRid());
 
@@ -322,7 +329,10 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                 if (mNetWorkStatus) {
                     if (validatePhoneNo()) {
                         DialogUtils.showProgressBar();
-                        callResendSmsApi();
+                        if(flag)
+                            callLoginResendSmsApi();
+                        else
+                            callResendSmsApi();
                     }
                 } else
                     UiUtils.showSnackbarToast(findViewById(R.id.root_view), Utils.getString(R.string.error_offline_msg));
@@ -331,7 +341,10 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                 if (mNetWorkStatus) {
                     if (validatePhoneNo()) {
                         DialogUtils.showProgressBar();
-                        callVoiceCallApi();
+                        if(flag)
+                            callLoginCallApi();
+                        else
+                            callVoiceCallApi();
                     }
                 } else {
                     UiUtils.showSnackbarToast(findViewById(R.id.root_view), Utils.getString(R.string.error_offline_msg));
@@ -392,6 +405,36 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
     @Override
     public void onNetworkStatusChanged(boolean isEnabled) {
         mNetWorkStatus = isEnabled;
+    }
+
+    public void callLoginResendSmsApi(){
+        HeldService.getService().loginSessionSendPinSmsApi(mPhoneNo, "",
+                new Callback<CreateUserResponse>() {
+                    @Override
+                    public void success(CreateUserResponse createUserResponse, Response response) {
+
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+    }
+    public void callLoginCallApi(){
+        HeldService.getService().loginSessionSendPinCallApi(mPhoneNo, "",
+                new Callback<VoiceCallResponse>() {
+                    @Override
+                    public void success(VoiceCallResponse voiceCallResponse, Response response) {
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
     }
 
 }
