@@ -152,7 +152,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void setPostChats(List<PostChatData> postChatData) {
         Timber.d("Inside SetPostChat");
         //mPostChatData.clear();
-        mPostChatData.addAll(postChatData);
+        mPostChatData=postChatData;
         //this.notifyItemInserted(0);
         this.notifyDataSetChanged();
     }
