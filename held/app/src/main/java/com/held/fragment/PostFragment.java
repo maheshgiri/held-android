@@ -62,7 +62,7 @@ public class PostFragment extends ParentFragment {
     private TextView mPostTxt, mUserNameTxt, mCancelTxt, mOkTxt, mTimeTxt,mTitle;
     private RelativeLayout mPostLayout;
     private RelativeLayout mBoxLayout,mTimeLayout;
-    private String sourceFileName, mCaption,mImageUri;
+    private String sourceFileName, mCaption,mImageUri,muserProfileUrl;
     private File mFile;
     private Uri mFileUri;
     private EditText mCaptionEdt;
@@ -110,7 +110,7 @@ public class PostFragment extends ParentFragment {
 
         TextView mTitle = (TextView)view.findViewById(R.id.tv_title);
         PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
-        if (!myhelper.readPreference("isFirstPostCreated", false)) {
+        if (muserProfileUrl==null&&myhelper.readPreference(getString(R.string.is_first_post),false)) {
             mTitle.setText(getString(R.string.title_profilepic_upload));
         }else{
             mTitle.setText(getString(R.string.title_photo_upload));
@@ -560,6 +560,7 @@ public class PostFragment extends ParentFragment {
                                 .load(AppConstants.BASE_URL + searchUserResponse.getUser().getProfilePic())
                                 .placeholder(R.drawable.user_icon)
                                 .into(mUserImg);
+                        muserProfileUrl=searchUserResponse.getUser().getProfilePic();
                     }
 
                     @Override
