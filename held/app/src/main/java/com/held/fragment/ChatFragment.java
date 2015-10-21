@@ -54,7 +54,7 @@ public class ChatFragment extends ParentFragment {
     private Button mSubmitBtn;
     private EditText mMessageEdt;
     private ImageView mDownLoad,mChatBackImage;
-    private boolean mIsOneToOne,misLastPage,mIsFirstLoad=true;
+    private boolean mIsOneToOne,misLastPage =false,mIsFirstLoad=true;
     private String mId, mFriendId,mPostId,mChatBackImg;
     private BroadcastReceiver broadcastReceiver;
     private PreferenceHelper mPreference;
@@ -63,11 +63,7 @@ public class ChatFragment extends ParentFragment {
     private PostChatData objPostChat=new PostChatData();
     private List<PostChatData> tmpList=new ArrayList<PostChatData>();
     private BlurTransformation mBlurTransformation;
-   // private HandlerThread handlerThread;
-    private Handler handler;
-   // private boolean mflag=true;
-    private Runnable runnable;
-
+    private boolean mIsScrollEndReached = false;
 
     public static ChatFragment newInstance(String id, boolean isOneToOne) {
 
@@ -159,15 +155,36 @@ public class ChatFragment extends ParentFragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int totalItemCoount = mLayoutManager.getItemCount();
+                int totalItemCount = mLayoutManager.getItemCount();
                 int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
 
-                Timber.d("on scroll dx: " + dx + " dy: " + dy + " last item visible: " + lastVisibleItemPosition);
+                View view = (View) recyclerView.getChildAt(recyclerView.getChildCount() - 1);
 
-               // mChatAdapter.notifyDataSetChanged();
-                //callFriendsChatsApi();
 
+                if(lastVisibleItemPosition == (totalItemCount -1)){
+                    if(!misLastPage) {
+                        if(!mIsScrollEndReached){
+                            Timber.d("fetching more chats");
+                            mIsScrollEndReached = true;
+                            if(mIsOneToOne){
+                                callFriendsChatsApi();
+                            }else{
+                                callPostChatApi();
+                            }
+
+
+                        }else{
+                            Timber.d("fetching already in progress");
+                        }
+
+                    }else{
+                        Timber.d("end of chat messages");
+                    }
+                }
             }
+
+
+
         });
 
     }
@@ -192,7 +209,14 @@ public class ChatFragment extends ParentFragment {
 //                        mPostChatData.addAll(tmpList);
                         // mChatAdapter.setPostChats(mPostChatData);
                         mMessageEdt.setText("");
-                        callFriendsChatsApi();
+                        PostChatData data = new PostChatData();
+                        data.setDate(postMessageResponse.getDate());
+                        data.setFromUser(postMessageResponse.getFromUser());
+                        data.setToUser(postMessageResponse.getToUser());
+                        data.setRid(postMessageResponse.getRid());
+                        data.setText(postMessageResponse.getText());
+                        mPostChatData.add(0, data);
+                        mChatAdapter.notifyDataSetChanged();
                         // tmpList.clear();
                         //Timber.i("Inside chat submit",""+postMessageResponse);
                     }
@@ -213,20 +237,21 @@ public class ChatFragment extends ParentFragment {
     private void callFriendsChatsApi() {
 
         Timber.d("Calling friends chat api");
+
         HeldService.getService().getFriendChat(mPreference.readPreference(getString(R.string.API_session_token)),
                 getArguments().getString("user_id"), mStart, mLimit, new Callback<PostChatResponse>() {
                     @Override
                     public void success(PostChatResponse postChatResponse, Response response) {
                         Timber.d("friends chat call success");
-                        mPostChatData.clear();
-                        mPostChatData.addAll(postChatResponse.getObjects());
                         misLastPage = postChatResponse.isLastPage();
-                        mChatAdapter.setPostChats(mPostChatData);
-                        mChatAdapter.notifyDataSetChanged();
-                        if(!postChatResponse.isLastPage()){
+                        if(!misLastPage){
                             mStart = postChatResponse.getNext();
                         }
-
+                        mPostChatData.addAll(postChatResponse.getObjects());
+                        mChatAdapter.setPostChats(mPostChatData);
+                        mChatAdapter.notifyDataSetChanged();
+                        Timber.d("resetting scroll check");
+                        mIsScrollEndReached = false;
                     }
 
                     @Override
@@ -242,19 +267,21 @@ public class ChatFragment extends ParentFragment {
     }
 
     private void callPostChatApi() {
+
        // Timber.d("@@@@@Post Id from Feed" + getArguments().getString("postid"));
         HeldService.getService().getPostChat(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
                 getArguments().getString("postid"), mStart, mLimit, new Callback<PostChatResponse>() {
                     @Override
                     public void success(PostChatResponse postChatResponse, Response response) {
-                        mPostChatData.clear();
-                        mPostChatData.addAll(postChatResponse.getObjects());
                         misLastPage = postChatResponse.isLastPage();
-                        mChatAdapter.setPostChats(mPostChatData);
-                        mChatAdapter.notifyDataSetChanged();
                         if(!postChatResponse.isLastPage()){
                             mStart = postChatResponse.getNext();
                         }
+                        mPostChatData.addAll(postChatResponse.getObjects());
+                        mChatAdapter.setPostChats(mPostChatData);
+                        mChatAdapter.notifyDataSetChanged();
+                        Timber.d("resetting scroll check");
+                        mIsScrollEndReached = false;
                     }
 
                     @Override
@@ -320,11 +347,19 @@ public class ChatFragment extends ParentFragment {
 
     private void postGroupChat() {
         HeldService.getService().postChat(mPreference.readPreference(getString(R.string.API_session_token)),
-                getArguments().getString("postid"), mMessageEdt.getText().toString().trim(), "", new Callback<PostMessageResponse>() {
+                getArguments().getString("postid"), mMessageEdt.getText().toString().trim(), "", new Callback<PostChatData>() {
                     @Override
-                    public void success(PostMessageResponse postMessageResponse, Response response) {
+                    public void success(PostChatData postMessageResponse, Response response) {
+
+
                         mMessageEdt.setText("");
-                        callPostChatApi();
+                        PostChatData data = new PostChatData();
+                        data.setDate(postMessageResponse.getDate());
+                        data.setFromUser(postMessageResponse.getUser());
+                        data.setRid(postMessageResponse.getRid());
+                        data.setText(postMessageResponse.getText());
+                        mPostChatData.add(0, data);
+                        mChatAdapter.notifyDataSetChanged();
                     }
 
                     @Override

@@ -24,6 +24,7 @@ import com.held.retrofit.response.FriendsResponse;
 import com.held.retrofit.response.HoldResponse;
 import com.held.retrofit.response.LoginUserResponse;
 import com.held.retrofit.response.LogoutUserResponse;
+import com.held.retrofit.response.PostChatData;
 import com.held.retrofit.response.PostChatResponse;
 import com.held.retrofit.response.PostMessageResponse;
 import com.held.retrofit.response.PostResponse;
@@ -167,7 +168,7 @@ public interface HeldAPI {
     void getPostChat(@Header("Authorization") String token, @Path("post_id") String postId,@Query("start") long start, @Query("limit") int limit, Callback<PostChatResponse> postChatResponseCallback);
 
     @POST("/posts/{post_id}/messages/")
-    void postChat(@Header("Authorization") String token, @Path("post_id") String postId, @Query("text") String message,@Body() String body, Callback<PostMessageResponse> postMessageResponseCallback);
+    void postChat(@Header("Authorization") String token, @Path("post_id") String postId, @Query("text") String message,@Body() String body, Callback<PostChatData> postMessageResponseCallback);
 
     @GET("/posts/{post_id}/engagers/")
     void getPostEngagers(@Header("Authorization") String token, @Path("post_id") String postId, @Query("limit") int limit, @Query("shuffle") boolean shuffle, Callback<EngagersResponse> engagersResponseCallback);
