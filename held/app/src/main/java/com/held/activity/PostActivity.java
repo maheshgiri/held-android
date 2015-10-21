@@ -107,12 +107,12 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
         mDisplayFragment = ChatFragment.newInstance(id, isOneToOne);
     }
 
-    /*
+
     @Override
     public void onBackPressed() {
         launchFeedScreen();
     }
-    */
+
 
     @Override
     public void perform(int id, Bundle bundle) {
@@ -211,8 +211,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
             case R.id.toolbar_post_btn:
                 break;*/
             case R.id.back_home:
-                Intent intent = new Intent(PostActivity.this, SeenByActivity.class);
-                startActivity(intent);
+                onBackPressed();
                 break;
         }
     }

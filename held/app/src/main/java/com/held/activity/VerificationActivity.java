@@ -77,6 +77,8 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         mUserNameTxt = (TextView) findViewById(R.id.VERIFICATION_username_txt);
         mIndicationTxt = (TextView) findViewById(R.id.VERIFICATION_code_sent_txt);
         mPhoneTxt=(TextView)findViewById(R.id.VERIFICATION_phone_txt);
+
+
         mUserNameTxt.setText("Hi, " + mUserName + "!");
         mIndicationTxt.setText("verification code sent to " );
         mback=(ImageView) findViewById(R.id.VER_back);
@@ -106,8 +108,10 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         mNetWorkStatus = NetworkUtil.isInternetConnected(getApplicationContext());
         NetworkStateReceiver.registerOnNetworkChangeListener(this);
         mPreference =PreferenceHelper.getInstance(this);
-        if(flag)
+        if(flag) {
+            mUserNameTxt.setVisibility(View.GONE);
             callLoginResendSmsApi();
+        }
         else
             callResendSmsApi();
 
@@ -282,8 +286,12 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                 mPreference.writePreference(getString(R.string.API_user_name), loginUserResponse.getUser().getDisplayName());
                 mPreference.writePreference(getString(R.string.API_session_token), loginUserResponse.getSessionToken());
                 mPreference.writePreference(getString(R.string.API_user_regId), loginUserResponse.getUser().getRid());
-
-                launchComposeScreen();
+                if (flag) {
+                    mPreference.writePreference(getString(R.string.is_first_post), false);
+                    launchFeedScreen();
+                }else {
+                    launchComposeScreen();
+                }
                /* if (loginUserResponse.isLogin()) {
                     PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSession_token());
                   // PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_registration_key), loginUserResponse.getRid());
@@ -322,6 +330,11 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         finish();
     }
 
+    private void launchFeedScreen() {
+        Intent intent = new Intent(VerificationActivity.this, FeedActivity.class);
+        startActivity(intent);
+        finish();
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
