@@ -3,6 +3,7 @@ package com.held.adapters;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -168,7 +169,9 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void setBtnColor(final Button btn,String reqStatus){
         if(reqStatus.equalsIgnoreCase("none")){
             ///Have to check request status for this for add as friends
-            btn.setCompoundDrawablesWithIntrinsicBounds(mActivity.getResources().getDrawable(R.drawable.friendrequest),null,null,null);
+            Drawable dr=mActivity.getResources().getDrawable(R.drawable.friendrequest);
+            dr.setBounds(50,70,50,70);
+            btn.setCompoundDrawablesWithIntrinsicBounds(dr,null,null,null);
             btn.setCompoundDrawablePadding(-30);
             btn.setGravity(Gravity.CENTER);
             btn.setBackgroundColor(mActivity.getResources().getColor(R.color.positve_btn));
@@ -184,6 +187,7 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 }
             });
+
 
         }else if(reqStatus.equalsIgnoreCase("friends")){
             btn.setText("Friends");
