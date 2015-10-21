@@ -22,13 +22,15 @@ import timber.log.Timber;
 public class InboxActivity extends ParentActivity implements View.OnClickListener {
 
     private Fragment mDisplayFragment;
-    private ImageView mChat, mCamera, mNotification;
+    private ImageView mChat, mCamera, mNotification,mSearch;
     private EditText mSearchEdt;
     private Button mRetakeBtn, mPostBtn;
-    private TextView mUsername;
+    private TextView mUsername,title;
     private static InboxActivity activity;
     private final String TAG = "InboxActivity";
     private final boolean flag=true;
+    private boolean firstClick=true;
+    private String mUserNameForSearch;
 
     public static InboxActivity getInstance() {
         return activity;
@@ -40,7 +42,7 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         activity = this;
-        TextView title = (TextView)findViewById(R.id.toolbar_title_txt);
+        title = (TextView)findViewById(R.id.toolbar_title_txt);
         title.setText("Inbox");
         Typeface medium = Typeface.createFromAsset(getAssets(), "BentonSansMedium.otf");
         title.setTypeface(medium);
@@ -50,6 +52,7 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
         mNotification = (ImageView) findViewById(R.id.toolbar_notification_img);
         mSearchEdt = (EditText) findViewById(R.id.toolbar_search_edt_txt);
         mSearchEdt.setVisibility(View.GONE);
+        mSearch=(ImageView) findViewById(R.id.toolbar_search_img);
      //   mRetakeBtn = (Button) findViewById(R.id.TOOLBAR_retake_btn);
      //   mPostBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
        // mUsername = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
@@ -61,8 +64,10 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
 
         mCamera.setOnClickListener(this);
         mNotification.setOnClickListener(this);
+        mSearch.setOnClickListener(this);
 //        mRetakeBtn.setOnClickListener(this);
   //      mPostBtn.setOnClickListener(this);
+
         if (getIntent().getExtras() != null) {
 
             String chatid = getIntent().getExtras().getString("id");
@@ -72,6 +77,19 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
             Log.d(TAG, "Launching inbox");
             launchInboxPage();
         }
+        mSearchEdt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mSearch.setVisibility(View.VISIBLE);
+                    title.setVisibility(View.GONE);
+                } else {
+                    mSearch.setVisibility(View.VISIBLE);
+                    title.setVisibility(View.VISIBLE);
+                    mSearchEdt.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     private void launchInboxPage() {
@@ -147,7 +165,7 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
 
 
             case R.id.toolbar_post_img:
-                launchCreatePostScreen();
+                launchFeedScreen();
                 break;
 
             case R.id.toolbar_chat_img:
@@ -156,16 +174,54 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
                 }
 
                 break;
+            case R.id.toolbar_search_img:
+                Log.d(TAG, "toolbar search image has been clicked");
+                if(firstClick) {
+                    visibleTextView();
+                    firstClick=false;
+                }
+                else {
+                    mUserNameForSearch= mSearchEdt.getText().toString();
+                    Timber.i("User Name for search :" + mUserNameForSearch);
+                    mSearchEdt.setText("");
+                    hideTextView();
+                    firstClick=true;
+                    launchSearchScreen(mUserNameForSearch);
+
+                }
+
+                break;
         }
     }
 
-    private void launchCreatePostScreen() {
-        Intent intent = new Intent(InboxActivity.this, PostActivity.class);
+    private void launchFeedScreen() {
+        Intent intent = new Intent(InboxActivity.this, FeedActivity.class);
         startActivity(intent);
     }
 
     private void launchNotificationScreen() {
         Intent intent = new Intent(InboxActivity.this, NotificationActivity.class);
+        startActivity(intent);
+    }
+    public void visibleTextView(){
+
+        mSearchEdt.setVisibility(View.VISIBLE);
+        mSearchEdt.setFocusable(true);
+        mSearchEdt.setFocusableInTouchMode(true);
+        mSearchEdt.requestFocus();
+        title.setVisibility(View.GONE);
+
+
+    }
+    public void hideTextView(){
+
+        mSearchEdt.setVisibility(View.GONE);
+        title.setVisibility(View.VISIBLE);
+        mSearch.setVisibility(View.VISIBLE);
+    }
+    private void launchSearchScreen(String uname) {
+        Intent intent = new Intent(InboxActivity.this, SearchActivity.class);
+        intent.putExtra("userName", uname);
         startActivity(intent);
     }
 

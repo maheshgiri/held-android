@@ -141,7 +141,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    mSearch.setVisibility(View.GONE);
+                    //mSearch.setVisibility(View.GONE);
                     mTitle.setVisibility(View.GONE);
                 } else {
                     mSearch.setVisibility(View.VISIBLE);

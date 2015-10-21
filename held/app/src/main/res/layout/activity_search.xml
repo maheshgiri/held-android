@@ -3,6 +3,7 @@
     android:layout_height="match_parent"
     tools:context="com.held.activity.SearchActivity"
     android:background="@color/bg_color"
+    android:fitsSystemWindows="true"
     >
     <include layout="@layout/search_toolbar_layout" android:id="@+id/toolbar"></include>
     <View
