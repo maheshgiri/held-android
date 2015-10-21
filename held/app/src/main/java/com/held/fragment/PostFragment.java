@@ -435,6 +435,7 @@ public class PostFragment extends ParentFragment {
                 if (myhelper.readPreference(getString(R.string.is_first_post), false)==false) {
                     myhelper.writePreference(getString(R.string.is_first_post), true);
 
+                    Timber.i("This is user's first post. Setting it as profile image");
                     callPicUpdateApi(postResponse.getImageUri());
                     callThumbnailUpdateApi(postResponse.getThumbnailUri());
                     launchProfileScreen();

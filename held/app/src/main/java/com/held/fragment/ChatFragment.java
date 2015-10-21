@@ -2,12 +2,9 @@ package com.held.fragment;
 
 
 import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -32,13 +29,11 @@ import com.held.retrofit.response.PostChatData;
 import com.held.retrofit.response.PostChatResponse;
 import com.held.retrofit.response.PostMessageResponse;
 import com.held.retrofit.response.PostResponse;
-import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.HeldApplication;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
-import com.held.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +58,7 @@ public class ChatFragment extends ParentFragment {
     private String mId, mFriendId,mPostId,mChatBackImg;
     private BroadcastReceiver broadcastReceiver;
     private PreferenceHelper mPreference;
-    private int mLimit = 5;
+    private int mLimit = 7;
     private long mStart = System.currentTimeMillis();
     private PostChatData objPostChat=new PostChatData();
     private List<PostChatData> tmpList=new ArrayList<PostChatData>();
@@ -141,131 +136,49 @@ public class ChatFragment extends ParentFragment {
         mMessageEdt = (EditText) view.findViewById(R.id.CHAT_message);
         mSubmitBtn.setOnClickListener(this);
         mBlurTransformation = new BlurTransformation(getCurrActivity(), 25f);
-        // mIsOneToOne = getArguments().getBoolean("isOneToOne");
         mChatBackImage = (ImageView) view.findViewById(R.id.background_imageView);
-        /*mDownLoad = (ImageView) view.findViewById(R.id.CHAT_download);
-        mDownLoad.setOnClickListener(this);*/
         mPreference = PreferenceHelper.getInstance(getCurrActivity());
         mChatAdapter = new ChatAdapter(getCurrActivity(), mPostChatData);
         mChatList.setLayoutManager(mLayoutManager);
         mChatList.setAdapter(mChatAdapter);
-      /*  runnable = new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    refreshMessages();
-                    mChatList.postDelayed(this, 100);
-                }catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-
-            }
-        };
-
-
-        mChatBackImg=getArguments().getString("chatBackImg");
-        PicassoCache.getPicassoInstance(getCurrActivity())
-                .load(AppConstants.BASE_URL+mChatBackImg)
-                .placeholder(R.drawable.milana_vayntrub)
-                .into(mChatBackImage);*/
-        // callFriendsChatsApi();
 
         if (getCurrActivity().getNetworkStatus()) {
             if (mIsOneToOne == true) {
-//            mDownLoad.setVisibility(View.GONE);
-                //callUserSearchApi();
                 callGetUserPostApi();
                 callFriendsChatsApi();
             } else {
-                //if (isAdded())
                 callSearchPostApi();
                 callPostChatApi();
 
             }
         }
 
-        //mChatList.scrollToPosition(mChatAdapter.getItemCount());
-
-       // handler.postDelayed((Runnable) this, 1000);
-     /*   if (getCurrActivity().getNetworkStatus()||misLastPage==false) {
-            callFriendsChatsApi();
-        } else {
-            UiUtils.showSnackbarToast(getView(), "Sorry! You don't seem to connected to internet");
-        }*/
 
 
-        PicassoCache.getPicassoInstance(getCurrActivity())
-                                                .load(R.drawable.milana_vayntrub)
-                                                .transform(mBlurTransformation)
-                                                .into(mChatBackImage);
-
-    /*    mChatList.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        mChatList.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int totalItemCoount = mLayoutManager.getItemCount();
                 int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
+
+                Timber.d("on scroll dx: " + dx + " dy: " + dy + " last item visible: " + lastVisibleItemPosition);
+
                // mChatAdapter.notifyDataSetChanged();
-                callFriendsChatsApi();
+                //callFriendsChatsApi();
 
             }
-        });*/
-
-      // mChatList.postDelayed(runnable, 100);
+        });
 
     }
-    public void refreshMessages() {
-       // mId = id;
-       // mIsOneToOne = isOneToOne;
-        if (mIsOneToOne) {
-       //     mDownLoad.setVisibility(View.GONE);
-          //  callUserSearchApi();
-            callFriendsChatsApi();
-            Timber.i("inside onDataRecived");
-        } else {
-           // if (isAdded())
-                callPostChatApi();
-        }
-    }
 
-    private void callUserSearchApi() {
-        HeldService.getService().searchUser(PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_session_token)),
-                getArguments().getString("user_id"), new Callback<SearchUserResponse>() {
-                    @Override
-                    public void success(SearchUserResponse searchUserResponse, Response response) {
-//                        DialogUtils.stopProgressDialog();
-                        Utils.hideSoftKeyboard(getCurrActivity());
-                        mFriendId = searchUserResponse.getRid();
 
-                     /*this code should not here
-                     PicassoCache.getPicassoInstance(getCurrActivity())
-                                .load(AppConstants.BASE_URL + searchUserResponse.getThumbnailUri())
-                                .placeholder(R.drawable.milana_vayntrub)
-                                .transform(mBlurTransformation)
-                                .into(mChatBackImage);*/
 
-//                        if (!mMessageEdt.getText().toString().isEmpty())
-                        callFriendsChatsApi();
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-//                        DialogUtils.stopProgressDialog();
-                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
-                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
-                            UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
-                        } else
-                            UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
-                    }
-                });
-    }
-
-    private void callFriendChatApi() {
+    private void callfriendChatSubmit() {
 
         Timber.d("Calling friend chat api");
         HeldService.getService().sendfriendChat(mPreference.readPreference(getString(R.string.API_session_token)),
-  //              mId, mMessageEdt.getText().toString().trim(), "", new Callback<PostMessageResponse>() {
+                //              mId, mMessageEdt.getText().toString().trim(), "", new Callback<PostMessageResponse>() {
                 getArguments().getString("user_id"), mMessageEdt.getText().toString().trim(), "", new Callback<PostMessageResponse>() {
                     @Override
                     public void success(PostMessageResponse postMessageResponse, Response response) {
@@ -294,7 +207,7 @@ public class ChatFragment extends ParentFragment {
                             UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
                     }
                 });
-      // callFriendsChatsApi();
+
     }
 
     private void callFriendsChatsApi() {
@@ -310,6 +223,9 @@ public class ChatFragment extends ParentFragment {
                         misLastPage = postChatResponse.isLastPage();
                         mChatAdapter.setPostChats(mPostChatData);
                         mChatAdapter.notifyDataSetChanged();
+                        if(!postChatResponse.isLastPage()){
+                            mStart = postChatResponse.getNext();
+                        }
 
                     }
 
@@ -336,6 +252,9 @@ public class ChatFragment extends ParentFragment {
                         misLastPage = postChatResponse.isLastPage();
                         mChatAdapter.setPostChats(mPostChatData);
                         mChatAdapter.notifyDataSetChanged();
+                        if(!postChatResponse.isLastPage()){
+                            mStart = postChatResponse.getNext();
+                        }
                     }
 
                     @Override
@@ -361,27 +280,20 @@ public class ChatFragment extends ParentFragment {
                 if (getCurrActivity().getNetworkStatus()) {
                     if (mIsOneToOne) {
                         if (!mMessageEdt.getText().toString().isEmpty()) {
-                            callFriendChatApi();
+                            callfriendChatSubmit();
                             //callFriendsChatsApi();
                         } else
                             UiUtils.showSnackbarToast(getView(), "Message should not be empty");
                     } else {
                         if (!mMessageEdt.getText().toString().isEmpty()) {
-                            callChatPostApi();
+                            postGroupChat();
                         } else
                             UiUtils.showSnackbarToast(getView(), "Message should not be empty");
                     }
                 }
 
                 break;
-            /*case R.id.CHAT_download:
-                if (getCurrActivity().getNetworkStatus()) {
-                    DialogUtils.showProgressBar();
-                    callDownloadRequestApi();
-                } else
-                    UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
 
-                break;*/
         }
     }
 
@@ -406,7 +318,7 @@ public class ChatFragment extends ParentFragment {
                 });
     }
 
-    private void callChatPostApi() {
+    private void postGroupChat() {
         HeldService.getService().postChat(mPreference.readPreference(getString(R.string.API_session_token)),
                 getArguments().getString("postid"), mMessageEdt.getText().toString().trim(), "", new Callback<PostMessageResponse>() {
                     @Override
@@ -425,21 +337,8 @@ public class ChatFragment extends ParentFragment {
                             UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
                     }
                 });
-       // callPostChatApi();
     }
-    public void setChatBackImg(){
-        Timber.i("@@@@@Chat Background");
-        if(mPostChatData.size()!=0){
-            PicassoCache.getPicassoInstance(getCurrActivity())
-                    .load(AppConstants.BASE_URL+mPostChatData.get(0).getPost().getImageUri())
-                    .placeholder(R.drawable.milana_vayntrub)
-                    .into(mChatBackImage);
-        }
-        else {
-            return;
-        }
 
-    }
     public void callSearchPostApi(){
         HeldService.getService().getSearchCurrentPost(mPreference.readPreference(getString(R.string.API_session_token)), getArguments().getString("postid"),
                 new Callback<PostResponse>() {
