@@ -18,6 +18,7 @@ import com.held.retrofit.response.EngagersResponse;
 import com.held.retrofit.response.FriendRequestObject;
 import com.held.retrofit.response.User;
 import com.held.utils.PreferenceHelper;
+import com.held.utils.UiUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -55,7 +56,6 @@ public class SeenByActivity extends ParentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seen_by);
        // mLayoutManager = new LinearLayoutManager(this);
-
         mChat=(ImageView)findViewById(R.id.toolbar_chat_img);
         mSearch=(ImageView)findViewById(R.id.toolbar_search_img);
         mNotification=(ImageView)findViewById(R.id.toolbar_notification_img);
@@ -63,20 +63,25 @@ public class SeenByActivity extends ParentActivity {
         mTitle=(TextView)findViewById(R.id.toolbar_title_txt);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
 
-        mPostId=getIntent().getExtras().getString("post_id");
-
         mSearch.setVisibility(View.GONE);
         mNotification.setVisibility(View.GONE);
         mCamera.setVisibility(View.GONE);
         mSearch_edt.setVisibility(View.GONE);
 
         mChat.setImageResource(R.drawable.back);
+        mChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         mChat.setVisibility(View.VISIBLE);
 
         Typeface medium = Typeface.createFromAsset(getAssets(), "BentonSansMedium.otf");
         mTitle.setTypeface(medium);
         mTitle.setText("Seen By");
         //setToolbar();
+        mPostId=getIntent().getExtras().getString("post_id");
         mPreference=PreferenceHelper.getInstance(this);
         mSeenRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mSeenRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -156,5 +161,10 @@ return;
            e.printStackTrace();
        }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

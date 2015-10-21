@@ -213,7 +213,10 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.signinTxt :
-                callLoginApi();
+                Intent intent2 = new Intent(SplashActivity.this, RegistrationActivity.class);
+                intent2.putExtra("ForLogin",true);
+                startActivity(intent2);
+                finish();
                 break;
         }
     }

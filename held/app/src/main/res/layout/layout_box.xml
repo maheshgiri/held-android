@@ -58,6 +58,7 @@
                         android:fontFamily="@string/benton_sans_book"
                         android:textColor="#898989"
                         android:singleLine="true"
+                        android:maxLines="1"
 
                         />
                     <EditText

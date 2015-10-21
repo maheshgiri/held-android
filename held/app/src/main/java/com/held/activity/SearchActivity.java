@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,14 +40,14 @@ public class SearchActivity extends ParentActivity {
     private String mUserName;
     private Engager searchResult=new Engager();
     private List<Engager> mSearchResultList=new ArrayList<>();
+    private Toolbar mSearchToolbar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
-
+        mSearchToolbar=(Toolbar)findViewById(R.id.search_toolbar);
         mSearchImg=(ImageView) findViewById(R.id.search_img);
         mSearchText=(TextView)findViewById(R.id.search_txt);
         mCancle=(TextView)findViewById(R.id.cancle_txt);
@@ -72,6 +73,12 @@ public class SearchActivity extends ParentActivity {
             public void onRefresh() {
                 callSearchByNameApi();
                 return;
+            }
+        });
+        mCancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
 
@@ -108,5 +115,10 @@ public class SearchActivity extends ParentActivity {
         }else {
             tv.setTypeface(medium);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

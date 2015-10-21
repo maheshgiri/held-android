@@ -1,6 +1,8 @@
 package com.held.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,12 +23,13 @@ import timber.log.Timber;
  */
 public class ChatActivity extends ParentActivity implements View.OnClickListener{
 
-    ImageView mChat, mCamera, mNotification;
+    ImageView mChat, mCamera, mNotification,mSearch;
     EditText mSearchEdt;
     Activity mActivity;
     Fragment mDisplayFragment;
     String mChatId,mPostId,mId,mChatBackImg;
     boolean flag;
+
 
 
     @Override
@@ -44,6 +47,8 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         mChat.setImageResource(R.drawable.back);
         mCamera.setImageResource(R.drawable.icon_menu);
         mCamera.setVisibility(View.VISIBLE);
+        mSearch=(ImageView) findViewById(R.id.toolbar_search_img);
+        mSearch.setVisibility(View.GONE);
         mCamera.setOnClickListener(this);
         mNotification.setOnClickListener(this);
         Bundle extras = getIntent().getExtras();

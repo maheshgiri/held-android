@@ -3,14 +3,15 @@
     android:layout_width="match_parent" android:layout_height="65dp"
     android:background="@color/bg_color"
     android:id="@+id/search_toolbar"
-    android:visibility="visible"
-
+    android:fitsSystemWindows="true"
     >
 
    <RelativeLayout
        android:layout_width="match_parent"
        android:layout_height="match_parent"
-       android:id="@+id/search_toolbar_relativeLayout">
+       android:id="@+id/search_toolbar_relativeLayout"
+
+       >
 
     <ImageView
         android:layout_width="25dp"
@@ -19,6 +20,8 @@
         android:src="@drawable/search_icon_v2"
         android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"
+
+
 />
     <TextView
         android:layout_width="wrap_content"

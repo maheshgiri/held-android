@@ -31,15 +31,13 @@
         android:layout_centerInParent="true"
         />
     <EditText
-        android:layout_width="50dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar_search_edt_txt"
-        android:visibility="gone"
+
         android:editable="true"
         android:maxLines="1"
         android:hint="Search...."
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="5dp"
         android:layout_centerVertical="true"
         android:inputType="text"
         android:layout_toLeftOf="@+id/toolbar_search_img"
@@ -68,7 +66,7 @@
         android:layout_height="25dp"
         android:id="@+id/toolbar_search_img"
         android:src="@drawable/search"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="7dp"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/toolbar_notification_img"
         android:layout_toStartOf="@+id/toolbar_notification_img" />
@@ -77,7 +75,7 @@
         android:layout_height="25dp"
         android:id="@+id/toolbar_notification_img"
         android:src="@drawable/notification"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="7dp"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/toolbar_post_img"
         android:layout_toStartOf="@+id/toolbar_post_img" />
@@ -89,8 +87,8 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp" />
+
+         />
 
 </RelativeLayout>
 </android.support.v7.widget.Toolbar>
