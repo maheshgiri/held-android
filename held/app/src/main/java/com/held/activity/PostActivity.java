@@ -61,9 +61,9 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
         // todo: this check is not very good. Should check with server whether user has an account
         // and skip to feed
 
-        if (callfrom==null && mPreference.readPreference(getString(R.string.is_first_post), false)==true){
+        if (mPreference.readPreference(getString(R.string.is_first_post), false)==true){
             launchCreatePostScreen();
-        }else if (callfrom==null && mPreference.readPreference(getString(R.string.is_first_post), false)) {
+        }else if (mPreference.readPreference(getString(R.string.is_first_post), false)) {
             launchFeedScreen();
         } else if(mPreference.readPreference(getString(R.string.is_first_post), false)==false) {
             launchCreatePostScreen();
@@ -107,12 +107,12 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
         mDisplayFragment = ChatFragment.newInstance(id, isOneToOne);
     }
 
-    /*
+
     @Override
     public void onBackPressed() {
         launchFeedScreen();
     }
-    */
+
 
     @Override
     public void perform(int id, Bundle bundle) {
@@ -211,8 +211,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
             case R.id.toolbar_post_btn:
                 break;*/
             case R.id.back_home:
-                Intent intent = new Intent(PostActivity.this, SeenByActivity.class);
-                startActivity(intent);
+                onBackPressed();
                 break;
         }
     }
