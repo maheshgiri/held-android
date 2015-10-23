@@ -45,7 +45,7 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         mSearchEdt = (EditText) findViewById(R.id.toolbar_search_edt_txt);
         mSearchEdt.setVisibility(View.GONE);
         mChat.setImageResource(R.drawable.back);
-        mCamera.setImageResource(R.drawable.icon_menu);
+        mCamera.setImageResource(R.drawable.menu);
         mCamera.setVisibility(View.VISIBLE);
         toolbar_divider=(View)findViewById(R.id.toolbar_divider);
         mCamera.setOnClickListener(this);

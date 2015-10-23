@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.held.activity.ProfileActivity"
+    android:fitsSystemWindows="true"
     android:background="@color/bg_color">
 
     <include layout="@layout/app_toolbar" android:id="@+id/toolbar"></include>

@@ -23,7 +23,7 @@
             android:id="@+id/PROFILE_friendReq"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="25dp"
-            android:src="@drawable/friendrequest"
+            android:src="@drawable/friendrequestprofile"
 
             />
         <com.held.customview.CircularImageView
@@ -40,7 +40,7 @@
             android:id="@+id/PROFILE_Chat"
             android:layout_marginLeft="25dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/chat"
+            android:src="@drawable/chatprofile"
             />
     </LinearLayout>
     <LinearLayout

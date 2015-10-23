@@ -45,7 +45,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         mSearchEdt = (EditText) findViewById(R.id.toolbar_search_edt_txt);
         mSearchEdt.setVisibility(View.GONE);
         mChat.setImageResource(R.drawable.back);
-        mCamera.setImageResource(R.drawable.icon_menu);
+        mCamera.setImageResource(R.drawable.menu);
         mCamera.setVisibility(View.VISIBLE);
         mSearch=(ImageView) findViewById(R.id.toolbar_search_img);
         mSearch.setVisibility(View.GONE);
