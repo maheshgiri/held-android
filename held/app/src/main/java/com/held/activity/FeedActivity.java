@@ -54,6 +54,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     private Toolbar toolbar;
     private boolean firstClick=true;
     private String mUserNameForSearch;
+    private View toolbar_divider;
 
 
     @Override
@@ -94,6 +95,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mSearch_edt.setVisibility(View.GONE);
 
         mSearch_edt = (EditText) findViewById(R.id.toolbar_search_edt_txt);
+        toolbar_divider=(View)findViewById(R.id.toolbar_divider);
 //        mSearch_edt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 //            @Override
 //            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -427,10 +429,12 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
     public void hideToolbar(){
         mHeld_toolbar.setVisibility(View.GONE);
+        toolbar_divider.setVisibility(View.GONE);
     }
 
     public void showToolbar(){
         mHeld_toolbar.setVisibility(View.VISIBLE);
+        toolbar_divider.setVisibility(View.VISIBLE);
     }
 
     private void callUserSearchApi() {
