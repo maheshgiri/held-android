@@ -139,7 +139,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             mItemViewHolder = viewHolder;
             Timber.i("Profile Post call Successfull ..Position:"+position);
             Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getCreator().getProfilePic()).into(viewHolder.mUserImg);
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getImageUri()).transform(mBlurTransformation).into(viewHolder.mFeedImg);
+            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position - 1).getThumbnailUri()).into(viewHolder.mFeedImg);
             setTimeText(mPostList.get(position - 1).getHeld(), viewHolder.mTimeMinTxt, viewHolder.mTimeSecTxt);
             viewHolder.mFeedTxt.setText(mPostList.get(position - 1).getText());
             viewHolder.mUserNameTxt.setText(mPostList.get(position - 1).getCreator().getDisplayName());
