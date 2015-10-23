@@ -56,7 +56,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        Timber.d("trying to get view type");
+
         // Just as an example, return 0 or 2 depending on position
         // Note that unlike in ListView adapters, types don't have to be contiguous
         int type;
@@ -67,7 +67,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             type = (mPostChatData.get(position).getUser().getDisplayName()).
                     equals(mPreference.readPreference(Utils.getString(R.string.API_user_name))) ? ITEM_RIGHT : ITEM_LEFT;
         }
-        Timber.d("chat id " + position + " is type " + type);
+
         return type;
 
     }
@@ -80,16 +80,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        Timber.d(" creating viewholder ");
+
         View v;
 //        switch (viewType) {
 //            case 0:
         if (viewType == ITEM_RIGHT) {
-            Timber.d("returning viewholder 0");
             v = LayoutInflater.from(mActivity).inflate(R.layout.layout_chat_right, parent, false);
             return new ViewHolder0(v);
         } else if(viewType == ITEM_LEFT) {
-            Timber.d("returning viewholder 2");
             v = LayoutInflater.from(mActivity).inflate(R.layout.layout_chat_left, parent, false);
             return new ViewHolder2(v);
         }
@@ -99,7 +97,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        Timber.d("onBind view holder");
+
 
         ///Get Current user
         String userName=mPreference.readPreference(Utils.getString(R.string.API_user_name));
@@ -127,7 +125,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
         if (holder instanceof ViewHolder0) {
-            Timber.d("populating viewholder 0");
+
 
             ViewHolder0 viewHolder0 = (ViewHolder0) holder;
             viewHolder0.mUserNameTxt.setText(currentUser.getDisplayName());
@@ -150,7 +148,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     public void setPostChats(List<PostChatData> postChatData) {
-        Timber.d("Inside SetPostChat");
+
         //mPostChatData.clear();
         mPostChatData=postChatData;
         //this.notifyItemInserted(0);

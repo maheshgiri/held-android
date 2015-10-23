@@ -7,6 +7,7 @@ public class PostChatResponse {
 
     private List<PostChatData> objects;
     private boolean lastPage;
+    private long next;
 
 
     public boolean isLastPage() {
@@ -19,5 +20,9 @@ public class PostChatResponse {
 
     public void setObjects(List<PostChatData> objects) {
         this.objects = objects;
+    }
+
+    public long getNext(){
+        return next;
     }
 }
