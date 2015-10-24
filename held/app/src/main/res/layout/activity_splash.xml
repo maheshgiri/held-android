@@ -19,6 +19,17 @@
         android:layout_marginTop="155dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"/>
+    <ImageView
+        android:layout_width="55dp"
+        android:layout_height="1dp"
+        android:id="@+id/topDivider"
+        android:src="#000000"
+        android:alpha=".08"
+        android:gravity="center"
+        android:layout_marginTop="41dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/imgLogo"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,17 +37,8 @@
         android:orientation="vertical"
         android:id="@+id/layout1"
         android:layout_below="@id/imgLogo"
-        android:layout_marginTop="44dp">
-        <ImageView
-            android:layout_width="55dp"
-            android:layout_height="1dp"
-            android:id="@+id/topDivider"
-            android:src="#000000"
-            android:alpha=".08"
-            android:layout_gravity="center"
-            >
+        android:layout_marginTop="42dp">
 
-        </ImageView>
         <TextView
             android:id="@+id/text1"
             android:layout_width="match_parent"
@@ -52,6 +54,8 @@
             android:maxLines="2"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:letterSpacing=".35"
+            android:lineSpacingExtra="12.5dp"
             />
 
             <Button
@@ -64,12 +68,10 @@
                 android:fontFamily="@string/benton_sans_book"
                 android:background="@drawable/register_btn_selector"
                 android:textColor="#ffffff"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-
-                android:layout_marginTop="45dp"
+                android:layout_marginTop="38dp"
                 android:layout_gravity="center"
                 android:layout_centerHorizontal="true"
+                android:letterSpacing=".35"
                 />
 
 
@@ -87,7 +89,9 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="20dp"
-                android:maxLines="2" />
+                android:maxLines="2"
+                android:lineSpacingExtra="5dp"
+                android:letterSpacing=".35"/>
 
     </LinearLayout>
 <LinearLayout
@@ -140,7 +144,9 @@
         android:fontFamily="@string/benton_sans_book"
         android:textSize="16sp"
         android:singleLine="false"
-        android:textColor="#acacac" />
+        android:textColor="#acacac"
+            android:letterSpacing=".35"
+            />
     <TextView
         android:id="@+id/signinTxt"
         android:layout_width="wrap_content"
@@ -152,6 +158,7 @@
         android:textSize="16sp"
         android:singleLine="false"
         android:textColor="@color/new_btn_color"
+        android:letterSpacing=".35"
 
          />
     </LinearLayout>

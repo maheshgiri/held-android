@@ -2,6 +2,7 @@ package com.held.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -57,6 +58,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
         mHave=(TextView)findViewById(R.id.text2);
         mGetStartedBtn.setOnClickListener(this);
         mSigninTxt.setOnClickListener(this);
+        mSigninTxt.setPaintFlags(mSigninTxt.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         Context ctx = getApplicationContext();
         if (ctx != null) {
             Typeface type = Typeface.createFromAsset(ctx.getAssets(),
@@ -66,6 +68,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
             mHeadLinetxt.setTypeface(type);
             mPolicy.setTypeface(type);
             mHave.setTypeface(type);
+
 
         }
         mPrefernce=PreferenceHelper.getInstance(getApplicationContext());
