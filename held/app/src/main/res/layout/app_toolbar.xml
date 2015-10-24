@@ -4,13 +4,15 @@
     android:background="@color/bg_color"
     android:id="@+id/toolbar_main"
     android:visibility="visible"
+    android:fitsSystemWindows="true"
+    android:layout_alignParentTop="true"
     >
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/toolbar_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_marginRight="14dp">
+    android:layout_marginRight="10dp">
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
@@ -18,6 +20,7 @@
         android:src="@drawable/chat"
         android:layout_marginRight="10dp"
         android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
         android:layout_alignParentLeft="true"
          />
 
@@ -34,7 +37,6 @@
         android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar_search_edt_txt"
-
         android:editable="true"
         android:maxLines="1"
         android:hint="Search...."
@@ -67,8 +69,9 @@
         android:layout_height="25dp"
         android:id="@+id/toolbar_search_img"
         android:src="@drawable/search"
-        android:layout_marginRight="7dp"
+        android:layout_marginRight="10dp"
         android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
         android:layout_toLeftOf="@+id/toolbar_notification_img"
         android:layout_toStartOf="@+id/toolbar_notification_img" />
     <ImageView
@@ -76,7 +79,7 @@
         android:layout_height="25dp"
         android:id="@+id/toolbar_notification_img"
         android:src="@drawable/notification"
-        android:layout_marginRight="7dp"
+        android:layout_marginRight="10dp"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/toolbar_post_img"
         android:layout_toStartOf="@+id/toolbar_post_img" />
@@ -92,5 +95,6 @@
          />
 
 </RelativeLayout>
+
 </android.support.v7.widget.Toolbar>
 
