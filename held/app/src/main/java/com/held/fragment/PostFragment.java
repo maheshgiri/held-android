@@ -104,10 +104,10 @@ public class PostFragment extends ParentFragment {
         setTypeFace(mPostBtn,"book");
         setTypeFace(mUserNameTxt,"1");
         setTypeFace(mPostTxt,"book");
-        setTypeFace(mPostBtn,"1");
+        setTypeFace(mCaptionEdt,"book");
         setTypeFace(mTitle,"1");
         setProfilePic();
-
+        mPostTxt.setVisibility(View.GONE);
         TextView mTitle = (TextView)view.findViewById(R.id.tv_title);
         PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
         if (muserProfileUrl==null&&myhelper.readPreference(getString(R.string.is_first_post),false)) {
@@ -589,9 +589,17 @@ public class PostFragment extends ParentFragment {
         Typeface book = Typeface.createFromAsset(getCurrActivity().getAssets(), "BentonSansBook.otf");
         if(type=="book"){
             tv.setTypeface(book);
-
         }else {
             tv.setTypeface(medium);
+        }
+    }
+    public void setTypeFace(Button btn,String type){
+        Typeface medium = Typeface.createFromAsset(getCurrActivity().getAssets(), "BentonSansMedium.otf");
+        Typeface book = Typeface.createFromAsset(getCurrActivity().getAssets(), "BentonSansBook.otf");
+        if(type=="book"){
+            btn.setTypeface(book);
+        }else {
+            btn.setTypeface(medium);
         }
     }
     }

@@ -1,6 +1,7 @@
 package com.held.customview;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -22,4 +23,5 @@ public class CustomTextView extends TextView {
         super(context, attrs, defStyle);
         CustomFontHelper.setCustomFont(this, context, attrs);
     }
+
 }
