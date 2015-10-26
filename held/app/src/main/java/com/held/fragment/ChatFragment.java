@@ -399,9 +399,7 @@ public class ChatFragment extends ParentFragment {
                     @Override
                     public void success(FeedResponse feedResponse, Response response) {
                         PicassoCache.getPicassoInstance(getCurrActivity())
-                                .load(AppConstants.BASE_URL + feedResponse.getObjects().get(0).getImageUri())
-                                .transform(mBlurTransformation)
-                               // .placeholder(R.drawable.milana_vayntrub)
+                                .load(AppConstants.BASE_URL + feedResponse.getObjects().get(0).getThumbnailUri())
                                 .into(mChatBackImage);
                     }
 

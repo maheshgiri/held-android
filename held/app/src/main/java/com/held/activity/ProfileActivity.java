@@ -28,6 +28,7 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     String mUserId;
     ProfileFragment frag;
     private Toolbar mHeld_toolbar;
+    private View toolbar_divider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,9 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         mSearchEdt = (EditText) findViewById(R.id.toolbar_search_edt_txt);
         mSearchEdt.setVisibility(View.GONE);
         mChat.setImageResource(R.drawable.back);
-        mCamera.setImageResource(R.drawable.icon_menu);
+        mCamera.setImageResource(R.drawable.menu);
         mCamera.setVisibility(View.VISIBLE);
+        toolbar_divider=(View)findViewById(R.id.toolbar_divider);
         mCamera.setOnClickListener(this);
         mNotification.setOnClickListener(this);
         Bundle extras = getIntent().getExtras();
@@ -80,9 +82,11 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     }
     public void hideToolbar(){
         mHeld_toolbar.setVisibility(View.GONE);
+        toolbar_divider.setVisibility(View.GONE);
     }
 
     public void showToolbar(){
         mHeld_toolbar.setVisibility(View.VISIBLE);
+        toolbar_divider.setVisibility(View.VISIBLE);
     }
 }

@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.held.customview.CustomTextView;
 import com.held.receiver.NetworkStateReceiver;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.CreateUserResponse;
@@ -38,10 +39,11 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
     private boolean mNetWorStatus,flag=false;
     private Button mRegisterBtn;
     private Spinner mCountryCodes;
-    private String mCountryCode;
+    private String mCountryCode,tempCode;
     private int mPin;
     private String mRegKey,mAccessToken;
     private PreferenceHelper mPrefernce;
+    private CustomTextView mspinnerText;
 private TextView mPolicy;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ private TextView mPolicy;
         mPhoneNoEdt = (EditText) findViewById(R.id.REG_mobile_no_edt);
         mBackImg = (ImageView) findViewById(R.id.REG_back);
         mRegisterBtn = (Button) findViewById(R.id.REG_register_btn);
+        mspinnerText=(CustomTextView)findViewById(R.id.spinner_Text);
         mBackImg.setOnClickListener(this);
         mRegisterBtn.setOnClickListener(this);
         mNetWorStatus = NetworkUtil.isInternetConnected(getApplicationContext());
@@ -70,10 +73,10 @@ private TextView mPolicy;
             Typeface type = Typeface.createFromAsset(ctx.getAssets(),
                     "BentonSansBook.otf");
             mUserNameEdt.setTypeface(type);
-
             mPhoneNoEdt.setTypeface(type);
             mRegisterBtn.setTypeface(type);
             mPolicy.setTypeface(type);
+
 
         }
         mPrefernce=PreferenceHelper.getInstance(this);
@@ -89,7 +92,7 @@ private TextView mPolicy;
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.REG_back:
-                finish();
+                launchSplashScreen();
                 break;
             case R.id.REG_register_btn:
                 Utils.hideSoftKeyboard(this);
@@ -123,6 +126,8 @@ private TextView mPolicy;
         if (validate) {
             String cc[] = mCountryCodes.getSelectedItem().toString().split(" ");
             mCountryCode = cc[0];
+            tempCode=mCountryCode;
+            mCountryCode=tempCode.substring(1);
             if (mNetWorStatus) {
                 DialogUtils.showProgressBar();
                     callCreateUserApi();
@@ -195,6 +200,8 @@ private TextView mPolicy;
     public void  launchLoginVerificationActivity(){
         String cc[] = mCountryCodes.getSelectedItem().toString().split(" ");
         mCountryCode = cc[0];
+//        tempCode=mCountryCode;
+//        mCountryCode=tempCode.substring(1);
         mPrefernce.writePreference(getString(R.string.API_phone_no), mCountryCode + mPhoneNoEdt.getText().toString().trim());
         Intent intent = new Intent(RegistrationActivity.this, VerificationActivity.class);
         intent.putExtra("phoneno", mCountryCode + mPhoneNoEdt.getText().toString().trim());
@@ -202,7 +209,9 @@ private TextView mPolicy;
         startActivity(intent);
         finish();
     }
-    public void validateLoginInput(){
-
+    public void launchSplashScreen(){
+        Intent intent = new Intent(RegistrationActivity.this, SplashActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

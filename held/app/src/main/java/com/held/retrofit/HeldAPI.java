@@ -174,7 +174,7 @@ public interface HeldAPI {
     @POST("/posts/{post_id}/messages/")
     void postChat(@Header("Authorization") String token, @Path("post_id") String postId, @Query("text") String message,@Body() String body, Callback<PostChatData> postMessageResponseCallback);
 
-    @GET("/posts/{post_id}/engagers/")
+    @GET("/posts/{post_id}/holds/")
     void getPostEngagers(@Header("Authorization") String token, @Path("post_id") String postId, @Query("limit") int limit, @Query("shuffle") boolean shuffle, Callback<EngagersResponse> engagersResponseCallback);
 
     @GET("/posts/{post_id}/")

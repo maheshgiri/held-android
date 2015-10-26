@@ -44,7 +44,6 @@
                 android:id="@+id/REG_user_name_edt"
                 android:layout_width="285dp"
                 android:layout_height="45dp"
-                android:gravity="center"
                 android:hint="@string/user_name_hint"
                 android:maxLength="16"
                 android:textColor="#000000"
@@ -54,7 +53,11 @@
                 android:textAlignment="center"
                 android:imeOptions="actionNext"
                 android:singleLine="true"
-                android:fontFamily="@string/benton_sans_book" />
+                android:letterSpacing=".35"
+                android:paddingLeft="5dp"
+
+                android:fontFamily="@string/benton_sans_book"
+                android:gravity="center" />
 
             <LinearLayout
                 android:id="@+id/phone_no_layout"
@@ -78,8 +81,7 @@
                     android:id="@+id/REG_mobile_no_edt"
                     android:layout_width="189dp"
                     android:layout_height="45dp"
-
-                    android:gravity="center"
+                    android:paddingLeft="5dp"
                     android:hint="@string/phone_hint"
                     android:inputType="number"
                     android:maxLength="10"
@@ -89,7 +91,9 @@
                     android:textSize="13sp"
                     android:background="@layout/text_border"
                     android:textAlignment="center"
-                    android:fontFamily="@string/benton_sans_book" />
+                    android:letterSpacing=".35"
+                    android:fontFamily="@string/benton_sans_book"
+                    android:gravity="center" />
 
             </LinearLayout>
 
@@ -106,6 +110,7 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textAlignment="center"
+                android:letterSpacing=".35"
                 android:fontFamily="@string/benton_sans_book"
                 />
 
@@ -117,8 +122,9 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:text="@string/Policy"
-
+                android:letterSpacing=".35"
                 android:textSize="10sp"
+                android:lineSpacingExtra="5dp"
                 android:textAlignment="center"
                 android:fontFamily="@string/benton_sans_book"
                 android:background="@color/bg_color" />

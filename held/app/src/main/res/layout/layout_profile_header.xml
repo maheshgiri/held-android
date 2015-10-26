@@ -23,23 +23,24 @@
             android:id="@+id/PROFILE_friendReq"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="25dp"
-            android:src="@drawable/friendrequest"
+            android:src="@drawable/friendrequestprofile"
 
             />
         <com.held.customview.CircularImageView
             android:layout_width="62dp"
             android:layout_height="62dp"
             android:id="@+id/PROFILE_pic"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/milana_vayntrub"
-            android:scaleType="centerCrop"/>
+            android:layout_gravity="center"
+            android:src="@drawable/user_icon"
+            android:scaleType="centerCrop"
+             />
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:id="@+id/PROFILE_Chat"
             android:layout_marginLeft="25dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/chat"
+            android:src="@drawable/chatprofile"
             />
     </LinearLayout>
     <LinearLayout

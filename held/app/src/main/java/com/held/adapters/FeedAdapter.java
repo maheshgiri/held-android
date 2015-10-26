@@ -136,7 +136,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.mFeedTxt.setText(mFeedList.get(position).getText());
 
             PicassoCache.getPicassoInstance(mActivity)
-                    .load(AppConstants.BASE_URL + mFeedList.get(position).getThumbnailUri()).transform(mBlurTransformation)
+                    .load(AppConstants.BASE_URL + mFeedList.get(position).getThumbnailUri())
                     .into(holder.mFeedImg);
             holder.mUserNameTxt.setText(mFeedList.get(position).getCreator().getDisplayName());
             setTimeText(mFeedList.get(position).getHeld(),holder.mTimeMinTxt,holder.mTimeSecTxt);
