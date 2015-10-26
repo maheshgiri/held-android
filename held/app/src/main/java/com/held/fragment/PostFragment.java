@@ -180,7 +180,7 @@ public class PostFragment extends ParentFragment {
                 } else {
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
                 }
-                mCaptionEdt.setVisibility(View.GONE);
+               // mCaptionEdt.setVisibility(View.GONE);
 
                 break;
             case R.id.POST_cancel:
