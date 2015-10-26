@@ -189,7 +189,7 @@ private TextView mPolicy;
 
     public void updateToLoginUI(){
         mUserNameEdt.setVisibility(View.GONE);
-        mRegisterBtn.setText("Loign");
+        mRegisterBtn.setText("Login");
     }
 
     public void  launchLoginVerificationActivity(){
