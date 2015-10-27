@@ -199,8 +199,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         case MotionEvent.ACTION_UP:
                             mFeedFragment.showRCView();
                             view.getParent().requestDisallowInterceptTouchEvent(false);
-                            Picasso.with(mActivity).load(AppConstants.BASE_URL + mFeedList.get(position).getImageUri()).
-                                    transform(mBlurTransformation).into(holder.mFeedImg);
+                            Picasso.with(mActivity).load(AppConstants.BASE_URL + mFeedList.get(position).getThumbnailUri()).
+                                    into(holder.mFeedImg);
                             holder.myTimeLayout.setVisibility(View.VISIBLE);
                             if(isFullScreenMode){
                                 if (!mFeedList.get(mPosition).getCreator().getDisplayName().equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
