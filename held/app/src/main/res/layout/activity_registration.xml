@@ -35,6 +35,7 @@
         android:id="@+id/getStartedText"
         android:textSize="13sp"
         android:textColor="@color/friend_req_color"
+        android:letterSpacing=".05"
         android:text="@string/Let_get_started"/>
     <TextView
         android:layout_width="match_parent"
@@ -44,6 +45,7 @@
         android:textSize="11sp"
         android:textColor="@color/friend_req_color"
         android:layout_marginTop="7dp"
+        android:letterSpacing=".05"
         android:id="@+id/psText" />
     <RelativeLayout
         android:layout_width="match_parent"
@@ -105,7 +107,7 @@
                 android:textAlignment="center"
                 android:imeOptions="actionNext"
                 android:singleLine="true"
-                android:letterSpacing=".35"
+                android:letterSpacing=".05"
                 android:paddingLeft="5dp"
 
                 android:fontFamily="@string/benton_sans_book"
@@ -143,7 +145,7 @@
                     android:textSize="13sp"
                     android:background="@layout/text_border"
                     android:textAlignment="center"
-                    android:letterSpacing=".35"
+                    android:letterSpacing=".05"
                     android:fontFamily="@string/benton_sans_book"
                     android:gravity="center" />
 
@@ -161,7 +163,7 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textAlignment="center"
-                android:letterSpacing=".35"
+                android:letterSpacing=".05"
                 android:fontFamily="@string/benton_sans_book"
                 />
 
@@ -173,21 +175,12 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:text="@string/Policy"
-                android:letterSpacing=".35"
+                android:letterSpacing=".05"
                 android:textSize="10sp"
                 android:lineSpacingExtra="5dp"
                 android:textAlignment="center"
                 android:fontFamily="@string/benton_sans_book"
                 android:background="@color/bg_color" />
         </LinearLayout>
-
-
-
-
-
-
-
-
-
     </RelativeLayout>
 </ScrollView>

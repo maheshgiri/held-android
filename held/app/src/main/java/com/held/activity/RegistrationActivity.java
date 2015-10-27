@@ -87,11 +87,11 @@ private TextView mPolicy;
         mspinnerText=(CustomTextView)findViewById(R.id.spinner_Text);
         mAddPicIcon=(ImageView)findViewById(R.id.addimageIcon);
         customRing=(com.held.customview.CircularImageView)findViewById(R.id.customRing);
-        customRing.setBorderWidth(1);
+        customRing.setBorderWidth(2);
 
         circularImage = (CircularImageView)findViewById(R.id.profile_pic);
         circularImage.setBorderColor(getResources().getColor(R.color.friend_req_color));
-        circularImage.setBorderWidth(1);
+        circularImage.setBorderWidth(2);
 
         mAddPicIcon.setOnClickListener(this);
         mBackImg.setOnClickListener(this);
@@ -129,7 +129,7 @@ private TextView mPolicy;
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.REG_back:
-                launchSplashScreen();
+                onBackPressed();
                 break;
             case R.id.REG_register_btn:
                 Utils.hideSoftKeyboard(this);
@@ -434,5 +434,11 @@ private TextView mPolicy;
         startActivityForResult(cropIntent, AppConstants.REQUEST_CROP);
 
         return mCropImageUri;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
