@@ -287,8 +287,8 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                 mPreference.writePreference(getString(R.string.API_session_token), loginUserResponse.getSessionToken());
                 mPreference.writePreference(getString(R.string.API_user_regId), loginUserResponse.getUser().getRid());
 //                if (flag) {
-                   // mPreference.writePreference(getString(R.string.is_first_post), false);
-                    launchFeedScreen();
+                // mPreference.writePreference(getString(R.string.is_first_post), false);
+                launchFeedScreen();
 //                }else {
 //                    launchComposeScreen();
 //                }
@@ -364,8 +364,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                 }
                 break;
             case R.id.VER_back:
-                Intent intent = new Intent(VerificationActivity.this, RegistrationActivity.class);
-                startActivity(intent);
+                onBackPressed();
         }
     }
 
@@ -449,5 +448,14 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                     }
                 });
     }
+    public void launchRegistrationActivity(){
+        Intent intent = new Intent(VerificationActivity.this, RegistrationActivity.class);
+        startActivity(intent);
+    }
 
+    @Override
+    public void onBackPressed() {
+        launchRegistrationActivity();
+        this.finish();
+    }
 }

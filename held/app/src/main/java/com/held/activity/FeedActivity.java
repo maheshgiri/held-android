@@ -261,7 +261,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     @Override
     public void onBackPressed() {
 
-        super.onBackPressed();
+
 
 
         if (mDisplayedFragment instanceof FeedFragment && mDisplayedFragment.isVisible()) {

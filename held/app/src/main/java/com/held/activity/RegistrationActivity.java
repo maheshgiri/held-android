@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -70,6 +71,7 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
     private Uri mFileUri;
     private CircularImageView circularImage;
     private com.held.customview.CircularImageView customRing;
+    private LinearLayout uploadPicLayout;
 
 
 private TextView mPolicy;
@@ -92,7 +94,7 @@ private TextView mPolicy;
         circularImage = (CircularImageView)findViewById(R.id.profile_pic);
         circularImage.setBorderColor(getResources().getColor(R.color.friend_req_color));
         circularImage.setBorderWidth(2);
-
+        uploadPicLayout=(LinearLayout)findViewById(R.id.photoUpload_Layout);
         mAddPicIcon.setOnClickListener(this);
         mBackImg.setOnClickListener(this);
         mRegisterBtn.setOnClickListener(this);
@@ -239,6 +241,7 @@ private TextView mPolicy;
     }
 
     public void updateToLoginUI(){
+        uploadPicLayout.setVisibility(View.GONE);
         mUserNameEdt.setVisibility(View.GONE);
         mRegisterBtn.setText("Loign");
     }
@@ -246,8 +249,8 @@ private TextView mPolicy;
     public void  launchLoginVerificationActivity(){
         String cc[] = mCountryCodes.getSelectedItem().toString().split(" ");
         mCountryCode = cc[0];
-//        tempCode=mCountryCode;
-//        mCountryCode=tempCode.substring(1);
+        tempCode=mCountryCode;
+        mCountryCode=tempCode.substring(1);
         mPrefernce.writePreference(getString(R.string.API_phone_no), mCountryCode + mPhoneNoEdt.getText().toString().trim());
         Intent intent = new Intent(RegistrationActivity.this, VerificationActivity.class);
         intent.putExtra("phoneno", mCountryCode + mPhoneNoEdt.getText().toString().trim());
@@ -438,7 +441,6 @@ private TextView mPolicy;
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+       launchSplashScreen();
     }
 }
