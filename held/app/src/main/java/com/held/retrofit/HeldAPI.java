@@ -89,9 +89,12 @@ public interface HeldAPI {
 
     @Multipart
     @PUT("/users/{user_id}/")
-    void updateProfilePic(@Header("Authorization") String token,@Path("user_id")String uid, @Query("field") String fieldValue, @Part("value") String image,
+    void updateNotificationToken(@Header("Authorization") String token,@Path("user_id")String uid, @Query("field") String fieldValue, @Part("value") String image,
                           Callback<ProfilPicUpdateResponse> profilPicUpdateResponseCallback);
-
+    @Multipart
+    @POST("/registrations/{registration_id}/pic")
+    void updateProfilePic(@Header("Authorization") String token,@Path("registration_id")String uid,@Part("file") TypedFile photoFile,
+                          Callback<ProfilPicUpdateResponse> profilPicUpdateResponseCallback);
     @GET("/users/{user_id}/")
     void searchUser(@Header("Authorization") String token, @Path("user_id") String uid, Callback<SearchUserResponse> searchUserResponseCallback);
 
@@ -154,7 +157,8 @@ public interface HeldAPI {
 
 
 
-
+    @POST("/registrations/{registration_id}/pic")
+    void setProfilePicRegistration();
     ///////////////////************OLD APIs**************///////////////////////////////
 
     @GET("/posts/{post_id}/holds/{hold_id}/")
