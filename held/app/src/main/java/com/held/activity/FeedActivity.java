@@ -1,5 +1,6 @@
 package com.held.activity;
 
+import android.app.Activity;
 import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -247,39 +248,40 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         }
     }
 
-    private void launchProfileScreen(String uid) {
+    private void launchProfileScreen(String uname) {
         Intent intent = new Intent(FeedActivity.this, ProfileActivity.class);
-        intent.putExtra("user_id", uid);
+        intent.putExtra("user_id", uname);
         startActivity(intent);
     }
     private void launchSearchScreen(String uname) {
         Intent intent = new Intent(FeedActivity.this, SearchActivity.class);
-        intent.putExtra("userName",uname);
+        intent.putExtra("userName", uname);
         startActivity(intent);
     }
     @Override
     public void onBackPressed() {
 
         super.onBackPressed();
-/*
+
 
         if (mDisplayedFragment instanceof FeedFragment && mDisplayedFragment.isVisible()) {
-
+            this.finishActivity(Activity.RESULT_OK);
+            this.finish();
           //  this.getSupportFragmentManager().beginTransaction().remove(new FeedFragment()).commit();
-            */
+
 /*super.onBackPressed();
             updateToolbar(true, false, true, false, true, true, false, "");
             mDisplayedFragment = Utils.getCurrVisibleFragment(this);*//*
 
             Timber.d("finishing feed activity");
 
-            this.finishActivity(Activity.RESULT_OK);
+            */
         }
         else {
             Timber.d("Calling super.onbackpressed");
             super.onBackPressed();
         }
-*/
+
 
 
     }

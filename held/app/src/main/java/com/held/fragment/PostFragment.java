@@ -110,11 +110,7 @@ public class PostFragment extends ParentFragment {
         mPostTxt.setVisibility(View.GONE);
         TextView mTitle = (TextView)view.findViewById(R.id.tv_title);
         PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
-        if (muserProfileUrl==null&&myhelper.readPreference(getString(R.string.is_first_post),false)) {
-            mTitle.setText(getString(R.string.title_profilepic_upload));
-        }else{
-            mTitle.setText(getString(R.string.title_photo_upload));
-        }
+
 
         mTimeLayout=(RelativeLayout)view.findViewById(R.id.time_layout);
         mBackImg.setOnClickListener(this);
@@ -354,7 +350,7 @@ public class PostFragment extends ParentFragment {
                     File photo = new File(Environment.getExternalStorageDirectory(),
                             "/HELD" + sourceFileName);
                     Uri photoUri = Uri.fromFile(photo);
-                    doCrop(photoUri);
+                    //doCrop(photoUri);
                     mFileUri=photoUri;
                     mFile = new File(photoUri.getPath());
                     updateBoxUI();
@@ -362,7 +358,7 @@ public class PostFragment extends ParentFragment {
 
                 case AppConstants.REQUEST_GALLERY:
                     Uri PhotoURI = data.getData();
-                    doCrop(PhotoURI);
+                   // doCrop(PhotoURI);
                     mFileUri=PhotoURI;
                     mFile = new File(getRealPathFromURI(PhotoURI));
                     updateBoxUI();
@@ -415,6 +411,7 @@ public class PostFragment extends ParentFragment {
         Bitmap mAttachment = BitmapFactory.decodeFile(mFile.getAbsolutePath(),
                 options);
         mImageToUpload.setImageBitmap(mAttachment);
+        mImageToUpload.setImageBitmap(mAttachment);
 //        PreferenceHelper.getInstance(getCurrActivity()).readPreference("isFirstPostCreated", false)
 
             mCaptionEdt.setVisibility(View.VISIBLE);
@@ -436,12 +433,12 @@ public class PostFragment extends ParentFragment {
                     myhelper.writePreference(getString(R.string.is_first_post), true);
 
                     Timber.i("This is user's first post. Setting it as profile image");
-                    callPicUpdateApi(postResponse.getImageUri());
+                   // callPicUpdateApi(postResponse.getImageUri());
                     callThumbnailUpdateApi(postResponse.getThumbnailUri());
                     launchProfileScreen();
                 }
                 else {
-                    callThumbnailUpdateApi(postResponse.getThumbnailUri());
+                    //callThumbnailUpdateApi(postResponse.getThumbnailUri());
                     launchFeedScreen();
                 }
 
@@ -471,12 +468,12 @@ public class PostFragment extends ParentFragment {
     //todo: what is this function doing??
     //Todo: put notification token in user object
     private void callThumbnailUpdateApi(String image) {
-        HeldService.getService().updateProfilePic(mPrefernce.readPreference(getString(R.string.API_session_token)),
-                mPrefernce.readPreference(getString(R.string.API_user_regId)),"notification_token",mPrefernce.readPreference(getString(R.string.API_gcm_registration_key)), new Callback<ProfilPicUpdateResponse>() {
+        HeldService.getService().updateNotificationToken(mPrefernce.readPreference(getString(R.string.API_session_token)),
+                mPrefernce.readPreference(getString(R.string.API_user_regId)), "notification_token", mPrefernce.readPreference(getString(R.string.API_gcm_registration_key)), new Callback<ProfilPicUpdateResponse>() {
                     @Override
                     public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
                         DialogUtils.stopProgressDialog();
-                        Timber.i(TAG,"Push notification token complete");
+                        Timber.i(TAG, "Push notification token complete");
 
                     }
 
@@ -493,29 +490,29 @@ public class PostFragment extends ParentFragment {
         );
     }
 
-    private void callPicUpdateApi(String image) {
-        HeldService.getService().updateProfilePic(mPrefernce.readPreference(getString(R.string.API_session_token)),
-                mPrefernce.readPreference(getString(R.string.API_user_regId)), "pic", image, new Callback<ProfilPicUpdateResponse>() {
-                    @Override
-                    public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
-                        DialogUtils.stopProgressDialog();
-                  //      PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_user_img), AppConstants.BASE_URL + profilPicUpdateResponse.getPic());
-                   //     UiUtils.showSnackbarToast(getView(), "User Profile  Pic Updated..");
-
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        DialogUtils.stopProgressDialog();
-                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
-                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
-                            UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
-                        } else
-                            UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
-                    }
-                }
-        );
-    }
+//    private void callPicUpdateApi(String image) {
+//        HeldService.getService().updateProfilePic(mPrefernce.readPreference(getString(R.string.REG_Session_token)),
+//                mPrefernce.readPreference(getString(R.string.REG_RID)), image, new Callback<ProfilPicUpdateResponse>() {
+//                    @Override
+//                    public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
+//                        DialogUtils.stopProgressDialog();
+//                  //      PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_user_img), AppConstants.BASE_URL + profilPicUpdateResponse.getPic());
+//                   //     UiUtils.showSnackbarToast(getView(), "User Profile  Pic Updated..");
+//
+//                    }
+//
+//                    @Override
+//                    public void failure(RetrofitError error) {
+//                        DialogUtils.stopProgressDialog();
+//                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+//                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+//                            UiUtils.showSnackbarToast(getView(), json.substring(json.indexOf(":") + 2, json.length() - 2));
+//                        } else
+//                            UiUtils.showSnackbarToast(getView(), "Some Problem Occurred");
+//                    }
+//                }
+//        );
+//    }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
@@ -562,6 +559,12 @@ public class PostFragment extends ParentFragment {
                                 .placeholder(R.drawable.user_icon)
                                 .into(mUserImg);
                         muserProfileUrl=searchUserResponse.getUser().getProfilePic();
+                        if (muserProfileUrl.isEmpty()) {
+                            mTitle.setText(getString(R.string.title_profilepic_upload));
+                        }else{
+                            mTitle.setText(getString(R.string.title_photo_upload));
+                        }
+
                     }
 
                     @Override

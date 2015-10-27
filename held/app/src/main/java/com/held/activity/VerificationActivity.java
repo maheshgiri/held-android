@@ -286,12 +286,12 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                 mPreference.writePreference(getString(R.string.API_user_name), loginUserResponse.getUser().getDisplayName());
                 mPreference.writePreference(getString(R.string.API_session_token), loginUserResponse.getSessionToken());
                 mPreference.writePreference(getString(R.string.API_user_regId), loginUserResponse.getUser().getRid());
-                if (flag) {
-                    mPreference.writePreference(getString(R.string.is_first_post), false);
+//                if (flag) {
+                   // mPreference.writePreference(getString(R.string.is_first_post), false);
                     launchFeedScreen();
-                }else {
-                    launchComposeScreen();
-                }
+//                }else {
+//                    launchComposeScreen();
+//                }
                /* if (loginUserResponse.isLogin()) {
                     PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSession_token());
                   // PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_registration_key), loginUserResponse.getRid());
