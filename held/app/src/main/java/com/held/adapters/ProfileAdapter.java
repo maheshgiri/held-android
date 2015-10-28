@@ -176,8 +176,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         case MotionEvent.ACTION_UP:
                             mProfileFragment.showRCView();
                             view.getParent().requestDisallowInterceptTouchEvent(false);
-                            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position-1).getImageUri()).
-                                    transform(mBlurTransformation).into(viewHolder.mFeedImg);
+                            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position-1).getImageUri())
+                                    .into(viewHolder.mFeedImg);
                             viewHolder.myTimeLayout.setVisibility(View.VISIBLE);
                             if(isFullScreenMode){
                                 if (!mPostList.get(mPosition).getCreator().getDisplayName().equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {

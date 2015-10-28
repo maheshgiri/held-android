@@ -2,6 +2,7 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,15 +22,68 @@
             android:layout_marginTop="23dp"
             android:src="@drawable/back" />
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/photoUpload_Layout"
+    android:orientation="vertical"
+    android:layout_below="@+id/REG_back">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/getStartedText"
+        android:textSize="13sp"
+        android:textColor="@color/friend_req_color"
+        android:letterSpacing=".05"
+        android:text="@string/Let_get_started"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/ps"
+        android:textSize="11sp"
+        android:textColor="@color/friend_req_color"
+        android:layout_marginTop="7dp"
+        android:letterSpacing=".05"
+        android:id="@+id/psText" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="17dp"
+        android:gravity="center">
+        <com.held.customview.CircularImageView
+            android:layout_width="83dp"
+            android:layout_height="83dp"
+            android:layout_centerInParent="true"
+            android:id="@+id/customRing"
+            />
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/profile_pic"
+            android:scaleType="centerCrop"
+            app:border="true"
+            android:layout_centerInParent="true"
+            />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imgLogo"
-            android:src="@drawable/logo"
-            android:layout_marginTop="70dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"/>
+            android:src="@drawable/addimage"
+            android:scaleType="center"
+            android:layout_gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
+            android:id="@+id/addimageIcon"
+            />
 
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,8 +91,8 @@
             android:id="@+id/main_layout"
             android:gravity="center"
             android:background="@color/bg_color"
-            android:layout_marginTop="40dp"
-            android:layout_below="@id/imgLogo"
+            android:layout_marginTop="23dp"
+            android:layout_below="@id/photoUpload_Layout"
             android:layout_centerInParent="true">
             <EditText
                 android:id="@+id/REG_user_name_edt"
@@ -53,7 +107,7 @@
                 android:textAlignment="center"
                 android:imeOptions="actionNext"
                 android:singleLine="true"
-                android:letterSpacing=".35"
+                android:letterSpacing=".05"
                 android:paddingLeft="5dp"
 
                 android:fontFamily="@string/benton_sans_book"
@@ -91,7 +145,7 @@
                     android:textSize="13sp"
                     android:background="@layout/text_border"
                     android:textAlignment="center"
-                    android:letterSpacing=".35"
+                    android:letterSpacing=".05"
                     android:fontFamily="@string/benton_sans_book"
                     android:gravity="center" />
 
@@ -101,8 +155,7 @@
                 android:id="@+id/REG_register_btn"
                 android:layout_width="285dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="54dp"
-                android:layout_marginRight="4dp"
+                android:layout_marginTop="22dp"
                 android:background="@drawable/register_btn_selector"
                 android:gravity="center"
                 android:text="Register"
@@ -110,7 +163,7 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textAlignment="center"
-                android:letterSpacing=".35"
+                android:letterSpacing=".05"
                 android:fontFamily="@string/benton_sans_book"
                 />
 
@@ -122,21 +175,12 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:text="@string/Policy"
-                android:letterSpacing=".35"
+                android:letterSpacing=".05"
                 android:textSize="10sp"
                 android:lineSpacingExtra="5dp"
                 android:textAlignment="center"
                 android:fontFamily="@string/benton_sans_book"
                 android:background="@color/bg_color" />
         </LinearLayout>
-
-
-
-
-
-
-
-
-
     </RelativeLayout>
 </ScrollView>
