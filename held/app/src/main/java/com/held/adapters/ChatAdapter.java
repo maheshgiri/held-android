@@ -3,6 +3,7 @@ package com.held.adapters;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -128,19 +129,23 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
             ViewHolder0 viewHolder0 = (ViewHolder0) holder;
-            viewHolder0.mUserNameTxt.setText(currentUser.getDisplayName());
+//            viewHolder0.mUserNameTxt.setText(currentUser.getDisplayName());
             String ts = mPostChatData.get(position).getDate();
             viewHolder0.mDateTxt.setText(Utils.convertDate(ts));
             viewHolder0.mDesTxt.setText(mPostChatData.get(position).getText());
-            Picasso.with(mActivity).load(AppConstants.BASE_URL + currentUser.getProfilePic()).into(viewHolder0.mProfilePic);
+            setTypeFace(viewHolder0.mDateTxt, "book");
+            setTypeFace(viewHolder0.mDesTxt,"book");
+//            Picasso.with(mActivity).load(AppConstants.BASE_URL + currentUser.getProfilePic()).into(viewHolder0.mProfilePic);
         } else if(holder instanceof ViewHolder2) {
 
 
             ViewHolder2 viewHolder = (ViewHolder2) holder;
-            viewHolder.mUserNameTxt.setText(friendUser.getDisplayName());
+           // viewHolder.mUserNameTxt.setText(friendUser.getDisplayName());
             String ts = mPostChatData.get(position).getDate();
             viewHolder.mDateTxt.setText(Utils.convertDate(ts));
             viewHolder.mDesTxt.setText(mPostChatData.get(position).getText());
+            setTypeFace(viewHolder.mDateTxt,"book");
+            setTypeFace(viewHolder.mDesTxt,"book");
             Picasso.with(mActivity).load(AppConstants.BASE_URL + friendUser.getProfilePic()).into(viewHolder.mProfilePic);
         }
         runEnterAnimation(holder.itemView, position);
@@ -162,10 +167,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public ViewHolder0(View itemView) {
             super(itemView);
-            mUserNameTxt = (TextView) itemView.findViewById(R.id.CHATRIGHT_user_name_txt);
+//            mUserNameTxt = (TextView) itemView.findViewById(R.id.CHATRIGHT_user_name_txt);
             mDesTxt = (TextView) itemView.findViewById(R.id.CHATRIGHT_des_txt);
             mDateTxt = (TextView) itemView.findViewById(R.id.CHATRIGHT_date_txt);
-            mProfilePic = (ImageView) itemView.findViewById(R.id.CHATRIGHT_profile_img);
+//            mProfilePic = (ImageView) itemView.findViewById(R.id.CHATRIGHT_profile_img);
         }
     }
 
@@ -176,7 +181,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public ViewHolder2(View itemView) {
             super(itemView);
-            mUserNameTxt = (TextView) itemView.findViewById(R.id.CHATLEFT_user_name_txt);
+//            mUserNameTxt = (TextView) itemView.findViewById(R.id.CHATLEFT_user_name_txt);
             mDesTxt = (TextView) itemView.findViewById(R.id.CHATLEFT_des_txt);
             mDateTxt = (TextView) itemView.findViewById(R.id.CHATLEFT_date_txt);
             mProfilePic = (ImageView) itemView.findViewById(R.id.CHATLEFT_profile_img);
@@ -211,6 +216,16 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         }
                     })
                     .start();
+        }
+    }
+    public void setTypeFace(TextView tv,String type){
+        Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
+        Typeface book = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansBook.otf");
+        if(type=="book"){
+            tv.setTypeface(book);
+
+        }else {
+            tv.setTypeface(medium);
         }
     }
 }

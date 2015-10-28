@@ -9,8 +9,10 @@ import android.util.Log;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -64,6 +66,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
 
+
        if (getIntent() != null && getIntent().getExtras() != null) {
             if (getIntent().getExtras().getBoolean("isProfile")) {
                 launchProfileScreen(mPreference.readPreference(getString(R.string.API_user_name)));
@@ -87,6 +90,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mTitle.setTypeface(medium);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
         mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(mHeld_toolbar);
+        getSupportActionBar().getThemedContext();
       //  setSupportActionBar(mHeld_toolbar);
 
         mChat.setOnClickListener(this);
@@ -138,7 +143,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 //       }catch (Exception e){
 //           e.printStackTrace();
 //       }
-
+//        Window window = this.getWindow();
+//        window.setStatusBarColor(this.getResources().getColor(R.color.black));
 
         mSearch_edt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -445,7 +451,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                         Bundle bundle = new Bundle();
 
                         bundle.putString("name", searchUserResponse.getDisplayName());
-                       // bundle.putString("image", searchUserResponse.getPic());
+                        // bundle.putString("image", searchUserResponse.getPic());
                         perform(AppConstants.LAUNCH_FRIEND_REQUEST_SCREEN, bundle);
 
                     }
