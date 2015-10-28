@@ -6,5 +6,6 @@
     android:gravity="center"
     android:textColor="#acacac"
     android:textSize="13sp"
+    android:letterSpacing=".05"
     android:fontFamily="@string/benton_sans_book"
     android:id="@+id/spinner_Text"/>

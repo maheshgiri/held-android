@@ -76,6 +76,7 @@
             android:textSize="15sp"
             android:textColor="@color/userName_color"
             android:layout_gravity="center"
+            android:letterSpacing=".05"
             />
     </LinearLayout>
     </LinearLayout>
@@ -102,12 +103,14 @@
                 android:gravity="center"
                 android:textSize="15sp"
                 android:textColor="@color/userName_color"
+                android:letterSpacing=".05"
                 android:id="@+id/PROFILE_count_photos"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Photos"
                 android:textSize="11sp"
+                android:letterSpacing=".05"
                 android:textColor="@color/userName_color"
                 android:id="@+id/PROFILE_txt_photos"/>
         </LinearLayout>
@@ -127,13 +130,15 @@
             android:gravity="center"
             android:textSize="15sp"
             android:textColor="@color/userName_color"
-            android:id="@+id/PROFILE_count_friends"/>
+            android:id="@+id/PROFILE_count_friends"
+            android:letterSpacing=".05"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Friends"
             android:gravity="center"
             android:textSize="11sp"
+            android:letterSpacing=".05"
             android:textColor="@color/userName_color"
             android:id="@+id/PROFILE_txt_friends"/>
     </LinearLayout>
