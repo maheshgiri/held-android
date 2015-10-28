@@ -54,9 +54,11 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         mSearchEdt = (EditText) findViewById(R.id.toolbar_search_edt_txt);
         mSearchEdt.setVisibility(View.GONE);
         mSearch=(ImageView)findViewById(R.id.toolbar_search_img);
-        mChat.setImageResource(R.drawable.back);
+        mChat.setImageResource(R.drawable.camera);
         mCamera.setImageResource(R.drawable.menu);
         mCamera.setVisibility(View.VISIBLE);
+        mSearch.setVisibility(View.GONE);
+        mSearchEdt.setVisibility(View.GONE);
         toolbar_divider=(View)findViewById(R.id.toolbar_divider);
         mCamera.setOnClickListener(this);
         mNotification.setOnClickListener(this);
@@ -95,29 +97,14 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.toolbar_chat_img:
 //                if (mDisplayFragment instanceof ProfileFragment) {
-                    onBackPressed();
+                    //onBackPressed();
+                launchCreatePostScreen();
 
                 break;
             case R.id.toolbar_notification_img:
                 launchNotificationScreen();
                 break;
-            case R.id.toolbar_search_img:
-                Timber.d(TAG, "toolbar search image has been clicked");
-                if(firstClick) {
-                    visibleTextView();
-                    firstClick=false;
-                }
-                else {
-                    mUserNameForSearch= mSearchEdt.getText().toString();
-                    Timber.i("User Name for search :"+mUserNameForSearch);
-                    mSearchEdt.setText("");
-                    hideTextView();
-                    firstClick=true;
-                    launchSearchScreen(mUserNameForSearch);
 
-                }
-
-                break;
         }
 
     }
@@ -153,6 +140,10 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     private void launchSearchScreen(String uname) {
         Intent intent = new Intent(ProfileActivity.this, SearchActivity.class);
         intent.putExtra("userName", uname);
+        startActivity(intent);
+    }
+    private void launchCreatePostScreen() {
+        Intent intent = new Intent(ProfileActivity.this, PostActivity.class);
         startActivity(intent);
     }
 }
