@@ -94,6 +94,7 @@ private TextView mPolicy;
         circularImage = (CircularImageView)findViewById(R.id.profile_pic);
         circularImage.setBorderColor(getResources().getColor(R.color.friend_req_color));
         circularImage.setBorderWidth(2);
+        circularImage.setVisibility(View.GONE);
         uploadPicLayout=(LinearLayout)findViewById(R.id.photoUpload_Layout);
         mAddPicIcon.setOnClickListener(this);
         mBackImg.setOnClickListener(this);
@@ -148,6 +149,7 @@ private TextView mPolicy;
             case R.id.addimageIcon:
                 openImageIntent();
                 customRing.setVisibility(View.GONE);
+                circularImage.setVisibility(View.VISIBLE);
         }
     }
 
