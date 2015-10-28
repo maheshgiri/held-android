@@ -260,10 +260,6 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     }
     @Override
     public void onBackPressed() {
-
-
-
-
         if (mDisplayedFragment instanceof FeedFragment && mDisplayedFragment.isVisible()) {
             this.finishActivity(Activity.RESULT_OK);
             this.finish();
