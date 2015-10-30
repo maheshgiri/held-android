@@ -18,7 +18,7 @@
     <string name="Policy">By using Held you agree to the Terms, Cookie \nPolicy and Privacy Policy"</string>
     <string name="Let_get_started">Lets get started by making your Profile</string>
     <string name="ps">ps: Use that dashing pic you took </string>
-
+<string name="login_header">Login</string>
     <!--API DATA-->
     <string name="API_session_token">SESSION_TOKEN</string>
     <string name="API_phone_no">PHONE_NUMBER</string>
