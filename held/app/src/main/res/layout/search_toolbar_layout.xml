@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/search_txt"
         android:editable="true"
+        android:letterSpacing=".05"
         android:textSize="13sp"
         android:textColor="@color/userName_color"
         android:text="Annawilkinson"
@@ -47,6 +48,7 @@
         android:layout_centerInParent="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="20dp"
+        android:letterSpacing=".05"
         />
    </RelativeLayout>
 </android.support.v7.widget.Toolbar>

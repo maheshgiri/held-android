@@ -31,7 +31,7 @@
         android:textSize="16sp"
         android:layout_centerInParent="true"
         android:text="Set profile picture"
-
+        android:letterSpacing=".05"
          />
 
     <Button
@@ -51,6 +51,7 @@
         android:background="@color/new_btn_color"
         android:fontFamily="@string/benton_sans_book"
         android:textAlignment="center"
+        android:letterSpacing=".05"
         />
 </RelativeLayout>
     <LinearLayout

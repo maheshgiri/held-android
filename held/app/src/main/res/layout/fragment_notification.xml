@@ -44,6 +44,7 @@
                 android:text="Friend\nRequests"
                 android:textColor="@color/white"
                 android:textSize="12sp"
+                android:letterSpacing=".05"
                  />
 
             <TextView
@@ -57,6 +58,7 @@
                 android:visibility="gone"
                 android:textAlignment="center"
                 android:gravity="center"
+                android:letterSpacing=".05"
                 android:layout_alignBaseline="@+id/NOTIFY_friend_request"
                 android:layout_alignBottom="@+id/NOTIFY_friend_request"
                 android:layout_toRightOf="@+id/NOTIFY_friend_request"
@@ -79,6 +81,7 @@
                 android:text="Download\nRequests"
                 android:textColor="@color/unselected_tab_txt_color"
                 android:textSize="12sp"
+                android:letterSpacing=".05"
                  />
 
             <TextView
@@ -92,6 +95,7 @@
                 android:visibility="gone"
                 android:textAlignment="center"
                 android:gravity="center"
+                android:letterSpacing=".05"
                 android:layout_alignBaseline="@+id/NOTIFY_download_request"
                 android:layout_alignBottom="@+id/NOTIFY_download_request"
                 android:layout_toRightOf="@+id/NOTIFY_download_request"
@@ -117,6 +121,7 @@
                 android:text="Activity\nFeed"
                 android:textColor="@color/unselected_tab_txt_color"
                 android:textSize="12sp"
+                android:letterSpacing=".05"
                 />
 
             <TextView
@@ -130,6 +135,7 @@
                 android:textAlignment="center"
                 android:gravity="center"
                 android:visibility="gone"
+                android:letterSpacing=".05"
                 android:layout_alignBaseline="@+id/NOTIFY_feed_activity"
                 android:layout_alignBottom="@+id/NOTIFY_feed_activity"
                 android:layout_toRightOf="@+id/NOTIFY_feed_activity"

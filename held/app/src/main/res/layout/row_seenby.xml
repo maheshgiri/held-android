@@ -25,6 +25,7 @@
         android:textSize="13sp"
         android:textColor="@color/userName_color"
         android:layout_centerVertical="true"
+        android:letterSpacing=".05"
         android:layout_toRightOf="@+id/profile_img"
         android:layout_toEndOf="@+id/profile_img"
         />
@@ -37,7 +38,7 @@
         android:textSize="11sp"
         android:background="@color/friend_btn_color"
         android:layout_margin="10dp"
-
+        android:letterSpacing=".05"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"

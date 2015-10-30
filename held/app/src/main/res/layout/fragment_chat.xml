@@ -65,11 +65,14 @@
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/CHAT_submit_btn"
                 android:background="@layout/chat_txt_border"
-                android:maxLength="100"
+                android:minLines="1"
+                android:singleLine="false"
+                android:scrollbars="vertical"
                 android:textColor="@color/black"
                 android:textSize="13sp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
+                android:letterSpacing=".05"
              />
 
             <Button
@@ -82,6 +85,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="13sp"
+                android:letterSpacing=".05"
                  />
         </RelativeLayout>
 

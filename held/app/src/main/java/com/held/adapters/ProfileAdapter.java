@@ -122,6 +122,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             PicassoCache.getPicassoInstance(mActivity)
                     .load(AppConstants.BASE_URL + user.getProfilePic())
                     .into(viewHolderHead.mProfilePic);
+            PicassoCache.getPicassoInstance(mActivity)
+                    .load(AppConstants.BASE_URL + user.getProfilePic())
+                    .noFade()
+                    .into(viewHolderHead.mCircularImage);
 
             setTypeFace(viewHolderHead.mUserName, "medium");
             setTypeFace(viewHolderHead.mFriendCount,"medium");
@@ -176,7 +180,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         case MotionEvent.ACTION_UP:
                             mProfileFragment.showRCView();
                             view.getParent().requestDisallowInterceptTouchEvent(false);
-                            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position-1).getImageUri())
+                            Picasso.with(mActivity).load(AppConstants.BASE_URL + mPostList.get(position-1).getThumbnailUri())
                                     .into(viewHolder.mFeedImg);
                             viewHolder.myTimeLayout.setVisibility(View.VISIBLE);
                             if(isFullScreenMode){
@@ -253,7 +257,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
-
+        private com.mikhaellopez.circularimageview.CircularImageView mCircularImage;
         private CircularImageView mProfilePic;
         private TextView mUserName, mFriendCount, mPostCount,mfriendTxt,mPostTxt;
 
@@ -265,6 +269,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             mPostCount = (TextView) itemView.findViewById(R.id.PROFILE_count_photos);
             mfriendTxt = (TextView) itemView.findViewById(R.id.PROFILE_txt_friends);
             mPostTxt = (TextView) itemView.findViewById(R.id.PROFILE_txt_photos);
+            mCircularImage=(com.mikhaellopez.circularimageview.CircularImageView)itemView.findViewById(R.id.circular_Profile_pic);
 
         }
     }

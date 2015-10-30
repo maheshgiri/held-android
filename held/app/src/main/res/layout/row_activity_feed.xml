@@ -31,11 +31,13 @@
                 android:text="Hello"
                 android:id="@+id/activity_feed_txt"
                 android:textSize="12sp"
+                android:letterSpacing=".05"
                 android:textColor="@color/activity_feed_txt_color"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hello"
+                android:letterSpacing=".05"
                 android:id="@+id/feed_desc_time"
                 android:textSize="12sp"/>
         </LinearLayout>
@@ -46,6 +48,7 @@
             android:id="@+id/activity_feed_time_txt"
             android:layout_alignParentRight="true"
             android:textColor="@color/chat_time_color"
+            android:letterSpacing=".05"
             android:textSize="12sp"/>
 
 

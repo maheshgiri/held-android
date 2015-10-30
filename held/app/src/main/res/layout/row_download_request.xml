@@ -24,6 +24,7 @@
             android:layout_marginStart="10dp"
             android:layout_alignTop="@+id/user_profile_pic"
             android:text="UserName"
+            android:letterSpacing=".05"
             android:textColor="@color/userName_color"
             />
 
@@ -39,7 +40,7 @@
                 android:layout_alignBottom="@+id/user_profile_pic"
                 android:layout_alignLeft="@+id/user_name_txt"
                 android:layout_alignStart="@+id/user_name_txt"
-
+                android:letterSpacing=".05"
                 />
 
             <Button
@@ -52,7 +53,8 @@
                 android:textColor="@color/bg_color"
                 android:layout_toRightOf="@+id/acceptBtn"
                 android:layout_alignTop="@+id/acceptBtn"
-                android:layout_marginLeft="12dp" />
+                android:layout_marginLeft="12dp"
+                android:letterSpacing=".05"/>
 
 
         <ImageView

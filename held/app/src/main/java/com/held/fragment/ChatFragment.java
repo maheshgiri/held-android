@@ -2,6 +2,7 @@ package com.held.fragment;
 
 
 import android.content.BroadcastReceiver;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.held.activity.R;
 import com.held.adapters.ChatAdapter;
@@ -137,7 +139,8 @@ public class ChatFragment extends ParentFragment {
         mChatAdapter = new ChatAdapter(getCurrActivity(), mPostChatData);
         mChatList.setLayoutManager(mLayoutManager);
         mChatList.setAdapter(mChatAdapter);
-
+        setTypeFace(mMessageEdt,"book");
+        setTypeFace(mSubmitBtn,"book");
         if (getCurrActivity().getNetworkStatus()) {
             if (mIsOneToOne == true) {
                 callGetUserPostApi();
@@ -244,7 +247,7 @@ public class ChatFragment extends ParentFragment {
                     public void success(PostChatResponse postChatResponse, Response response) {
                         Timber.d("friends chat call success");
                         misLastPage = postChatResponse.isLastPage();
-                        if(!misLastPage){
+                        if (!misLastPage) {
                             mStart = postChatResponse.getNext();
                         }
                         mPostChatData.addAll(postChatResponse.getObjects());
@@ -274,7 +277,7 @@ public class ChatFragment extends ParentFragment {
                     @Override
                     public void success(PostChatResponse postChatResponse, Response response) {
                         misLastPage = postChatResponse.isLastPage();
-                        if(!postChatResponse.isLastPage()){
+                        if (!postChatResponse.isLastPage()) {
                             mStart = postChatResponse.getNext();
                         }
                         mPostChatData.addAll(postChatResponse.getObjects());
@@ -382,7 +385,7 @@ public class ChatFragment extends ParentFragment {
                         PicassoCache.getPicassoInstance(getCurrActivity())
                                 .load(AppConstants.BASE_URL + postResponse.getImageUri())
                                 .transform(mBlurTransformation)
-                                //.placeholder(R.drawable.milana_vayntrub)
+                                        //.placeholder(R.drawable.milana_vayntrub)
                                 .into(mChatBackImage);
                     }
 
@@ -408,5 +411,25 @@ public class ChatFragment extends ParentFragment {
 
                     }
                 });
+    }
+    public void setTypeFace(TextView tv,String type){
+        Typeface medium = Typeface.createFromAsset(this.getResources().getAssets(), "BentonSansMedium.otf");
+        Typeface book = Typeface.createFromAsset(this.getResources().getAssets(), "BentonSansBook.otf");
+        if(type=="book"){
+            tv.setTypeface(book);
+
+        }else {
+            tv.setTypeface(medium);
+        }
+    }
+    public void setTypeFace(Button tv,String type){
+        Typeface medium = Typeface.createFromAsset(this.getResources().getAssets(), "BentonSansMedium.otf");
+        Typeface book = Typeface.createFromAsset(this.getResources().getAssets(), "BentonSansBook.otf");
+        if(type=="book"){
+            tv.setTypeface(book);
+
+        }else {
+            tv.setTypeface(medium);
+        }
     }
 }
