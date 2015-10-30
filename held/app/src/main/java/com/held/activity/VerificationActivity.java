@@ -108,12 +108,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         mNetWorkStatus = NetworkUtil.isInternetConnected(getApplicationContext());
         NetworkStateReceiver.registerOnNetworkChangeListener(this);
         mPreference =PreferenceHelper.getInstance(this);
-        if(flag) {
-            mUserNameTxt.setVisibility(View.GONE);
-            callLoginResendSmsApi();
-        }
-        else
-            callResendSmsApi();
+
 
 
         mFirstEdt.addTextChangedListener(new TextWatcher() {
@@ -430,7 +425,15 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
 
                     @Override
                     public void failure(RetrofitError error) {
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            String strError="";
 
+                                strError="Invalid User..";
+                                UiUtils.showSnackbarToast(findViewById(R.id.root_view),strError);
+
+                        } else
+                            UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Some Problem Occurred");
                     }
                 });
     }

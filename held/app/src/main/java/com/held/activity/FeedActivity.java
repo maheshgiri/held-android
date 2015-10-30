@@ -2,6 +2,7 @@ package com.held.activity;
 
 import android.app.Activity;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -51,7 +52,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     private GestureDetector gestureDetector;
     private Toolbar mHeld_toolbar;
     private final String TAG = "FeedActivity";
-    private RelativeLayout mPosttoolbar;
+    private RelativeLayout mPosttoolbar,statusbar;
     private int mPosition = 1;
     private PreferenceHelper mPreference;
     private Toolbar toolbar;
@@ -63,11 +64,24 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "starting feed activity");
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
 
+//        getSupportActionBar().hide();
+//        statusbar=(RelativeLayout)findViewById(R.id.statusbar);
+//        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT)
+//        {
+//            statusbar.setVisibility(View.VISIBLE);
+//        }
+//        else
+//        {
+//            statusbar.setVisibility(View.GONE);
+//        }
 
-       if (getIntent() != null && getIntent().getExtras() != null) {
+
+        if (getIntent() != null && getIntent().getExtras() != null) {
             if (getIntent().getExtras().getBoolean("isProfile")) {
                 launchProfileScreen(mPreference.readPreference(getString(R.string.API_user_name)));
             }
@@ -90,8 +104,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mTitle.setTypeface(medium);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
         mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(mHeld_toolbar);
-        getSupportActionBar().getThemedContext();
+//        setSupportActionBar(mHeld_toolbar);
+//        getSupportActionBar().getThemedContext();
       //  setSupportActionBar(mHeld_toolbar);
 
         mChat.setOnClickListener(this);
