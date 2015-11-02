@@ -3,6 +3,7 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/bg_color">
     <LinearLayout
@@ -15,14 +16,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="30dp"
         android:id="@+id/profile_img_with_icon">
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:id="@+id/PROFILE_friendReq"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="7dp"
+            android:layout_marginRight="12.50dp"
             android:src="@drawable/friendrequestprofile"
 
             />
@@ -30,33 +31,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             >
-            <com.held.customview.CircularImageView
-            android:layout_width="62dp"
-            android:layout_height="62dp"
-            android:id="@+id/PROFILE_pic"
-            android:layout_gravity="center"
-            android:src="@drawable/user_icon"
-            android:scaleType="centerCrop"
-                android:layout_centerInParent="true"
-                android:alpha=".40"
-            />
-            <com.mikhaellopez.circularimageview.CircularImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+            <!--<com.held.customview.CircularImageView-->
+            <!--android:layout_width="62dp"-->
+            <!--android:layout_height="62dp"-->
+            <!--android:id="@+id/PROFILE_pic"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:src="@drawable/user_icon"-->
+            <!--android:scaleType="centerCrop"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:alpha=".40"-->
+            <!--/>-->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="62.50dp"
+                android:layout_height="62.50dp"
                 android:layout_gravity="center"
                 android:layout_centerInParent="true"
                 android:id="@+id/circular_Profile_pic"
                 />
-
-
-
         </RelativeLayout>
 
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:id="@+id/PROFILE_Chat"
-            android:layout_marginLeft="7dp"
+            android:layout_marginLeft="12.50dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/chatprofile"
             />
@@ -66,7 +64,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/user_name_layout"
-
+        android:layout_marginTop="12dp"
         >
         <TextView
             android:layout_width="wrap_content"
@@ -86,7 +84,7 @@
         android:orientation="horizontal"
         android:id="@+id/count_layout"
         android:gravity="center"
-        android:layout_marginTop="140dp"
+        android:layout_marginTop="141dp"
         android:background="@color/profiel_infoBar_color"
 
         >
