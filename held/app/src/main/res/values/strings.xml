@@ -25,7 +25,7 @@
     <string name="API_user_name">USER_NAME</string>
     <string name="API_pin">PIN</string>
     <string name="API_user_regId">USER_REGID</string>
-    <string name="is_first_post">isFirstPostCreated</string>
+    <string name="is_first_post">isFirstPost</string>
     <string name="REG_Session_token">OLD_REG_TOKEN</string>
     <string name="REG_RID">OLD_REG_ID</string>
 

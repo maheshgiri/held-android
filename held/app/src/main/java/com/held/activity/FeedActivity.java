@@ -81,15 +81,15 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 //        }
 
 
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            if (getIntent().getExtras().getBoolean("isProfile")) {
-                launchProfileScreen(mPreference.readPreference(getString(R.string.API_user_name)));
-            }
-        } else {
+//        if (getIntent() != null && getIntent().getExtras() != null) {
+//            if (getIntent().getExtras().getBoolean("isProfile")) {
+//                launchProfileScreen(mPreference.readPreference(getString(R.string.API_user_name)));
+//            }
+//        } else {
             launchFeedScreen();
 //            launchHomeScreen();
 
-        }
+//        }
 
 
         setToolbar();

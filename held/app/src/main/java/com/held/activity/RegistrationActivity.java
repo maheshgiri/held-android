@@ -482,6 +482,11 @@ private TextView mPolicy;
         }
     }
     public void callLoginResendSmsApi(){
+        String cc[] = mCountryCodes.getSelectedItem().toString().split(" ");
+        mCountryCode = cc[0];
+        tempCode=mCountryCode;
+        mCountryCode=tempCode.substring(1);
+        mPreference.writePreference(getString(R.string.API_phone_no), mCountryCode + mPhoneNoEdt.getText().toString().trim());
         HeldService.getService().loginSessionSendPinSmsApi(mCountryCode + mPhoneNoEdt.getText().toString().trim(), "",
                 new Callback<CreateUserResponse>() {
                     @Override

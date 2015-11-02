@@ -106,10 +106,12 @@ public class PostFragment extends ParentFragment {
         setTypeFace(mPostTxt,"book");
         setTypeFace(mCaptionEdt,"book");
         setTypeFace(mTitle,"1");
+        muserProfileUrl=new String();
         setProfilePic();
         mPostTxt.setVisibility(View.GONE);
         TextView mTitle = (TextView)view.findViewById(R.id.tv_title);
         PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
+
 
 
         mTimeLayout=(RelativeLayout)view.findViewById(R.id.time_layout);
@@ -211,17 +213,18 @@ public class PostFragment extends ParentFragment {
                 UiUtils.dpToPx(getResources(), 350));
         options.inSampleSize = 1;
         options.inJustDecodeBounds = false;
-        Bitmap mAttachment;
-        try {
-            mAttachment = MediaStore.Images.Media.getBitmap(getCurrActivity().getContentResolver(), mFileUri);
-            mPostImg.setImageBitmap(mAttachment);
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        Bitmap mAttachment=BitmapFactory.decodeFile(mFileUri.getPath(),options);
+        mPostImg.setImageBitmap(mAttachment);
+//        try {
+//            mAttachment = MediaStore.Images.Media.getBitmap(getCurrActivity().getContentResolver(), mFileUri);
+//            mPostImg.setImageBitmap(mAttachment);
+//        } catch (FileNotFoundException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
 
 
 
@@ -418,7 +421,7 @@ public class PostFragment extends ParentFragment {
     }
 
     private void callPostDataApi() {
-        PreferenceHelper helper = PreferenceHelper.getInstance(getCurrActivity());
+        final PreferenceHelper helper = PreferenceHelper.getInstance(getCurrActivity());
         String sessionToken = helper.readPreference(getString(R.string.API_session_token));
         Log.i("PostFrgament", "Session token: " + sessionToken);
 
@@ -426,11 +429,11 @@ public class PostFragment extends ParentFragment {
                 mCaptionEdt.getText().toString().trim(), new TypedFile("multipart/form-data", mFile), "", new Callback<PostResponse>() {
                     @Override
                     public void success(PostResponse postResponse, Response response) {
-                        DialogUtils.stopProgressDialog();
+                        //DialogUtils.stopProgressDialog();
 
-                PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
-                if (myhelper.readPreference(getString(R.string.is_first_post), false)==false) {
-                    myhelper.writePreference(getString(R.string.is_first_post), true);
+
+                if (helper.readPreference(getString(R.string.is_first_post), false)==true) {
+                    helper.writePreference(getString(R.string.is_first_post), false);
 
                     Timber.i("This is user's first post. Setting it as profile image");
                    // callPicUpdateApi(postResponse.getImageUri());
@@ -442,12 +445,12 @@ public class PostFragment extends ParentFragment {
                     launchFeedScreen();
                 }
 
-
-                getCurrActivity().perform(1, null);
-                if (getCurrActivity() instanceof PostActivity)
-                    getCurrActivity().perform(1, null);
-                else
-                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);
+                        //launchFeedScreen();
+//                getCurrActivity().perform(1, null);
+//                if (getCurrActivity() instanceof PostActivity)
+//                    getCurrActivity().perform(1, null);
+//                else
+//                    ((HomeFragment) getParentFragment()).mViewPager.setCurrentItem(2);
 
             }
 
@@ -549,22 +552,24 @@ public class PostFragment extends ParentFragment {
 
     public void setProfilePic()
     {
+
         HeldService.getService().searchUser(mPrefernce.readPreference(getString(R.string.API_session_token)),
                 mPrefernce.readPreference(getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
-                      // Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
+                        Log.i("PostFragment", "@@Image Url" + searchUserResponse.getUser().getProfilePic());
+                        muserProfileUrl=searchUserResponse.getUser().getProfilePic();
+                        Log.i(TAG,muserProfileUrl);
+
                         PicassoCache.getPicassoInstance(getCurrActivity())
                                 .load(AppConstants.BASE_URL + searchUserResponse.getUser().getProfilePic())
                                 .placeholder(R.drawable.user_icon)
                                 .into(mUserImg);
-                        muserProfileUrl=searchUserResponse.getUser().getProfilePic();
-                        if (muserProfileUrl.isEmpty()) {
-                            mTitle.setText(getString(R.string.title_profilepic_upload));
-                        }else{
+                        if (searchUserResponse.getUser().getProfilePic()!=null) {
                             mTitle.setText(getString(R.string.title_photo_upload));
+                        }else{
+                            mTitle.setText(getString(R.string.title_profilepic_upload));
                         }
-
                     }
 
                     @Override
