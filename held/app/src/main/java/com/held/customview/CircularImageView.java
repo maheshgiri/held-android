@@ -19,8 +19,8 @@ import com.held.activity.R;
 public class CircularImageView extends ImageView {
 
 
-    private Paint paintCanvas=new Paint();
-    private Paint paintBorder=new Paint();
+    private Paint paintCanvas=new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint paintBorder=new Paint(Paint.ANTI_ALIAS_FLAG);
     private float borderWidth;
     public CircularImageView(Context context) {
         super(context);
@@ -90,8 +90,8 @@ public class CircularImageView extends ImageView {
 
 
         canvas.drawARGB(0, 0, 0, 0);
-       // paintCanvas.setColor(Color.parseColor("#BAB399"));
-        //paintBorder.setColor(Color.parseColor("#5f61b6"));
+        paintCanvas.setColor(Color.WHITE);
+        paintBorder.setColor(this.getResources().getColor(R.color.friend_req_color));
         paintBorder.setStyle(Paint.Style.STROKE);
         paintBorder.setStrokeWidth(borderWidth);
 
@@ -100,6 +100,7 @@ public class CircularImageView extends ImageView {
                 finalBitmap.getWidth() / 2 + 0.1f, paintCanvas);
         canvas.drawBitmap(finalBitmap, rect, rect, paintCanvas);
         paintCanvas.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+
         canvas.drawCircle(radius / 2 + 0.7f,
                 radius / 2 + 0.7f, radius / 2 - paintBorder.getStrokeWidth()/2 +0.1f, paintBorder);
         return output;
@@ -116,6 +117,7 @@ public class CircularImageView extends ImageView {
         this.invalidate();
     }
     public void drawRing(Canvas canvas,int radius){
+
         paintCanvas.setAntiAlias(true);
         paintBorder.setAntiAlias(true);
         paintCanvas.setFilterBitmap(true);
@@ -126,13 +128,20 @@ public class CircularImageView extends ImageView {
         paintBorder.setColor(this.getResources().getColor(R.color.friend_req_color));
         paintBorder.setStyle(Paint.Style.STROKE);
         paintBorder.setStrokeWidth(borderWidth);
+        paintCanvas.setStrokeJoin(Paint.Join.ROUND);
+        paintCanvas.setStrokeCap(Paint.Cap.ROUND);
+        paintBorder.setStrokeJoin(Paint.Join.ROUND);
+        paintBorder.setStrokeCap(Paint.Cap.ROUND);
         canvas.drawARGB(0, 0, 0, 0);
-        canvas.drawCircle(getWidth() / 2 + 0.7f,
-                getHeight() / 2 + 0.7f,
-                getWidth() / 2 + 0.1f, paintCanvas);
-        paintCanvas.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawCircle(radius / 2 + 0.7f,
-                radius / 2 + 0.7f, radius / 2 - paintBorder.getStrokeWidth()/2 +0.1f, paintBorder);
+//        canvas.drawCircle(getWidth() / 2 + 0.7f,
+//                getHeight() / 2 + 0.7f,
+//                getWidth() / 2 + 0.1f, paintCanvas);
+ //       paintCanvas.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        Rect rect = new Rect(0, 0,getWidth(),
+                getHeight());
+
+        canvas.drawCircle(radius / 2 ,
+                radius / 2 , radius / 2-borderWidth/2, paintBorder);
     }
 
 

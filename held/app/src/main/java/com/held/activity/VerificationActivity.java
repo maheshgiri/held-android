@@ -108,12 +108,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         mNetWorkStatus = NetworkUtil.isInternetConnected(getApplicationContext());
         NetworkStateReceiver.registerOnNetworkChangeListener(this);
         mPreference =PreferenceHelper.getInstance(this);
-        if(flag) {
-            mUserNameTxt.setVisibility(View.GONE);
-            callLoginResendSmsApi();
-        }
-        else
-            callResendSmsApi();
+
 
 
         mFirstEdt.addTextChangedListener(new TextWatcher() {
@@ -286,12 +281,12 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                 mPreference.writePreference(getString(R.string.API_user_name), loginUserResponse.getUser().getDisplayName());
                 mPreference.writePreference(getString(R.string.API_session_token), loginUserResponse.getSessionToken());
                 mPreference.writePreference(getString(R.string.API_user_regId), loginUserResponse.getUser().getRid());
-//                if (flag) {
-                // mPreference.writePreference(getString(R.string.is_first_post), false);
-                launchFeedScreen();
-//                }else {
-//                    launchComposeScreen();
-//                }
+                if (flag) {
+                    mPreference.writePreference(getString(R.string.is_first_post), false);
+                    launchFeedScreen();
+                }else {
+                    launchComposeScreen();
+                }
                /* if (loginUserResponse.isLogin()) {
                     PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), loginUserResponse.getSession_token());
                   // PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_registration_key), loginUserResponse.getRid());
@@ -430,7 +425,15 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
 
                     @Override
                     public void failure(RetrofitError error) {
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            String strError="";
 
+                                strError="Invalid User..";
+                                UiUtils.showSnackbarToast(findViewById(R.id.root_view),strError);
+
+                        } else
+                            UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Some Problem Occurred");
                     }
                 });
     }

@@ -21,6 +21,18 @@
             android:layout_marginLeft="18dp"
             android:layout_marginTop="23dp"
             android:src="@drawable/back" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/login_header"
+            android:textSize="16sp"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/positve_btn"
+            android:letterSpacing=".05"
+            android:visibility="gone"
+            android:id="@+id/loginHeaderText"
+             />
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -36,6 +48,7 @@
         android:textSize="13sp"
         android:textColor="@color/friend_req_color"
         android:letterSpacing=".05"
+        android:layout_marginTop="12dp"
         android:text="@string/Let_get_started"/>
     <TextView
         android:layout_width="match_parent"
@@ -49,22 +62,27 @@
         android:id="@+id/psText" />
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="17dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:gravity="center">
         <com.held.customview.CircularImageView
             android:layout_width="83dp"
             android:layout_height="83dp"
             android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:id="@+id/customRing"
-            />
-        <com.mikhaellopez.circularimageview.CircularImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_alignBaseline="@+id/profile_pic" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="80dp"
+            android:layout_height="81dp"
             android:id="@+id/profile_pic"
-            android:scaleType="centerCrop"
-            app:border="true"
+            app:border_width="5dp"
+            app:border_color="@color/friend_req_color"
             android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             />
 
         <ImageView
@@ -73,15 +91,14 @@
             android:src="@drawable/addimage"
             android:scaleType="center"
             android:layout_gravity="center"
-            android:layout_centerVertical="true"
             android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:id="@+id/addimageIcon"
-            />
+            android:layout_alignBaseline="@+id/profile_pic" />
 
 
     </RelativeLayout>
-
-
 
 </LinearLayout>
         <LinearLayout
@@ -91,7 +108,7 @@
             android:id="@+id/main_layout"
             android:gravity="center"
             android:background="@color/bg_color"
-            android:layout_marginTop="23dp"
+            android:layout_marginTop="30dp"
             android:layout_below="@id/photoUpload_Layout"
             android:layout_centerInParent="true">
             <EditText

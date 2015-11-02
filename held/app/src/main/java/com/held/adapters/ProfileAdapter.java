@@ -119,9 +119,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolderHead.mUserName.setText(user.getDisplayName());
             viewHolderHead.mFriendCount.setText(user.getFriendCount());
             viewHolderHead.mPostCount.setText(user.getPostCount());
-            PicassoCache.getPicassoInstance(mActivity)
-                    .load(AppConstants.BASE_URL + user.getProfilePic())
-                    .into(viewHolderHead.mProfilePic);
+//            PicassoCache.getPicassoInstance(mActivity)
+//                    .load(AppConstants.BASE_URL + user.getProfilePic())
+//                    .into(viewHolderHead.mProfilePic);
             PicassoCache.getPicassoInstance(mActivity)
                     .load(AppConstants.BASE_URL + user.getProfilePic())
                     .noFade()
@@ -257,19 +257,19 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
-        private com.mikhaellopez.circularimageview.CircularImageView mCircularImage;
+        private de.hdodenhof.circleimageview.CircleImageView mCircularImage;
         private CircularImageView mProfilePic;
         private TextView mUserName, mFriendCount, mPostCount,mfriendTxt,mPostTxt;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
-            mProfilePic = (CircularImageView) itemView.findViewById(R.id.PROFILE_pic);
+          //  mProfilePic = (com.held.customview.CircularImageView) itemView.findViewById(R.id.PROFILE_pic);
             mUserName = (TextView) itemView.findViewById(R.id.PROFILE_name);
             mFriendCount = (TextView) itemView.findViewById(R.id.PROFILE_count_friends);
             mPostCount = (TextView) itemView.findViewById(R.id.PROFILE_count_photos);
             mfriendTxt = (TextView) itemView.findViewById(R.id.PROFILE_txt_friends);
             mPostTxt = (TextView) itemView.findViewById(R.id.PROFILE_txt_photos);
-            mCircularImage=(com.mikhaellopez.circularimageview.CircularImageView)itemView.findViewById(R.id.circular_Profile_pic);
+            mCircularImage=(de.hdodenhof.circleimageview.CircleImageView)itemView.findViewById(R.id.circular_Profile_pic);
 
         }
     }

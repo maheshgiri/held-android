@@ -18,12 +18,14 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -41,7 +43,7 @@ import com.held.utils.NetworkUtil;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 import com.held.utils.Utils;
-import com.mikhaellopez.circularimageview.CircularImageView;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -62,16 +64,18 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
     private boolean mNetWorStatus,flag=false;
     private Button mRegisterBtn;
     private Spinner mCountryCodes;
-    private String mCountryCode,tempCode;
+    private String mCountryCode,tempCode,mphoneNo;
     private int mPin;
     private String mRegKey,mAccessToken,sourceFileName;
-    private PreferenceHelper mPrefernce;
+    private PreferenceHelper mPreference;
     private CustomTextView mspinnerText;
     private File mFile;
     private Uri mFileUri;
-    private CircularImageView circularImage;
+    private ImageView circularImage;
     private com.held.customview.CircularImageView customRing;
-    private LinearLayout uploadPicLayout;
+    private LinearLayout uploadPicLayout,dummyLinearLayout, registerLayout;
+    private TextView loginHeader;
+
 
 
 private TextView mPolicy;
@@ -90,12 +94,12 @@ private TextView mPolicy;
         mAddPicIcon=(ImageView)findViewById(R.id.addimageIcon);
         customRing=(com.held.customview.CircularImageView)findViewById(R.id.customRing);
         customRing.setBorderWidth(2);
-
-        circularImage = (CircularImageView)findViewById(R.id.profile_pic);
-        circularImage.setBorderColor(getResources().getColor(R.color.friend_req_color));
-        circularImage.setBorderWidth(2);
-        circularImage.setVisibility(View.GONE);
+        circularImage = (ImageView)findViewById(R.id.profile_pic);
+        loginHeader=(TextView)findViewById(R.id.loginHeaderText);
+//        circularImage.setVisibility(View.GONE);
         uploadPicLayout=(LinearLayout)findViewById(R.id.photoUpload_Layout);
+        //dummyLinearLayout=(LinearLayout)findViewById(R.id.dummy_Layout);
+        registerLayout=(LinearLayout)findViewById(R.id.main_layout);
         mAddPicIcon.setOnClickListener(this);
         mBackImg.setOnClickListener(this);
         mRegisterBtn.setOnClickListener(this);
@@ -108,18 +112,18 @@ private TextView mPolicy;
         int spinnerPosition = myAdap.getPosition("+91 (India)");
         mCountryCodes.setSelection(spinnerPosition);
         mPolicy=(TextView)findViewById(R.id.SPLASH_terms_condition_txt);
-        Context ctx = getApplicationContext();
-        if (ctx != null) {
-            Typeface type = Typeface.createFromAsset(ctx.getAssets(),
-                    "BentonSansBook.otf");
-            mUserNameEdt.setTypeface(type);
-            mPhoneNoEdt.setTypeface(type);
-            mRegisterBtn.setTypeface(type);
-            mPolicy.setTypeface(type);
 
 
-        }
-        mPrefernce=PreferenceHelper.getInstance(this);
+        setTypeFace(mUserNameEdt,"book");
+        setTypeFace(mPhoneNoEdt,"book");
+        setTypeFace(mRegisterBtn,"book");
+        setTypeFace(mPolicy,"book");
+        setTypeFace(loginHeader,"medium");
+
+
+
+
+        mPreference=PreferenceHelper.getInstance(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         if(flag)
@@ -136,11 +140,12 @@ private TextView mPolicy;
                 break;
             case R.id.REG_register_btn:
                 Utils.hideSoftKeyboard(this);
+
                 if(mFile!=null)
                     callUpdateProfileImageApi();
                 if (mNetWorStatus)
                     if(flag)
-                        launchLoginVerificationActivity();
+                        callLoginResendSmsApi();
                     else
                         validateInput();
                 else
@@ -148,8 +153,7 @@ private TextView mPolicy;
                 break;
             case R.id.addimageIcon:
                 openImageIntent();
-                customRing.setVisibility(View.GONE);
-                circularImage.setVisibility(View.VISIBLE);
+
         }
     }
 
@@ -188,27 +192,26 @@ private TextView mPolicy;
     }
 
     private void callCreateUserApi() {
-        HeldService.getService().createUser( mUserNameEdt.getText().toString().trim().toLowerCase(),mCountryCode + mPhoneNoEdt.getText().toString().trim(),"" ,new Callback<CreateUserResponse>() {
+        HeldService.getService().createUser(mUserNameEdt.getText().toString().trim().toLowerCase(), mCountryCode + mPhoneNoEdt.getText().toString().trim(), "", new Callback<CreateUserResponse>() {
             @Override
             public void success(CreateUserResponse createUserResponse, Response response) {
                 DialogUtils.stopProgressDialog();
-                if (createUserResponse == null)
-                {
+                if (createUserResponse == null) {
                     return;
                 }
-                mPrefernce.writePreference(getString(R.string.API_phone_no), mCountryCode + mPhoneNoEdt.getText().toString().trim());
-                mPrefernce.writePreference(getString(R.string.API_user_name), mUserNameEdt.getText().toString().trim());
+                mPreference.writePreference(getString(R.string.API_phone_no), mCountryCode + mPhoneNoEdt.getText().toString().trim());
+                mPreference.writePreference(getString(R.string.API_user_name), mUserNameEdt.getText().toString().trim());
 
                 mPin = createUserResponse.getPin();
-                mRegKey=createUserResponse.getRid();
-                mAccessToken=createUserResponse.getAccessToken();
+                mRegKey = createUserResponse.getRid();
+                mAccessToken = createUserResponse.getAccessToken();
                 PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), mAccessToken);
                 PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.REG_Session_token), mAccessToken);
                 PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.REG_RID), mRegKey);
-                if(mFile!=null)
+                if (mFile != null)
                     callUpdateProfileImageApi();
                 Log.i("RegistrationActivity", "Profile PIN" + createUserResponse.toString());
-                launchVerificationActivity();
+                callResendSmsApi();
             }
 
             @Override
@@ -243,9 +246,12 @@ private TextView mPolicy;
     }
 
     public void updateToLoginUI(){
+
+        registerLayout.setPadding(0, 140, 0, 0);
         uploadPicLayout.setVisibility(View.GONE);
         mUserNameEdt.setVisibility(View.GONE);
-        mRegisterBtn.setText("Login");
+        mRegisterBtn.setText("Loign");
+        loginHeader.setVisibility(View.VISIBLE);
     }
 
     public void  launchLoginVerificationActivity(){
@@ -253,10 +259,10 @@ private TextView mPolicy;
         mCountryCode = cc[0];
         tempCode=mCountryCode;
         mCountryCode=tempCode.substring(1);
-        mPrefernce.writePreference(getString(R.string.API_phone_no), mCountryCode + mPhoneNoEdt.getText().toString().trim());
+        mPreference.writePreference(getString(R.string.API_phone_no), mCountryCode + mPhoneNoEdt.getText().toString().trim());
         Intent intent = new Intent(RegistrationActivity.this, VerificationActivity.class);
         intent.putExtra("phoneno", mCountryCode + mPhoneNoEdt.getText().toString().trim());
-        intent.putExtra("ForLogin",true);
+        intent.putExtra("ForLogin", true);
         startActivity(intent);
         finish();
     }
@@ -323,17 +329,19 @@ private TextView mPolicy;
                     File photo = new File(Environment.getExternalStorageDirectory(),
                             "/HELD" + sourceFileName);
                     Uri photoUri = Uri.fromFile(photo);
-                    mFileUri=doCrop(photoUri);
+                    doCrop(photoUri);
+                    mFileUri=photoUri;
                     mFile = new File(photoUri.getPath());
-                   // PicassoCache.getPicassoInstance(this).load(mFile).noFade().into(mProfileimg);
+                    //PicassoCache.getPicassoInstance(this).load(mFile).noFade().into(circularImage);
                     updateImageview();
                     break;
 
                 case AppConstants.REQUEST_GALLERY:
                     Uri PhotoURI = data.getData();
-                    mFileUri=doCrop(PhotoURI);
+                    doCrop(PhotoURI);
+                    mFileUri=PhotoURI;
                     mFile = new File(getRealPathFromURI(PhotoURI));
-                    //PicassoCache.getPicassoInstance(this).load(mFile).noFade().into(mProfileimg);
+                   // PicassoCache.getPicassoInstance(this).load(mFile).noFade().into(circularImage);
                     updateImageview();
                     break;
             }
@@ -365,10 +373,10 @@ private TextView mPolicy;
         return result;
     }
     public void callUpdateProfileImageApi(){
-        HeldService.getService().updateProfilePic(mAccessToken, mRegKey,  new TypedFile("multipart/form-data", mFile), new Callback<ProfilPicUpdateResponse>() {
+        HeldService.getService().updateProfilePic(mAccessToken, mRegKey, new TypedFile("multipart/form-data", mFile), new Callback<ProfilPicUpdateResponse>() {
             @Override
             public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
-                Timber.i(TAG,"Profile pic updated..");
+                Timber.i(TAG, "Profile pic updated..");
             }
 
             @Override
@@ -386,23 +394,31 @@ private TextView mPolicy;
         options.inSampleSize = 1;
         options.inJustDecodeBounds = false;
         Bitmap mAttachment;
-        circularImage.setImageURI(Uri.fromFile(mFile));
-//        PicassoCache.getPicassoInstance(this).load(mFileUri).noFade().into(mProfileimg);
 
-//        try {
+
+////        PicassoCache.getPicassoInstance(this).load(mFileUri).noFade().into(mProfileimg);
+//
+        try {
+            circularImage.setImageURI(Uri.fromFile(mFile));
+            circularImage.setImageBitmap(BitmapFactory.decodeFile(mFile.getAbsolutePath(), options));
+//            Timber.i(TAG, mFileUri.getPath().toString());
+//            Timber.i(TAG, mFile.getAbsolutePath().toString());
 //            mAttachment = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mFileUri);
 ////         mAttachment = BitmapFactory.decodeFile(mFile.getAbsolutePath(), options);
 //           circularImage.setImageBitmap(mAttachment);
-
-//        } catch (FileNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
+//
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 //        } catch (IOException e) {
 //            // TODO Auto-generated catch block
 //            e.printStackTrace();
 //        }
+//        customRing.setVisibility(View.GONE);
+//        circularImage.setVisibility(View.VISIBLE);
     }
-    private Uri doCrop(Uri mCurrentPhotoPath) {
+    private void doCrop(Uri mCurrentPhotoPath) {
         Intent cropIntent = new Intent("com.android.camera.action.CROP");
         cropIntent.setDataAndType(mCurrentPhotoPath, "image/*");
 
@@ -431,18 +447,85 @@ private TextView mPolicy;
             e.printStackTrace();
         }
 
-        mFile = photo;
+        mFile =new File(photo.getPath());
 
         Uri mCropImageUri = Uri.fromFile(photo);
 
         cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCropImageUri);
         startActivityForResult(cropIntent, AppConstants.REQUEST_CROP);
 
-        return mCropImageUri;
     }
 
     @Override
     public void onBackPressed() {
        launchSplashScreen();
+    }
+    public void setTypeFace(TextView tv,String type){
+        Typeface medium = Typeface.createFromAsset(this.getResources().getAssets(), "BentonSansMedium.otf");
+        Typeface book = Typeface.createFromAsset(this.getResources().getAssets(), "BentonSansBook.otf");
+        if(type=="book"){
+            tv.setTypeface(book);
+
+        }else {
+            tv.setTypeface(medium);
+        }
+    }
+    public void setTypeFace(Button tv,String type){
+        Typeface medium = Typeface.createFromAsset(this.getResources().getAssets(), "BentonSansMedium.otf");
+        Typeface book = Typeface.createFromAsset(this.getResources().getAssets(), "BentonSansBook.otf");
+        if(type=="book"){
+            tv.setTypeface(book);
+
+        }else {
+            tv.setTypeface(medium);
+        }
+    }
+    public void callLoginResendSmsApi(){
+        String cc[] = mCountryCodes.getSelectedItem().toString().split(" ");
+        mCountryCode = cc[0];
+        tempCode=mCountryCode;
+        mCountryCode=tempCode.substring(1);
+        mPreference.writePreference(getString(R.string.API_phone_no), mCountryCode + mPhoneNoEdt.getText().toString().trim());
+        HeldService.getService().loginSessionSendPinSmsApi(mCountryCode + mPhoneNoEdt.getText().toString().trim(), "",
+                new Callback<CreateUserResponse>() {
+                    @Override
+                    public void success(CreateUserResponse createUserResponse, Response response) {
+                        launchLoginVerificationActivity();
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                            String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                            String strError="";
+
+                            strError="Invalid User..";
+                            UiUtils.showSnackbarToast(findViewById(R.id.root_view),strError);
+
+                        } else
+                            UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Some Problem Occurred");
+                    }
+                });
+    }
+    private void callResendSmsApi() {
+        HeldService.getService().resendSms(mPreference.readPreference(getString(R.string.API_session_token)), mRegKey, new Callback<CreateUserResponse>() {
+            @Override
+            public void success(CreateUserResponse createUserResponse, Response response) {
+                DialogUtils.stopProgressDialog();
+                launchVerificationActivity();
+                // mPreference.writePreference(getString(R.string.API_pin), createUserResponse.getPin());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                DialogUtils.stopProgressDialog();
+                if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
+                    String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                    UiUtils.showSnackbarToast(findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
+                } else
+                    UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Some Problem Occurred");
+            }
+        });
     }
 }

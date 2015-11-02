@@ -34,8 +34,11 @@ import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
+import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import retrofit.Callback;
@@ -139,8 +142,15 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .load(AppConstants.BASE_URL + mFeedList.get(position).getThumbnailUri())
                     .into(holder.mFeedImg);
             holder.mUserNameTxt.setText(mFeedList.get(position).getCreator().getDisplayName());
-            setTimeText(mFeedList.get(position).getHeld(),holder.mTimeMinTxt,holder.mTimeSecTxt);
-
+            setTimeText(mFeedList.get(position).getHeld(), holder.mTimeMinTxt, holder.mTimeSecTxt);
+            if(mFeedList.get(position).getLatestMessage()!=null)
+                checkLatestMessage(holder.feedStatusIcon,mFeedList.get(position).getLatestMessage().getDate());
+            else if(mFeedList.get(position).getLatestHold() != null)
+            {
+                //checkLatestHold(holder.feedStatusIcon, mFeedList.get(position).getLatestHold().getHeld());
+            }
+            else
+                holder.feedStatusIcon.setVisibility(View.GONE);
 //            holder.mUserImg.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
@@ -318,6 +328,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public final TextView mPersonCount = (TextView) itemView.findViewById(R.id.count_hold_people);
         public final TextView mTimeTxt = (TextView) itemView.findViewById(R.id.time_txt);
         public final TextView mTimeTxt2 = (TextView) itemView.findViewById(R.id.time_txt2);
+        ImageView feedStatusIcon;
 
         private FeedViewHolder(View v) {
             super(v);
@@ -329,6 +340,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTimeMinTxt = (TextView) itemView.findViewById(R.id.box_min_txt);
             mTimeSecTxt=(TextView) itemView.findViewById(R.id.box_sec_txt);
             myTimeLayout.setVisibility(View.VISIBLE);
+            feedStatusIcon=(ImageView)v.findViewById(R.id.feed_status_icon);
 
         }
     }
@@ -423,8 +435,32 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return true;
         }
 
-
     }
+    public int calculateTimeDiff(String tm){
+        String s1,s2;
+        long d1,d2,diff,diffHours;
 
+
+        d1= Long.parseLong(tm);
+        s2=String.valueOf(System.currentTimeMillis());
+        d2= Long.parseLong(s2);
+
+        diff=d2-d1;
+        diffHours = diff / (60 * 60 * 1000);
+        System.out.println("@@@@@  Diff hours "+diffHours);
+        return (int) diffHours;
+    }
+    public void checkLatestMessage(ImageView img,String tm){
+        int diff=calculateTimeDiff(tm);
+        if(diff<=1){
+            img.setImageResource(R.drawable.greenicon);
+        }
+    }
+    public void checkLatestHold(ImageView img,String tm){
+        //int diff=calculateTimeDiff(tm);
+       // if(diff<=1){
+            img.setImageResource(R.drawable.yellowicon);
+       // }
+    }
 
 }
