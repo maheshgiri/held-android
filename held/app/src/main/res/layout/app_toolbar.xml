@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="65dp"
-    android:background="@color/bg_color"
+    android:layout_width="match_parent" android:layout_height="50dp"
+    android:background="@color/new_btn_color"
     android:id="@+id/toolbar_main"
     android:visibility="visible"
     android:fitsSystemWindows="true"
     android:layout_alignParentTop="true"
+    android:elevation="10dp"
     >
 <RelativeLayout
     android:layout_width="match_parent"
@@ -14,11 +15,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_marginRight="10dp">
     <ImageView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/toolbar_chat_img"
         android:src="@drawable/chat"
-        android:layout_marginRight="10dp"
         android:layout_centerVertical="true"
         android:layout_centerInParent="true"
         android:layout_alignParentLeft="true"
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar_title_txt"
-        android:textColor="@color/new_btn_color"
+        android:textColor="@color/white"
         android:text="Home"
         android:textSize="16sp"
         android:letterSpacing=".05"
@@ -67,18 +67,17 @@
 
 
     <ImageView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/toolbar_search_img"
         android:src="@drawable/search"
         android:layout_marginRight="10dp"
         android:layout_centerVertical="true"
-        android:scaleType="fitCenter"
         android:layout_toLeftOf="@+id/toolbar_notification_img"
         android:layout_toStartOf="@+id/toolbar_notification_img" />
     <ImageView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/toolbar_notification_img"
         android:src="@drawable/notification"
         android:layout_marginRight="10dp"
@@ -86,8 +85,8 @@
         android:layout_toLeftOf="@+id/toolbar_post_img"
         android:layout_toStartOf="@+id/toolbar_post_img" />
     <ImageView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/toolbar_post_img"
         android:src="@drawable/camera"
         android:layout_centerVertical="true"

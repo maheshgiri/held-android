@@ -58,7 +58,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     private Toolbar toolbar;
     private boolean firstClick=true;
     private String mUserNameForSearch;
-    private View toolbar_divider;
+//    private View toolbar_divider;
 
 
     @Override
@@ -68,6 +68,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
+//        getSupportActionBar().setCustomView(R.layout.app_toolbar);
 
 //        getSupportActionBar().hide();
 //        statusbar=(RelativeLayout)findViewById(R.id.statusbar);
@@ -86,7 +87,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 //                launchProfileScreen(mPreference.readPreference(getString(R.string.API_user_name)));
 //            }
 //        } else {
-            launchFeedScreen();
+
 //            launchHomeScreen();
 
 //        }
@@ -104,6 +105,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mTitle.setTypeface(medium);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
         mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
+        //setSupportActionBar(mHeld_toolbar);
+        launchFeedScreen();
 //        setSupportActionBar(mHeld_toolbar);
 //        getSupportActionBar().getThemedContext();
       //  setSupportActionBar(mHeld_toolbar);
@@ -115,7 +118,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mSearch_edt.setVisibility(View.GONE);
 
         mSearch_edt = (EditText) findViewById(R.id.toolbar_search_edt_txt);
-        toolbar_divider=(View)findViewById(R.id.toolbar_divider);
+//        toolbar_divider=(View)findViewById(R.id.toolbar_divider);
 //        mSearch_edt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 //            @Override
 //            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -447,12 +450,12 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
     public void hideToolbar(){
         mHeld_toolbar.setVisibility(View.GONE);
-        toolbar_divider.setVisibility(View.GONE);
+//        toolbar_divider.setVisibility(View.GONE);
     }
 
     public void showToolbar(){
         mHeld_toolbar.setVisibility(View.VISIBLE);
-        toolbar_divider.setVisibility(View.VISIBLE);
+//        toolbar_divider.setVisibility(View.VISIBLE);
     }
 
     private void callUserSearchApi() {

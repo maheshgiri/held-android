@@ -4,7 +4,7 @@
     android:id="@+id/BOX_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
+    android:background="@color/white"
     android:layout_marginTop="15dp"
     >
 
@@ -188,11 +188,40 @@
 
             </LinearLayout>
         </LinearLayout>
+
+
+
 </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="300dp"
+            android:id="@+id/feed_status_icon_Layout"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_alignRight="@+id/post_image"
+            android:layout_alignEnd="@+id/post_image"
 
+            >
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:id="@+id/feed_status_icon"
+                android:layout_centerInParent="true"
+                />
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:id="@+id/white_ring"
+                android:src="@drawable/ring"
+                />
+
+        </RelativeLayout>
     </RelativeLayout>
-
 
 </RelativeLayout>
 

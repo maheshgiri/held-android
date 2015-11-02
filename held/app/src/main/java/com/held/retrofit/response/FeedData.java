@@ -14,6 +14,16 @@ public class FeedData {
     private User user;
     private Creator creator;
     private String rid,views,friendCount,postCount;
+    SubFeedData latestMessage;
+    SubFeedData latestHold;
+
+    public SubFeedData getLatestHold() {
+        return latestHold;
+    }
+
+    public SubFeedData getLatestMessage() {
+        return latestMessage;
+    }
 
     public String getFriendCount() {
         return friendCount;
