@@ -13,6 +13,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -143,17 +145,22 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .into(holder.mFeedImg);
             holder.mUserNameTxt.setText(mFeedList.get(position).getCreator().getDisplayName());
             setTimeText(mFeedList.get(position).getHeld(), holder.mTimeMinTxt, holder.mTimeSecTxt);
+
             if(mFeedList.get(position).getLatestMessage()!=null){
-                checkLatestMessage(holder.feedStatusIcon,mFeedList.get(position).getLatestMessage().getDate());
+                checkLatestMessage(holder.feedStatusIcon, mFeedList.get(position).getLatestMessage().getDate());
+
                 holder.feedStatusIcon.setVisibility(View.VISIBLE);
             }
             else if(mFeedList.get(position).getLatestHold() != null)
             {
-                checkLatestHold(holder.feedStatusIcon, mFeedList.get(position).getLatestHold().getHeld());
+                checkLatestHold(holder.feedStatusIcon, mFeedList.get(position).getLatestHold().getDate());
+
                 holder.feedStatusIcon.setVisibility(View.VISIBLE);
             }else if(mFeedList.get(position).getLatestHold()==null && mFeedList.get(position).getLatestMessage()==null)
             {
+
                 holder.feedStatusIcon.setVisibility(View.GONE);
+
             }
 
 //            holder.mUserImg.setOnClickListener(new View.OnClickListener() {
@@ -333,7 +340,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public final TextView mPersonCount = (TextView) itemView.findViewById(R.id.count_hold_people);
         public final TextView mTimeTxt = (TextView) itemView.findViewById(R.id.time_txt);
         public final TextView mTimeTxt2 = (TextView) itemView.findViewById(R.id.time_txt2);
-        ImageView feedStatusIcon;
+        de.hdodenhof.circleimageview.CircleImageView feedStatusIcon,feedring;
 
         private FeedViewHolder(View v) {
             super(v);
@@ -345,7 +352,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTimeMinTxt = (TextView) itemView.findViewById(R.id.box_min_txt);
             mTimeSecTxt=(TextView) itemView.findViewById(R.id.box_sec_txt);
             myTimeLayout.setVisibility(View.VISIBLE);
-            feedStatusIcon=(ImageView)v.findViewById(R.id.feed_status_icon);
+            feedStatusIcon=(de.hdodenhof.circleimageview.CircleImageView)v.findViewById(R.id.feed_status_icon);
+            feedring=(de.hdodenhof.circleimageview.CircleImageView)v.findViewById(R.id.white_ring);
 
         }
     }
@@ -441,7 +449,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
 
     }
-    public int calculateTimeDiff(String tm){
+    public long calculateTimeDiff(String tm){
         String s1,s2;
         long d1,d2,diff,diffHours;
 
@@ -453,19 +461,38 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         diff=d2-d1;
         diffHours = diff / (60 * 60 * 1000);
         System.out.println("@@@@@  Diff hours "+diffHours);
-        return (int) diffHours;
+        return diffHours;
     }
     public void checkLatestMessage(ImageView img,String tm){
-        int diff=calculateTimeDiff(tm);
+        long diff=calculateTimeDiff(tm);
         if(diff<=1){
             img.setImageResource(R.drawable.greenicon);
+            blinkAnimation(img);
+//            PicassoCache.getPicassoInstance(mActivity)
+//                    .load(R.drawable.greenicon)
+//                    .noFade()
+//                    .into(img);
         }
     }
     public void checkLatestHold(ImageView img,String tm){
-        //int diff=calculateTimeDiff(tm);
-       // if(diff<=1){
+        long diff=calculateTimeDiff(tm);
+        if(diff<=1){
             img.setImageResource(R.drawable.yellowicon);
-       // }
+            blinkAnimation(img);
+//            PicassoCache.getPicassoInstance(mActivity)
+//                    .load(R.drawable.yellowicon)
+//                    .noFade()
+//                    .into(img);
+        }
     }
+    public void blinkAnimation(ImageView img) {
 
+            Animation anim = new AlphaAnimation(0.0f, 1.0f);
+            anim.setDuration(500); //You can manage the time of the blink with this <span id="IL_AD7" class="IL_AD">parameter</span>
+            anim.setStartOffset(200);
+            anim.setRepeatMode(Animation.REVERSE);
+            anim.setRepeatCount(Animation.INFINITE);
+            img.startAnimation(anim);
+
+    }
 }
