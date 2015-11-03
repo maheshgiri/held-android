@@ -71,6 +71,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(mHeld_toolbar);
         getSupportActionBar().getThemedContext();
+
+
        /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.new_btn_color));
@@ -244,6 +246,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         intent.putExtra("post_id", post_id);
         startActivity(intent);
     }
+
     @Override
     public void perform(int id, Bundle bundle) {
         super.perform(id, bundle);
@@ -492,7 +495,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 });
     }
 
-   
+
 
 
 }
