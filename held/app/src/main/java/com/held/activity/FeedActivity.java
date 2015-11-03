@@ -68,6 +68,13 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
+        mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(mHeld_toolbar);
+        getSupportActionBar().getThemedContext();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(getResources().getColor(R.color.new_btn_color));
+        }
 //        getSupportActionBar().setCustomView(R.layout.app_toolbar);
 
 //        getSupportActionBar().hide();
@@ -104,8 +111,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         Typeface medium = Typeface.createFromAsset(getAssets(), "BentonSansMedium.otf");
         mTitle.setTypeface(medium);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
-        mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
-        //setSupportActionBar(mHeld_toolbar);
+
         launchFeedScreen();
 //        setSupportActionBar(mHeld_toolbar);
 //        getSupportActionBar().getThemedContext();
