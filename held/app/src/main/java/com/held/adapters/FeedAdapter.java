@@ -147,10 +147,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 checkLatestMessage(holder.feedStatusIcon,mFeedList.get(position).getLatestMessage().getDate());
             else if(mFeedList.get(position).getLatestHold() != null)
             {
-                //checkLatestHold(holder.feedStatusIcon, mFeedList.get(position).getLatestHold().getHeld());
+                checkLatestHold(holder.feedStatusIcon, mFeedList.get(position).getLatestHold().getHeld());
             }
-            else
-                holder.feedStatusIcon.setVisibility(View.GONE);
+
 //            holder.mUserImg.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
