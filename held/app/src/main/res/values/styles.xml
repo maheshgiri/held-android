@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:splitMotionEvents">false</item>
         <item name="colorPrimary">@color/new_btn_color</item>
@@ -33,5 +34,7 @@
     <declare-styleable name="circularImageViewStyle">
 
     </declare-styleable>
+
+
 
 </resources>

@@ -143,14 +143,19 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .into(holder.mFeedImg);
             holder.mUserNameTxt.setText(mFeedList.get(position).getCreator().getDisplayName());
             setTimeText(mFeedList.get(position).getHeld(), holder.mTimeMinTxt, holder.mTimeSecTxt);
-            if(mFeedList.get(position).getLatestMessage()!=null)
+            if(mFeedList.get(position).getLatestMessage()!=null){
                 checkLatestMessage(holder.feedStatusIcon,mFeedList.get(position).getLatestMessage().getDate());
+                holder.feedStatusIcon.setVisibility(View.VISIBLE);
+            }
             else if(mFeedList.get(position).getLatestHold() != null)
             {
-                //checkLatestHold(holder.feedStatusIcon, mFeedList.get(position).getLatestHold().getHeld());
-            }
-            else
+                checkLatestHold(holder.feedStatusIcon, mFeedList.get(position).getLatestHold().getHeld());
+                holder.feedStatusIcon.setVisibility(View.VISIBLE);
+            }else if(mFeedList.get(position).getLatestHold()==null && mFeedList.get(position).getLatestMessage()==null)
+            {
                 holder.feedStatusIcon.setVisibility(View.GONE);
+            }
+
 //            holder.mUserImg.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
