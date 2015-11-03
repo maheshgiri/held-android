@@ -89,7 +89,7 @@
         android:layout_marginTop="10dp"
         >
         <ImageView
-            android:layout_width="320dp"
+            android:layout_width="match_parent"
             android:layout_height="343dp"
             android:id="@+id/post_image"
             android:layout_alignParentLeft="false"
