@@ -43,6 +43,7 @@ dependencies {
     compile "com.splunk.mint:mint:4.3.0"
     compile 'com.mikhaellopez:circularimageview:2.0.2'
     compile 'de.hdodenhof:circleimageview:2.0.0'
+    compile 'com.android.support:design:22.2.0'
 
 
 }
