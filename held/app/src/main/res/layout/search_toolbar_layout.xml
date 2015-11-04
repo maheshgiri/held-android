@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="65dp"
-    android:background="@color/bg_color"
+    android:layout_width="match_parent" android:layout_height="50dp"
+    android:background="@color/new_btn_color"
     android:id="@+id/search_toolbar"
     android:fitsSystemWindows="true"
     >
@@ -14,10 +14,10 @@
        >
 
     <ImageView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/search_img"
-        android:src="@drawable/search_icon_v2"
+        android:src="@drawable/search"
         android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"
 
@@ -30,7 +30,7 @@
         android:editable="true"
         android:letterSpacing=".05"
         android:textSize="13sp"
-        android:textColor="@color/userName_color"
+        android:textColor="@color/white"
         android:text="Annawilkinson"
         android:layout_marginLeft="50dp"
         android:layout_centerVertical="true"
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/cancle_txt"
-        android:textColor="@color/friend_req_color"
+        android:textColor="@color/white"
         android:text="Cancel"
         android:textSize="13sp"
         android:layout_alignParentRight="true"

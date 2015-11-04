@@ -161,6 +161,7 @@ public class FeedFragment extends ParentFragment {
                     mStart = System.currentTimeMillis();
 //                    DialogUtils.showProgressBar();
                     callFeedApi();
+                    mFeedAdapter.notifyDataSetChanged();
                 } else {
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
                 }
@@ -176,6 +177,7 @@ public class FeedFragment extends ParentFragment {
 
                 if (!isLastPage && (lastVisibleItemPosition + 1) == totalItemCoount && !isLoading) {
                     callFeedApi();
+                    mFeedAdapter.notifyDataSetChanged();
                 }
             }
         });

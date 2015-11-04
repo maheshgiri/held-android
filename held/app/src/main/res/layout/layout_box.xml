@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/BOX_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:layout_marginTop="15dp"
-    >
+    android:layout_marginTop="15dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,7 +20,6 @@
             android:orientation="horizontal"
             android:id="@+id/linearLayout"
             >
-
             <ImageView
             android:layout_width="43dp"
             android:layout_height="43dp"
@@ -102,25 +101,23 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:id="@+id/time_layout">
-        <LinearLayout
+            <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:orientation="vertical">
-            <ImageView
+                <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/clock"
                 android:layout_gravity="center"
-                android:id="@+id/clock_img"
-                />
-
-            <LinearLayout
+                android:id="@+id/clock_img" />
+                <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal">
-                <TextView
+                    <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -128,7 +125,7 @@
                     android:textSize="18sp"
                     android:id="@+id/box_min_txt"
                     />
-                <TextView
+                    <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" minutes "
@@ -136,7 +133,7 @@
                     android:textSize="18sp"
                     android:id="@+id/time_txt"
                      />
-                <TextView
+                    <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -145,22 +142,22 @@
                     android:id="@+id/box_sec_txt"
 
                     />
-                <TextView
+                    <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" seconds"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:id="@+id/time_txt2"/>
-            </LinearLayout>
-            <LinearLayout
+                </LinearLayout>
+                <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:id="@+id/layout_people_count"
                 >
-                <TextView
+                    <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="by "
@@ -168,7 +165,7 @@
                     android:textSize="15sp"
                     android:textAlignment="center"
                     android:id="@+id/tv_count_people"/>
-                <TextView
+                    <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -176,7 +173,7 @@
                     android:textSize="15sp"
                     android:textAlignment="center"
                     android:id="@+id/count_hold_people"/>
-                <TextView
+                    <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" people"
@@ -184,44 +181,38 @@
                     android:textSize="15sp"
                     android:textAlignment="center"
                     android:id="@+id/tv_count_people2"/>
-
-
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-
-
-
-</RelativeLayout>
-
+        </RelativeLayout>
         <RelativeLayout
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginTop="300dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/feed_status_icon_Layout"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:layout_alignRight="@+id/post_image"
-            android:layout_alignEnd="@+id/post_image"
-
-            >
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center"
-                android:id="@+id/feed_status_icon"
-                android:layout_centerInParent="true"
-                />
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="17.5dp"
+                android:layout_height="17.5dp"
+                custom:civ_border_color="@color/white"
+                custom:civ_border_width="1dp"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:id="@+id/white_ring"
-                android:src="@drawable/ring"
-                />
+                android:layout_marginRight="17.5dp"
+                android:layout_marginBottom="17.5dp"
+                android:src="@drawable/transperant"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="12.5dp"
+                android:layout_height="12.5dp"
+                android:layout_gravity="center"
+                android:id="@+id/feed_status_icon"
+                android:layout_marginRight="17.5dp"
+                android:layout_marginBottom="17.5dp"
+                android:layout_centerInParent="true"
+                android:layout_alignBaseline="@+id/white_ring" />
 
         </RelativeLayout>
     </RelativeLayout>
-
 </RelativeLayout>
-
