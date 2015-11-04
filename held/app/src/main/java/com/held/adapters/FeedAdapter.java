@@ -154,13 +154,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             else if(mFeedList.get(position).getLatestHold() != null)
             {
                 checkLatestHold(holder.feedStatusIcon, mFeedList.get(position).getLatestHold().getDate());
-
                 holder.feedStatusIcon.setVisibility(View.VISIBLE);
-            }else if(mFeedList.get(position).getLatestHold()==null && mFeedList.get(position).getLatestMessage()==null)
+            }else
             {
-
                 holder.feedStatusIcon.setVisibility(View.GONE);
-
             }
 
 //            holder.mUserImg.setOnClickListener(new View.OnClickListener() {
@@ -472,6 +469,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //                    .load(R.drawable.greenicon)
 //                    .noFade()
 //                    .into(img);
+        }else{
+            img.setImageBitmap(null);
+            return;
         }
     }
     public void checkLatestHold(ImageView img,String tm){
@@ -483,6 +483,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //                    .load(R.drawable.yellowicon)
 //                    .noFade()
 //                    .into(img);
+        }else{
+            img.setImageBitmap(null);
+            return;
         }
     }
     public void blinkAnimation(ImageView img) {
