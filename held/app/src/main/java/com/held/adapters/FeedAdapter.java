@@ -66,7 +66,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
     private boolean isFullScreenMode = false;
-
+    RelativeLayout myLayout;
 
 
     public FeedAdapter(FeedActivity activity, List<FeedData> feedDataList, BlurTransformation blurTransformation
@@ -145,7 +145,8 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     .into(holder.mFeedImg);
             holder.mUserNameTxt.setText(mFeedList.get(position).getCreator().getDisplayName());
             setTimeText(mFeedList.get(position).getHeld(), holder.mTimeMinTxt, holder.mTimeSecTxt);
-
+            holder.mFeedImg.setVisibility(View.VISIBLE);
+            myLayout=holder.myLayout;
             if(mFeedList.get(position).getLatestMessage()!=null){
                 checkLatestMessage(holder.feedStatusIcon, mFeedList.get(position).getLatestMessage().getDate());
 
@@ -490,12 +491,13 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
     public void blinkAnimation(ImageView img) {
 
-            Animation anim = new AlphaAnimation(0.0f, 1.0f);
+        Animation anim = new AlphaAnimation(0.0f, 1.0f);
             anim.setDuration(500); //You can manage the time of the blink with this <span id="IL_AD7" class="IL_AD">parameter</span>
             anim.setStartOffset(200);
-            anim.setRepeatMode(Animation.REVERSE);
+            
             anim.setRepeatCount(Animation.INFINITE);
             img.startAnimation(anim);
+
 
     }
 }
