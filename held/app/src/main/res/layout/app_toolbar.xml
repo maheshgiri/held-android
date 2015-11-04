@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/new_btn_color"
+    android:background="?attr/colorPrimary"
     android:id="@+id/toolbar_main"
     android:visibility="visible"
     android:fitsSystemWindows="true"
     android:layout_alignParentTop="true"
     android:elevation="5dp"
-    app:theme="@style/AppTheme"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+app:theme="@style/AppTheme"
+    app:popupTheme="@style/MyTheme"
     >
 <RelativeLayout
     android:layout_width="match_parent"
