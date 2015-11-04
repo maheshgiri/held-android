@@ -252,7 +252,6 @@ private TextView mPolicy;
         mUserNameEdt.setVisibility(View.GONE);
         mRegisterBtn.setText("Loign");
         loginHeader.setVisibility(View.VISIBLE);
-
     }
 
     public void  launchLoginVerificationActivity(){

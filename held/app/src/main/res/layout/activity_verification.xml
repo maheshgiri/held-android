@@ -203,27 +203,27 @@
 
             <TextView
                 android:id="@+id/VERIFICATION_sms_resend_txt"
-                android:layout_width="wrap_content"
+                android:layout_weight="5"
+                android:layout_width="0dp"
                 android:layout_height="45dp"
-
-                android:gravity="center"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="68dp"
                 android:text="Resend SMS"
                 android:textColor="#acacac"
                 android:textSize="11sp"
-                android:layout_marginLeft="68dp"
                 android:fontFamily="@string/benton_sans_book"
                 android:typeface="normal" />
 
             <TextView
                 android:id="@+id/VERIFICATION_voice_call_txt"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:gravity="right|center_vertical"
+                android:paddingRight="68dp"
                 android:layout_height="45dp"
-
-                android:gravity="center"
+                android:layout_weight="5"
                 android:text="Voice Call"
                 android:textColor="#acacac"
                 android:textSize="11sp"
-                android:layout_marginLeft="70dp"
                 android:fontFamily="@string/benton_sans_book"
                 android:typeface="normal" />
         </LinearLayout>

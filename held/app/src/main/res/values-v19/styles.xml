@@ -5,8 +5,10 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/new_btn_color</item>
         <item name="colorPrimaryDark">@color/statusbar_color</item>
-        <item name="android:fitsSystemWindows">true</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+
 
 
         <!--<item name="android:actionBarStyle">@style/MyTheme</item>-->

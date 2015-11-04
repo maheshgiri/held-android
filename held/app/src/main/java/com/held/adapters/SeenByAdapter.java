@@ -151,6 +151,7 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
        // mIsLastPage = isLastPage;
         notifyDataSetChanged();
     }
+
     public static class SeenByViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView mProfilePic;

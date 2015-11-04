@@ -46,6 +46,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import timber.log.Timber;
 
 public class FeedFragment extends ParentFragment {
 
@@ -195,7 +196,7 @@ public class FeedFragment extends ParentFragment {
         Picasso.with(getActivity()).load(url).into(mFullImg);
         mFeedRecyclerView.setEnabled(false);
         mSwipeRefreshLayout.setEnabled(false);
-        UiUtils.hideSystemUI(this.getView());
+        //UiUtils.hideSystemUI(this.getView());
         ((FeedActivity)getCurrActivity()).hideToolbar();
 
     }
@@ -237,10 +238,9 @@ public class FeedFragment extends ParentFragment {
                 });
     }
 
+
     @Override
-    public void onResume() {
-        super.onResume();
-    }
+    public void onResume() { super.onResume();}
 
     private void callFeedApi() {
         isLoading = true;

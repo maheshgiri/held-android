@@ -190,24 +190,23 @@
             android:id="@+id/feed_status_icon_Layout"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:gravity="center">
+            android:gravity="center"
+            >
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="17.5dp"
                 android:layout_height="17.5dp"
                 custom:civ_border_color="@color/white"
                 custom:civ_border_width="1dp"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
                 android:id="@+id/white_ring"
                 android:layout_marginRight="17.5dp"
                 android:layout_marginBottom="17.5dp"
                 android:src="@drawable/transperant"
                 android:layout_alignBaseline="@+id/feed_status_icon" />
 
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="12.5dp"
                 android:layout_height="12.5dp"
-                android:layout_gravity="center"
                 android:id="@+id/feed_status_icon"
                 custom:civ_border_width="0dp"
                 android:layout_marginRight="17.5dp"
