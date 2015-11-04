@@ -160,7 +160,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             {
                 holder.feedStatusIcon.setVisibility(View.GONE);
             }
-
+            blinkAnimation(holder.feedStatusIcon);
 //            holder.mUserImg.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
@@ -492,11 +492,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void blinkAnimation(ImageView img) {
 
         Animation anim = new AlphaAnimation(0.0f, 1.0f);
-            anim.setDuration(500); //You can manage the time of the blink with this <span id="IL_AD7" class="IL_AD">parameter</span>
-            anim.setStartOffset(200);
-            
-            anim.setRepeatCount(Animation.INFINITE);
-            img.startAnimation(anim);
+
+        anim.setDuration(500);
+        anim.setStartOffset(200);
+        anim.setRepeatMode(Animation.RESTART);
+        anim.setRepeatCount(Animation.INFINITE);
+        img.animate();
+        img.startAnimation(anim);
+
 
 
     }
