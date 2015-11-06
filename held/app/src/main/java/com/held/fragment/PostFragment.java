@@ -70,6 +70,7 @@ public class PostFragment extends ParentFragment {
     private GestureDetector mGestureDetector;
     private Button mPostBtn;
     private PreferenceHelper mPrefernce;
+    private boolean isfromCamera=false;
 
     public static PostFragment newInstance() {
 
@@ -213,18 +214,24 @@ public class PostFragment extends ParentFragment {
                 UiUtils.dpToPx(getResources(), 350));
         options.inSampleSize = 1;
         options.inJustDecodeBounds = false;
-        Bitmap mAttachment=BitmapFactory.decodeFile(mFileUri.getPath(),options);
-        mPostImg.setImageBitmap(mAttachment);
-//        try {
-//            mAttachment = MediaStore.Images.Media.getBitmap(getCurrActivity().getContentResolver(), mFileUri);
-//            mPostImg.setImageBitmap(mAttachment);
-//        } catch (FileNotFoundException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
+        Bitmap mAttachment;
+        if(isfromCamera){
+            mAttachment=BitmapFactory.decodeFile(mFileUri.getPath(),options);
+            mPostImg.setImageBitmap(mAttachment);
+
+        }else {
+
+            try {
+                mAttachment = MediaStore.Images.Media.getBitmap(getCurrActivity().getContentResolver(),mFileUri);
+                mPostImg.setImageBitmap(mAttachment);
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
 
 
 
@@ -353,6 +360,7 @@ public class PostFragment extends ParentFragment {
                     File photo = new File(Environment.getExternalStorageDirectory(),
                             "/HELD" + sourceFileName);
                     Uri photoUri = Uri.fromFile(photo);
+                    isfromCamera=true;
                     //doCrop(photoUri);
                     mFileUri=photoUri;
                     mFile = new File(photoUri.getPath());
@@ -362,6 +370,7 @@ public class PostFragment extends ParentFragment {
                 case AppConstants.REQUEST_GALLERY:
                     Uri PhotoURI = data.getData();
                    // doCrop(PhotoURI);
+                    isfromCamera=false;
                     mFileUri=PhotoURI;
                     mFile = new File(getRealPathFromURI(PhotoURI));
                     updateBoxUI();

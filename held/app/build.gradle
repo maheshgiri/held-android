@@ -19,6 +19,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    repositories {
+        maven {
+            url "https://mint.splunk.com/gradle/"
+        }
+    }
+
 }
 
 dependencies {
@@ -35,8 +41,10 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.mikhaellopez:circularimageview:2.0.2'
     compile 'de.hdodenhof:circleimageview:2.0.0'
-    compile files('libs/splunk-mint-4.2.jar')
-    compile files('libs/timber-3.1.0.jar')
+    compile 'com.android.support:design:22.2.0'
+    compile "com.splunk.mint:mint:4.4.0"
+    compile 'com.jakewharton.timber:timber:4.1.0'
+
 
 
 

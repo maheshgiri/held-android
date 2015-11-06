@@ -9,6 +9,7 @@ import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
@@ -207,14 +208,15 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             view.animate()
                     .translationY(0).alpha(1.f)
                     .setStartDelay(delayEnterAnimation ? 50 * (position) : 0)
-                    .setInterpolator(new DecelerateInterpolator(2.f))
-                    .setDuration(300)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            animationsLocked = false;
-                        }
-                    })
+                    .setInterpolator(new DecelerateInterpolator(1.f))
+                    .setDuration(750)
+
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    animationsLocked = false;
+                                }
+                            })
                     .start();
         }
     }

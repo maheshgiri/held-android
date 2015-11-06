@@ -50,12 +50,12 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     private EditText mSearch_edt;
     private TextView mTitle;
     private GestureDetector gestureDetector;
-    private Toolbar mHeld_toolbar;
+    protected Toolbar mHeld_toolbar;
     private final String TAG = "FeedActivity";
     private RelativeLayout mPosttoolbar,statusbar;
     private int mPosition = 1;
     private PreferenceHelper mPreference;
-    private Toolbar toolbar;
+
     private boolean firstClick=true;
     private String mUserNameForSearch;
 //    private View toolbar_divider;
@@ -68,16 +68,27 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
+
+
         mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(mHeld_toolbar);
         getSupportActionBar().getThemedContext();
+        getSupportActionBar();
+        View statusBar=(View)findViewById(R.id.statusBarView);
+        Window w = getWindow();
+        w.setFlags(
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        w.setFlags(
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            statusBar.setVisibility(View.VISIBLE);
 
-
-       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(getResources().getColor(R.color.new_btn_color));
-
-        }*/
+        }else {
+            statusBar.setVisibility(View.GONE);
+        }
 //        getSupportActionBar().setCustomView(R.layout.app_toolbar);
 
 //        getSupportActionBar().hide();
@@ -103,7 +114,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 //        }
 
 
-        setToolbar();
+        //setToolbar();
 
         //launchFeedScreen();
         mChat=(ImageView)findViewById(R.id.toolbar_chat_img);
