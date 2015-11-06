@@ -559,9 +559,11 @@ public class PostFragment extends ParentFragment {
                     public void success(SearchUserResponse searchUserResponse, Response response) {
                         Log.i("PostFragment", "@@Image Url" + searchUserResponse.getUser().getProfilePic());
                         muserProfileUrl=searchUserResponse.getUser().getProfilePic();
-                        Log.i(TAG,muserProfileUrl);
-
-                        PicassoCache.getPicassoInstance(getCurrActivity())
+                        //Log.i(TAG,muserProfileUrl);
+                        if(muserProfileUrl == null)
+                            mUserImg.setImageResource(R.drawable.user_icon);
+                        else
+                            PicassoCache.getPicassoInstance(getCurrActivity())
                                 .load(AppConstants.BASE_URL + searchUserResponse.getUser().getProfilePic())
                                 .placeholder(R.drawable.user_icon)
                                 .into(mUserImg);
