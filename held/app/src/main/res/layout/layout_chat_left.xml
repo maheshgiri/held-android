@@ -19,13 +19,13 @@
         android:id="@+id/chat_time_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="43dp"
-        android:maxWidth="220dp"
+
         android:background="@color/chatBox_left_color"
         android:alpha=".95"
         android:layout_toRightOf="@+id/CHATLEFT_profile_img"
         android:orientation="vertical"
-
+        android:maxWidth="220dp"
+        android:minHeight="43dp"
         >
         <!--<TextView-->
             <!--android:id="@+id/CHATLEFT_user_name_txt"-->
@@ -54,6 +54,7 @@
             android:paddingRight="7dp"
             android:paddingBottom="7dp"
             android:letterSpacing=".05"
+            android:maxWidth="220dp"
              />
         <TextView
             android:id="@+id/CHATLEFT_date_txt"
@@ -67,6 +68,7 @@
             android:layout_below="@+id/CHATLEFT_des_txt"
             android:layout_marginRight="6dp"
             android:layout_marginBottom="6dp"
+            android:paddingLeft="7dp"
             android:letterSpacing=".05"
              />
     </LinearLayout>
