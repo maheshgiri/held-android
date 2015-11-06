@@ -205,6 +205,7 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
         }
         if (mToolbar == null) return;
 
+        setSupportActionBar(mToolbar);
         ImageView chat_img=(ImageView)findViewById(R.id.toolbar_chat_img);
         ImageView search_img=(ImageView)findViewById(R.id.toolbar_search_img);
         ImageView notification_img=(ImageView)findViewById(R.id.toolbar_notification_img);
