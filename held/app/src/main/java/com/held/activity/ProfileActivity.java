@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -44,8 +45,16 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         statusBar=(View)findViewById(R.id.statusBarView);
+        Window w = getWindow();
+
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            w.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            w.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             statusBar.setVisibility(View.VISIBLE);
 
         }else {
@@ -121,11 +130,13 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     public void hideToolbar(){
         mHeld_toolbar.setVisibility(View.GONE);
         toolbar_divider.setVisibility(View.GONE);
+        statusBar.setVisibility(View.GONE);
     }
 
     public void showToolbar(){
         mHeld_toolbar.setVisibility(View.VISIBLE);
         toolbar_divider.setVisibility(View.VISIBLE);
+        statusBar.setVisibility(View.GONE);
     }
     private void launchNotificationScreen() {
         Intent intent = new Intent(ProfileActivity.this, NotificationActivity.class);
