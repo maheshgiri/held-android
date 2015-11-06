@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -50,13 +51,21 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
     private String mRegId,mAuth,mSessonToken,mNewRegId;
     private ImageView mback;
     private PreferenceHelper mPreference;
-
+    View statusBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         Log.i("Activity", "VerificationActivity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification);
+        statusBar=(View)findViewById(R.id.statusBarView);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            statusBar.setVisibility(View.VISIBLE);
+
+        }else {
+            statusBar.setVisibility(View.GONE);
+        }
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         if (getIntent().getExtras() != null) {

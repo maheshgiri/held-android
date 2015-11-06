@@ -1,12 +1,14 @@
 package com.held.activity;
 
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,13 +50,22 @@ public class SeenByActivity extends ParentActivity {
     private int mlimit=10;
     private List<Engager> mEngagersList=new ArrayList<Engager>();
     private List<Engager> tempList=new ArrayList<Engager>();
-
+    View statusBar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seen_by);
+
+        statusBar=(View)findViewById(R.id.statusBarView);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            statusBar.setVisibility(View.VISIBLE);
+
+        }else {
+            statusBar.setVisibility(View.GONE);
+        }
        // mLayoutManager = new LinearLayoutManager(this);
         mChat=(ImageView)findViewById(R.id.toolbar_chat_img);
         mSearch=(ImageView)findViewById(R.id.toolbar_search_img);

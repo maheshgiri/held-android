@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.media.Image;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -75,7 +76,7 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
     private com.held.customview.CircularImageView customRing;
     private LinearLayout uploadPicLayout,dummyLinearLayout, registerLayout;
     private TextView loginHeader;
-
+    View statusBar;
 
 
 private TextView mPolicy;
@@ -84,6 +85,14 @@ private TextView mPolicy;
         Log.d(TAG, "starting Registration activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        statusBar=(View)findViewById(R.id.statusBarView);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            statusBar.setVisibility(View.VISIBLE);
+
+        }else {
+            statusBar.setVisibility(View.GONE);
+        }
         if(getIntent().getExtras()!=null)
             flag=getIntent().getExtras().getBoolean("ForLogin");
         mUserNameEdt = (EditText) findViewById(R.id.REG_user_name_edt);

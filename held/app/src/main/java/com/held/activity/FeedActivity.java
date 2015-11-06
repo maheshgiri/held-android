@@ -55,7 +55,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     private RelativeLayout mPosttoolbar,statusbar;
     private int mPosition = 1;
     private PreferenceHelper mPreference;
-
+    View statusBar;
     private boolean firstClick=true;
     private String mUserNameForSearch;
 //    private View toolbar_divider;
@@ -74,7 +74,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         setSupportActionBar(mHeld_toolbar);
         getSupportActionBar().getThemedContext();
         getSupportActionBar();
-        View statusBar=(View)findViewById(R.id.statusBarView);
+        statusBar=(View)findViewById(R.id.statusBarView);
         Window w = getWindow();
         w.setFlags(
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,

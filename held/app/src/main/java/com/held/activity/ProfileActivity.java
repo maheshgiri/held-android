@@ -3,6 +3,7 @@ package com.held.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,11 +38,19 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     private boolean firstClick=true;
     private String mUserNameForSearch;
     private final String TAG = "ProfileActivity";
-
+    View statusBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        statusBar=(View)findViewById(R.id.statusBarView);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            statusBar.setVisibility(View.VISIBLE);
+
+        }else {
+            statusBar.setVisibility(View.GONE);
+        }
         mActivity = this;
         mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
         setToolbar();

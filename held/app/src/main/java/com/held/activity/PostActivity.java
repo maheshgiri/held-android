@@ -1,6 +1,7 @@
 package com.held.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -35,12 +36,20 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
     private RelativeLayout toolbar;
     private PreferenceHelper mPreference;
     String callfrom;
+    View statusBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "starting Post activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+        statusBar=(View)findViewById(R.id.statusBarView);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            statusBar.setVisibility(View.VISIBLE);
 
+        }else {
+            statusBar.setVisibility(View.GONE);
+        }
         mChat = (ImageView) findViewById(R.id.toolbar_chat_img);
         mCamera = (ImageView) findViewById(R.id.toolbar_post_img);
         mNotification = (ImageView) findViewById(R.id.toolbar_notification_img);

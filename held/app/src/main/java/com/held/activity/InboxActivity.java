@@ -1,6 +1,7 @@
 package com.held.activity;
 
 import android.graphics.Typeface;
+import android.os.Build;
 import android.util.Log;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,7 +32,7 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
     private final boolean flag=true;
     private boolean firstClick=true;
     private String mUserNameForSearch;
-
+    View statusBar;
     public static InboxActivity getInstance() {
         return activity;
     }
@@ -41,6 +42,14 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
         Log.d(TAG, "starting Chat activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        statusBar=(View)findViewById(R.id.statusBarView);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            statusBar.setVisibility(View.VISIBLE);
+
+        }else {
+            statusBar.setVisibility(View.GONE);
+        }
         activity = this;
         title = (TextView)findViewById(R.id.toolbar_title_txt);
         title.setText("Inbox");
