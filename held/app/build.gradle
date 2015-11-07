@@ -42,11 +42,6 @@ dependencies {
     compile 'com.mikhaellopez:circularimageview:2.0.2'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.android.support:design:22.2.0'
-    compile "com.splunk.mint:mint:4.4.0"
-    compile 'com.jakewharton.timber:timber:4.1.0'
-
-
-
 
 
 }
