@@ -29,6 +29,6 @@
         android:visibility="gone"
         android:focusableInTouchMode="true"
         android:background="@color/black"
-        android:fitsSystemWindows="true"/>
+        />
 
 </RelativeLayout>
