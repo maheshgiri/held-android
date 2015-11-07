@@ -72,8 +72,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
         mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(mHeld_toolbar);
-        getSupportActionBar().getThemedContext();
-        getSupportActionBar();
+
         statusBar=(View)findViewById(R.id.statusBarView);
         Window w = getWindow();
 
@@ -472,13 +471,15 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
     public void hideToolbar(){
         mHeld_toolbar.setVisibility(View.GONE);
-        statusBar.setVisibility(View.GONE);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+        statusBar.setVisibility(View.GONE);}
 //        toolbar_divider.setVisibility(View.GONE);
     }
 
     public void showToolbar(){
         mHeld_toolbar.setVisibility(View.VISIBLE);
-        statusBar.setVisibility(View.VISIBLE);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+        statusBar.setVisibility(View.VISIBLE);}
 //        toolbar_divider.setVisibility(View.VISIBLE);
     }
 

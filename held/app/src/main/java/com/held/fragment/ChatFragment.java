@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -87,7 +88,7 @@ public class ChatFragment extends ParentFragment {
 
        // mflag=getArguments().getBoolean("flag");
         //Timber.d("ChatFragment new instance received arguments: user id: " + mId + " isonetoone: " + mIsOneToOne);
-
+//        getCurrActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         return inflater.inflate(R.layout.fragment_chat, container, false);
 
     }
