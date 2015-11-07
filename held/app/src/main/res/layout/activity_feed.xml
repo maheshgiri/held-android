@@ -10,7 +10,6 @@
         android:id="@+id/statusBarView"
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:layout_above="@id/toolbar"
         android:background="@color/statusbar_color"
         android:layout_alignParentTop="true"
         android:visibility="visible"

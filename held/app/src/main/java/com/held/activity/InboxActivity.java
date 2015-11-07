@@ -1,11 +1,13 @@
 package com.held.activity;
 
 import android.graphics.Typeface;
+import android.os.Build;
 import android.util.Log;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,7 +33,7 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
     private final boolean flag=true;
     private boolean firstClick=true;
     private String mUserNameForSearch;
-
+    View statusBar;
     public static InboxActivity getInstance() {
         return activity;
     }
@@ -41,6 +43,22 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
         Log.d(TAG, "starting Chat activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        statusBar=(View)findViewById(R.id.statusBarView);
+        Window w = getWindow();
+
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            w.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            w.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            statusBar.setVisibility(View.VISIBLE);
+
+        }else {
+            statusBar.setVisibility(View.GONE);
+        }
         activity = this;
         title = (TextView)findViewById(R.id.toolbar_title_txt);
         title.setText("Inbox");

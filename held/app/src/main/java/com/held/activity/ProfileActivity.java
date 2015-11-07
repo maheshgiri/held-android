@@ -3,6 +3,7 @@ package com.held.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,14 +39,34 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     private boolean firstClick=true;
     private String mUserNameForSearch;
     private final String TAG = "ProfileActivity";
-
+    View statusBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        mActivity = this;
         mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
-        setToolbar();
+        setSupportActionBar(mHeld_toolbar);
+        getSupportActionBar().getThemedContext();
+        getSupportActionBar();
+        statusBar=(View)findViewById(R.id.statusBarView);
+        Window w = getWindow();
+
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            w.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            w.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            statusBar.setVisibility(View.VISIBLE);
+
+        }else {
+            statusBar.setVisibility(View.GONE);
+        }
+        mActivity = this;
+
+        //setToolbar();
         mTitle=(TextView)findViewById(R.id.toolbar_title_txt);
         mTitle.setText("Profile");
         Typeface medium = Typeface.createFromAsset(getAssets(), "BentonSansMedium.otf");
@@ -111,11 +134,13 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     public void hideToolbar(){
         mHeld_toolbar.setVisibility(View.GONE);
         toolbar_divider.setVisibility(View.GONE);
+        statusBar.setVisibility(View.GONE);
     }
 
     public void showToolbar(){
         mHeld_toolbar.setVisibility(View.VISIBLE);
         toolbar_divider.setVisibility(View.VISIBLE);
+        statusBar.setVisibility(View.GONE);
     }
     private void launchNotificationScreen() {
         Intent intent = new Intent(ProfileActivity.this, NotificationActivity.class);

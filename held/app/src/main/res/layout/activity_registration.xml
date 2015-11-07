@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="none"
+    android:orientation="vertical"
     android:background="@color/bg_color">
-
+    <View
+        android:id="@+id/statusBarView"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="@color/statusbar_color"
+        android:layout_alignParentTop="true"
+        android:visibility="visible"
+        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -200,4 +207,4 @@
                 android:background="@color/bg_color" />
         </LinearLayout>
     </RelativeLayout>
-</ScrollView>
+</LinearLayout>

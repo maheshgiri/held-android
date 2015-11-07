@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_color"
-    android:fitsSystemWindows="true"
     android:orientation="vertical">
-
-    <include layout="@layout/app_toolbar" android:id="@+id/toolbar"></include>
     <View
+        android:id="@+id/statusBarView"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:id="@+id/toolbar_divider"
-        android:background="@color/shadow_color"
-        android:alpha=".20"
-        android:layout_below="@+id/toolbar"
-        android:elevation="2dp"
-        />
+        android:layout_height="25dp"
+        android:background="@color/statusbar_color"
+        android:layout_alignParentTop="true"
+        android:visibility="visible"
+        ></View>
+    <include layout="@layout/app_toolbar" android:id="@+id/toolbar"></include>
+
     <FrameLayout
         android:id="@+id/frag_container"
         android:layout_width="match_parent"
@@ -26,4 +24,4 @@
 
 
 
-</RelativeLayout>
+</LinearLayout>

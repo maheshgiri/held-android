@@ -1,10 +1,18 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.held.activity.SearchActivity"
     android:background="@color/bg_color"
-    android:fitsSystemWindows="true"
+    android:orientation="vertical"
     >
+    <View
+        android:id="@+id/statusBarView"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="@color/statusbar_color"
+        android:layout_alignParentTop="true"
+        android:visibility="visible"
+        ></View>
     <include layout="@layout/search_toolbar_layout" android:id="@+id/toolbar"></include>
     <View
         android:layout_width="match_parent"
@@ -33,4 +41,4 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
 
-</RelativeLayout>
+</LinearLayout>

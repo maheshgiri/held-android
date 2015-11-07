@@ -1,11 +1,13 @@
 package com.held.activity;
 
 import android.graphics.Typeface;
+import android.os.Build;
 import android.util.Log;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,12 +28,28 @@ public class NotificationActivity extends ParentActivity implements View.OnClick
     private TextView mUsername,mTitle;
     private boolean firstClick=true;
     private String mUserNameForSearch;
-
+    View statusBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "starting notification activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+        statusBar=(View)findViewById(R.id.statusBarView);
+        Window w = getWindow();
+
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            w.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            w.setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            statusBar.setVisibility(View.VISIBLE);
+
+        }else {
+            statusBar.setVisibility(View.GONE);
+        }
         mChat = (ImageView) findViewById(R.id.toolbar_chat_img);
         mCamera = (ImageView) findViewById(R.id.toolbar_post_img);
         mNotification = (ImageView) findViewById(R.id.toolbar_notification_img);
