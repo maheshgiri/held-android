@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.held.fragment.ChatFragment;
 import com.held.fragment.ParentFragment;
+import com.held.utils.AndroidBug5497Workaround;
 import com.held.utils.AppConstants;
 import com.held.utils.Utils;
 import timber.log.Timber;
@@ -51,7 +52,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
             statusBar.setVisibility(View.VISIBLE);
-
+            AndroidBug5497Workaround.assistActivity(this);
         }else {
             statusBar.setVisibility(View.GONE);
         }
