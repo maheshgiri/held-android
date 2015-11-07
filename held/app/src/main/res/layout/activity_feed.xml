@@ -12,7 +12,7 @@
         android:layout_height="25dp"
         android:background="@color/statusbar_color"
         android:layout_alignParentTop="true"
-        android:visibility="visible"
+        android:visibility="gone"
         ></View>
     <!--<RelativeLayout-->
         <!--android:id="@+id/statusbar"-->

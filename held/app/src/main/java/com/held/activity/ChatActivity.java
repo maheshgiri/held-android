@@ -49,12 +49,15 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
             w.setFlags(
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
             statusBar.setVisibility(View.VISIBLE);
 
         }else {
             statusBar.setVisibility(View.GONE);
         }
+
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED);
+//        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         mActivity = this;
         TextView title = (TextView)findViewById(R.id.toolbar_title_txt);
         title.setText("");

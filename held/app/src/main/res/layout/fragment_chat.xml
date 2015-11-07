@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
     android:orientation="vertical"
-    android:id="@+id/fragment_chat_layout">
 
+    android:id="@+id/fragment_chat_layout">
 
     <ImageView
         android:layout_width="match_parent"
@@ -22,6 +23,7 @@
     android:layout_height="match_parent"
     android:layout_above="@+id/CHAT_bottom_layout"
     android:layout_centerInParent="true"
+
 
     >
 </android.support.v7.widget.RecyclerView>
@@ -48,6 +50,8 @@
         android:background="@color/bg_color"
         android:layout_marginTop="5dp"
         android:alpha=".70"
+        android:orientation="vertical"
+
         >
 
         <RelativeLayout
@@ -72,7 +76,11 @@
                 android:textSize="13sp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:letterSpacing=".05"
+
+
              />
 
             <Button
@@ -86,6 +94,7 @@
                 android:textColor="@color/white"
                 android:textSize="13sp"
                 android:letterSpacing=".05"
+
                  />
         </RelativeLayout>
 
