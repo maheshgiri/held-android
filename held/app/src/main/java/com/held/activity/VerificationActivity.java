@@ -59,23 +59,23 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         Log.i("Activity", "VerificationActivity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification);
-        statusBar=(View)findViewById(R.id.statusBarView);
-        Window w = getWindow();
-
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-            w.setFlags(
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            w.setFlags(
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            statusBar.setVisibility(View.VISIBLE);
-
-        }else {
-            statusBar.setVisibility(View.GONE);
-        }
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        statusBar=(View)findViewById(R.id.statusBarView);
+//        Window w = getWindow();
+//
+//        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+//            w.setFlags(
+//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION,
+//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//            w.setFlags(
+//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+//                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//            statusBar.setVisibility(View.VISIBLE);
+//
+//        }else {
+//            statusBar.setVisibility(View.GONE);
+//        }
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         if (getIntent().getExtras() != null) {
             mUserName = getIntent().getExtras().getString("username");
@@ -127,7 +127,10 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
         NetworkStateReceiver.registerOnNetworkChangeListener(this);
         mPreference =PreferenceHelper.getInstance(this);
 
-
+        if(flag)
+        {
+            updateToLoginUI();
+        }
 
         mFirstEdt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -302,7 +305,7 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
                 if (flag) {
                     mPreference.writePreference(getString(R.string.is_first_post), false);
                     launchFeedScreen();
-                }else {
+                } else {
                     launchComposeScreen();
                 }
                /* if (loginUserResponse.isLogin()) {
@@ -478,5 +481,9 @@ public class VerificationActivity extends ParentActivity implements View.OnClick
     public void onBackPressed() {
         launchRegistrationActivity();
         this.finish();
+    }
+    public void updateToLoginUI(){
+        mUserNameTxt.setVisibility(View.GONE);
+
     }
 }
