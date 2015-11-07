@@ -44,6 +44,10 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(mHeld_toolbar);
+        getSupportActionBar().getThemedContext();
+        getSupportActionBar();
         statusBar=(View)findViewById(R.id.statusBarView);
         Window w = getWindow();
 
@@ -61,8 +65,8 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
             statusBar.setVisibility(View.GONE);
         }
         mActivity = this;
-        mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
-        setToolbar();
+
+        //setToolbar();
         mTitle=(TextView)findViewById(R.id.toolbar_title_txt);
         mTitle.setText("Profile");
         Typeface medium = Typeface.createFromAsset(getAssets(), "BentonSansMedium.otf");
