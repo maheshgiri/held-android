@@ -268,7 +268,7 @@ private TextView mPolicy;
         registerLayout.setPadding(0, 140, 0, 0);
         uploadPicLayout.setVisibility(View.GONE);
         mUserNameEdt.setVisibility(View.GONE);
-        mRegisterBtn.setText("Loign");
+        mRegisterBtn.setText("Login");
         loginHeader.setVisibility(View.VISIBLE);
     }
 
