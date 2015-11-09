@@ -242,6 +242,7 @@ public class PostFragment extends ParentFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getCurrActivity());
         builder.setTitle("Select Source");
+        //builder.setCancelable(false);
         CharSequence charSequence[] = {"Camera ", "Gallery"};
         builder.setItems(charSequence,
                 new DialogInterface.OnClickListener() {
@@ -302,7 +303,13 @@ public class PostFragment extends ParentFragment {
                         }
                     }
                 });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener(){
 
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                launchFeedScreen();
+            }
+        });
         builder.show();
 //updateBoxUI();
 
@@ -593,7 +600,7 @@ public class PostFragment extends ParentFragment {
     private void launchFeedScreen() {
         Intent intent = new Intent(getCurrActivity(), FeedActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("isProfile", true);
+        //intent.putExtra("isProfile", true);
         startActivity(intent);
     }
     private void launchProfileScreen() {
