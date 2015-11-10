@@ -1,18 +1,15 @@
 package com.held.adapters;
 
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
@@ -23,7 +20,6 @@ import android.widget.TextView;
 
 import com.held.activity.FeedActivity;
 import com.held.activity.R;
-import com.held.activity.SeenByActivity;
 import com.held.customview.BlurTransformation;
 import com.held.customview.PicassoCache;
 import com.held.fragment.FeedFragment;
@@ -31,16 +27,12 @@ import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.HoldResponse;
 import com.held.retrofit.response.ReleaseResponse;
-import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
-import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import retrofit.Callback;

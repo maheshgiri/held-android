@@ -13,21 +13,20 @@
         android:visibility="visible"
         ></View>
     <include layout="@layout/app_toolbar" android:id="@+id/toolbar"></include>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:id="@+id/toolbar_divider"
-        android:background="@color/shadow_color"
-        android:alpha=".20"
-        android:layout_below="@+id/toolbar"
-        />
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="2dp"-->
+        <!--android:id="@+id/toolbar_divider"-->
+        <!--android:background="@color/shadow_color"-->
+        <!--android:alpha=".20"-->
+        <!--android:layout_below="@+id/toolbar"-->
+        <!--/>-->
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="66dp"
-        android:layout_below="@+id/toolbar_divider">
+        android:layout_below="@+id/toolbar">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
