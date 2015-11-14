@@ -2,16 +2,13 @@ package com.held.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -19,22 +16,16 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-
 import com.held.customview.CustomTextView;
-
-import com.held.customview.PicassoCache;
 import com.held.receiver.NetworkStateReceiver;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.CreateUserResponse;
@@ -46,9 +37,7 @@ import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 import com.held.utils.Utils;
 
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import retrofit.Callback;
@@ -127,8 +116,8 @@ private TextView mPolicy;
         String countryCodes[] = getResources().getStringArray(R.array.country_codes);
         mCountryCodes.setAdapter(new ArrayAdapter(this, R.layout.row_spinner_item, countryCodes));
         ArrayAdapter myAdap = (ArrayAdapter) mCountryCodes.getAdapter();
-        int spinnerPosition = myAdap.getPosition("+91 (India)");
-        mCountryCodes.setSelection(spinnerPosition);
+//        int spinnerPosition = myAdap.getPosition("+91 (India)");
+        mCountryCodes.setSelection(setCountryCode());
         mPolicy=(TextView)findViewById(R.id.SPLASH_terms_condition_txt);
 
 
@@ -545,5 +534,22 @@ private TextView mPolicy;
                     UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Some Problem Occurred");
             }
         });
+    }
+    public int setCountryCode(){
+        CharSequence countryNameDevice = this.getResources().getConfiguration().locale.getDisplayCountry();
+       // StringBuffer stringBuffer =new StringBuffer(countryNameDevice);
+        String countryCodes[] = getResources().getStringArray(R.array.country_codes);
+        int position=0;
+        String countrycode;
+        for(int i=0;i<countryCodes.length;i++)
+        {
+            countrycode=countryCodes[i];
+            if(countrycode.contains(countryNameDevice))
+            {
+                position= i;
+                break;
+            }
+        }
+        return position;
     }
 }

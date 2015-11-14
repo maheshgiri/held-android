@@ -2,11 +2,10 @@ package com.held.activity;
 
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,13 +17,9 @@ import com.held.adapters.SeenByAdapter;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.Engager;
 import com.held.retrofit.response.EngagersResponse;
-import com.held.retrofit.response.FriendRequestObject;
-import com.held.retrofit.response.User;
 import com.held.utils.PreferenceHelper;
-import com.held.utils.UiUtils;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import retrofit.Callback;
@@ -58,7 +53,7 @@ public class SeenByActivity extends ParentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seen_by);
-
+        statusBar=(View)findViewById(R.id.statusBarView);
         Window w = getWindow();
 
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
