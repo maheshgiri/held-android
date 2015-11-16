@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +40,7 @@ import com.held.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -118,6 +120,7 @@ private TextView mPolicy;
         ArrayAdapter myAdap = (ArrayAdapter) mCountryCodes.getAdapter();
 //        int spinnerPosition = myAdap.getPosition("+91 (India)");
         mCountryCodes.setSelection(setCountryCode());
+//        setCountryCode();
         mPolicy=(TextView)findViewById(R.id.SPLASH_terms_condition_txt);
 
 
@@ -536,7 +539,10 @@ private TextView mPolicy;
         });
     }
     public int setCountryCode(){
-        CharSequence countryNameDevice = this.getResources().getConfiguration().locale.getDisplayCountry();
+        TelephonyManager telephonyManager=(TelephonyManager)getSystemService(getApplicationContext().TELEPHONY_SERVICE);
+        String contry_code=telephonyManager.getNetworkCountryIso();
+        Locale locale=new Locale("en",contry_code);
+        CharSequence countryNameDevice = locale.getDisplayCountry();
        // StringBuffer stringBuffer =new StringBuffer(countryNameDevice);
         String countryCodes[] = getResources().getStringArray(R.array.country_codes);
         int position=0;
@@ -546,10 +552,19 @@ private TextView mPolicy;
             countrycode=countryCodes[i];
             if(countrycode.contains(countryNameDevice))
             {
+                Log.i(TAG, "@@@@@" +countryCodes[i]);
                 position= i;
                 break;
             }
         }
+
         return position;
+//        TelephonyManager telephonyManager=(TelephonyManager)getSystemService(getApplicationContext().TELEPHONY_SERVICE);
+//        String contry_code=telephonyManager.getNetworkCountryIso();
+//        Locale locale=new Locale("en",contry_code);
+//        Timber.i(TAG,"@@@@@"+contry_code);
+//        Log.i(TAG, "@@@@@" + contry_code);
+//        Log.i(TAG, "@@@@@" + locale.getDisplayCountry());
+
     }
 }
