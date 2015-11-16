@@ -6,9 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
+import android.view.GestureDetector;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,9 +16,6 @@ import com.held.receiver.NetworkStateReceiver;
 import com.held.utils.DialogUtils;
 import com.held.utils.HeldApplication;
 import com.held.utils.NetworkUtil;
-import com.held.utils.UiUtils;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -238,6 +233,7 @@ public abstract class ParentActivity extends AppCompatActivity implements Networ
 
 
     }
+
 
 
 

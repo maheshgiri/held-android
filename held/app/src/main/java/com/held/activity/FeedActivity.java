@@ -1,32 +1,26 @@
 package com.held.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.GestureDetector;
-import android.view.Gravity;
-import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 
-import com.held.fragment.ChatFragment;
 import com.held.fragment.FeedFragment;
 import com.held.fragment.HomeFragment;
-import com.held.fragment.ProfileFragment;
 import com.held.fragment.SendFriendRequestFragment;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.SearchUserResponse;
@@ -58,6 +52,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     View statusBar;
     private boolean firstClick=true;
     private String mUserNameForSearch;
+    private GestureDetectorCompat mGestureDetector;
 //    private View toolbar_divider;
 
 
@@ -125,7 +120,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         Typeface medium = Typeface.createFromAsset(getAssets(), "BentonSansMedium.otf");
         mTitle.setTypeface(medium);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
-
+        mGestureDetector = new GestureDetectorCompat(this, new GestureListener());
         launchFeedScreen();
 //        setSupportActionBar(mHeld_toolbar);
 //        getSupportActionBar().getThemedContext();
@@ -138,6 +133,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mSearch_edt.setVisibility(View.GONE);
 
         mSearch_edt = (EditText) findViewById(R.id.toolbar_search_edt_txt);
+
+
 //        toolbar_divider=(View)findViewById(R.id.toolbar_divider);
 //        mSearch_edt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 //            @Override
@@ -200,7 +197,11 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
 
     }
-
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        this.mGestureDetector.onTouchEvent(event);
+        return super.dispatchTouchEvent(event);
+    }
     private void launchFeedScreen() {
         updateToolbar(true, false, true, false, true, true, false, "");
         addFragment(FeedFragment.newInstance(), FeedFragment.TAG, true);
@@ -410,6 +411,8 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         launchChatListScreen();
     }
 
+
+
     public void callSerachFriendApi()
     {
 
@@ -509,7 +512,17 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                     }
                 });
     }
-
+    public class GestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2,float velocityX, float velocityY) {
+            if (e2.getX()<e1.getX()) {
+                onLeftSwipe();
+            } else if (e2.getX()>e1.getX()) {
+                onRightSwipe();
+            }
+            return true;
+        }
+    }
 
 
 

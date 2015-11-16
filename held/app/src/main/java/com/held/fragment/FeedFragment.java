@@ -7,27 +7,21 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.held.activity.FeedActivity;
 import com.held.activity.R;
 import com.held.adapters.FeedAdapter;
 import com.held.customview.BlurTransformation;
-import com.held.customview.PicassoCache;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
@@ -46,7 +40,6 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
-import timber.log.Timber;
 
 public class FeedFragment extends ParentFragment {
 
@@ -102,6 +95,7 @@ public class FeedFragment extends ParentFragment {
 //                return mGestureDetector.onTouchEvent(motionEvent);
 //            }
 //        });
+
 
         if (getCurrActivity().getNetworkStatus()) {
 //            DialogUtils.showProgressBar();
@@ -297,25 +291,35 @@ public class FeedFragment extends ParentFragment {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2,
                                float velocityX, float velocityY) {
-            try {
-                float diffAbs = Math.abs(e1.getY() - e2.getY());
-                float diff = e1.getX() - e2.getX();
+//            try {
+//                float diffAbs = Math.abs(e1.getY() - e2.getY());
+//                float diff = e1.getX() - e2.getX();
+//                Timber.i(TAG,"@@@Inside try");
+//
+//                if (diffAbs > SWIPE_MAX_OFF_PATH)
+//                    return false;
 
-                if (diffAbs > SWIPE_MAX_OFF_PATH)
-                    return false;
-
-                // Left swipe
-                if (diff > SWIPE_MIN_DISTANCE
-                        && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+//                // Left swipe
+//                if (diff > SWIPE_MIN_DISTANCE
+//                        && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+//                    ((FeedActivity) getCurrActivity()).onLeftSwipe();
+//                    // Right swipe
+//                } else if (-diff > SWIPE_MIN_DISTANCE
+//                        && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+//                    ((FeedActivity) getCurrActivity()).onRightSwipe();
+//                }
+                if (e1.getX()<e2.getX()) {
                     ((FeedActivity) getCurrActivity()).onLeftSwipe();
                     // Right swipe
-                } else if (-diff > SWIPE_MIN_DISTANCE
-                        && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                } else if (e1.getX()>e2.getX()) {
                     ((FeedActivity) getCurrActivity()).onRightSwipe();
                 }
-            } catch (Exception e) {
-                Log.e("YourActivity", "Error on gestures");
-            }
+
+
+
+//            } catch (Exception e) {
+//                Log.e("YourActivity", "Error on gestures");
+//            }
             return false;
         }
     }
