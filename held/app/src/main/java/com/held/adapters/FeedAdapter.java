@@ -202,7 +202,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             UiUtils.owSnackbarToast(mActivity.findViewById(R.id.frag_container), "You are not connected to internet");
                         }*/
                             mPosition = position;
-                            view.getParent().requestDisallowInterceptTouchEvent(true);
+//                            view.getParent().requestDisallowInterceptTouchEvent(true);
                             break;
                         case MotionEvent.ACTION_MOVE:
 //                            view.getParent().requestDisallowInterceptTouchEvent(true);
@@ -210,7 +210,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         case MotionEvent.ACTION_CANCEL:
                         case MotionEvent.ACTION_UP:
                             mFeedFragment.showRCView();
-                            view.getParent().requestDisallowInterceptTouchEvent(false);
+//                            view.getParent().requestDisallowInterceptTouchEvent(false);
                             Picasso.with(mActivity).load(AppConstants.BASE_URL + mFeedList.get(position).getThumbnailUri()).
                                     into(holder.mFeedImg);
                             holder.myTimeLayout.setVisibility(View.VISIBLE);
