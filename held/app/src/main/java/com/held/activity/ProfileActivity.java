@@ -4,13 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,12 +14,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.held.activity.R;
-import com.held.fragment.ChatFragment;
 import com.held.fragment.ParentFragment;
 import com.held.fragment.ProfileFragment;
-
-import timber.log.Timber;
 
 public class ProfileActivity extends ParentActivity implements View.OnClickListener {
 
@@ -46,8 +38,7 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         setContentView(R.layout.activity_profile);
         mHeld_toolbar=(Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(mHeld_toolbar);
-        getSupportActionBar().getThemedContext();
-        getSupportActionBar();
+
         statusBar=(View)findViewById(R.id.statusBarView);
         Window w = getWindow();
 
@@ -134,13 +125,15 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     public void hideToolbar(){
         mHeld_toolbar.setVisibility(View.GONE);
         toolbar_divider.setVisibility(View.GONE);
-        statusBar.setVisibility(View.GONE);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            statusBar.setVisibility(View.GONE);}
     }
 
     public void showToolbar(){
         mHeld_toolbar.setVisibility(View.VISIBLE);
         toolbar_divider.setVisibility(View.VISIBLE);
-        statusBar.setVisibility(View.GONE);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            statusBar.setVisibility(View.VISIBLE);}
     }
     private void launchNotificationScreen() {
         Intent intent = new Intent(ProfileActivity.this, NotificationActivity.class);
