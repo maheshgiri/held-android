@@ -512,12 +512,23 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                     }
                 });
     }
-    public class GestureListener extends GestureDetector.SimpleOnGestureListener {
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+        private static final int SWIPE_MIN_DISTANCE = 120;
+        private static final int SWIPE_MAX_OFF_PATH = 200;
+        private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2,float velocityX, float velocityY) {
-            if (e2.getX()<e1.getX()) {
+            float diffAbs = Math.abs(e1.getY() - e2.getY());
+            float diff = e1.getX() - e2.getX();
+            Timber.i(TAG,"@@@Inside try");
+
+//            if (diffAbs > SWIPE_MAX_OFF_PATH)
+//                return false;
+
+            if (diff > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                 onLeftSwipe();
-            } else if (e2.getX()>e1.getX()) {
+            }else if (-diff > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                 onRightSwipe();
             }
             return true;

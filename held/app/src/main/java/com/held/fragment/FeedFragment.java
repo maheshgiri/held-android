@@ -175,6 +175,7 @@ public class FeedFragment extends ParentFragment {
                 }
             }
         });
+
         Utils.hideSoftKeyboard(getCurrActivity());
     }
 

@@ -202,7 +202,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             UiUtils.owSnackbarToast(mActivity.findViewById(R.id.frag_container), "You are not connected to internet");
                         }*/
                             mPosition = position;
-//                            view.getParent().requestDisallowInterceptTouchEvent(true);
+                            view.getParent().requestDisallowInterceptTouchEvent(true);
                             break;
                         case MotionEvent.ACTION_MOVE:
 //                            view.getParent().requestDisallowInterceptTouchEvent(true);
