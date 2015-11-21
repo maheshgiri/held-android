@@ -140,6 +140,41 @@
             android:textColor="@color/userName_color"
             android:id="@+id/PROFILE_txt_friends"/>
     </LinearLayout>
-    </LinearLayout>
 
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/count_layout"
+        >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/invite_count_layout"
+        android:background="@color/profiel_infoBar_color"
+        >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="123"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:textColor="@color/userName_color"
+        android:id="@+id/invite_count"
+        android:letterSpacing=".05"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Available Invites"
+        android:gravity="center"
+        android:textSize="11sp"
+        android:letterSpacing=".05"
+        android:textColor="@color/userName_color"
+        android:id="@+id/invite_txt"/>
+
+   </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>
