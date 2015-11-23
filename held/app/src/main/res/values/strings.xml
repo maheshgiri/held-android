@@ -28,6 +28,7 @@
     <string name="is_first_post">isFirstPost</string>
     <string name="REG_Session_token">OLD_REG_TOKEN</string>
     <string name="REG_RID">OLD_REG_ID</string>
+    <string name="title_activity_see_invite">See Invites</string>
 
 
     <!--COUNTRY-CODES-->
