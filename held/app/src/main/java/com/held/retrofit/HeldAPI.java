@@ -173,7 +173,8 @@ public interface HeldAPI {
 
     @PUT("/invites/")
     void askForMoreInvites(@Header("Authorization") String token,@Body() String body, Callback<InviteResponse> postInviteResponseCallBack);
-
+    @DELETE("/invites/{invite_id}")
+    void deleteInvite(@Header("Authorization") String token,@Path("invite_id")String id,Callback<InviteResponse> postInviteResponseCallBack);
 
 
     ///////////////////************OLD APIs**************///////////////////////////////

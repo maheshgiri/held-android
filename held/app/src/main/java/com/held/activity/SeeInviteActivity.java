@@ -2,10 +2,12 @@ package com.held.activity;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.held.adapters.SeeInviteAdapter;
@@ -23,7 +25,6 @@ import timber.log.Timber;
 
 public class SeeInviteActivity extends ParentActivity{
 
-    ListView inviteListView;
     SeeInviteAdapter seeInviteAdapter;
     ArrayList<InviteResponse>inviteList=new ArrayList<>();
     PreferenceHelper mPreference;
@@ -32,6 +33,9 @@ public class SeeInviteActivity extends ParentActivity{
     private ImageView mChat, mCamera, mNotification,mSearch;
     private EditText mSearch_edt;
     private TextView mTitle,mInvite;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private RecyclerView mSeenRecyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,23 +63,25 @@ public class SeeInviteActivity extends ParentActivity{
                 onBackPressed();
             }
         });
-
-
         mPreference=PreferenceHelper.getInstance(this);
-        inviteListView=(ListView)findViewById(R.id.seeInviteListView);
+
+        mSeenRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mSeenRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         callGetInviteListByUser();
-        seeInviteAdapter=new SeeInviteAdapter(inviteList,this);
-        inviteListView.setAdapter(seeInviteAdapter);
+        seeInviteAdapter=new SeeInviteAdapter(this,inviteList);
+        seeInviteAdapter.setInviteList(inviteList);
+        mSeenRecyclerView.setAdapter(seeInviteAdapter);
 
     }
-    void callGetInviteListByUser(){
+    public void callGetInviteListByUser(){
         HeldService.getService().getInvitationList(mPreference.readPreference(getString(R.string.API_session_token))
                 , mStart, mLimit, new Callback<InviteListResponse>() {
             @Override
             public void success(InviteListResponse inviteListResponse, Response response) {
                 inviteList=inviteListResponse.getObjects();
-                Timber.i("Data Recived :"+inviteList.get(0).getPhone());
-//                seeInviteAdapter.notifyDataSetChanged();
+                Timber.i("Data Recived ");
+                seeInviteAdapter.setInviteList(inviteList);
+                seeInviteAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -89,6 +95,7 @@ public class SeeInviteActivity extends ParentActivity{
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        this.finish();
     }
 
 }
