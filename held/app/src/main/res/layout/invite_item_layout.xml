@@ -11,26 +11,9 @@
             android:layout_marginRight="5dp"
             android:layout_marginLeft="10dp"
             android:id="@+id/contact_name"
-            android:layout_alignTop="@+id/invite_status"
             android:layout_alignParentStart="true"
-            android:layout_alignBaseline="@+id/action_invite" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Status"
-            android:layout_marginRight="5dp"
-            android:id="@+id/invite_status"
-            android:layout_centerHorizontal="true"
-            android:layout_alignBaseline="@+id/action_invite" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete"
-            android:textAllCaps="false"
-            android:layout_marginRight="5dp"
-            android:id="@+id/action_invite"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+           />
+
 
 
 

@@ -280,5 +280,6 @@
     <string name="title_photo_upload">Upload photo</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_see_invite">SeeInviteActivity</string>
 
 </resources>
