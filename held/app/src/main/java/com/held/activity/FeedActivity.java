@@ -1,40 +1,39 @@
 package com.held.activity;
 
 import android.app.Activity;
-import android.graphics.Typeface;
-import android.os.Build;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.GestureDetector;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 
-import com.held.fragment.ChatFragment;
 import com.held.fragment.FeedFragment;
 import com.held.fragment.HomeFragment;
-import com.held.fragment.ProfileFragment;
 import com.held.fragment.SendFriendRequestFragment;
 import com.held.retrofit.HeldService;
+import com.held.retrofit.response.InviteResponse;
 import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.AppConstants;
+import com.held.utils.CustomContact;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 import com.held.utils.Utils;
+
+import java.util.ArrayList;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -44,11 +43,13 @@ import timber.log.Timber;
 
 public class FeedActivity extends ParentActivity implements View.OnClickListener {
 
+    private static final int PICK_CONTACT =1 ;
+    int  max_pic_contact = 5;
     //    private Fragment mDisplayFragment;
     public static boolean isBlured = true;
     private ImageView mChat, mCamera, mNotification,mSearch;
     private EditText mSearch_edt;
-    private TextView mTitle;
+    private TextView mTitle,mInvite;
     private GestureDetector gestureDetector;
     protected Toolbar mHeld_toolbar;
     private final String TAG = "FeedActivity";
@@ -58,7 +59,10 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     View statusBar;
     private boolean firstClick=true;
     private String mUserNameForSearch;
+    CustomContact personContact=new CustomContact();
+    ArrayList<CustomContact> inviteContactList=new ArrayList<>(max_pic_contact);
 //    private View toolbar_divider;
+
 
 
     @Override
@@ -122,8 +126,10 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mNotification=(ImageView)findViewById(R.id.toolbar_notification_img);
         mCamera=(ImageView)findViewById(R.id.toolbar_post_img);
         mTitle=(TextView)findViewById(R.id.toolbar_title_txt);
+        mInvite=(TextView)findViewById(R.id.toolbar_invite_txt);
         Typeface medium = Typeface.createFromAsset(getAssets(), "BentonSansMedium.otf");
         mTitle.setTypeface(medium);
+        mInvite.setTypeface(medium);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
 
         launchFeedScreen();
@@ -136,6 +142,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         mNotification.setOnClickListener(this);
         mCamera.setOnClickListener(this);
         mSearch_edt.setVisibility(View.GONE);
+        mInvite.setOnClickListener(this);
 
         mSearch_edt = (EditText) findViewById(R.id.toolbar_search_edt_txt);
 //        toolbar_divider=(View)findViewById(R.id.toolbar_divider);
@@ -284,11 +291,9 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 launchChatListScreen();
                 break;
             case AppConstants.LAUNCH_PROFILE_SCREEN:
-
                 if (bundle != null)
                     launchProfileScreen(bundle.getString("user_id"));
                 break;
-
         }
     }
 
@@ -388,6 +393,9 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
 
                  }
 
+                break;
+            case R.id.toolbar_invite_txt:
+                inviteNewUser();
                 break;
         }
     }
@@ -510,6 +518,57 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 });
     }
 
+    void inviteNewUser(){
+        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        startActivityForResult(intent, PICK_CONTACT);
+    }
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        String phn_no="",name;
+        switch (reqCode) {
+            case (PICK_CONTACT):
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri contactData = data.getData();
+                    Cursor c = managedQuery(contactData, null, null, null, null);
+                    if (c.moveToFirst()) {
+                        String id=c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                        String hasPhone=c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+
+                        if (hasPhone.equalsIgnoreCase("1")) {
+                            Cursor phones = getContentResolver().query(
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id,
+                                    null, null);
+                            phones.moveToFirst();
+                            phn_no = phones.getString(phones.getColumnIndex("data1"));
+                            phn_no=phn_no.replaceAll(" ","");
+                        }
+                            name = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.DISPLAY_NAME));
+                            Timber.i("Contact Picked :"+name+":"+phn_no);
+                        personContact.setName(name);
+                        personContact.setPhone_no(phn_no);
+
+
+                    }
+                }
+        }
+    }
+
+    void callInviteUser(String phone){
+        HeldService.getService().sendInvitation(mPreference.readPreference(getString(R.string.API_session_token)), phone, "",
+                new Callback<InviteResponse>() {
+                    @Override
+                    public void success(InviteResponse inviteResponse, Response response) {
+                        Timber.i("Invittion Sent To :"+inviteResponse.getPhone()+":Successfully..");
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+
+    }
 
 
 

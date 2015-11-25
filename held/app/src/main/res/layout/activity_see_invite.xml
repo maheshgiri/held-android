@@ -1,19 +1,9 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.held.activity.SearchActivity"
-    android:background="@color/bg_color"
-    android:orientation="vertical"
-    >
-    <View
-        android:id="@+id/statusBarView"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:background="@color/statusbar_color"
-        android:layout_alignParentTop="true"
-        android:visibility="visible"
-        ></View>
-    <include layout="@layout/search_toolbar_layout" android:id="@+id/toolbar"></include>
+    android:background="@color/white"
+    tools:context="com.held.activity.SeeInviteActivity">
+    <include layout="@layout/app_toolbar" android:id="@+id/toolbar"></include>
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
@@ -26,8 +16,6 @@
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-
         android:layout_below="@+id/toolbar_divider">
 
         <android.support.v7.widget.RecyclerView
@@ -40,5 +28,4 @@
         </android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-
-</LinearLayout>
+</RelativeLayout>

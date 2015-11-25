@@ -11,6 +11,11 @@ public class User {
         String displayName;
         String phone;
         String joinDate,friendCount,postCount;
+        int availableInvites;
+
+        public int getAvailableInvites() {
+                return availableInvites;
+        }
 
         public String getPostCount() {
                 return postCount;

@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,7 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.held.activity.FeedActivity;
 import com.held.activity.ParentActivity;
 import com.held.activity.ProfileActivity;
 import com.held.activity.R;
@@ -28,6 +26,7 @@ import com.held.fragment.ProfileFragment;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.HoldResponse;
+import com.held.retrofit.response.InviteResponse;
 import com.held.retrofit.response.ReleaseResponse;
 import com.held.retrofit.response.SearchUserResponse;
 import com.held.retrofit.response.User;
@@ -66,6 +65,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private String mUserName,mprofileUrl,mUserId,mholdId;
     private User user=new User();
     private boolean isFullScreenMode = false;
+    private int maxInvite=5,mInviteNo;
 
 
 
@@ -114,11 +114,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         if (holder instanceof HeaderViewHolder) {
 
-            HeaderViewHolder viewHolderHead = (HeaderViewHolder) holder;
-            Timber.i("Profile Post call Successfull ..Position:"+position);
+            final HeaderViewHolder viewHolderHead = (HeaderViewHolder) holder;
+            Timber.i("Profile Post call Successfull ..Position:" + position);
             viewHolderHead.mUserName.setText(user.getDisplayName());
             viewHolderHead.mFriendCount.setText(user.getFriendCount());
             viewHolderHead.mPostCount.setText(user.getPostCount());
+            checkAvailableInvite(user.getAvailableInvites(), viewHolderHead.mInviteCount,viewHolderHead.mInviteText);
+
 //            PicassoCache.getPicassoInstance(mActivity)
 //                    .load(AppConstants.BASE_URL + user.getProfilePic())
 //                    .into(viewHolderHead.mProfilePic);
@@ -132,6 +134,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             setTypeFace(viewHolderHead.mPostCount,"medium");
             setTypeFace(viewHolderHead.mfriendTxt,"book");
             setTypeFace(viewHolderHead.mPostTxt,"book");
+            setTypeFace(viewHolderHead.mInviteCount,"medium");
+            setTypeFace(viewHolderHead.mInviteText,"book");
 //            }catch (Exception e){
 //                e.printStackTrace();
 //            }
@@ -259,7 +263,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
         private de.hdodenhof.circleimageview.CircleImageView mCircularImage;
         private CircularImageView mProfilePic;
-        private TextView mUserName, mFriendCount, mPostCount,mfriendTxt,mPostTxt;
+        private TextView mUserName, mFriendCount, mPostCount,mfriendTxt,mPostTxt,mInviteCount,mInviteText;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
@@ -269,6 +273,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             mPostCount = (TextView) itemView.findViewById(R.id.PROFILE_count_photos);
             mfriendTxt = (TextView) itemView.findViewById(R.id.PROFILE_txt_friends);
             mPostTxt = (TextView) itemView.findViewById(R.id.PROFILE_txt_photos);
+            mInviteCount=(TextView) itemView.findViewById(R.id.invite_count);
+            mInviteText=(TextView) itemView.findViewById(R.id.invite_txt);
             mCircularImage=(de.hdodenhof.circleimageview.CircleImageView)itemView.findViewById(R.id.circular_Profile_pic);
 
         }
@@ -352,10 +358,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void callHoldApi(String postId,String start_tm) {
-        HeldService.getService().holdPost(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"),postId,start_tm,"" ,new Callback<HoldResponse>(){
-        @Override
+        HeldService.getService().holdPost(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"), postId, start_tm, "", new Callback<HoldResponse>() {
+            @Override
             public void success(HoldResponse holdResponse, Response response) {
-                mholdId=holdResponse.getRid();
+                mholdId = holdResponse.getRid();
             }
 
             @Override
@@ -365,9 +371,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
                     String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
 //                    UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), json.substring(json.indexOf(":") + 2, json.length() - 2));
-                }
-                else
-                UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "Some Problem Occurred");
+                } else
+                    UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "Some Problem Occurred");
             }
         });
     }
@@ -379,7 +384,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
                         //Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
-                        user=searchUserResponse.getUser();
+                        user = searchUserResponse.getUser();
                         notifyDataSetChanged();
                         Timber.i("User Init:" + user.getDisplayName());
 
@@ -401,4 +406,44 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tv.setTypeface(medium);
         }
     }
+    void checkAvailableInvite(int count,TextView text,TextView text2){
+        if(count==0)
+        {   text.setVisibility(View.GONE);
+            text2.setVisibility(View.GONE);
+            return;
+        }
+        if(count>maxInvite){
+            text.setText("Ask For More Invites");
+            text.setVisibility(View.VISIBLE);
+            text.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        callAskForMoreInvites();
+                }
+            });
+            text2.setVisibility(View.GONE);
+
+        }else {
+            text.setText(String.valueOf(count));
+            text.setVisibility(View.VISIBLE);
+            text2.setVisibility(View.VISIBLE);
+        }
+
+    }
+    void callAskForMoreInvites(){
+
+        HeldService.getService().askForMoreInvites(PreferenceHelper.getInstance(mActivity).readPreference(Utils.getString(R.string.API_session_token)), "",
+                new Callback<InviteResponse>() {
+                    @Override
+                    public void success(InviteResponse inviteResponse, Response response) {
+                        Timber.i("You Have Asked for More Invites .......");
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+    }
+
 }

@@ -4,7 +4,6 @@ package com.held.fragment;
 import android.content.BroadcastReceiver;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +11,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -132,8 +130,10 @@ public class ChatFragment extends ParentFragment {
         slideInUpAnimator.setAddDuration(1000);
         mChatList.setItemAnimator(slideInUpAnimator);
         mSubmitBtn = (Button) view.findViewById(R.id.CHAT_submit_btn);
+        mSubmitBtn.setBackgroundColor(getResources().getColor(R.color.chat_submitBtn_color));
         mMessageEdt = (EditText) view.findViewById(R.id.CHAT_message);
         mSubmitBtn.setOnClickListener(this);
+
         mBlurTransformation = new BlurTransformation(getCurrActivity(), 25f);
         mChatBackImage = (ImageView) view.findViewById(R.id.background_imageView);
         mPreference = PreferenceHelper.getInstance(getCurrActivity());
@@ -405,6 +405,7 @@ public class ChatFragment extends ParentFragment {
                         PicassoCache.getPicassoInstance(getCurrActivity())
                                 .load(AppConstants.BASE_URL + feedResponse.getObjects().get(0).getThumbnailUri())
                                 .into(mChatBackImage);
+
                     }
 
                     @Override

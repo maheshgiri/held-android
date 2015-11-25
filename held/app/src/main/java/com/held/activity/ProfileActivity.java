@@ -16,12 +16,19 @@ import android.widget.TextView;
 
 import com.held.fragment.ParentFragment;
 import com.held.fragment.ProfileFragment;
+import com.held.retrofit.HeldService;
+import com.held.retrofit.response.InviteResponse;
+import com.held.utils.PreferenceHelper;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class ProfileActivity extends ParentActivity implements View.OnClickListener {
 
     ImageView mChat, mCamera, mNotification,mSearch;
     EditText mSearchEdt;
-    private TextView mTitle;
+    private TextView mTitle,mInvite;
     Activity mActivity;
     Fragment mDisplayFragment;
     String mUserId;
@@ -32,6 +39,7 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     private String mUserNameForSearch;
     private final String TAG = "ProfileActivity";
     View statusBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +68,11 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         //setToolbar();
         mTitle=(TextView)findViewById(R.id.toolbar_title_txt);
         mTitle.setText("Profile");
+        mInvite=(TextView)findViewById(R.id.toolbar_invite_txt);
+        mInvite.setText("See Invites");
         Typeface medium = Typeface.createFromAsset(getAssets(), "BentonSansMedium.otf");
         mTitle.setTypeface(medium);
+        mInvite.setTypeface(medium);
         mChat = (ImageView) findViewById(R.id.toolbar_chat_img);
         mCamera = (ImageView) findViewById(R.id.toolbar_post_img);
         mNotification = (ImageView) findViewById(R.id.toolbar_notification_img);
@@ -78,9 +89,11 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         mNotification.setOnClickListener(this);
         mSearch.setOnClickListener(this);
         mChat.setOnClickListener(this);
+        mInvite.setOnClickListener(this);
         Bundle extras = getIntent().getExtras();
         mUserId=extras.getString("user_id");
         launchProfileScreen(mUserId);
+
     }
 
     private void launchProfileScreen(String uid) {
@@ -117,6 +130,12 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
                 break;
             case R.id.toolbar_notification_img:
                 launchNotificationScreen();
+                break;
+            case R.id.toolbar_invite_txt:
+                launchSeeInviteScreen();
+                break;
+            case R.id.invite_count:
+
                 break;
 
         }
@@ -164,4 +183,10 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         Intent intent = new Intent(ProfileActivity.this, PostActivity.class);
         startActivity(intent);
     }
+    private void launchSeeInviteScreen() {
+        Intent intent = new Intent(ProfileActivity.this, SeeInviteActivity.class);
+        startActivity(intent);
+    }
+
+
 }

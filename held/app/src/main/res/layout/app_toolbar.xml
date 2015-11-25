@@ -25,7 +25,18 @@
         android:layout_centerInParent="true"
         android:layout_alignParentLeft="true"
          />
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar_invite_txt"
+        android:textColor="@color/white"
+        android:text="Invite"
+        android:textSize="16sp"
+        android:letterSpacing=".05"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@id/toolbar_chat_img"
+         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,6 +62,7 @@
         android:paddingRight="5dp"
         android:textColorHint="@color/white"
         android:layout_marginLeft="50dp"
+        android:visibility="gone"
         />
 
 

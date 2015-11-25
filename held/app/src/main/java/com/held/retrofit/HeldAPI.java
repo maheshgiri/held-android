@@ -1,8 +1,5 @@
 package com.held.retrofit;
 
-import android.media.Image;
-import android.widget.ImageView;
-
 import com.held.retrofit.response.ActivityFeedDataResponse;
 import com.held.retrofit.response.AddFriendResponse;
 import com.held.retrofit.response.ApproveDownloadResponse;
@@ -15,13 +12,13 @@ import com.held.retrofit.response.DownloadRequestData;
 import com.held.retrofit.response.DownloadRequestListResponse;
 import com.held.retrofit.response.Engager;
 import com.held.retrofit.response.EngagersResponse;
-import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.FriendDeclineResponse;
-import com.held.retrofit.response.FriendRequestObject;
 import com.held.retrofit.response.FriendRequestResponse;
 import com.held.retrofit.response.FriendsResponse;
 import com.held.retrofit.response.HoldResponse;
+import com.held.retrofit.response.InviteListResponse;
+import com.held.retrofit.response.InviteResponse;
 import com.held.retrofit.response.LoginUserResponse;
 import com.held.retrofit.response.LogoutUserResponse;
 import com.held.retrofit.response.PostChatData;
@@ -30,11 +27,9 @@ import com.held.retrofit.response.PostMessageResponse;
 import com.held.retrofit.response.PostResponse;
 import com.held.retrofit.response.ProfilPicUpdateResponse;
 import com.held.retrofit.response.ReleaseResponse;
-import com.held.retrofit.response.SearchByNameResponce;
 import com.held.retrofit.response.SearchUserResponse;
 import com.held.retrofit.response.UnDeclineFriendResponse;
 import com.held.retrofit.response.UnFriendResponse;
-import com.held.retrofit.response.User;
 import com.held.retrofit.response.VerificationResponse;
 import com.held.retrofit.response.VoiceCallResponse;
 
@@ -155,22 +150,8 @@ public interface HeldAPI {
     @GET("//users/{user_id}/messages/")
     void getFriendChat(@Header("Authorization") String token, @Path("user_id") String userId, @Query("start") long start, @Query("limit") int limit, Callback<PostChatResponse> postChatResponseCallback);
 
-
-
-    @POST("/registrations/{registration_id}/pic")
-    void setProfilePicRegistration();
-    ///////////////////************OLD APIs**************///////////////////////////////
-
     @GET("/posts/{post_id}/holds/{hold_id}/")
     void getHold(@Header("Authorization") String token, @Path("post_id") String postId,@Path("hold_id") String holdId,Callback<HoldResponse> getHoldResponce);
-
-
-    @GET("/posts/")
-    void feedPost(@Header("X-HELD-TOKEN") String token, Callback<FeedResponse> feedResponseCallback);
-
-    @GET("/friends/declined")
-    void getDeclinedFriends(@Header("X-HELD-TOKEN") String token, Callback<FriendDeclineResponse> friendDeclineResponseCallback);
-
 
     @GET("/posts/{post_id}/messages/")
     void getPostChat(@Header("Authorization") String token, @Path("post_id") String postId,@Query("start") long start, @Query("limit") int limit, Callback<PostChatResponse> postChatResponseCallback);
@@ -184,7 +165,19 @@ public interface HeldAPI {
     @GET("/posts/{post_id}/")
     void getSearchCurrentPost(@Header("Authorization") String token, @Path("post_id") String postId,Callback<PostResponse> postResponseCallback);
 
+    @POST("/invites/")
+    void sendInvitation(@Header("Authorization") String token,@Query("phone") String phone_no,@Body() String body, Callback<InviteResponse> postInviteResponseCallBack);
 
+    @GET("/invites/")
+    void getInvitationList(@Header("Authorization") String token,@Query("start") long start,@Query("limit") int limit, Callback<InviteListResponse> getInviteListCallBack);
+
+    @PUT("/invites/")
+    void askForMoreInvites(@Header("Authorization") String token,@Body() String body, Callback<InviteResponse> postInviteResponseCallBack);
+    @DELETE("/invites/{invite_id}")
+    void deleteInvite(@Header("Authorization") String token,@Path("invite_id")String id,Callback<InviteResponse> postInviteResponseCallBack);
+
+
+    ///////////////////************OLD APIs**************///////////////////////////////
     @GET("/friends/add")
     void addFriend(@Header("X-HELD-TOKEN") String token, @Query("name") String name, Callback<AddFriendResponse> addFriendResponseCallback);
 
@@ -209,5 +202,11 @@ public interface HeldAPI {
 
     @GET("/posts/search")
     void postSearch(@Header("X-HELD-TOKEN") String token, @Query("post") String postId, Callback<PostResponse> postResponseCallback);
+
+    @GET("/posts/")
+    void feedPost(@Header("X-HELD-TOKEN") String token, Callback<FeedResponse> feedResponseCallback);
+
+    @GET("/friends/declined")
+    void getDeclinedFriends(@Header("X-HELD-TOKEN") String token, Callback<FriendDeclineResponse> friendDeclineResponseCallback);
 
 }

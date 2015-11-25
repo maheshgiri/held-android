@@ -1,38 +1,28 @@
 package com.held.fragment;
 
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
-import android.view.KeyEvent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.held.activity.FeedActivity;
 import com.held.activity.ProfileActivity;
 import com.held.activity.R;
 import com.held.adapters.ProfileAdapter;
-import com.held.customview.PicassoCache;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.SearchUserResponse;
-import com.held.utils.AppConstants;
-import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
-import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -41,7 +31,6 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import timber.log.Timber;
 
 public class ProfileFragment extends ParentFragment {
 
@@ -59,6 +48,7 @@ public class ProfileFragment extends ParentFragment {
     private ImageView mFullImg;
     private FeedActivity mActivity;
     private EditText mSearchEdt;
+
 
     public static final String TAG = ProfileFragment.class.getSimpleName();
 
@@ -86,6 +76,7 @@ public class ProfileFragment extends ParentFragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mFullImg = (ImageView) view.findViewById(R.id.PROFILE_full_img);
         mPreference=PreferenceHelper.getInstance(getCurrActivity());
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.PROFILE_swipe_refresh_layout);
         mUserId= getArguments().getString("user_id");
         mProfileAdapter=null;
@@ -259,6 +250,12 @@ public class ProfileFragment extends ParentFragment {
     @Override
     public void onClicked(View v) {
 
+        switch (v.getId()) {
+
+        }
+
     }
+
+
 
 }
