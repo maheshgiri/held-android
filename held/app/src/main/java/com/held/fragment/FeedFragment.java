@@ -1,33 +1,26 @@
 package com.held.fragment;
 
 
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.held.activity.FeedActivity;
 import com.held.activity.R;
 import com.held.adapters.FeedAdapter;
 import com.held.customview.BlurTransformation;
-import com.held.customview.PicassoCache;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
@@ -46,7 +39,6 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
-import timber.log.Timber;
 
 public class FeedFragment extends ParentFragment {
 
@@ -193,7 +185,8 @@ public class FeedFragment extends ParentFragment {
         mFullImg.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setVisibility(View.GONE);
 
-        Picasso.with(getActivity()).load(url).into(mFullImg);
+
+        Picasso.with(getActivity()).load(url).priority(Picasso.Priority.HIGH).noFade().into(mFullImg);
         mFeedRecyclerView.setEnabled(false);
         mSwipeRefreshLayout.setEnabled(false);
         //UiUtils.hideSystemUI(this.getView());

@@ -2,6 +2,7 @@ package com.held.adapters;
 
 
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -37,6 +38,7 @@ import com.held.utils.UiUtils;
 import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +55,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private boolean mIsLastPage;
     private String mPostId, mOwnerDisplayName;
     private int mPosition;
-    private GestureDetector mGestureDetector;
+
     private ProfileFragment mProfileFragment;
     private ItemViewHolder mItemViewHolder;
     private PreferenceHelper mPreference;
@@ -66,7 +68,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private User user=new User();
     private boolean isFullScreenMode = false;
     private int maxInvite=5,mInviteNo;
-
+    private GestureDetector mGestureDetector,mGestureDetector2;
+    private File mFile;
+    private Uri mFileUri;
+    String sourceFileName;
 
 
     public ProfileAdapter(ParentActivity activity,String userId,List<FeedData> postList, boolean isLastPage, ProfileFragment profileFragment) {
@@ -76,10 +81,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mProfileFragment = profileFragment;
         mBlurTransformation = new BlurTransformation(mActivity, 18);
         mGestureDetector = new GestureDetector(mActivity, new GestureListener());
+        mGestureDetector2=new GestureDetector(mActivity,new GestureListenerProfile());
         mPreference=PreferenceHelper.getInstance(mActivity);
         Timber.i("User Name In Profile "+userId);
         mUserId=userId;
         setUserProfile();
+
 
     }
 
@@ -140,6 +147,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //                e.printStackTrace();
 //            }
 
+            viewHolderHead.mCircularImage.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return mGestureDetector2.onTouchEvent(event);
+                }
+            });
 
 
         } else if(holder instanceof ItemViewHolder) {
@@ -356,6 +369,21 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super.onLongPress(e);
         }
     }
+    private class GestureListenerProfile extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+
+            return true;
+        }
+
+        // event when double tap occurs
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            mActivity.openImageIntent();
+            return true;
+        }
+    }
 
     private void callHoldApi(String postId,String start_tm) {
         HeldService.getService().holdPost(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"), postId, start_tm, "", new Callback<HoldResponse>() {
@@ -445,5 +473,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 });
     }
+
+
+
+
+
 
 }

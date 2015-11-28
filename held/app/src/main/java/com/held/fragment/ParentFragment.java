@@ -1,6 +1,7 @@
 package com.held.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -53,6 +54,7 @@ public abstract class ParentFragment extends Fragment implements View.OnClickLis
     public void onNetworkStatusChanged(boolean mNetworkStatus) {
 
     }
+
 
 }
 

@@ -42,12 +42,12 @@ public class ProfileFragment extends ParentFragment {
     private long mStart = System.currentTimeMillis();
     private int mLimit = 5;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
     private String mUserName,mUserImg = "",mUserId;
     private PreferenceHelper mPreference;
     private ImageView mFullImg;
     private FeedActivity mActivity;
     private EditText mSearchEdt;
+
 
 
     public static final String TAG = ProfileFragment.class.getSimpleName();
@@ -76,7 +76,6 @@ public class ProfileFragment extends ParentFragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mFullImg = (ImageView) view.findViewById(R.id.PROFILE_full_img);
         mPreference=PreferenceHelper.getInstance(getCurrActivity());
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.PROFILE_swipe_refresh_layout);
         mUserId= getArguments().getString("user_id");
         mProfileAdapter=null;
@@ -153,6 +152,7 @@ public class ProfileFragment extends ParentFragment {
 
 
     }
+
 
     private void callUserSearchApi() {
 
@@ -255,7 +255,6 @@ public class ProfileFragment extends ParentFragment {
         }
 
     }
-
 
 
 }
