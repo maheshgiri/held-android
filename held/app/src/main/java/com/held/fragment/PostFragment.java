@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,7 +31,6 @@ import android.widget.TextView;
 import com.held.activity.FeedActivity;
 import com.held.activity.PostActivity;
 import com.held.activity.R;
-import com.held.activity.SeenByActivity;
 import com.held.customview.PicassoCache;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.PostResponse;
@@ -43,11 +41,11 @@ import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
 import com.held.utils.Utils;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -173,7 +171,12 @@ public class PostFragment extends ParentFragment {
                 openImageIntent();
                 break;*/
             case R.id.post_button:
-                if (mFile != null & getCurrActivity().getNetworkStatus()) {
+                if(mCaptionEdt.getText().toString().equals(""))
+                {
+                    UiUtils.showSnackbarToast(getView(), "Please, add caption.");
+                    return;
+                }
+                else if (mFile != null & getCurrActivity().getNetworkStatus()) {
                     DialogUtils.showProgressBar();
                     callPostDataApi();
                 } else {
