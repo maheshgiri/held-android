@@ -25,7 +25,7 @@ public class NotificationActivity extends ParentActivity implements View.OnClick
     private EditText mSearchEdt;
     private Button mRetakeBtn, mPostBtn;
     private final String TAG = "NotificationActivity";
-    private TextView mUsername,mTitle;
+    private TextView mUsername,mTitle,mInvite;
     private boolean firstClick=true;
     private String mUserNameForSearch;
     View statusBar;
@@ -64,7 +64,8 @@ public class NotificationActivity extends ParentActivity implements View.OnClick
         mCamera.setOnClickListener(this);
         mNotification.setOnClickListener(this);
         mSearch.setOnClickListener(this);
-
+        mInvite=(TextView)findViewById(R.id.toolbar_invite_txt);
+        mInvite.setVisibility(View.GONE);
 //        mRetakeBtn.setOnClickListener(this);
 //        mPostBtn.setOnClickListener(this);
         mChat.setVisibility(View.GONE);

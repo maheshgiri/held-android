@@ -547,6 +547,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                             Timber.i("Contact Picked :"+name+":"+phn_no);
                         personContact.setName(name);
                         personContact.setPhone_no(phn_no);
+                        callInviteUser(personContact.getPhone_no());
 
 
                     }
