@@ -297,9 +297,9 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         }
     }
 
-    private void launchProfileScreen(String uname) {
+    private void launchProfileScreen(String uid) {
         Intent intent = new Intent(FeedActivity.this, ProfileActivity.class);
-        intent.putExtra("user_id", uname);
+        intent.putExtra("user_id", uid);
         startActivity(intent);
     }
     private void launchSearchScreen(String uname) {

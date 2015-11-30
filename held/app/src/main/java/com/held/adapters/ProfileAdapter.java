@@ -74,10 +74,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private GestureDetector mGestureDetector,mGestureDetector2;
     private File mFile;
     private Uri mFileUri;
-    String currentProfileUserName;
+
+    SearchUserResponse currentProfileUser=new SearchUserResponse();
 
 
-    public ProfileAdapter(ParentActivity activity,String userId,List<FeedData> postList, boolean isLastPage, ProfileFragment profileFragment) {
+    public ProfileAdapter(ParentActivity activity,String mUserId,List<FeedData> postList, boolean isLastPage, ProfileFragment profileFragment) {
         mActivity =(ProfileActivity)activity;
         mPostList = postList;
         mIsLastPage = isLastPage;
@@ -86,9 +87,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mGestureDetector = new GestureDetector(mActivity, new GestureListener());
         mGestureDetector2=new GestureDetector(mActivity,new GestureListenerProfile());
         mPreference=PreferenceHelper.getInstance(mActivity);
-        Timber.i("User Name In Profile "+userId);
-        mUserId=userId;
+        this.mUserId=mUserId;
         setUserProfile();
+
 
 
     }
@@ -126,16 +127,18 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             final HeaderViewHolder viewHolderHead = (HeaderViewHolder) holder;
             Timber.i("Profile Post call Successfull ..Position:" + position);
-            viewHolderHead.mUserName.setText(user.getDisplayName());
-            viewHolderHead.mFriendCount.setText(user.getFriendCount());
-            viewHolderHead.mPostCount.setText(user.getPostCount());
-            checkAvailableInvite(user.getAvailableInvites(), viewHolderHead.mInviteCount,viewHolderHead.mInviteText);
+            if(currentProfileUser.getUser()==null)
+                return;
+            viewHolderHead.mUserName.setText(currentProfileUser.getUser().getDisplayName());
+            viewHolderHead.mFriendCount.setText(currentProfileUser.getUser().getFriendCount());
+            viewHolderHead.mPostCount.setText(currentProfileUser.getUser().getPostCount());
+            checkAvailableInvite(currentProfileUser.getUser().getAvailableInvites(), viewHolderHead.mInviteCount,viewHolderHead.mInviteText);
 
 //            PicassoCache.getPicassoInstance(mActivity)
 //                    .load(AppConstants.BASE_URL + user.getProfilePic())
 //                    .into(viewHolderHead.mProfilePic);
             PicassoCache.getPicassoInstance(mActivity)
-                    .load(AppConstants.BASE_URL + user.getProfilePic())
+                    .load(AppConstants.BASE_URL + currentProfileUser.getUser().getProfilePic())
                     .noFade()
                     .into(viewHolderHead.mCircularImage);
 
@@ -153,9 +156,20 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolderHead.mFriendReqestImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!mPreference.readPreference(getString(R.string.API_user_name)).equals(user.getDisplayName())){
-                        callSendFriendRequestApi(user.getRid());
+                    if(!mPreference.readPreference(getString(R.string.API_user_name)).equals(currentProfileUser.getUser().getDisplayName())&&currentProfileUser.getFriendshipstatus().equals("none")){
+                        callSendFriendRequestApi(currentProfileUser.getUser().getRid());
+                        viewHolderHead.mFriendReqestImg.setImageResource(R.drawable.friendrequestdeleteprofile);
 
+                    }else
+                    {}
+                }
+            });
+
+            viewHolderHead.mChatImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!mPreference.readPreference(getString(R.string.API_user_name)).equals(currentProfileUser.getUser().getDisplayName())) {
+                        mActivity.launchPersonalChatScreen(currentProfileUser.getUser().getRid(), true);
                     }
                 }
             });
@@ -395,7 +409,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // event when double tap occurs
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            if (currentProfileUserName.equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
+            if (currentProfileUser.getUser().getDisplayName().equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
                 mActivity.openImageIntent();
                 return true;
             } else {
@@ -423,27 +437,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         });
     }
-    public void setUserProfile()
-    {
 
-        HeldService.getService().searchUser(PreferenceHelper.getInstance(mActivity).readPreference(Utils.getString(R.string.API_session_token)),
-                mUserId, new Callback<SearchUserResponse>() {
-                    @Override
-                    public void success(SearchUserResponse searchUserResponse, Response response) {
-                        //Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
-                        user = searchUserResponse.getUser();
-                        currentProfileUserName = searchUserResponse.getUser().getDisplayName();
-                        notifyDataSetChanged();
-                        Timber.i("User Init:" + user.getDisplayName());
-
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
-    }
     public void setTypeFace(TextView tv,String type){
         Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
         Typeface book = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansBook.otf");
@@ -509,6 +503,25 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         });
     }
+    public void setUserProfile()
+    {
 
+        HeldService.getService().searchUser(mPreference.readPreference(Utils.getString(R.string.API_session_token)),
+                mUserId, new Callback<SearchUserResponse>() {
+                    @Override
+                    public void success(SearchUserResponse searchUserResponse, Response response) {
+                        //Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
+                        currentProfileUser.setUser(searchUserResponse.getUser());
+                        currentProfileUser.setFriendshipstatus(searchUserResponse.getFriendshipstatus());
+                        Timber.i("Data Recived");
+                        notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+    }
 
 }

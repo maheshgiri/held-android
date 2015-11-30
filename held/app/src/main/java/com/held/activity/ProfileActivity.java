@@ -90,6 +90,8 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         mTitle.setText("Profile");
         mInvite=(TextView)findViewById(R.id.toolbar_invite_txt);
         mInvite.setText("See Invites");
+        Bundle extras = getIntent().getExtras();
+        mUserId=extras.getString("user_id");
         Typeface medium = Typeface.createFromAsset(getAssets(), "BentonSansMedium.otf");
         mTitle.setTypeface(medium);
         mInvite.setTypeface(medium);
@@ -110,8 +112,7 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         mSearch.setOnClickListener(this);
         mChat.setOnClickListener(this);
         mInvite.setOnClickListener(this);
-        Bundle extras = getIntent().getExtras();
-        mUserId=extras.getString("user_id");
+
         launchProfileScreen(mUserId);
 
 
@@ -206,6 +207,13 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     }
     private void launchSeeInviteScreen() {
         Intent intent = new Intent(ProfileActivity.this, SeeInviteActivity.class);
+        startActivity(intent);
+    }
+
+    public void launchPersonalChatScreen(String id,boolean isOneToOne) {
+        Intent intent = new Intent(ProfileActivity.this, ChatActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("isOneToOne", isOneToOne);
         startActivity(intent);
     }
 

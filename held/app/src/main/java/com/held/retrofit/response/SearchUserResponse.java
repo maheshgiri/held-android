@@ -1,9 +1,6 @@
 package com.held.retrofit.response;
 
 
-import android.media.Image;
-import android.widget.ImageView;
-
 public class SearchUserResponse {
 
     private String session_token;
@@ -18,6 +15,14 @@ public class SearchUserResponse {
     private String displayName,friendshipstatus;
     private String profilePic,imageUri,thumbnailUri;
     private User user;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setFriendshipstatus(String friendshipstatus) {
+        this.friendshipstatus = friendshipstatus;
+    }
 
 
     public User getUser() {
