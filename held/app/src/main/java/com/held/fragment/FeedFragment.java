@@ -55,7 +55,7 @@ public class FeedFragment extends ParentFragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private boolean isLastPage, isLoading;
     private List<FeedData> mFeedList = new ArrayList<>();
-    private int mLimit = 5;
+    private int mLimit = 10;
     private long mStart = System.currentTimeMillis();
     private ImageView mFullImg,mUserImg;
     private GestureDetector mGestureDetector;

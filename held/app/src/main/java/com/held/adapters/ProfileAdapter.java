@@ -71,7 +71,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private GestureDetector mGestureDetector,mGestureDetector2;
     private File mFile;
     private Uri mFileUri;
-    String sourceFileName;
+    String currentUserName;
 
 
     public ProfileAdapter(ParentActivity activity,String userId,List<FeedData> postList, boolean isLastPage, ProfileFragment profileFragment) {
@@ -380,8 +380,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // event when double tap occurs
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            mActivity.openImageIntent();
-            return true;
+            if (currentUserName.equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
+                mActivity.openImageIntent();
+                return true;
+            } else {
+                return true;
+            }
         }
     }
 
@@ -413,6 +417,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     public void success(SearchUserResponse searchUserResponse, Response response) {
                         //Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
                         user = searchUserResponse.getUser();
+                        currentUserName=searchUserResponse.getUser().getDisplayName();
                         notifyDataSetChanged();
                         Timber.i("User Init:" + user.getDisplayName());
 
