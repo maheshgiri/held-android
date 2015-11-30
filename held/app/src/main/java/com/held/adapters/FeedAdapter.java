@@ -446,10 +446,10 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         String s1,s2;
         long d1,d2,diff,diffHours;
 
-
-        d1= Long.parseLong(tm);
-        s2=String.valueOf(System.currentTimeMillis());
-        d2= Long.parseLong(s2);
+        if(tm==null)
+            return 0;
+        d1= Long.valueOf(tm);
+        d2= System.currentTimeMillis();
 
         diff=d2-d1;
         diffHours = diff / (60 * 60 * 1000);

@@ -55,7 +55,7 @@ public class FeedFragment extends ParentFragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private boolean isLastPage, isLoading;
     private List<FeedData> mFeedList = new ArrayList<>();
-    private int mLimit = 10;
+    private int mLimit = 5;
     private long mStart = System.currentTimeMillis();
     private ImageView mFullImg,mUserImg;
     private GestureDetector mGestureDetector;
@@ -190,11 +190,13 @@ public class FeedFragment extends ParentFragment {
         mFullImg.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setVisibility(View.GONE);
 
-        DialogUtils.showProgressBar();
+        if(!getCurrActivity().isFinishing())
+            DialogUtils.showProgressBar();
         Picasso.with(getActivity()).load(url).priority(Picasso.Priority.HIGH).noFade().into(mFullImg, new com.squareup.picasso.Callback() {
             @Override
             public void onSuccess() {
-               DialogUtils.stopProgressDialog();
+                if(!getCurrActivity().isFinishing())
+                    DialogUtils.stopProgressDialog();
             }
 
             @Override
