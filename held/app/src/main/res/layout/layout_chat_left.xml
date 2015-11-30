@@ -10,7 +10,6 @@
         android:id="@+id/CHATLEFT_profile_img"
         android:layout_width="43dp"
         android:layout_height="43dp"
-        android:fitsSystemWindows="true"
         android:scaleType="centerCrop"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="7dp"
