@@ -39,6 +39,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import timber.log.Timber;
 
 public class FeedFragment extends ParentFragment {
 
@@ -59,6 +60,7 @@ public class FeedFragment extends ParentFragment {
     private ImageView mFullImg,mUserImg;
     private GestureDetector mGestureDetector;
     private PreferenceHelper mPrefernce;
+
    // private RelativeLayout toolbar;
     public static FeedFragment newInstance() {
         return new FeedFragment();
@@ -86,6 +88,7 @@ public class FeedFragment extends ParentFragment {
         mFeedAdapter = new FeedAdapter((FeedActivity) getCurrActivity(), mFeedList, blurTransformation, isLastPage, this);
         mFeedRecyclerView.setAdapter(mFeedAdapter);
         mPrefernce=PreferenceHelper.getInstance(getCurrActivity());
+
 //        mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());
 //
 //        mFeedRecyclerView.setOnTouchListener(new View.OnTouchListener() {
@@ -165,9 +168,11 @@ public class FeedFragment extends ParentFragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int totalItemCoount = mLayoutManager.getItemCount();
+                Timber.i("item Count :"+totalItemCoount);
                 int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
-
+                Timber.i("Last Item :"+lastVisibleItemPosition);
                 if (!isLastPage && (lastVisibleItemPosition + 1) == totalItemCoount && !isLoading) {
+                    Timber.i("Inside If for call Feed Api");
                     callFeedApi();
                     mFeedAdapter.notifyDataSetChanged();
                 }
@@ -185,8 +190,18 @@ public class FeedFragment extends ParentFragment {
         mFullImg.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setVisibility(View.GONE);
 
+        DialogUtils.showProgressBar();
+        Picasso.with(getActivity()).load(url).priority(Picasso.Priority.HIGH).noFade().into(mFullImg, new com.squareup.picasso.Callback() {
+            @Override
+            public void onSuccess() {
+               DialogUtils.stopProgressDialog();
+            }
 
-        Picasso.with(getActivity()).load(url).priority(Picasso.Priority.HIGH).noFade().into(mFullImg);
+            @Override
+            public void onError() {
+
+            }
+        });
         mFeedRecyclerView.setEnabled(false);
         mSwipeRefreshLayout.setEnabled(false);
         //UiUtils.hideSystemUI(this.getView());

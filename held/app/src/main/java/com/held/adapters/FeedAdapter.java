@@ -231,6 +231,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     //Post id sent to chat
                     mPostImgUrl=mFeedList.get(position).getImageUri();
                     mPostId=mFeedList.get(position).getRid();
+
                     //mPostId = mFeedList.get(position).getCreator().getRid();
                     return mGestureDetector.onTouchEvent(motionEvent);
                 }
@@ -372,8 +373,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public boolean onDoubleTap(MotionEvent e) {
             Bundle bundle = new Bundle();
 
-            bundle.putString("postid", mPostId);
-            bundle.putBoolean("oneToOne",false);
+            bundle.putString("id", mPostId);
+            bundle.putBoolean("oneToOne", false);
+
            // bundle.putString("chatBackImg",mPostImgUrl); we have post img url in api
             //bundle.putBoolean("flag",false);//not necessary
             mActivity.perform(AppConstants.LAUNCH_CHAT_SCREEN, bundle);
@@ -418,8 +420,9 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public boolean onDoubleTap(MotionEvent e) {
             if (!mOwnerDisplayName.equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
                 Bundle bundle = new Bundle();
-                bundle.putString("owner_displayname", mOwnerDisplayName);
-                mActivity.perform(AppConstants.LAUNCH_PERSONAL_CHAT_SCREEN, bundle);
+                bundle.putString("id", mUserId);
+                bundle.putBoolean("oneToOne",true);
+                mActivity.perform(AppConstants.LAUNCH_CHAT_SCREEN, bundle);
                 return true;
             } else {
                 UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view), "You cannot chat with yourself");

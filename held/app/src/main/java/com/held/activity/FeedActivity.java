@@ -227,9 +227,9 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
     }
 
     //private void launchChatScreen(String id, boolean isOneToOne) {
-    private void launchChatScreen(String postid,boolean isOneToOne) {
+    private void launchChatScreen(String id,boolean isOneToOne) {
         Intent intent = new Intent(FeedActivity.this, ChatActivity.class);
-        intent.putExtra("postid", postid);
+        intent.putExtra("id", id);
         intent.putExtra("isOneToOne", isOneToOne);
         //intent.putExtra("chatBackImg",backImg);
         //intent.putExtra("flag",flag);
@@ -278,7 +278,7 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
                 break;
             case AppConstants.LAUNCH_CHAT_SCREEN:
                 if (bundle != null)
-                    launchChatScreen(bundle.getString("postid"),bundle.getBoolean("oneToOne"));
+                    launchChatScreen(bundle.getString("id"),bundle.getBoolean("oneToOne"));
                 break;
             case AppConstants.LAUNCH_NOTIFICATION_SCREEN:
                 launchNotificationScreen();

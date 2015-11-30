@@ -139,7 +139,7 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
         Timber.d("Launching chatscreen with user id " + id + " isonetoone " + isOneToOne);
         Intent intent = new Intent(InboxActivity.this, ChatActivity.class);
         intent.putExtra("isOneToOne", isOneToOne);
-        intent.putExtra("chatId", id);
+        intent.putExtra("id", id);
         startActivity(intent);
     }
 

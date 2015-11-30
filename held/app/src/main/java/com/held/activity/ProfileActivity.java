@@ -27,6 +27,7 @@ import com.held.retrofit.HeldService;
 import com.held.retrofit.response.PostResponse;
 import com.held.retrofit.response.ProfilPicUpdateResponse;
 import com.held.utils.AppConstants;
+import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.Utils;
 
@@ -297,6 +298,7 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     }
     public void updateImageview(){
 
+        DialogUtils.showProgressBar();
         callUploadFileApi();
     }
     private void doCrop(Uri mCurrentPhotoPath) {
@@ -369,9 +371,19 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
             public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
 
                 Timber.i("Profile pic Url"+AppConstants.BASE_URL+profilPicUpdateResponse.getProfilePic());
-                Timber.i("Profile pic ImageView"+mCircularImage.toString());
+                Timber.i("Profile pic ImageView" + mCircularImage.toString());
                 PicassoCache.getPicassoInstance(getApplicationContext()).load(AppConstants.BASE_URL + profilPicUpdateResponse.getProfilePic()).noFade()
-                        .into(mCircularImage);
+                        .into(mCircularImage, new com.squareup.picasso.Callback() {
+                            @Override
+                            public void onSuccess() {
+                                DialogUtils.stopProgressDialog();
+                            }
+
+                            @Override
+                            public void onError() {
+
+                            }
+                        });
             }
 
             @Override

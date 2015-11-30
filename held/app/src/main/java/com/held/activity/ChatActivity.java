@@ -26,7 +26,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
     EditText mSearchEdt;
     Activity mActivity;
     Fragment mDisplayFragment;
-    String mChatId,mPostId,mId,mChatBackImg;
+    String mId,mChatBackImg;
     boolean flag;
     View statusBar;
 
@@ -74,15 +74,8 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         mChat.setOnClickListener(this);
         Bundle extras = getIntent().getExtras();
         boolean isOneToOne = extras.getBoolean("isOneToOne");
-        mChatId=extras.getString("chatId");
-        mPostId=extras.getString("postid");
+        mId=extras.getString("id");
        // mChatBackImg=extras.getString("chatBackImg");
-        if(isOneToOne){
-            mId=mChatId;
-        }
-        else {
-            mId=mPostId;
-        }
        // flag=extras.getBoolean("flag");
        // String chatId = extras.getString("chatId");
        // Timber.d("Chat activity received chat id " + chatId + " isontotone: " + isOneToOne);
