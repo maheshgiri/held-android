@@ -26,6 +26,7 @@ import com.held.customview.PicassoCache;
 import com.held.fragment.ProfileFragment;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
+import com.held.retrofit.response.FriendRequestResponse;
 import com.held.retrofit.response.HoldResponse;
 import com.held.retrofit.response.InviteResponse;
 import com.held.retrofit.response.ReleaseResponse;
@@ -47,6 +48,8 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 import timber.log.Timber;
+
+import static com.held.utils.Utils.getString;
 
 public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -71,7 +74,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private GestureDetector mGestureDetector,mGestureDetector2;
     private File mFile;
     private Uri mFileUri;
-    String currentUserName;
+    String currentProfileUserName;
 
 
     public ProfileAdapter(ParentActivity activity,String userId,List<FeedData> postList, boolean isLastPage, ProfileFragment profileFragment) {
@@ -146,6 +149,16 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //            }catch (Exception e){
 //                e.printStackTrace();
 //            }
+
+            viewHolderHead.mFriendReqestImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!mPreference.readPreference(getString(R.string.API_user_name)).equals(user.getDisplayName())){
+                        callSendFriendRequestApi(user.getRid());
+
+                    }
+                }
+            });
 
             viewHolderHead.mCircularImage.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -277,6 +290,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private de.hdodenhof.circleimageview.CircleImageView mCircularImage;
         private CircularImageView mProfilePic;
         private TextView mUserName, mFriendCount, mPostCount,mfriendTxt,mPostTxt,mInviteCount,mInviteText;
+        ImageView mFriendReqestImg,mChatImg;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
@@ -289,7 +303,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             mInviteCount=(TextView) itemView.findViewById(R.id.invite_count);
             mInviteText=(TextView) itemView.findViewById(R.id.invite_txt);
             mCircularImage=(de.hdodenhof.circleimageview.CircleImageView)itemView.findViewById(R.id.circular_Profile_pic);
-
+            mFriendReqestImg=(ImageView)itemView.findViewById(R.id.PROFILE_friendReq);
+            mChatImg=(ImageView)itemView.findViewById(R.id.PROFILE_Chat);
         }
     }
 
@@ -380,7 +395,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // event when double tap occurs
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            if (currentUserName.equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
+            if (currentProfileUserName.equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
                 mActivity.openImageIntent();
                 return true;
             } else {
@@ -417,7 +432,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     public void success(SearchUserResponse searchUserResponse, Response response) {
                         //Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
                         user = searchUserResponse.getUser();
-                        currentUserName=searchUserResponse.getUser().getDisplayName();
+                        currentProfileUserName = searchUserResponse.getUser().getDisplayName();
                         notifyDataSetChanged();
                         Timber.i("User Init:" + user.getDisplayName());
 
@@ -480,8 +495,20 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
 
+    public void callSendFriendRequestApi(final String friendUserId){
+        HeldService.getService().sendRequests(PreferenceHelper.getInstance(mActivity).readPreference(getString(R.string.API_session_token))
+                , friendUserId, "", new Callback<FriendRequestResponse>() {
+            @Override
+            public void success(FriendRequestResponse friendRequestResponse, Response response) {
+                Timber.i("Friend Request Sent to :" + friendUserId);
+            }
 
+            @Override
+            public void failure(RetrofitError retrofitError) {
 
+            }
+        });
+    }
 
 
 }
