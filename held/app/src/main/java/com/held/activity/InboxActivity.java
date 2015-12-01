@@ -27,7 +27,7 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
     private ImageView mChat, mCamera, mNotification,mSearch;
     private EditText mSearchEdt;
     private Button mRetakeBtn, mPostBtn;
-    private TextView mUsername,title;
+    private TextView mUsername,title,mInvite;
     private static InboxActivity activity;
     private final String TAG = "InboxActivity";
     private final boolean flag=true;
@@ -74,7 +74,8 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
      //   mRetakeBtn = (Button) findViewById(R.id.TOOLBAR_retake_btn);
      //   mPostBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
        // mUsername = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
-
+        mInvite=(TextView)findViewById(R.id.toolbar_invite_txt);
+        mInvite.setVisibility(View.GONE);
         mCamera.setImageResource(R.drawable.home);
         mCamera.setVisibility(View.VISIBLE);
         //mCamera.setImageDrawable(homeIcon);
@@ -138,7 +139,7 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
         Timber.d("Launching chatscreen with user id " + id + " isonetoone " + isOneToOne);
         Intent intent = new Intent(InboxActivity.this, ChatActivity.class);
         intent.putExtra("isOneToOne", isOneToOne);
-        intent.putExtra("chatId", id);
+        intent.putExtra("id", id);
         startActivity(intent);
     }
 

@@ -13,6 +13,15 @@ public class ProfilPicUpdateResponse {
     private String pic;
     private String rid;
     private String display_name;
+    String profilePic,imageUri;
+
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
 
     public int getPin() {
         return pin;

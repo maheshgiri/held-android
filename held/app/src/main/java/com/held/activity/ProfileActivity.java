@@ -1,10 +1,16 @@
 package com.held.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -14,15 +20,25 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.held.customview.PicassoCache;
 import com.held.fragment.ParentFragment;
 import com.held.fragment.ProfileFragment;
 import com.held.retrofit.HeldService;
-import com.held.retrofit.response.InviteResponse;
+import com.held.retrofit.response.PostResponse;
+import com.held.retrofit.response.ProfilPicUpdateResponse;
+import com.held.utils.AppConstants;
+import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
+import com.held.utils.Utils;
+
+import java.io.File;
+import java.io.IOException;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.TypedFile;
+import timber.log.Timber;
 
 public class ProfileActivity extends ParentActivity implements View.OnClickListener {
 
@@ -39,6 +55,10 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     private String mUserNameForSearch;
     private final String TAG = "ProfileActivity";
     View statusBar;
+    private File mFile;
+    private Uri mFileUri;
+    String sourceFileName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +90,8 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         mTitle.setText("Profile");
         mInvite=(TextView)findViewById(R.id.toolbar_invite_txt);
         mInvite.setText("See Invites");
+        Bundle extras = getIntent().getExtras();
+        mUserId=extras.getString("user_id");
         Typeface medium = Typeface.createFromAsset(getAssets(), "BentonSansMedium.otf");
         mTitle.setTypeface(medium);
         mInvite.setTypeface(medium);
@@ -90,9 +112,9 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         mSearch.setOnClickListener(this);
         mChat.setOnClickListener(this);
         mInvite.setOnClickListener(this);
-        Bundle extras = getIntent().getExtras();
-        mUserId=extras.getString("user_id");
+
         launchProfileScreen(mUserId);
+
 
     }
 
@@ -102,7 +124,7 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         bundle.putString("user_id", uid);
         frag.setArguments(bundle);
         addFragment(ProfileFragment.newInstance(uid), ProfileFragment.TAG, true);
-        mDisplayedFragment = ProfileFragment.newInstance(uid);
+        mDisplayFragment = ProfileFragment.newInstance(uid);
     }
 
     public Fragment getCurrentFragment() {
@@ -188,5 +210,209 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         startActivity(intent);
     }
 
+    public void launchPersonalChatScreen(String id,boolean isOneToOne) {
+        Intent intent = new Intent(ProfileActivity.this, ChatActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("isOneToOne", isOneToOne);
+        startActivity(intent);
+    }
+
+    public void openImageIntent() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        builder.setTitle("Select Source");
+        CharSequence charSequence[] = {"Camera ", "Gallery"};
+        builder.setItems(charSequence,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+
+                            case 0:
+                                // GET IMAGE FROM THE CAMERA
+                                Intent getCameraImage = new Intent(
+                                        "android.media.action.IMAGE_CAPTURE");
+                                getCameraImage.putExtra("android.intent.extras.CAMERA_FACING", 1);
+                                File cameraFolder;
+                                cameraFolder = new File(Environment
+                                        .getExternalStorageDirectory(), "/HELD");
+                                if (!cameraFolder.exists())
+                                    cameraFolder.mkdirs();
+                                sourceFileName = "/IMG_"
+                                        + System.currentTimeMillis() + ".jpg";
+                                File photo = new File(cameraFolder, sourceFileName);
+                                getCameraImage.putExtra(MediaStore.EXTRA_OUTPUT,
+                                        Uri.fromFile(photo));
+                                startActivityForResult(getCameraImage, AppConstants.REQUEST_CAMEAR);
+                                break;
+
+                            case 1:
+                                Intent intent;
+                                intent = new Intent(
+                                        Intent.ACTION_PICK,
+                                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                intent.setType("image/*");
+                                Intent chooser = Intent.createChooser(intent,
+                                        "Choose a Picture");
+                                startActivityForResult(chooser, AppConstants.REQUEST_GALLERY);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                });
+        builder.show();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Timber.i("Inside onActivityResult");
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case AppConstants.REQUEST_CAMEAR:
+                    File photo = new File(Environment.getExternalStorageDirectory(),
+                            "/HELD" + sourceFileName);
+                    Uri photoUri = Uri.fromFile(photo);
+                    doCrop(photoUri);
+                    mFileUri=photoUri;
+                    mFile = new File(photoUri.getPath());
+                    //PicassoCache.getPicassoInstance(this).load(mFile).noFade().into(circularImage);
+                    updateImageview();
+                    break;
+
+                case AppConstants.REQUEST_GALLERY:
+                    Uri PhotoURI = data.getData();
+                    doCrop(PhotoURI);
+                    mFileUri=PhotoURI;
+                    mFile = new File(getRealPathFromURI(PhotoURI));
+                    // PicassoCache.getPicassoInstance(this).load(mFile).noFade().into(circularImage);
+                    updateImageview();
+                    break;
+            }
+        }
+
+        if (requestCode == AppConstants.REQUEST_CROP) {
+            File photo = new File(Environment.getExternalStorageDirectory(),
+                    "/HELD" + sourceFileName);
+
+            if (resultCode != Activity.RESULT_OK) {
+                photo.delete();
+                return;
+            }
+
+        }
+    }
+    public void updateImageview(){
+
+        DialogUtils.showProgressBar();
+        callUploadFileApi();
+    }
+    private void doCrop(Uri mCurrentPhotoPath) {
+        Intent cropIntent = new Intent("com.android.camera.action.CROP");
+        cropIntent.setDataAndType(mCurrentPhotoPath, "image/*");
+
+        cropIntent.putExtra("crop", "true");
+        cropIntent.putExtra("aspectX", 1);
+        cropIntent.putExtra("aspectY", 1);
+        cropIntent.putExtra("outputX", 320);
+        cropIntent.putExtra("outputY", 320);
+
+
+        File cameraFolder;
+
+        cameraFolder = new File(Environment.getExternalStorageDirectory(),
+                "/HELD");
+
+        if (!cameraFolder.exists()) {
+            cameraFolder.mkdirs();
+        }
+
+        sourceFileName = "/IMG_" + System.currentTimeMillis() + ".jpg";
+
+        File photo = new File(cameraFolder, sourceFileName);
+        try {
+            photo.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        mFile =new File(photo.getPath());
+
+        Uri mCropImageUri = Uri.fromFile(photo);
+
+        cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCropImageUri);
+        mActivity.startActivityForResult(cropIntent, AppConstants.REQUEST_CROP);
+
+    }
+    void callUploadFileApi() {
+
+
+        final PreferenceHelper helper = PreferenceHelper.getInstance(this);
+        String sessionToken = helper.readPreference(getString(R.string.API_session_token));
+
+
+        HeldService.getService().uploadFile(sessionToken, "", new TypedFile("multipart/form-data", mFile), "", new Callback<PostResponse>() {
+            @Override
+            public void success(PostResponse postResponse, Response response) {
+                String imgUrl = postResponse.getImageUri();
+                Timber.i("New Profile Pic Url:"+imgUrl);
+                callUpdateNewProfilePicApi(imgUrl);
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+    void callUpdateNewProfilePicApi(String imgUrl){
+
+        final PreferenceHelper helper = PreferenceHelper.getInstance(this);
+        final de.hdodenhof.circleimageview.CircleImageView mCircularImage=(de.hdodenhof.circleimageview.CircleImageView)findViewById(R.id.circular_Profile_pic);
+        String sessionToken = helper.readPreference(getString(R.string.API_session_token));
+
+        HeldService.getService().uploadNewProfilePic(sessionToken, helper.readPreference(Utils.getString(R.string.API_user_regId)), "pic", imgUrl,"",new Callback<ProfilPicUpdateResponse>() {
+            @Override
+            public void success(ProfilPicUpdateResponse profilPicUpdateResponse, Response response) {
+
+                Timber.i("Profile pic Url"+AppConstants.BASE_URL+profilPicUpdateResponse.getProfilePic());
+                Timber.i("Profile pic ImageView" + mCircularImage.toString());
+                PicassoCache.getPicassoInstance(getApplicationContext()).load(AppConstants.BASE_URL + profilPicUpdateResponse.getProfilePic()).noFade()
+                        .into(mCircularImage, new com.squareup.picasso.Callback() {
+                            @Override
+                            public void onSuccess() {
+                                DialogUtils.stopProgressDialog();
+                            }
+
+                            @Override
+                            public void onError() {
+
+                            }
+                        });
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+    private String getRealPathFromURI(Uri contentURI) {
+        String result = "";
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+        Cursor cursor = mActivity.getContentResolver().query(contentURI, filePathColumn, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(filePathColumn[0]);//MediaStore.Images.ImageColumns.DATA
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
+    }
 
 }

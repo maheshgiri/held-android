@@ -2,6 +2,7 @@ package com.held.adapters;
 
 
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -25,6 +26,7 @@ import com.held.customview.PicassoCache;
 import com.held.fragment.ProfileFragment;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
+import com.held.retrofit.response.FriendRequestResponse;
 import com.held.retrofit.response.HoldResponse;
 import com.held.retrofit.response.InviteResponse;
 import com.held.retrofit.response.ReleaseResponse;
@@ -37,6 +39,7 @@ import com.held.utils.UiUtils;
 import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +49,8 @@ import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 import timber.log.Timber;
 
+import static com.held.utils.Utils.getString;
+
 public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ProfileActivity mActivity;
@@ -53,7 +58,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private boolean mIsLastPage;
     private String mPostId, mOwnerDisplayName;
     private int mPosition;
-    private GestureDetector mGestureDetector;
+
     private ProfileFragment mProfileFragment;
     private ItemViewHolder mItemViewHolder;
     private PreferenceHelper mPreference;
@@ -66,20 +71,26 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private User user=new User();
     private boolean isFullScreenMode = false;
     private int maxInvite=5,mInviteNo;
+    private GestureDetector mGestureDetector,mGestureDetector2;
+    private File mFile;
+    private Uri mFileUri;
+
+    SearchUserResponse currentProfileUser=new SearchUserResponse();
 
 
-
-    public ProfileAdapter(ParentActivity activity,String userId,List<FeedData> postList, boolean isLastPage, ProfileFragment profileFragment) {
+    public ProfileAdapter(ParentActivity activity,String mUserId,List<FeedData> postList, boolean isLastPage, ProfileFragment profileFragment) {
         mActivity =(ProfileActivity)activity;
         mPostList = postList;
         mIsLastPage = isLastPage;
         mProfileFragment = profileFragment;
         mBlurTransformation = new BlurTransformation(mActivity, 18);
         mGestureDetector = new GestureDetector(mActivity, new GestureListener());
+        mGestureDetector2=new GestureDetector(mActivity,new GestureListenerProfile());
         mPreference=PreferenceHelper.getInstance(mActivity);
-        Timber.i("User Name In Profile "+userId);
-        mUserId=userId;
+        this.mUserId=mUserId;
         setUserProfile();
+
+
 
     }
 
@@ -116,16 +127,18 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             final HeaderViewHolder viewHolderHead = (HeaderViewHolder) holder;
             Timber.i("Profile Post call Successfull ..Position:" + position);
-            viewHolderHead.mUserName.setText(user.getDisplayName());
-            viewHolderHead.mFriendCount.setText(user.getFriendCount());
-            viewHolderHead.mPostCount.setText(user.getPostCount());
-            checkAvailableInvite(user.getAvailableInvites(), viewHolderHead.mInviteCount,viewHolderHead.mInviteText);
+            if(currentProfileUser.getUser()==null)
+                return;
+            viewHolderHead.mUserName.setText(currentProfileUser.getUser().getDisplayName());
+            viewHolderHead.mFriendCount.setText(currentProfileUser.getUser().getFriendCount());
+            viewHolderHead.mPostCount.setText(currentProfileUser.getUser().getPostCount());
+            checkAvailableInvite(currentProfileUser.getUser().getAvailableInvites(), viewHolderHead.mInviteCount,viewHolderHead.mInviteText);
 
 //            PicassoCache.getPicassoInstance(mActivity)
 //                    .load(AppConstants.BASE_URL + user.getProfilePic())
 //                    .into(viewHolderHead.mProfilePic);
             PicassoCache.getPicassoInstance(mActivity)
-                    .load(AppConstants.BASE_URL + user.getProfilePic())
+                    .load(AppConstants.BASE_URL + currentProfileUser.getUser().getProfilePic())
                     .noFade()
                     .into(viewHolderHead.mCircularImage);
 
@@ -140,6 +153,33 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 //                e.printStackTrace();
 //            }
 
+            viewHolderHead.mFriendReqestImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!mPreference.readPreference(getString(R.string.API_user_name)).equals(currentProfileUser.getUser().getDisplayName())&&currentProfileUser.getFriendshipstatus().equals("none")){
+                        callSendFriendRequestApi(currentProfileUser.getUser().getRid());
+                        viewHolderHead.mFriendReqestImg.setImageResource(R.drawable.friendrequestdeleteprofile);
+
+                    }else
+                    {}
+                }
+            });
+
+            viewHolderHead.mChatImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!mPreference.readPreference(getString(R.string.API_user_name)).equals(currentProfileUser.getUser().getDisplayName())) {
+                        mActivity.launchPersonalChatScreen(currentProfileUser.getUser().getRid(), true);
+                    }
+                }
+            });
+
+            viewHolderHead.mCircularImage.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return mGestureDetector2.onTouchEvent(event);
+                }
+            });
 
 
         } else if(holder instanceof ItemViewHolder) {
@@ -264,6 +304,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private de.hdodenhof.circleimageview.CircleImageView mCircularImage;
         private CircularImageView mProfilePic;
         private TextView mUserName, mFriendCount, mPostCount,mfriendTxt,mPostTxt,mInviteCount,mInviteText;
+        ImageView mFriendReqestImg,mChatImg;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
@@ -276,7 +317,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             mInviteCount=(TextView) itemView.findViewById(R.id.invite_count);
             mInviteText=(TextView) itemView.findViewById(R.id.invite_txt);
             mCircularImage=(de.hdodenhof.circleimageview.CircleImageView)itemView.findViewById(R.id.circular_Profile_pic);
-
+            mFriendReqestImg=(ImageView)itemView.findViewById(R.id.PROFILE_friendReq);
+            mChatImg=(ImageView)itemView.findViewById(R.id.PROFILE_Chat);
         }
     }
 
@@ -356,6 +398,25 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super.onLongPress(e);
         }
     }
+    private class GestureListenerProfile extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+
+            return true;
+        }
+
+        // event when double tap occurs
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            if (currentProfileUser.getUser().getDisplayName().equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
+                mActivity.openImageIntent();
+                return true;
+            } else {
+                return true;
+            }
+        }
+    }
 
     private void callHoldApi(String postId,String start_tm) {
         HeldService.getService().holdPost(PreferenceHelper.getInstance(mActivity).readPreference("SESSION_TOKEN"), postId, start_tm, "", new Callback<HoldResponse>() {
@@ -376,26 +437,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         });
     }
-    public void setUserProfile()
-    {
 
-        HeldService.getService().searchUser(PreferenceHelper.getInstance(mActivity).readPreference(Utils.getString(R.string.API_session_token)),
-                mUserId, new Callback<SearchUserResponse>() {
-                    @Override
-                    public void success(SearchUserResponse searchUserResponse, Response response) {
-                        //Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
-                        user = searchUserResponse.getUser();
-                        notifyDataSetChanged();
-                        Timber.i("User Init:" + user.getDisplayName());
-
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
-    }
     public void setTypeFace(TextView tv,String type){
         Typeface medium = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansMedium.otf");
         Typeface book = Typeface.createFromAsset(mActivity.getAssets(), "BentonSansBook.otf");
@@ -437,6 +479,42 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     @Override
                     public void success(InviteResponse inviteResponse, Response response) {
                         Timber.i("You Have Asked for More Invites .......");
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+    }
+
+
+    public void callSendFriendRequestApi(final String friendUserId){
+        HeldService.getService().sendRequests(PreferenceHelper.getInstance(mActivity).readPreference(getString(R.string.API_session_token))
+                , friendUserId, "", new Callback<FriendRequestResponse>() {
+            @Override
+            public void success(FriendRequestResponse friendRequestResponse, Response response) {
+                Timber.i("Friend Request Sent to :" + friendUserId);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+            }
+        });
+    }
+    public void setUserProfile()
+    {
+
+        HeldService.getService().searchUser(mPreference.readPreference(Utils.getString(R.string.API_session_token)),
+                mUserId, new Callback<SearchUserResponse>() {
+                    @Override
+                    public void success(SearchUserResponse searchUserResponse, Response response) {
+                        //Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
+                        currentProfileUser.setUser(searchUserResponse.getUser());
+                        currentProfileUser.setFriendshipstatus(searchUserResponse.getFriendshipstatus());
+                        Timber.i("Data Recived");
+                        notifyDataSetChanged();
                     }
 
                     @Override

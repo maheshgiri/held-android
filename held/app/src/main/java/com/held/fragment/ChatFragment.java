@@ -30,6 +30,8 @@ import com.held.retrofit.response.PostChatData;
 import com.held.retrofit.response.PostChatResponse;
 import com.held.retrofit.response.PostMessageResponse;
 import com.held.retrofit.response.PostResponse;
+import com.held.retrofit.response.SearchUserResponse;
+import com.held.retrofit.response.User;
 import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.HeldApplication;
@@ -65,6 +67,8 @@ public class ChatFragment extends ParentFragment {
     private List<PostChatData> tmpList=new ArrayList<PostChatData>();
     private BlurTransformation mBlurTransformation;
     private boolean mIsScrollEndReached = false;
+    User currentUser=new User();
+    User otherUser=new User();
 
     public static ChatFragment newInstance(String id, boolean isOneToOne) {
 
@@ -143,9 +147,11 @@ public class ChatFragment extends ParentFragment {
         setTypeFace(mMessageEdt,"book");
         setTypeFace(mSubmitBtn,"book");
         if (getCurrActivity().getNetworkStatus()) {
+            getCurrentUser();
             if (mIsOneToOne == true) {
                 callGetUserPostApi();
                 callFriendsChatsApi();
+                getOtherUser();
             } else {
                 callSearchPostApi();
                 callPostChatApi();
@@ -212,15 +218,7 @@ public class ChatFragment extends ParentFragment {
 //                        tmpList.add(objPostChat);
 //                        mPostChatData.addAll(tmpList);
                         // mChatAdapter.setPostChats(mPostChatData);
-                        mMessageEdt.setText("");
-                        PostChatData data = new PostChatData();
-                        data.setDate(postMessageResponse.getDate());
-                        data.setFromUser(postMessageResponse.getFromUser());
-                        data.setToUser(postMessageResponse.getToUser());
-                        data.setRid(postMessageResponse.getRid());
-                        data.setText(postMessageResponse.getText());
-                        mPostChatData.add(0, data);
-                        mChatAdapter.notifyDataSetChanged();
+
                         // tmpList.clear();
                         //Timber.i("Inside chat submit",""+postMessageResponse);
                     }
@@ -309,18 +307,7 @@ public class ChatFragment extends ParentFragment {
         switch (v.getId()) {
             case R.id.CHAT_submit_btn:
                 if (getCurrActivity().getNetworkStatus()) {
-                    if (mIsOneToOne) {
-                        if (!mMessageEdt.getText().toString().isEmpty()) {
-                            callfriendChatSubmit();
-                            //callFriendsChatsApi();
-                        } else
-                            UiUtils.showSnackbarToast(getView(), "Message should not be empty");
-                    } else {
-                        if (!mMessageEdt.getText().toString().isEmpty()) {
-                            postGroupChat();
-                        } else
-                            UiUtils.showSnackbarToast(getView(), "Message should not be empty");
-                    }
+                    submitChat();
                 }
 
                 break;
@@ -356,14 +343,6 @@ public class ChatFragment extends ParentFragment {
                     public void success(PostChatData postMessageResponse, Response response) {
 
 
-                        mMessageEdt.setText("");
-                        PostChatData data = new PostChatData();
-                        data.setDate(postMessageResponse.getDate());
-                        data.setFromUser(postMessageResponse.getUser());
-                        data.setRid(postMessageResponse.getRid());
-                        data.setText(postMessageResponse.getText());
-                        mPostChatData.add(0, data);
-                        mChatAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -433,5 +412,62 @@ public class ChatFragment extends ParentFragment {
         }else {
             tv.setTypeface(medium);
         }
+    }
+    void submitChat(){
+        if(mIsOneToOne){
+
+            PostChatData data = new PostChatData();
+            data.setFromUser(currentUser);
+            data.setToUser(otherUser);
+            data.setDate(String.valueOf(System.currentTimeMillis()));
+            data.setFromUser(currentUser);
+            data.setText(mMessageEdt.getText().toString());
+            mPostChatData.add(0, data);
+            mChatAdapter.notifyDataSetChanged();
+            callfriendChatSubmit();
+            mMessageEdt.setText("");
+
+        }
+        else {
+
+            PostChatData data = new PostChatData();
+            data.setDate(String.valueOf(System.currentTimeMillis()));
+            data.setFromUser(currentUser);
+            data.setText(mMessageEdt.getText().toString());
+            mPostChatData.add(0, data);
+            mChatAdapter.notifyDataSetChanged();
+            postGroupChat();
+            mMessageEdt.setText("");
+        }
+
+    }
+    void getCurrentUser(){
+        HeldService.getService().searchUser(mPreference.readPreference(getString(R.string.API_session_token)),
+                mPreference.readPreference(getString(R.string.API_user_regId)), new Callback<SearchUserResponse>() {
+                    @Override
+                    public void success(SearchUserResponse searchUserResponse, Response response) {
+                        currentUser=searchUserResponse.getUser();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+
+    }
+    void getOtherUser(){
+        HeldService.getService().searchUser(mPreference.readPreference(getString(R.string.API_session_token)),
+                getArguments().getString("user_id"), new Callback<SearchUserResponse>() {
+                    @Override
+                    public void success(SearchUserResponse searchUserResponse, Response response) {
+                        otherUser=searchUserResponse.getUser();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
     }
 }

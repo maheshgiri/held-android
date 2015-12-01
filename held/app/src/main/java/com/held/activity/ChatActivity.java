@@ -1,13 +1,10 @@
 package com.held.activity;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,9 +15,6 @@ import android.widget.TextView;
 import com.held.fragment.ChatFragment;
 import com.held.fragment.ParentFragment;
 import com.held.utils.AndroidBug5497Workaround;
-import com.held.utils.AppConstants;
-import com.held.utils.Utils;
-import timber.log.Timber;
 
 /**
  * Created by swapnil on 3/10/15.
@@ -28,10 +22,11 @@ import timber.log.Timber;
 public class ChatActivity extends ParentActivity implements View.OnClickListener{
 
     ImageView mChat, mCamera, mNotification,mSearch;
+    TextView mInvite;
     EditText mSearchEdt;
     Activity mActivity;
     Fragment mDisplayFragment;
-    String mChatId,mPostId,mId,mChatBackImg;
+    String mId,mChatBackImg;
     boolean flag;
     View statusBar;
 
@@ -66,6 +61,8 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         mCamera = (ImageView) findViewById(R.id.toolbar_post_img);
         mNotification = (ImageView) findViewById(R.id.toolbar_notification_img);
         mSearchEdt = (EditText) findViewById(R.id.toolbar_search_edt_txt);
+        mInvite=(TextView)findViewById(R.id.toolbar_invite_txt);
+        mInvite.setVisibility(View.GONE);
         mSearchEdt.setVisibility(View.GONE);
         mChat.setImageResource(R.drawable.back);
         mCamera.setImageResource(R.drawable.menu);
@@ -74,17 +71,11 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
         mSearch.setVisibility(View.GONE);
         mCamera.setOnClickListener(this);
         mNotification.setOnClickListener(this);
+        mChat.setOnClickListener(this);
         Bundle extras = getIntent().getExtras();
         boolean isOneToOne = extras.getBoolean("isOneToOne");
-        mChatId=extras.getString("chatId");
-        mPostId=extras.getString("postid");
+        mId=extras.getString("id");
        // mChatBackImg=extras.getString("chatBackImg");
-        if(isOneToOne){
-            mId=mChatId;
-        }
-        else {
-            mId=mPostId;
-        }
        // flag=extras.getBoolean("flag");
        // String chatId = extras.getString("chatId");
        // Timber.d("Chat activity received chat id " + chatId + " isontotone: " + isOneToOne);
@@ -112,18 +103,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
 
     @Override
     public void onBackPressed() {
-        if (mDisplayFragment instanceof ChatFragment) {
-            Timber.d("on back pressed. current fragment is chat fragment");
-            super.onBackPressed();
-            mSearchEdt.setVisibility(View.GONE);
-//            mUsername.setVisibility(View.INVISIBLE);
-            mCamera.setImageResource(R.drawable.icon_feed);
-            mChat.setImageResource(R.drawable.icon_chat);
-            mDisplayFragment = Utils.getCurrVisibleFragment(this);
-        } else {
-            Timber.d("unknown current fragment");
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
 
@@ -140,9 +120,7 @@ public class ChatActivity extends ParentActivity implements View.OnClickListener
                 break;
 
             case R.id.toolbar_chat_img:
-                if (mDisplayFragment instanceof ChatFragment) {
-                    onBackPressed();
-                }
+                onBackPressed();
                 break;
         }
     }

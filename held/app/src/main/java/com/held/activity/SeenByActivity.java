@@ -31,7 +31,7 @@ public class SeenByActivity extends ParentActivity {
 
     private ImageView mChat, mCamera, mNotification,mSearch;
     private EditText mSearch_edt;
-    private TextView mTitle;
+    private TextView mTitle,mInvite;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private SeenByAdapter mSeenByAdapter;
    // private List<String []> mList = new ArrayList<>();
@@ -76,7 +76,8 @@ public class SeenByActivity extends ParentActivity {
         mCamera=(ImageView)findViewById(R.id.toolbar_post_img);
         mTitle=(TextView)findViewById(R.id.toolbar_title_txt);
         mSearch_edt=(EditText)findViewById(R.id.toolbar_search_edt_txt);
-
+        mInvite=(TextView)findViewById(R.id.toolbar_invite_txt);
+        mInvite.setVisibility(View.GONE);
         mSearch.setVisibility(View.GONE);
         mNotification.setVisibility(View.GONE);
         mCamera.setVisibility(View.GONE);

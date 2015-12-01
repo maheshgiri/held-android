@@ -1,33 +1,26 @@
 package com.held.fragment;
 
 
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.held.activity.FeedActivity;
 import com.held.activity.R;
 import com.held.adapters.FeedAdapter;
 import com.held.customview.BlurTransformation;
-import com.held.customview.PicassoCache;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.FeedData;
 import com.held.retrofit.response.FeedResponse;
@@ -67,6 +60,7 @@ public class FeedFragment extends ParentFragment {
     private ImageView mFullImg,mUserImg;
     private GestureDetector mGestureDetector;
     private PreferenceHelper mPrefernce;
+
    // private RelativeLayout toolbar;
     public static FeedFragment newInstance() {
         return new FeedFragment();
@@ -94,6 +88,7 @@ public class FeedFragment extends ParentFragment {
         mFeedAdapter = new FeedAdapter((FeedActivity) getCurrActivity(), mFeedList, blurTransformation, isLastPage, this);
         mFeedRecyclerView.setAdapter(mFeedAdapter);
         mPrefernce=PreferenceHelper.getInstance(getCurrActivity());
+
 //        mGestureDetector = new GestureDetector(getCurrActivity(), new GestureListener());
 //
 //        mFeedRecyclerView.setOnTouchListener(new View.OnTouchListener() {
@@ -173,9 +168,11 @@ public class FeedFragment extends ParentFragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int totalItemCoount = mLayoutManager.getItemCount();
+                Timber.i("item Count :"+totalItemCoount);
                 int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
-
+                Timber.i("Last Item :"+lastVisibleItemPosition);
                 if (!isLastPage && (lastVisibleItemPosition + 1) == totalItemCoount && !isLoading) {
+                    Timber.i("Inside If for call Feed Api");
                     callFeedApi();
                     mFeedAdapter.notifyDataSetChanged();
                 }
@@ -193,7 +190,20 @@ public class FeedFragment extends ParentFragment {
         mFullImg.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setVisibility(View.GONE);
 
-        Picasso.with(getActivity()).load(url).into(mFullImg);
+        if(!getCurrActivity().isFinishing())
+            DialogUtils.showProgressBar();
+        Picasso.with(getActivity()).load(url).priority(Picasso.Priority.HIGH).noFade().into(mFullImg, new com.squareup.picasso.Callback() {
+            @Override
+            public void onSuccess() {
+                if(!getCurrActivity().isFinishing())
+                    DialogUtils.stopProgressDialog();
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
         mFeedRecyclerView.setEnabled(false);
         mSwipeRefreshLayout.setEnabled(false);
         //UiUtils.hideSystemUI(this.getView());

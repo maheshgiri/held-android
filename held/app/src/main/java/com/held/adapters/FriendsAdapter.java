@@ -4,10 +4,8 @@ package com.held.adapters;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,10 +20,7 @@ import com.held.utils.AppConstants;
 import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import com.held.retrofit.response.FriendData;
 
 import timber.log.Timber;
 
@@ -64,7 +59,7 @@ public class FriendsAdapter extends RecyclerView.Adapter {
             final InboxData friend  = mFriendList.get(position);
             FriendViewHolder viewHolder = (FriendViewHolder) holder;
             String picUrl = AppConstants.BASE_URL + friend.getProfilePic();
-            Picasso.with(mActivity).load(picUrl).into(viewHolder.mProfilePic);
+            Picasso.with(mActivity).load(picUrl).priority(Picasso.Priority.HIGH).noFade().into(viewHolder.mProfilePic);
             viewHolder.mUserName.setText(friend.getDisplayName());
             viewHolder.mUserDetail.setText(friend.getText());
             String ts = friend.getJoinDate();
