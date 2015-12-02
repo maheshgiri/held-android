@@ -147,6 +147,7 @@ public class SeenByAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public void setEngagersList(List<Engager> engagersList) {
         //mActivityDataList = activitySeenList;
+        mEngagersList.clear();
         mEngagersList=engagersList;
        // mIsLastPage = isLastPage;
         notifyDataSetChanged();

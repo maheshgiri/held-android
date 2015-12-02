@@ -150,14 +150,13 @@ private TextView mPolicy;
                 break;
             case R.id.REG_register_btn:
                 Utils.hideSoftKeyboard(this);
-
-                if(mFile!=null)
-                    callUpdateProfileImageApi();
-                if (mNetWorStatus)
-                    if(flag)
-                        callLoginResendSmsApi();
-                    else
+                if(getNetworkStatus()) {
+                    if (flag) {
+                        loginValidation();
+                    } else {
                         validateInput();
+                    }
+                }
                 else
                     UiUtils.showSnackbarToast(findViewById(R.id.root_view), Utils.getString(R.string.error_offline_msg));
                 break;
@@ -169,7 +168,8 @@ private TextView mPolicy;
 
     private void validateInput() {
         boolean validate = false;
-        if (!TextUtils.isEmpty(mUserNameEdt.getText().toString().trim())) {
+        if (!TextUtils.isEmpty(mUserNameEdt.getText().toString().trim()))
+        {
             if (mUserNameEdt.getText().toString().trim().length() < 6 || mUserNameEdt.getText().toString().trim().length() > 15) {
                 mUserNameEdt.setError("Please enter between 6 to 15 chars.");
                 mUserNameEdt.requestFocus();
@@ -177,18 +177,39 @@ private TextView mPolicy;
                 mUserNameEdt.setError("Please enter Alphabet and digits.");
                 mUserNameEdt.requestFocus();
             } else {
-                validate = true;
+                mUserNameEdt.setError("Please enter user name");
+                mUserNameEdt.requestFocus();
             }
-        } else {
-            mUserNameEdt.setError("Please enter user name");
+
+        } else if(TextUtils.isEmpty(mPhoneNoEdt.getText().toString())){
+            mPhoneNoEdt.setError("Please enter valid phone no.");
             mUserNameEdt.requestFocus();
         }
+
+        else if (!TextUtils.isEmpty(mPhoneNoEdt.getText().toString()))
+        {
+            if(mPhoneNoEdt.getText().toString().trim().length() < 10)
+            {
+                mPhoneNoEdt.setError("Please enter valid phone no.");
+                mUserNameEdt.requestFocus();
+            }
+
+        }
+        else
+        {
+            validate = true;
+        }
+
         if (validate) {
             String cc[] = mCountryCodes.getSelectedItem().toString().split(" ");
             mCountryCode = cc[0];
             tempCode=mCountryCode;
             mCountryCode=tempCode.substring(1);
-            if (mNetWorStatus) {
+            if (mFile==null) {
+                UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Please, select or capture an image for profile image");
+                return;
+            }
+            else if (mNetWorStatus) {
                 DialogUtils.showProgressBar();
                     callCreateUserApi();
             } else {
@@ -218,8 +239,8 @@ private TextView mPolicy;
                 PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.API_session_token), mAccessToken);
                 PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.REG_Session_token), mAccessToken);
                 PreferenceHelper.getInstance(getApplicationContext()).writePreference(getString(R.string.REG_RID), mRegKey);
-                if (mFile != null)
-                    callUpdateProfileImageApi();
+
+                callUpdateProfileImageApi();
                 Log.i("RegistrationActivity", "Profile PIN" + createUserResponse.toString());
                 callResendSmsApi();
             }
@@ -265,11 +286,7 @@ private TextView mPolicy;
     }
 
     public void  launchLoginVerificationActivity(){
-        String cc[] = mCountryCodes.getSelectedItem().toString().split(" ");
-        mCountryCode = cc[0];
-        tempCode=mCountryCode;
-        mCountryCode=tempCode.substring(1);
-        mPreference.writePreference(getString(R.string.API_phone_no), mCountryCode + mPhoneNoEdt.getText().toString().trim());
+
         Intent intent = new Intent(RegistrationActivity.this, VerificationActivity.class);
         intent.putExtra("phoneno", mCountryCode + mPhoneNoEdt.getText().toString().trim());
         intent.putExtra("ForLogin", true);
@@ -491,6 +508,7 @@ private TextView mPolicy;
         }
     }
     public void callLoginResendSmsApi(){
+        DialogUtils.showProgressBar();
         String cc[] = mCountryCodes.getSelectedItem().toString().split(" ");
         mCountryCode = cc[0];
         tempCode=mCountryCode;
@@ -509,10 +527,8 @@ private TextView mPolicy;
                         if (error != null && error.getResponse() != null && !TextUtils.isEmpty(error.getResponse().getBody().toString())) {
                             String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
                             String strError="";
-
                             strError="Invalid User..";
                             UiUtils.showSnackbarToast(findViewById(R.id.root_view),strError);
-
                         } else
                             UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Some Problem Occurred");
                     }
@@ -566,5 +582,22 @@ private TextView mPolicy;
 //        Log.i(TAG, "@@@@@" + contry_code);
 //        Log.i(TAG, "@@@@@" + locale.getDisplayCountry());
 
+    }
+    void loginValidation(){
+
+        if(TextUtils.isEmpty(mPhoneNoEdt.getText().toString())){
+            mPhoneNoEdt.setError("Please enter valid phone no.");
+            mUserNameEdt.requestFocus();
+        }
+        else if (!TextUtils.isEmpty(mPhoneNoEdt.getText().toString()))
+        {
+            if(mPhoneNoEdt.getText().toString().trim().length() < 10)
+            {
+                mPhoneNoEdt.setError("Please enter valid phone no.");
+                mUserNameEdt.requestFocus();
+            }
+            else
+                callLoginResendSmsApi();
+        }
     }
 }
