@@ -19,14 +19,25 @@ public class ProgressDialog extends Dialog {
 
     private ImageView mProgressBar;
     private Animation rotateAnimation;
+    boolean dark = false;
 
     public ProgressDialog(Context context) {
         super(context);
     }
 
+    public ProgressDialog(Context context, boolean dark) {
+        super(context);
+        this.dark = dark;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.progress_dialog);
+        if(this.dark){
+            setContentView(R.layout.progress_dialog_dark);
+        }else{
+            setContentView(R.layout.progress_dialog);
+        }
+
         mProgressBar = (ImageView) findViewById(R.id.progress_bar);
         rotateAnimation = AnimationUtils.loadAnimation(HeldApplication.getAppContext(), R.anim.progress_rotate_anim);
         rotateAnimation.setRepeatCount(Animation.INFINITE);

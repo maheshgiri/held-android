@@ -306,7 +306,7 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     }
     public void updateImageview(){
 
-        DialogUtils.showProgressBar();
+        DialogUtils.showDarkProgressBar();
         callUploadFileApi();
     }
     private void doCrop(Uri mCurrentPhotoPath) {

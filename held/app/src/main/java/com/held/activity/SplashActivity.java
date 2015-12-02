@@ -82,7 +82,7 @@ public class SplashActivity extends ParentActivity implements View.OnClickListen
         if (mphoneNo!=null && mPin!=null &&
                 mphoneNo != ""  && mPin != "") {
             if (getNetworkStatus()) {
-                DialogUtils.showProgressBar();
+                DialogUtils.showDarkProgressBar();
                 callLoginApi();
             } else {
                 UiUtils.showSnackbarToast(findViewById(R.id.root_view), "You are not connected to internet");
