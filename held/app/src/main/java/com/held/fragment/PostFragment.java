@@ -171,15 +171,25 @@ public class PostFragment extends ParentFragment {
                 openImageIntent();
                 break;*/
             case R.id.post_button:
-                if(mCaptionEdt.getText().toString().equals(""))
+                if (mFile == null & mCaptionEdt.getText().toString().equals("")){
+                UiUtils.showSnackbarToast(getView(), "Please, add caption and image for post");
+                }
+                else if(mCaptionEdt.getText().toString().equals(""))
                 {
                     UiUtils.showSnackbarToast(getView(), "Please, add caption.");
                     return;
                 }
-                else if (mFile != null & getCurrActivity().getNetworkStatus()) {
+                else if (mFile == null)
+                {
+                    UiUtils.showSnackbarToast(getView(), "Please, add image");
+                    return;
+                }
+                else if (mFile != null & !mCaptionEdt.getText().toString().equals("") & getCurrActivity().getNetworkStatus()) {
                     DialogUtils.showProgressBar();
                     callPostDataApi();
-                } else {
+                }
+
+                else {
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
                 }
                // mCaptionEdt.setVisibility(View.GONE);
