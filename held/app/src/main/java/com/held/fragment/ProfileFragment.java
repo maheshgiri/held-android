@@ -23,7 +23,6 @@ import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
-import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class ProfileFragment extends ParentFragment {
     private ImageView mFullImg;
     private FeedActivity mActivity;
     private EditText mSearchEdt;
-    final SearchUserResponse currentProfileUser=new SearchUserResponse();
+
 
 
     public static final String TAG = ProfileFragment.class.getSimpleName();
@@ -230,7 +229,6 @@ public class ProfileFragment extends ParentFragment {
                         mPostList.addAll(feedResponse.getObjects());
                         mIsLastPage = feedResponse.isLastPage();
                         mStart = feedResponse.getNextPageStart();
-                        setAdapter();
                         mProfileAdapter.setPostList(mPostList, mIsLastPage);
                         mIsLoading = false;
 
@@ -257,29 +255,7 @@ public class ProfileFragment extends ParentFragment {
         }
 
     }
-    public void setUserProfile()
-    {
-
-        HeldService.getService().searchUser(mPreference.readPreference(Utils.getString(R.string.API_session_token)),
-                mUserId, new Callback<SearchUserResponse>() {
-                    @Override
-                    public void success(SearchUserResponse searchUserResponse, Response response) {
-                        //Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
-                        currentProfileUser.setUser(searchUserResponse.getUser());
-                        currentProfileUser.setFriendshipstatus(searchUserResponse.getFriendshipstatus());
 
 
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
-    }
-
-    void setAdapter(){
-
-    }
 
 }
