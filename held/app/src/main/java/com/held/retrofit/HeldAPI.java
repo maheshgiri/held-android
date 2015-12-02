@@ -102,7 +102,7 @@ public interface HeldAPI {
 
 
     @GET("/posts/")
-    void feedPostWithPage(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start,@Query("next") String next, Callback<FeedResponse> feedResponseCallback);
+    void feedPostWithPage(@Header("Authorization") String token, @Query("limit") int limit, @Query("start") long start, Callback<FeedResponse> feedResponseCallback);
 
     @GET("/users/{user_id}/posts/")
     void getUserPosts(@Header("Authorization") String token, @Path("user_id") String userId,@Query("start") long start,@Query("limit") int limit, Callback<FeedResponse> feedResponseCallback);
