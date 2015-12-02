@@ -21,16 +21,13 @@ import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
+import com.splunk.mint.Mint;
+import com.splunk.mint.MintLog;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
-import com.splunk.mint.Mint;
-import com.splunk.mint.MintLog;
-
-import java.util.List;
-
 import timber.log.Timber;
 import timber.log.Timber.DebugTree;
 

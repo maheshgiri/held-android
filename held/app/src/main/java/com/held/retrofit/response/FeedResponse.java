@@ -8,13 +8,10 @@ public class FeedResponse {
     private List<FeedData> objects;
     private boolean lastPage;
     private long nextPageStart;
-    String next;
+    long next;
 
-    public String getNext() {
+    public long getNext() {
         return next;
-    }
-    public void setNext(String next) {
-        this.next = next;
     }
 
     public long getNextPageStart() {

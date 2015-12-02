@@ -26,6 +26,7 @@ import com.held.fragment.ProfileFragment;
 import com.held.retrofit.HeldService;
 import com.held.retrofit.response.PostResponse;
 import com.held.retrofit.response.ProfilPicUpdateResponse;
+import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.AppConstants;
 import com.held.utils.DialogUtils;
 import com.held.utils.PreferenceHelper;
@@ -58,6 +59,8 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
     private File mFile;
     private Uri mFileUri;
     String sourceFileName;
+    PreferenceHelper mPreference;
+    final SearchUserResponse currentProfileUser=new SearchUserResponse();
 
 
     @Override
@@ -86,6 +89,7 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         mActivity = this;
 
         //setToolbar();
+        mPreference=PreferenceHelper.getInstance(this);
         mTitle=(TextView)findViewById(R.id.toolbar_title_txt);
         mTitle.setText("Profile");
         mInvite=(TextView)findViewById(R.id.toolbar_invite_txt);
@@ -112,6 +116,7 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         mSearch.setOnClickListener(this);
         mChat.setOnClickListener(this);
         mInvite.setOnClickListener(this);
+        checkUserProfile();
 
         launchProfileScreen(mUserId);
 
@@ -357,7 +362,7 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
             @Override
             public void success(PostResponse postResponse, Response response) {
                 String imgUrl = postResponse.getImageUri();
-                Timber.i("New Profile Pic Url:"+imgUrl);
+                Timber.i("New Profile Pic Url:" + imgUrl);
                 callUpdateNewProfilePicApi(imgUrl);
 
             }
@@ -415,4 +420,30 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         return result;
     }
 
+    public void checkUserProfile()
+    {
+
+        HeldService.getService().searchUser(mPreference.readPreference(Utils.getString(R.string.API_session_token)),
+                mUserId, new Callback<SearchUserResponse>() {
+                    @Override
+                    public void success(SearchUserResponse searchUserResponse, Response response) {
+                        //Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
+                        currentProfileUser.setUser(searchUserResponse.getUser());
+                        checkCurrentUser();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+
+    }
+    void checkCurrentUser(){
+        if(!currentProfileUser.getUser().getDisplayName().equals(mPreference.readPreference(getString(R.string.API_user_name)))){
+            mInvite.setVisibility(View.GONE);
+        }else {
+            mInvite.setVisibility(View.VISIBLE);
+        }
+    }
 }

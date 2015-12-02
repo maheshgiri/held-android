@@ -23,7 +23,6 @@ import com.held.retrofit.response.FeedResponse;
 import com.held.retrofit.response.SearchUserResponse;
 import com.held.utils.PreferenceHelper;
 import com.held.utils.UiUtils;
-import com.held.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -41,14 +40,14 @@ public class ProfileFragment extends ParentFragment {
     private ProfileAdapter mProfileAdapter;
     private boolean mIsLastPage, mIsLoading = true;
     private long mStart = System.currentTimeMillis();
-    private int mLimit = 5;
+    private int mLimit = 10;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private String mUserName,mUserImg = "",mUserId;
     private PreferenceHelper mPreference;
     private ImageView mFullImg;
     private FeedActivity mActivity;
     private EditText mSearchEdt;
-    final SearchUserResponse currentProfileUser=new SearchUserResponse();
+    long nextPage=0;
 
 
     public static final String TAG = ProfileFragment.class.getSimpleName();
@@ -80,7 +79,7 @@ public class ProfileFragment extends ParentFragment {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.PROFILE_swipe_refresh_layout);
         mUserId= getArguments().getString("user_id");
         if (getCurrActivity().getNetworkStatus()) {
-            callProfilePostAPi();
+            callProfilePostAPi(mStart);
         } else {
             UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
         }
@@ -130,7 +129,7 @@ public class ProfileFragment extends ParentFragment {
                 int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
 
                 if (!mIsLastPage && (lastVisibleItemPosition + 1) == totalItemCount && !mIsLoading) {
-                    callProfilePostAPi();
+                    callProfilePostAPi(nextPage);
                 }
             }
         });
@@ -143,7 +142,7 @@ public class ProfileFragment extends ParentFragment {
                 mPostList.clear();
                 mIsLastPage = false;
                 if (getCurrActivity().getNetworkStatus()) {
-                    callProfilePostAPi();
+                    callProfilePostAPi(mStart);
                 } else {
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
                 }
@@ -161,7 +160,7 @@ public class ProfileFragment extends ParentFragment {
                     @Override
                     public void success(SearchUserResponse searchUserResponse, Response response) {
 
-                        callProfilePostAPi();
+                        callProfilePostAPi(mStart);
                     }
 
                     @Override
@@ -218,10 +217,10 @@ public class ProfileFragment extends ParentFragment {
         //showSystemUI();
     }
 
-    private void callProfilePostAPi() {
+    private void callProfilePostAPi(long startVal) {
         //mIsLoading = true;
         HeldService.getService().getUserPosts(mPreference.readPreference(getString(R.string.API_session_token)),
-                mUserId, mStart, mLimit,
+                mUserId, startVal, mLimit,
                 new Callback<FeedResponse>() {
                     @Override
                     public void success(FeedResponse feedResponse, Response response) {
@@ -230,7 +229,7 @@ public class ProfileFragment extends ParentFragment {
                         mPostList.addAll(feedResponse.getObjects());
                         mIsLastPage = feedResponse.isLastPage();
                         mStart = feedResponse.getNextPageStart();
-                        setAdapter();
+                        nextPage=feedResponse.getNext();
                         mProfileAdapter.setPostList(mPostList, mIsLastPage);
                         mIsLoading = false;
 
@@ -257,29 +256,7 @@ public class ProfileFragment extends ParentFragment {
         }
 
     }
-    public void setUserProfile()
-    {
-
-        HeldService.getService().searchUser(mPreference.readPreference(Utils.getString(R.string.API_session_token)),
-                mUserId, new Callback<SearchUserResponse>() {
-                    @Override
-                    public void success(SearchUserResponse searchUserResponse, Response response) {
-                        //Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
-                        currentProfileUser.setUser(searchUserResponse.getUser());
-                        currentProfileUser.setFriendshipstatus(searchUserResponse.getFriendshipstatus());
 
 
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
-    }
-
-    void setAdapter(){
-
-    }
 
 }

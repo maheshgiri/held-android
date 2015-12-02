@@ -93,7 +93,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, final int position) {
 
         if (viewHolder instanceof FeedViewHolder) {
             final FeedViewHolder holder = (FeedViewHolder) viewHolder;
@@ -216,7 +216,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             holder.myTimeLayout.setVisibility(View.VISIBLE);
                             if(isFullScreenMode){
                                 if (!mFeedList.get(mPosition).getCreator().getDisplayName().equals(mPreference.readPreference(mActivity.getString(R.string.API_user_name)))) {
-                                    callReleaseApi(mFeedList.get(position).getRid(), holder.mTimeMinTxt, holder.mTimeSecTxt, String.valueOf(System.currentTimeMillis()));
+                                    callReleaseApi(mFeedList.get(position).getRid(), holder.mTimeMinTxt, holder.mTimeSecTxt, String.valueOf(System.currentTimeMillis()),((FeedViewHolder) viewHolder).mPersonCount);
                                 }
                                 isFullScreenMode = false;
                             }
@@ -251,13 +251,14 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    private void callReleaseApi(String postId, final TextView textView1,final TextView textView2,String start_tm) {
+    private void callReleaseApi(String postId, final TextView textView1,final TextView textView2,String start_tm, final TextView count) {
         Timber.d("calling release api");
         HeldService.getService().releasePost(mPreference.readPreference("SESSION_TOKEN"),postId,mholdId,"",String.valueOf(System.currentTimeMillis()),
                 "",new Callback<ReleaseResponse>() {
                     @Override
                     public void success(ReleaseResponse releaseResponse, Response response) {
                         setTimeText(releaseResponse.getHeld(), textView1,textView2);
+                        setSeenByPeople(count);
                     }
 
                     @Override
@@ -494,8 +495,11 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         anim.setRepeatCount(Animation.INFINITE);
         img.animate();
         img.startAnimation(anim);
-
-
+    }
+    public void setSeenByPeople(TextView countText){
+        int count=Integer.parseInt(countText.getText().toString());
+        count++;
+        countText.setText(count);
 
     }
 }
