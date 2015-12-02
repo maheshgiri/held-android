@@ -1,6 +1,7 @@
 package com.held.fragment;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.held.activity.FeedActivity;
+import com.held.activity.ParentActivity;
 import com.held.activity.R;
 import com.held.adapters.FeedAdapter;
 import com.held.customview.BlurTransformation;
@@ -192,8 +194,11 @@ public class FeedFragment extends ParentFragment {
         mFullImg.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setVisibility(View.GONE);
 
-        if(!getCurrActivity().isFinishing())
+        ParentActivity myactivity = getCurrActivity();
+        if(!myactivity.isFinishing()) {
+            DialogUtils.resetDialog(myactivity);
             DialogUtils.showProgressBar();
+        }
         Picasso.with(getActivity()).load(url).priority(Picasso.Priority.HIGH).noFade().into(mFullImg, new com.squareup.picasso.Callback() {
             @Override
             public void onSuccess() {
