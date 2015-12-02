@@ -468,7 +468,7 @@ private TextView mPolicy;
 
     @Override
     public void onBackPressed() {
-       launchSplashScreen();
+       this.finish();
     }
     public void setTypeFace(TextView tv,String type){
         Typeface medium = Typeface.createFromAsset(this.getResources().getAssets(), "BentonSansMedium.otf");
