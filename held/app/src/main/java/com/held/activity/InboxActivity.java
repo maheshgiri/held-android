@@ -75,7 +75,7 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
      //   mPostBtn = (Button) findViewById(R.id.TOOLBAR_post_btn);
        // mUsername = (TextView) findViewById(R.id.TOOLBAR_user_name_txt);
         mInvite=(TextView)findViewById(R.id.toolbar_invite_txt);
-        mInvite.setVisibility(View.GONE);
+        mInvite.setTextColor(getResources().getColor(R.color.positve_btn));
         mCamera.setImageResource(R.drawable.home);
         mCamera.setVisibility(View.VISIBLE);
         //mCamera.setImageDrawable(homeIcon);
@@ -84,6 +84,7 @@ public class InboxActivity extends ParentActivity implements View.OnClickListene
         mCamera.setOnClickListener(this);
         mNotification.setOnClickListener(this);
         mSearch.setOnClickListener(this);
+
 //        mRetakeBtn.setOnClickListener(this);
   //      mPostBtn.setOnClickListener(this);
 

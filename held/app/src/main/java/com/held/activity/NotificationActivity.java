@@ -65,10 +65,11 @@ public class NotificationActivity extends ParentActivity implements View.OnClick
         mNotification.setOnClickListener(this);
         mSearch.setOnClickListener(this);
         mInvite=(TextView)findViewById(R.id.toolbar_invite_txt);
-        mInvite.setVisibility(View.GONE);
+        mInvite.setTextColor(getResources().getColor(R.color.positve_btn));
 //        mRetakeBtn.setOnClickListener(this);
 //        mPostBtn.setOnClickListener(this);
         mChat.setVisibility(View.GONE);
+
         mCamera.setImageResource(R.drawable.home);
         mSearchEdt.setVisibility(View.GONE);
         mTitle.setText("Notifications");
