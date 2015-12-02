@@ -60,6 +60,7 @@ public class FeedFragment extends ParentFragment {
     private ImageView mFullImg,mUserImg;
     private GestureDetector mGestureDetector;
     private PreferenceHelper mPrefernce;
+    String nextPage=null;
 
    // private RelativeLayout toolbar;
     public static FeedFragment newInstance() {
@@ -100,7 +101,7 @@ public class FeedFragment extends ParentFragment {
 
         if (getCurrActivity().getNetworkStatus()) {
 //            DialogUtils.showProgressBar();
-            callFeedApi();
+            callFeedApi(mStart,nextPage);
         } else {
             UiUtils.showSnackbarToast(getView(), "Sorry! You don't seem to connected to internet");
         }
@@ -155,7 +156,8 @@ public class FeedFragment extends ParentFragment {
                     mFeedList.clear();
                     mStart = System.currentTimeMillis();
 //                    DialogUtils.showProgressBar();
-                    callFeedApi();
+                    mStart = System.currentTimeMillis();
+                    callFeedApi(mStart,nextPage);
                     mFeedAdapter.notifyDataSetChanged();
                 } else {
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
@@ -173,7 +175,7 @@ public class FeedFragment extends ParentFragment {
                 Timber.i("Last Item :"+lastVisibleItemPosition);
                 if (!isLastPage && (lastVisibleItemPosition + 1) == totalItemCoount && !isLoading) {
                     Timber.i("Inside If for call Feed Api");
-                    callFeedApi();
+                    callFeedApi(mStart,nextPage);
                     mFeedAdapter.notifyDataSetChanged();
                 }
             }
@@ -252,11 +254,11 @@ public class FeedFragment extends ParentFragment {
     @Override
     public void onResume() { super.onResume();}
 
-    private void callFeedApi() {
+    private void callFeedApi(long startVal, final String nextval) {
         isLoading = true;
         if (getCurrActivity().getNetworkStatus()) {//PreferenceHelper.getInstance(getCurrActivity()).readPreference("SESSION_TOKEN")
             HeldService.getService().feedPostWithPage(mPrefernce.readPreference(getString(R.string.API_session_token)),
-                    mLimit, mStart, new Callback<FeedResponse>() {
+                    mLimit,startVal,nextval , new Callback<FeedResponse>() {
                         @Override
                         public void success(FeedResponse feedResponse, Response response) {
 //                            DialogUtils.stopProgressDialog();
@@ -265,7 +267,7 @@ public class FeedFragment extends ParentFragment {
                             mFeedResponse = feedResponse;
                             mFeedList.addAll(mFeedResponse.getObjects());
                             isLastPage = mFeedResponse.isLastPage();
-
+                            nextPage=feedResponse.getNext();
                             mFeedAdapter.setFeedResponse(mFeedList, isLastPage);
                             mStart = mFeedResponse.getNextPageStart();
                             isLoading = false;
