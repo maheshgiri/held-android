@@ -128,7 +128,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
 
     @Override
     public void onBackPressed() {
-        launchFeedScreen();
+        super.onBackPressed();
     }
 
 
@@ -229,7 +229,11 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
             case R.id.toolbar_post_btn:
                 break;*/
             case R.id.back_home:
-                onBackPressed();
+                if(mPreference.readPreference(getString(R.string.is_first_post), false)==false){
+                    this.finish();
+                }
+                else
+                    onBackPressed();
                 break;
         }
     }
