@@ -601,7 +601,7 @@ public class PostFragment extends ParentFragment {
                         if (searchUserResponse.getUser().getProfilePic()!=null) {
                             mTitle.setText(getString(R.string.title_photo_upload));
                         }else{
-                            mTitle.setText(getString(R.string.title_profilepic_upload));
+                            mTitle.setText("Make your first post");
                         }
                     }
 
