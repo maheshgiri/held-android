@@ -499,7 +499,7 @@ public class FeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void setSeenByPeople(TextView countText){
         int count=Integer.parseInt(countText.getText().toString());
         count++;
-        countText.setText(count);
+        countText.setText("" + count);
 
     }
 }
