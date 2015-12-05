@@ -54,7 +54,7 @@ public class RegistrationActivity extends ParentActivity implements View.OnClick
     private static final String TAG = "RegistrationActivity";
     private ImageView mBackImg,mAddPicIcon;
     private EditText mUserNameEdt, mPhoneNoEdt;
-    private boolean mNetWorStatus,flag=false;
+    private boolean mIsNetworkConnected,flag=false;
     private Button mRegisterBtn;
     private Spinner mCountryCodes;
     private String mCountryCode,tempCode,mphoneNo;
@@ -112,7 +112,7 @@ private TextView mPolicy;
         mAddPicIcon.setOnClickListener(this);
         mBackImg.setOnClickListener(this);
         mRegisterBtn.setOnClickListener(this);
-        mNetWorStatus = NetworkUtil.isInternetConnected(getApplicationContext());
+        mIsNetworkConnected = NetworkUtil.isInternetConnected(getApplicationContext());
         NetworkStateReceiver.registerOnNetworkChangeListener(this);
         mCountryCodes = (Spinner) findViewById(R.id.REG_country_code_edt);
         String countryCodes[] = getResources().getStringArray(R.array.country_codes);
@@ -167,55 +167,60 @@ private TextView mPolicy;
     }
 
     private void validateInput() {
-        boolean validate = false;
+
         if (!TextUtils.isEmpty(mUserNameEdt.getText().toString().trim()))
         {
             if (mUserNameEdt.getText().toString().trim().length() < 6 || mUserNameEdt.getText().toString().trim().length() > 15) {
                 mUserNameEdt.setError("Please enter between 6 to 15 chars.");
                 mUserNameEdt.requestFocus();
-            } else if (!containsChar(mUserNameEdt.getText().toString())) {
+                return;
+
+            }
+
+            if (!containsChar(mUserNameEdt.getText().toString())) {
                 mUserNameEdt.setError("Please enter Alphabet and digits.");
                 mUserNameEdt.requestFocus();
-            } else {
-                mUserNameEdt.setError("Please enter user name");
-                mUserNameEdt.requestFocus();
-            }
-
-        } else if(TextUtils.isEmpty(mPhoneNoEdt.getText().toString())){
-            mPhoneNoEdt.setError("Please enter valid phone no.");
-            mUserNameEdt.requestFocus();
-        }
-
-        else if (!TextUtils.isEmpty(mPhoneNoEdt.getText().toString()))
-        {
-            if(mPhoneNoEdt.getText().toString().trim().length() < 10)
-            {
-                mPhoneNoEdt.setError("Please enter valid phone no.");
-                mUserNameEdt.requestFocus();
-            }
-
-        }
-        else
-        {
-            validate = true;
-        }
-
-        if (validate) {
-            String cc[] = mCountryCodes.getSelectedItem().toString().split(" ");
-            mCountryCode = cc[0];
-            tempCode=mCountryCode;
-            mCountryCode=tempCode.substring(1);
-            if (mFile==null) {
-                UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Please, select or capture an image for profile image");
                 return;
             }
-            else if (mNetWorStatus) {
-                DialogUtils.showProgressBar();
-                    callCreateUserApi();
-            } else {
-                UiUtils.showSnackbarToast(findViewById(R.id.root_view), "You are not connected to internet.");
-            }
+
+        }else {
+            mUserNameEdt.setError("Please enter user name");
+            mUserNameEdt.requestFocus();
+            return;
         }
+
+        if(TextUtils.isEmpty(mPhoneNoEdt.getText().toString())){
+            mPhoneNoEdt.setError("Please enter valid phone no.");
+            mUserNameEdt.requestFocus();
+            return;
+        }
+
+
+
+        if(mPhoneNoEdt.getText().toString().trim().length() < 10)
+        {
+            mPhoneNoEdt.setError("Please enter valid phone no.");
+            mUserNameEdt.requestFocus();
+            return;
+        }
+
+
+        String cc[] = mCountryCodes.getSelectedItem().toString().split(" ");
+        mCountryCode = cc[0];
+        tempCode=mCountryCode;
+        mCountryCode=tempCode.substring(1);
+        if (mFile==null) {
+            UiUtils.showSnackbarToast(findViewById(R.id.root_view), "Please, select or capture an image for profile picture");
+            return;
+        }
+
+        if (mIsNetworkConnected) {
+            DialogUtils.showProgressBar();
+                callCreateUserApi();
+        } else {
+            UiUtils.showSnackbarToast(findViewById(R.id.root_view), "You are not connected to internet.");
+        }
+
     }
 
     private boolean containsChar(String s) {
@@ -273,7 +278,7 @@ private TextView mPolicy;
 
     @Override
     public void onNetworkStatusChanged(boolean isEnabled) {
-        mNetWorStatus = isEnabled;
+        mIsNetworkConnected = isEnabled;
     }
 
     public void updateToLoginUI(){

@@ -116,7 +116,7 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         mSearch.setOnClickListener(this);
         mChat.setOnClickListener(this);
         mInvite.setOnClickListener(this);
-        checkUserProfile();
+
 
         launchProfileScreen(mUserId);
 
@@ -128,6 +128,16 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         Bundle bundle=new Bundle();
         bundle.putString("user_id", uid);
         frag.setArguments(bundle);
+
+        String selfID = mPreference.readPreference(getString(R.string.API_user_regId));
+
+        boolean selfProfile = selfID.equals(uid);
+        if(selfProfile){
+            mInvite.setVisibility(View.VISIBLE);
+        }else {
+            mInvite.setVisibility(View.GONE);
+        }
+
         addFragment(ProfileFragment.newInstance(uid), ProfileFragment.TAG, true);
         mDisplayFragment = ProfileFragment.newInstance(uid);
     }
@@ -420,30 +430,8 @@ public class ProfileActivity extends ParentActivity implements View.OnClickListe
         return result;
     }
 
-    public void checkUserProfile()
-    {
 
-        HeldService.getService().searchUser(mPreference.readPreference(Utils.getString(R.string.API_session_token)),
-                mUserId, new Callback<SearchUserResponse>() {
-                    @Override
-                    public void success(SearchUserResponse searchUserResponse, Response response) {
-                        //Log.i("PostFragment", "@@Image Url" + searchUserResponse.getProfilePic());
-                        currentProfileUser.setUser(searchUserResponse.getUser());
-                        checkCurrentUser();
-                    }
+    void checkCurrentUser(String uid){
 
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
-
-    }
-    void checkCurrentUser(){
-        if(!currentProfileUser.getUser().getDisplayName().equals(mPreference.readPreference(getString(R.string.API_user_name)))){
-            mInvite.setVisibility(View.GONE);
-        }else {
-            mInvite.setVisibility(View.VISIBLE);
-        }
     }
 }

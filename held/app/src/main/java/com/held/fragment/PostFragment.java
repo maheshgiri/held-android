@@ -108,7 +108,7 @@ public class PostFragment extends ParentFragment {
         muserProfileUrl=new String();
         setProfilePic();
         mPostTxt.setVisibility(View.GONE);
-        TextView mTitle = (TextView)view.findViewById(R.id.tv_title);
+
         PreferenceHelper myhelper = PreferenceHelper.getInstance(getCurrActivity());
 
 

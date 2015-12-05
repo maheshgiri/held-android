@@ -132,7 +132,22 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolderHead.mUserName.setText(currentProfileUser.getUser().getDisplayName());
             viewHolderHead.mFriendCount.setText(currentProfileUser.getUser().getFriendCount());
             viewHolderHead.mPostCount.setText(currentProfileUser.getUser().getPostCount());
-            checkAvailableInvite(currentProfileUser.getUser().getAvailableInvites(), viewHolderHead.mInviteCount,viewHolderHead.mInviteText);
+            String selfID = mPreference.readPreference(getString(R.string.API_user_regId));
+            if(mUserId.equals(selfID)){
+
+                checkAvailableInvite(currentProfileUser.getUser().getAvailableInvites(), viewHolderHead.mInviteCount,viewHolderHead.mInviteText);
+                viewHolderHead.mInviteCount.setVisibility(View.VISIBLE);
+                viewHolderHead.mInviteText.setVisibility(View.VISIBLE);
+                viewHolderHead.mInviteLayout.setVisibility(View.VISIBLE);
+
+            }else {
+
+                viewHolderHead.mInviteCount.setVisibility(View.GONE);
+                viewHolderHead.mInviteText.setVisibility(View.GONE);
+                viewHolderHead.mInviteLayout.setVisibility(View.GONE);
+
+            }
+
 
 //            PicassoCache.getPicassoInstance(mActivity)
 //                    .load(AppConstants.BASE_URL + user.getProfilePic())
@@ -305,10 +320,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private CircularImageView mProfilePic;
         private TextView mUserName, mFriendCount, mPostCount,mfriendTxt,mPostTxt,mInviteCount,mInviteText;
         ImageView mFriendReqestImg,mChatImg;
+        LinearLayout mInviteLayout;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
           //  mProfilePic = (com.held.customview.CircularImageView) itemView.findViewById(R.id.PROFILE_pic);
+            mInviteLayout = (LinearLayout)itemView.findViewById(R.id.invite_count_layout);
             mUserName = (TextView) itemView.findViewById(R.id.PROFILE_name);
             mFriendCount = (TextView) itemView.findViewById(R.id.PROFILE_count_friends);
             mPostCount = (TextView) itemView.findViewById(R.id.PROFILE_count_photos);

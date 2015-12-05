@@ -86,8 +86,6 @@ public class ProfileFragment extends ParentFragment {
         mProfileAdapter = new ProfileAdapter(getCurrActivity(),mUserId,mPostList, mIsLastPage, this);
         mRecyclerView.setAdapter(mProfileAdapter);
 
-
-
         //mUserName = PreferenceHelper.getInstance(getCurrActivity()).readPreference(getString(R.string.API_user_name));
 
         //mProfilePic=(ImageView)view.findViewById(R.id.PROFILE_pic);

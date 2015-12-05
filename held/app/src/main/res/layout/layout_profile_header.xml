@@ -156,6 +156,7 @@
         android:gravity="center"
         android:id="@+id/invite_count_layout"
         android:background="@color/profiel_infoBar_color"
+        android:visibility="gone"
         >
     <TextView
         android:layout_width="match_parent"
@@ -165,7 +166,8 @@
         android:textSize="15sp"
         android:textColor="@color/userName_color"
         android:id="@+id/invite_count"
-        android:letterSpacing=".05"/>
+        android:letterSpacing=".05"
+        android:visibility="gone"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -174,7 +176,8 @@
         android:textSize="11sp"
         android:letterSpacing=".05"
         android:textColor="@color/userName_color"
-        android:id="@+id/invite_txt"/>
+        android:id="@+id/invite_txt"
+        android:visibility="gone"/>
 
    </LinearLayout>
     </LinearLayout>
