@@ -223,7 +223,6 @@ public class ProfileFragment extends ParentFragment {
                     @Override
                     public void success(FeedResponse feedResponse, Response response) {
 
-
                         mPostList.addAll(feedResponse.getObjects());
                         mIsLastPage = feedResponse.isLastPage();
                         mStart = feedResponse.getNextPageStart();

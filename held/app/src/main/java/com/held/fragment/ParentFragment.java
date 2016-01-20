@@ -41,7 +41,6 @@ public abstract class ParentFragment extends Fragment implements View.OnClickLis
         if (!mIsOneItemClicked) {
             onClicked(v);
             mIsOneItemClicked = true;
-
             v.postDelayed(new Runnable() {
                 @Override
                 public void run() {

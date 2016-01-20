@@ -24,7 +24,6 @@ public class SplashActivityTest extends ActivityInstrumentationTestCase2 <Splash
     public void setUp()throws Exception
     {
         super.setUp();
-
         Intent intent = new Intent(getInstrumentation().getTargetContext(),SplashActivity.class);
         intent.putExtra("testRunner", true);
         setActivityIntent(null);

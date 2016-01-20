@@ -110,8 +110,8 @@ public class SearchActivity extends ParentActivity {
                         searchResult=engager;
                         /*TODO for multiple object
                         mSearchResultList=searchByNameResponce.getObjects();
-
                         */
+
                         mSearchResultList.clear();
                         mSearchResultList.add(searchResult);
                         mSeenByAdapter.setEngagersList(mSearchResultList);

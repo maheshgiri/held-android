@@ -157,7 +157,8 @@ public class FriendRequestAdapter extends RecyclerView.Adapter {
                     public void success(ApproveFriendResponse approveFriendResponse, Response response) {
                         DialogUtils.stopProgressDialog();
                         mFriendRequestList.clear();
-                        mFriendRequestFragment.callFriendRequestListApi();
+                        UiUtils.showSnackbarToast(mActivity.findViewById(R.id.root_view),"Accepted Friend Request");//added msg when success
+                                mFriendRequestFragment.callFriendRequestListApi();
                     }
 
                     @Override

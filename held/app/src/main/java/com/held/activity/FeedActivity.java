@@ -259,12 +259,12 @@ public class FeedActivity extends ParentActivity implements View.OnClickListener
         addFragment(SendFriendRequestFragment.newInstance(name, AppConstants.BASE_URL + image), SendFriendRequestFragment.TAG, true);
         mDisplayedFragment = Utils.getCurrVisibleFragment(this);
     }
+
     public void launchSeenBy(String post_id){
         Intent intent = new Intent(FeedActivity.this, SeenByActivity.class);
         intent.putExtra("post_id", post_id);
         startActivity(intent);
     }
-
     @Override
     public void perform(int id, Bundle bundle) {
         super.perform(id, bundle);

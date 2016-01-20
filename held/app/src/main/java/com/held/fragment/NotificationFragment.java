@@ -178,7 +178,6 @@ public class NotificationFragment extends ParentFragment {
                 mFriendRequest.setTextColor(Color.WHITE);
                 mDownloadRequest.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
                 mActivityFeed.setTextColor(getResources().getColor(R.color.unselected_tab_txt_color));
-
                PreferenceHelper.getInstance(getCurrActivity()).writePreference(getString(R.string.API_FRIEND_REQUEST_COUNT), 0);
                mFriendCount.setVisibility(View.GONE);
                 break;

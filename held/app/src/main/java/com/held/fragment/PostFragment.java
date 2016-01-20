@@ -185,10 +185,10 @@ public class PostFragment extends ParentFragment {
                     return;
                 }
                 else if (mFile != null & !mCaptionEdt.getText().toString().equals("") & getCurrActivity().getNetworkStatus()) {
+
                     DialogUtils.showProgressBar();
                     callPostDataApi();
                 }
-
                 else {
                     UiUtils.showSnackbarToast(getView(), "You are not connected to internet.");
                 }

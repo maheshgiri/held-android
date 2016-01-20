@@ -22,7 +22,6 @@ public class HeldApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         mInstance = this;
         mAppContext = getApplicationContext();
 

@@ -31,6 +31,7 @@ import timber.log.Timber;
 /**
  * Created by MAHESH on 11/21/2015.
  */
+
 public class SeeInviteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     List<InviteResponse> inviteList=new ArrayList<>();
     ParentActivity mActivity;

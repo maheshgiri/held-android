@@ -38,6 +38,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
     private PreferenceHelper mPreference;
     String callfrom;
     View statusBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "starting Post activity");
@@ -99,6 +100,7 @@ public class PostActivity extends ParentActivity implements View.OnClickListener
         addFragment(FeedFragment.newInstance(), FeedFragment.TAG, true);
         mDisplayFragment = FeedFragment.newInstance();*/
     }
+
 
     private void launchCreatePostScreen() {
         updateToolbar(false, true, false, false, false, false, true, "");
